@@ -1,0 +1,41 @@
+@import '../../App.scss';
+
+nav {
+  position: absolute !important;
+  top: 0;
+  right: -5rem;
+  z-index: 999;
+  list-style: none;
+  .nav-item {
+    a:focus,
+    .active {
+      @extend .text-accent;
+    }
+
+    a:hover {
+      color: $font-color;
+    }
+
+    svg {
+      font-size: 1.6em;
+    }
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  nav {
+    right: 2rem;
+
+    .popper.show {
+      display: none;
+    }
+
+    .nav-link {
+      background-color: $dark-color-2 !important;
+    }
+
+    .navbar-collapse {
+      background-color: $dark-color-2;
+    }
+  }
+}

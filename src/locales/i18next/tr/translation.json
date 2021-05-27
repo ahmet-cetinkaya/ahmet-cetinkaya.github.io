@@ -1,0 +1,22 @@
+{
+  "home": "Ana Sayfa",
+  "about-me": "Hakkımda",
+  "portfolio": "Portfolyo",
+  "blog": "Blog",
+  "soon": "Yakında",
+  "resume": "Geçmiş",
+  "short-bio": "Burdur Mehmet Akif Ersoy Üniversitesi Bilgisayar Mühendisliği bölümünde 2. sınıf öğrencisiyim. Özel olarak yazılım geliştirme, web tasarım ve programlama, grafik tasarımı gibi alanlarla ilgileniyorum. İlgili konular üzerine freelancer olarak hizmet veriyorum.",
+  "bio": "8 Kasım 1999'da İstanbul'da doğdum. İlköğretimi dönemimi burada tamamlamamın ardından Antalya Karatay Anadolu Lisesinde lise hayatıma başladım. Lisede bulunduğum sayısal bölümünde derslerin yanısıra web programlama uygulamalarına başladım. Lise dönemi ardından Burdur Mehmet Akif Ersoy Üniversitesi bölümüne girmeye hak kazandım. Yabancı Dil üzerine hazırlık okudum. Şuan 2. sınıf öğrencisiyim. Özel olarak yazılım geliştirme, web tasarım ve programlama, grafik tasarımı gibi alanlarla   ilgileniyorum. İlgili konular üzerine freelancer olarak hizmet veriyorum.",
+  "first-name": "Ad",
+  "last-name": "Soyad",
+  "age": "Yaş",
+  "address": "Adres",
+  "email": "E-Posta",
+  "langages": "Diller",
+  "turkey": "Türkiye",
+  "turkish": "Türkçe",
+  "english": "İngilizce",
+  "technologies-i-use": "Kullandığım Teknojiler",
+  "testimonials": "Görüşler",
+  "testimonial-engindemirog": "Gururla söyleyebilirim ki, Ahmet, kurumsal projelerde kullanılan teknikleri uygulayabilecek, her türlü projenin altından kalkabilecek 'aranan' bir geliştirici..."
+}

@@ -1,0 +1,26 @@
+@import '../../App.scss';
+
+#home {
+  .profile-frame {
+    display: block;
+    position: relative;
+    height: 20rem;
+    width: 20rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: $accent-color-2;
+    border: 18px solid $dark-color-2;
+
+    .profile {
+      background-image: url(../../assets/images/ahmet-cetinkaya-logo.svg);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 50%;
+      position: absolute;
+      top: -2rem;
+      bottom: -2rem;
+      left: -2rem;
+      right: -2rem;
+    }
+  }
+}

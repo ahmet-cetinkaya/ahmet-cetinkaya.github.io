@@ -1,0 +1,56 @@
+@import '../../App.scss';
+
+#card {
+  position: relative;
+  width: 100%;
+  max-width: 66vw;
+  height: 80vh;
+  margin: 10vh auto;
+  padding: 0;
+  box-shadow: 0 0 100px -5px rgb(0, 0, 0 / 25%);
+  border-radius: 32px;
+  backface-visibility: hidden;
+  transform: perspective(1000px);
+  transform-style: preserve-3d;
+  transition: all 180ms ease-out;
+  & > nav + * {
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    text-shadow: 0 0 22px rgb(0, 0, 0.6);
+
+    &::-webkit-scrollbar {
+      width: 0.6rem;
+      height: 0.6rem;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $dark-color-3;
+      border-radius: $small-size;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: $font-color-3;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  #card {
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0 100px -5px rgb(0, 0, 0 / 25%);
+    border-radius: 0 !important;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    & > * {
+      flex: 1 1 auto;
+    }
+  }
+}

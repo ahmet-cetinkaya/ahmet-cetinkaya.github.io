@@ -1,0 +1,25 @@
+.quotation-item {
+  .quotation-picture {
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+  }
+
+  .quotation-icon {
+    left: 3rem;
+    bottom: 3rem;
+    line-height: 1.25rem;
+    font-size: 1.25rem;
+    opacity: 0.3;
+  }
+
+  .quotation-icon-big {
+    line-height: 44px;
+    font-size: 44px;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.1;
+  }
+}

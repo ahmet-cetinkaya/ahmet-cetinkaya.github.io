@@ -1,23 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.802305b6.chunk.css",
-    "main.js": "/static/js/main.d25b9d6c.chunk.js",
-    "main.js.map": "/static/js/main.d25b9d6c.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d1738775.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d1738775.js.map",
-    "static/js/2.0eb6d15f.chunk.js": "/static/js/2.0eb6d15f.chunk.js",
-    "static/js/2.0eb6d15f.chunk.js.map": "/static/js/2.0eb6d15f.chunk.js.map",
-    "static/js/3.8504a839.chunk.js": "/static/js/3.8504a839.chunk.js",
-    "static/js/3.8504a839.chunk.js.map": "/static/js/3.8504a839.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/main.802305b6.chunk.css.map": "/static/css/main.802305b6.chunk.css.map",
-    "static/js/2.0eb6d15f.chunk.js.LICENSE.txt": "/static/js/2.0eb6d15f.chunk.js.LICENSE.txt",
-    "static/media/ahmet-cetinkaya-logo.213c03a4.svg": "/static/media/ahmet-cetinkaya-logo.213c03a4.svg"
+    "main.css": "./static/css/main.7707560e.chunk.css",
+    "main.js": "./static/js/main.b5212109.chunk.js",
+    "main.js.map": "./static/js/main.b5212109.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.858b5af4.js",
+    "runtime-main.js.map": "./static/js/runtime-main.858b5af4.js.map",
+    "static/css/2.61b4cb56.chunk.css": "./static/css/2.61b4cb56.chunk.css",
+    "static/js/2.60757ab2.chunk.js": "./static/js/2.60757ab2.chunk.js",
+    "static/js/2.60757ab2.chunk.js.map": "./static/js/2.60757ab2.chunk.js.map",
+    "static/js/3.5eb98324.chunk.js": "./static/js/3.5eb98324.chunk.js",
+    "static/js/3.5eb98324.chunk.js.map": "./static/js/3.5eb98324.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/2.61b4cb56.chunk.css.map": "./static/css/2.61b4cb56.chunk.css.map",
+    "static/css/main.7707560e.chunk.css.map": "./static/css/main.7707560e.chunk.css.map",
+    "static/js/2.60757ab2.chunk.js.LICENSE.txt": "./static/js/2.60757ab2.chunk.js.LICENSE.txt",
+    "static/media/Home.scss": "./static/media/ahmet-cetinkaya-logo.213c03a4.svg",
+    "static/media/App.scss": "./static/media/bg.a93f8688.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.d1738775.js",
-    "static/js/2.0eb6d15f.chunk.js",
-    "static/css/main.802305b6.chunk.css",
-    "static/js/main.d25b9d6c.chunk.js"
+    "static/js/runtime-main.858b5af4.js",
+    "static/css/2.61b4cb56.chunk.css",
+    "static/js/2.60757ab2.chunk.js",
+    "static/css/main.7707560e.chunk.css",
+    "static/js/main.b5212109.chunk.js"
   ]
 }

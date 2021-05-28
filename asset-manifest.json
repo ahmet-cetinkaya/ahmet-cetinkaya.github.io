@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "./static/css/main.2f9586c4.chunk.css",
+    "main.css": "./static/css/main.67823134.chunk.css",
     "main.js": "./static/js/main.239035cc.chunk.js",
     "main.js.map": "./static/js/main.239035cc.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.858b5af4.js",
@@ -12,16 +12,16 @@
     "static/js/3.5eb98324.chunk.js.map": "./static/js/3.5eb98324.chunk.js.map",
     "index.html": "./index.html",
     "static/css/2.61b4cb56.chunk.css.map": "./static/css/2.61b4cb56.chunk.css.map",
-    "static/css/main.2f9586c4.chunk.css.map": "./static/css/main.2f9586c4.chunk.css.map",
+    "static/css/main.67823134.chunk.css.map": "./static/css/main.67823134.chunk.css.map",
     "static/js/2.60757ab2.chunk.js.LICENSE.txt": "./static/js/2.60757ab2.chunk.js.LICENSE.txt",
     "static/media/Home.scss": "./static/media/ahmet-cetinkaya-logo.213c03a4.svg",
-    "static/media/App.scss": "./static/media/bg.a93f8688.png"
+    "static/media/App.scss": "./static/media/bg.7ad68458.png"
   },
   "entrypoints": [
     "static/js/runtime-main.858b5af4.js",
     "static/css/2.61b4cb56.chunk.css",
     "static/js/2.60757ab2.chunk.js",
-    "static/css/main.2f9586c4.chunk.css",
+    "static/css/main.67823134.chunk.css",
     "static/js/main.239035cc.chunk.js"
   ]
 }

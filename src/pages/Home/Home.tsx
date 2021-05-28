@@ -40,12 +40,12 @@ class Home extends Component<WithTranslation> {
 
     return (
       <div id='home' className='row'>
-        <div className='col-5 d-flex justify-content-center align-items-center'>
+        <div className='col-md-5 d-flex justify-content-center align-items-center'>
           <div className='profile-frame shadow'>
             <div className='profile' style={profileStyle}></div>
           </div>
         </div>
-        <div className='col-7 d-flex flex-column justify-content-center align-items-start'>
+        <div className='col-md-7 d-flex flex-column justify-content-center align-items-start'>
           <div id='titleCarousel' className='carousel slide vertical' data-bs-ride='carousel'>
             <div className='carousel-inner'>
               <div className='carousel-item active' data-bs-interval='3000'>

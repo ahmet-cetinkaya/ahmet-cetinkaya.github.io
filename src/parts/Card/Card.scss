@@ -18,21 +18,6 @@
     overflow-y: auto;
     flex: 1 1 auto;
     text-shadow: 0 0 22px rgb(0, 0, 0.6);
-
-    &::-webkit-scrollbar {
-      width: 0.6rem;
-      height: 0.6rem;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: $dark-color-3;
-      border-radius: $small-size;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-      background: $font-color-3;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
   }
 }
 

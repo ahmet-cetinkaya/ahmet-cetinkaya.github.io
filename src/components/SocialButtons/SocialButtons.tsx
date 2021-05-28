@@ -13,7 +13,7 @@ export default class SocialButtons extends Component<Props> {
   render(): JSX.Element {
     const { className } = this.props;
     return (
-      <div className='d-flex'>
+      <div className='d-flex overflow-auto w-100 py-2'>
         <Popper text='Github' trigger='hover focus' placement='bottom'>
           <a href='https://github.com/ahmet-cetinkaya' target='_blank' rel='noreferrer' className={`rounded-circle hoverCircleBackground equal mx-1 ${className}`}>
             <FontAwesomeIcon icon={faGithub} color='white' />

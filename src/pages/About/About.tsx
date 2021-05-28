@@ -32,7 +32,7 @@ import './About.scss';
 class About extends Component<WithTranslation> {
   PersonalInfoField(props: { name: string; info: string }) {
     return (
-      <div className='mb-3'>
+      <div className='mb-3 overflow-auto'>
         <span className='text-accent'>{props.name}</span>
         <span className='fw-light ms-3'>{props.info}</span>
       </div>
@@ -64,19 +64,21 @@ class About extends Component<WithTranslation> {
       <div className='row'>
         <CardTitle title={t('about-me')} secondTitle={t('resume')} />
         <div className='row'>
-          <div className='col px-5'>
-            {t('bio')}
+          <div className='col-xxl-8 px-5'>
+            <p>{t('bio')}</p>
             <span className='d-flex justify-content-center mt-2'>
               <SocialButtons className='fs-3' />
             </span>
           </div>
-          <div className='col-4'>
-            <PersonalInfoField name={t('first-name')} info='Ahmet' />
-            <PersonalInfoField name={t('last-name')} info='Çetinkaya' />
-            <PersonalInfoField name={t('age')} info={getAge().toString()} />
-            <PersonalInfoField name={t('email')} info='ahmet4cetinkaya @ outlook.com' />
-            <PersonalInfoField name={t('langages')} info={`${t('turkish')}, ${t('english')}`} />
-            <PersonalInfoField name={t('address')} info={`Antalya, ${t('turkey')}`} />
+          <div className='d-flex justify-content-center col-xxl-4 mt-3 mt-xxl-0'>
+            <div>
+              <PersonalInfoField name={t('first-name')} info='Ahmet' />
+              <PersonalInfoField name={t('last-name')} info='Çetinkaya' />
+              <PersonalInfoField name={t('age')} info={getAge().toString()} />
+              <PersonalInfoField name={t('email')} info='ahmet4cetinkaya@outlook.com' />
+              <PersonalInfoField name={t('langages')} info={`${t('turkish')}, ${t('english')}`} />
+              <PersonalInfoField name={t('address')} info={`Antalya, ${t('turkey')}`} />
+            </div>
           </div>
         </div>
 

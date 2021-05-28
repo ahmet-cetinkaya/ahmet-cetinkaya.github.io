@@ -23,7 +23,7 @@ export default class Popper extends Component<Props> {
     const { children, text, title, trigger, placement, offset } = this.props;
 
     return (
-      <div
+      <span
         data-bs-toggle='popover'
         title={title}
         data-bs-content={text}
@@ -33,7 +33,7 @@ export default class Popper extends Component<Props> {
         data-bs-custom-class='bg-dark-color-2 text-white rounded p-1 shadow'
       >
         {children}
-      </div>
+      </span>
     );
   }
 }

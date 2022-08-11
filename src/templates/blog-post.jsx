@@ -4,6 +4,7 @@ import {Link, graphql} from 'gatsby';
 import Bio from '../shared/components/Bio/Bio';
 import Layout from '../shared/layouts/layout';
 import Seo from '../core/components/Seo/Seo';
+import {getPostUrl} from '../features/blog/utils/postHelper';
 
 function BlogPostTemplate({
   data: {previous, next, site, markdownRemark: post},
@@ -43,14 +44,14 @@ function BlogPostTemplate({
         >
           <li>
             {previous && (
-              <Link to={previous.fields.slug} rel="prev">
+              <Link to={getPostUrl(previous)} rel="prev">
                 ← {previous.frontmatter.title}
               </Link>
             )}
           </li>
           <li>
             {next && (
-              <Link to={next.fields.slug} rel="next">
+              <Link to={getPostUrl(next)} rel="next">
                 {next.frontmatter.title} →
               </Link>
             )}

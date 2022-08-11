@@ -3,6 +3,7 @@ import {Link, graphql} from 'gatsby';
 
 import Layout from '../shared/layouts/layout';
 import Seo from '../core/components/Seo/Seo';
+import {getPostUrl} from '../features/blog/utils/postHelper';
 
 function BlogIndex({data, location}) {
   const siteTitle = data.site.siteMetadata?.title || `Title`;
@@ -23,7 +24,7 @@ function BlogIndex({data, location}) {
               >
                 <header>
                   <h2>
-                    <Link to={post.fields.slug} itemProp="url">
+                    <Link to={getPostUrl(post)} itemProp="url">
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>

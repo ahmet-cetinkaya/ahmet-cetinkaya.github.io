@@ -1,0 +1,61 @@
+{
+  "name": "ahmet-cetinkaya.github.io",
+  "private": true,
+  "description": "Ahmet Çetinkaya's personal website.",
+  "version": "0.1.0",
+  "author": "Ahmet Çetinkaya <ahmetcetinkaya7@outlook.com>",
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "dependencies": {
+    "gatsby": "^4.20.0",
+    "gatsby-plugin-feed": "^4.20.0",
+    "gatsby-plugin-image": "^2.20.0",
+    "gatsby-plugin-manifest": "^4.20.0",
+    "gatsby-plugin-sass": "^5.20.0",
+    "gatsby-plugin-sharp": "^4.20.0",
+    "gatsby-remark-copy-linked-files": "^5.20.0",
+    "gatsby-remark-images": "^6.20.0",
+    "gatsby-remark-prismjs": "^6.20.0",
+    "gatsby-remark-responsive-iframe": "^5.20.0",
+    "gatsby-remark-smartypants": "^5.20.0",
+    "gatsby-source-filesystem": "^4.20.0",
+    "gatsby-transformer-remark": "^5.20.0",
+    "gatsby-transformer-sharp": "^4.20.0",
+    "prismjs": "^1.28.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "sass": "^1.54.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "2.7.1"
+  },
+  "homepage": "https://github.com/gatsbyjs/ahmet-cetinkaya.github.io#readme",
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "0BSD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gatsbyjs/ahmet-cetinkaya.github.io.git"
+  },
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "gatsby clean && gatsby build && gatsby clean && gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
+  }
+}

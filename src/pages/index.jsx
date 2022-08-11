@@ -4,6 +4,7 @@ import {Link, graphql} from 'gatsby';
 import Layout from '../shared/layouts/layout';
 import Seo from '../core/components/Seo/Seo';
 import {getPostUrl} from '../features/blog/utils/postHelper';
+import ChangeLanguageMenu from '../core/components/ChangeLanguageMenu/ChangeLanguageMenu';
 
 function BlogIndex({data, location}) {
   const siteTitle = data.site.siteMetadata?.title || `Title`;
@@ -11,6 +12,7 @@ function BlogIndex({data, location}) {
 
   return (
     <Layout location={location} title={siteTitle}>
+      <ChangeLanguageMenu />
       <ol style={{listStyle: `none`}}>
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;

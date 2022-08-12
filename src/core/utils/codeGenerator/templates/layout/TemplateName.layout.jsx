@@ -5,7 +5,7 @@ import React from 'react';
 
 function TemplateName({children}) {
   return (
-    <div className="TemplateName" data-testid="TemplateName">
+    <div>
       TemplateName Component
       {children}
     </div>

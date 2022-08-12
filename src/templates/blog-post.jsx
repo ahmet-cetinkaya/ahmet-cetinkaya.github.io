@@ -2,9 +2,9 @@ import * as React from 'react';
 import {Link, graphql} from 'gatsby';
 
 import Bio from '../shared/components/Bio/Bio';
-import Layout from '../shared/layouts/layout';
 import Seo from '../core/components/Seo/Seo';
 import {getPostUrl} from '../features/blog/utils/postHelper';
+import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
 function BlogPostTemplate({
   data: {previous, next, site, markdownRemark: post},
@@ -13,7 +13,7 @@ function BlogPostTemplate({
   const siteTitle = site.siteMetadata?.title || `Title`;
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <CardLayout location={location} title={siteTitle}>
       <article
         className="blog-post"
         itemScope
@@ -58,7 +58,7 @@ function BlogPostTemplate({
           </li>
         </ul>
       </nav>
-    </Layout>
+    </CardLayout>
   );
 }
 

@@ -1,0 +1,47 @@
+@import '../../../assets/styles/index.scss';
+
+.ac-card-layout {
+  @extend .position-relative,
+    .d-flex,
+    .flex-column,
+    .p-5,
+    .rounded-3,
+    .shadow,
+    .ac-bg-dark-color,
+    .ac-text-color;
+  margin: 10vh auto;
+  height: 80vh !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: perspective(1000px);
+  transform-style: preserve-3d;
+  transition: all 180ms ease-out;
+
+  & > main {
+    @extend .p-3;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+
+  // & > nav + * {
+  //   overflow-x: hidden;
+  //   overflow-y: auto;
+  //   flex: 1 1 auto;
+  //   text-shadow: 0 0 22px rgb(0, 0, 0.6);
+  // }
+
+  @media #{$media-max-lg} {
+    margin: 0 !important;
+    padding: $small-size-3 !important;
+    height: 100vh !important;
+    min-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+}
+
+.ac-card-layout-extended {
+  @extend .ac-card-layout;
+  max-width: 80vw !important;
+}

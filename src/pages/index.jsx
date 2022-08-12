@@ -1,17 +1,16 @@
 import * as React from 'react';
 import {Link, graphql} from 'gatsby';
 
-import Layout from '../shared/layouts/layout';
 import Seo from '../core/components/Seo/Seo';
 import {getPostUrl} from '../features/blog/utils/postHelper';
 import ChangeLanguageMenu from '../core/components/ChangeLanguageMenu/ChangeLanguageMenu';
+import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
 function BlogIndex({data, location}) {
-  const siteTitle = data.site.siteMetadata?.title || `Title`;
   const posts = data.allMarkdownRemark.nodes;
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <CardLayout location={location}>
       <ChangeLanguageMenu />
       <ol style={{listStyle: `none`}}>
         {posts.map(post => {
@@ -45,7 +44,7 @@ function BlogIndex({data, location}) {
           );
         })}
       </ol>
-    </Layout>
+    </CardLayout>
   );
 }
 export default BlogIndex;
@@ -55,7 +54,16 @@ export function Head() {
 }
 
 export const pageQuery = graphql`
-  query {
+  query ($language: String!) {
+    locales: allLocale(filter: {language: {eq: $language}}) {
+      edges {
+        node {
+          ns
+          data
+          language
+        }
+      }
+    }
     site {
       siteMetadata {
         title

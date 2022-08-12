@@ -1,0 +1,23 @@
+$border-radius-sm: $small-size-3;
+$border-radius: $medium-size;
+$border-radius-lg: $medium-size-2;
+@import '/node_modules/bootstrap/scss/bootstrap.scss';
+.rounded-4 {
+  border-radius: $medium-size-3;
+}
+.carousel.ac-vertical {
+  .carousel-item-next.carousel-item-start,
+  .carousel-item-prev.carousel-item-end {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .carousel-item-next,
+  .active.carousel-item-end {
+    transform: translate3d(0, 100% 0);
+  }
+
+  .carousel-item-prev,
+  .active.carousel-item-start {
+    transform: translate3d(0, -100%, 0);
+  }
+}

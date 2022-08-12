@@ -1,0 +1,14 @@
+@import '../../../assets/styles/index.scss';
+
+.ac-bg {
+  @extend .d-none, .d-lg-block, .ac-background-image;
+  background-image: url('../../../assets/images/bg.png');
+  background-position: top;
+}
+
+.ac-bg-back {
+  @extend .d-none, .d-lg-block, .ac-background-image;
+  background-image: url('../../../assets/images/bg-back.jpg');
+  background-repeat: repeat;
+  z-index: -2;
+}

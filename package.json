@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fontsource/poppins": "^4.5.9",
+    "@react-icons/all-files": "^4.1.0",
     "bootstrap": "^5.2.0",
     "dotenv": "^16.0.1",
     "gatsby": "^4.20.0",

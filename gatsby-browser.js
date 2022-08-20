@@ -1,6 +1,3 @@
-// custom CSS styles
-import '@fontsource/poppins';
-import './src/assets/styles/index.scss';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
-// Highlighting for code blocks
-import 'prismjs/themes/prism.css';
+import './src/shared/assets/styles/index.scss';

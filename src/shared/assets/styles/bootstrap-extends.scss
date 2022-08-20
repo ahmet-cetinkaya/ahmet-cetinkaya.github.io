@@ -1,7 +1,8 @@
 $border-radius-sm: $small-size-3;
 $border-radius: $medium-size;
 $border-radius-lg: $medium-size-2;
-@import '/node_modules/bootstrap/scss/bootstrap.scss';
+@import 'bootstrap/scss/bootstrap.scss';
+
 .rounded-4 {
   border-radius: $medium-size-3;
 }
@@ -20,4 +21,7 @@ $border-radius-lg: $medium-size-2;
   .active.carousel-item-start {
     transform: translate3d(0, -100%, 0);
   }
+}
+.fw-900 {
+  font-weight: 900;
 }

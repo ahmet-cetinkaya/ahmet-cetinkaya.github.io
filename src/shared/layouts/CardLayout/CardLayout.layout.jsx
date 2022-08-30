@@ -11,6 +11,7 @@ import {
   createResetCardStateAction,
   createSetCardStyleAction,
 } from '../../store/card/card.actions';
+import SideNavbar from '../SideNavbar/SideNavbar';
 
 function CardLayout({location, children}) {
   const storeDispatch = useDispatch();
@@ -79,6 +80,7 @@ function CardLayout({location, children}) {
         )}
         style={style}
       >
+        <SideNavbar />
         <main>{children}</main>
       </div>
     </>

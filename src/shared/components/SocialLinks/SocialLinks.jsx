@@ -56,7 +56,7 @@ function SocialLinks() {
   return (
     <div className="d-flex overflow-auto w-100 py-2">
       {getLinks().map(({name, url, icon}) => (
-        <Popover key={name} content={name}>
+        <Popover key={name} content={name} placement="bottom">
           <IconButton url={url} icon={icon} />
         </Popover>
       ))}

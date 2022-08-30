@@ -9,6 +9,7 @@
     .shadow,
     .ac-bg-dark-color,
     .ac-text-color;
+  z-index: 1;
   margin: 10vh auto;
   height: 80vh !important;
   -webkit-backface-visibility: hidden;
@@ -25,12 +26,13 @@
     overflow: auto;
   }
 
-  // & > nav + * {
-  //   overflow-x: hidden;
-  //   overflow-y: auto;
-  //   flex: 1 1 auto;
-  //   text-shadow: 0 0 22px rgb(0, 0, 0.6);
-  // }
+  &.ac-card-layout-extended {
+    max-width: 80vw !important;
+  }
+
+  @media only screen and (max-width: 1500px) {
+    max-width: 80vw !important;
+  }
 
   @media #{$media-max-lg} {
     margin: 0 !important;
@@ -41,7 +43,14 @@
   }
 }
 
-.ac-card-layout-extended {
-  @extend .ac-card-layout;
-  max-width: 80vw !important;
+.ac-change-language-button {
+  @extend .btn, .py-2, .px-3, .rounded, .ac-bg-dark-color, .ac-text-color-3;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+
+  @media #{$media-max-lg} {
+    top: 2.3rem;
+    right: 6rem;
+  }
 }

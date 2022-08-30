@@ -2,22 +2,21 @@ import './IconButton.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'gatsby-plugin-react-i18next';
+import classNames from 'classnames';
 
 function IconButton({url, route, onClick, icon, className}) {
+  const iconButtonClassName = classNames('ac-icon-button', className);
+
   if (route)
     return (
-      <Link to={route} className={`ac-icon-button ${className}`}>
+      <Link to={route} className={iconButtonClassName}>
         {icon}
       </Link>
     );
 
   if (onClick)
     return (
-      <button
-        type="button"
-        onClick={onClick}
-        className={`ac-icon-button ${className}`}
-      >
+      <button type="button" onClick={onClick} className={iconButtonClassName}>
         {icon}
       </button>
     );
@@ -27,7 +26,7 @@ function IconButton({url, route, onClick, icon, className}) {
       href={url}
       target="_blank"
       rel="noreferrer"
-      className={`ac-icon-button ${className}`}
+      className={iconButtonClassName}
     >
       {icon}
     </a>

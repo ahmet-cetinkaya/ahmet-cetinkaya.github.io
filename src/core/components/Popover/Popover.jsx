@@ -2,6 +2,7 @@ import './Popover.scss';
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {usePopper} from 'react-popper';
+import classNames from 'classnames';
 
 function Popover({children, title, content, trigger, placement, offset}) {
   const [isShow, setIsShow] = useState(false);
@@ -65,9 +66,9 @@ function Popover({children, title, content, trigger, placement, offset}) {
 
       <div
         ref={setPopperElement}
-        className={`popover ac-popover bs-popover-auto fade${
-          isShow ? ' show' : ''
-        }`}
+        className={classNames('popover ac-popover bs-popover-auto fade', {
+          show: isShow,
+        })}
         style={styles.popper}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...attributes.popper}

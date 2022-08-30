@@ -3,7 +3,6 @@ import {Link, graphql} from 'gatsby';
 
 import Seo from '../core/components/Seo/Seo';
 import {getPostUrl} from '../features/blog/utils/postHelper';
-import ChangeLanguageMenu from '../core/components/ChangeLanguageMenu/ChangeLanguageMenu';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
 function BlogIndex({data, location}) {
@@ -11,7 +10,6 @@ function BlogIndex({data, location}) {
 
   return (
     <CardLayout location={location}>
-      <ChangeLanguageMenu />
       <ol style={{listStyle: `none`}}>
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;

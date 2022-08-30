@@ -1,8 +1,11 @@
+/* eslint-disable no-undef */
 import './CardLayout.layout.scss';
 
 import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import classNames from 'classnames';
+import {useI18next} from 'gatsby-plugin-react-i18next';
 import {tiltElementOnMouseMove} from '../../../core/utils/animation/animationHelper';
 import CodeSpaceBackground from '../../components/CodeSpaceBackground/CodeSpaceBackground';
 import {
@@ -12,11 +15,12 @@ import {
   createSetCardStyleAction,
 } from '../../store/card/card.actions';
 import SideNavbar from '../SideNavbar/SideNavbar';
+import ChangeLanguageButton from '../../../core/components/ChangeLanguageButton/ChangeLanguageButton';
 
 function CardLayout({location, children}) {
   const storeDispatch = useDispatch();
   const {classes, style} = useSelector(state => state.cardReducer);
-
+  const {languages} = useI18next();
   let cardTransformTimeout = false;
 
   const setCardTransformTimeout = () => {
@@ -43,12 +47,13 @@ function CardLayout({location, children}) {
   };
 
   const setIsCardLayoutExtended = () => {
-    // eslint-disable-next-line no-undef
-    const rootPath = `${__PATH_PREFIX__}/`;
-    const isRootPath = location.pathname === rootPath;
-    const className = 'ac-card-layout-extended';
-    if (!isRootPath) storeDispatch(createAddCardClassAction(className));
-    else storeDispatch(createRemoveCardClassAction(className));
+    const isRootPath = [
+      `${__PATH_PREFIX__}/`,
+      ...languages.map(language => `${__PATH_PREFIX__}/${language}/`),
+    ].includes(location.pathname);
+    const extendedClassName = 'ac-card-layout-extended';
+    if (!isRootPath) storeDispatch(createAddCardClassAction(extendedClassName));
+    else storeDispatch(createRemoveCardClassAction(extendedClassName));
   };
 
   useEffect(() => {
@@ -75,12 +80,11 @@ function CardLayout({location, children}) {
     <>
       <CodeSpaceBackground />
       <div
-        className={['ac-card-layout', 'container', 'card', ...classes].join(
-          ' '
-        )}
+        className={classNames('ac-card-layout container card', classes)}
         style={style}
       >
         <SideNavbar />
+        <ChangeLanguageButton className="ac-change-language-button" />
         <main>{children}</main>
       </div>
     </>

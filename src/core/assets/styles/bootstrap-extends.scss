@@ -1,10 +1,12 @@
+@import './variables.scss';
+
 $border-radius-sm: $small-size-3;
 $border-radius: $medium-size;
 $border-radius-lg: $medium-size-2;
 @import 'bootstrap/scss/bootstrap.scss';
 
 .rounded-4 {
-  border-radius: $medium-size-3;
+  border-radius: $medium-size-3 !important;
 }
 .carousel.ac-vertical {
   .carousel-item-next.carousel-item-start,

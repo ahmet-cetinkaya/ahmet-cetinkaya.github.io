@@ -1,9 +1,9 @@
-@import './fonts.scss';
 @import './variables.scss';
+@import '../../../core/assets/styles/index.scss';
+@import './fonts.scss';
 @import './colors.scss';
 @import './abstracts.scss';
 @import './utils.scss';
-@import './bootstrap-extends.scss';
 @import 'prismjs/themes/prism.css'; // Highlighting for code blocks
 
 // General
@@ -17,7 +17,7 @@ a {
 }
 a:focus,
 a:hover {
-  color: $font-color;
+  color: $light-color;
 }
 a,
 .btn {
@@ -33,7 +33,7 @@ a,
   border-radius: $small-size;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: $font-color-3;
+  background: $light-color-3;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

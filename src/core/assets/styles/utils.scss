@@ -1,0 +1,40 @@
+@import './variables.scss';
+
+.ac-hover-opacity {
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.rounded-circle.ac-hover-circle-background {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+
+  svg {
+    color: $light-color !important;
+  }
+
+  &:hover {
+    background-color: $accent-color;
+
+    svg {
+      color: $dark-color-2 !important;
+    }
+  }
+}
+
+.ac-bg-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  letter-spacing: 10px;
+  line-height: 0.7;
+  transform: translateY(-50%);
+  opacity: 0.07;
+}

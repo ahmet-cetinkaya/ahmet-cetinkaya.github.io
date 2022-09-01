@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import './CardLayout.layout.scss';
 
 import PropTypes from 'prop-types';
@@ -47,9 +46,11 @@ function CardLayout({location, children}) {
   };
 
   const setIsCardLayoutExtended = () => {
+    // eslint-disable-next-line no-undef
+    const rootPath = `${__PATH_PREFIX__}`;
     const isRootPath = [
-      `${__PATH_PREFIX__}/`,
-      ...languages.map(language => `${__PATH_PREFIX__}/${language}/`),
+      `${rootPath}/`,
+      ...languages.map(language => `${rootPath}/${language}/`),
     ].includes(location.pathname);
     const extendedClassName = 'ac-card-layout-extended';
     if (!isRootPath) storeDispatch(createAddCardClassAction(extendedClassName));

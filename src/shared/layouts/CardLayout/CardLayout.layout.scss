@@ -24,6 +24,7 @@
     width: 100%;
     box-sizing: border-box;
     overflow: auto;
+    z-index: 0;
   }
 
   &.ac-card-layout-extended {

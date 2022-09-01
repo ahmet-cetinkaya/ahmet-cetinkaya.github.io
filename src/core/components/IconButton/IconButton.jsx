@@ -3,47 +3,54 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'gatsby-plugin-react-i18next';
 import classNames from 'classnames';
+import {isUrl} from '../../utils/validation/regexHelper';
 
-function IconButton({url, route, onClick, icon, className}) {
+function IconButton({link, onClick, icon, className, ...attributes}) {
   const iconButtonClassName = classNames('ac-icon-button', className);
 
-  if (route)
+  if (link) {
+    if (isUrl(link)) {
+      return (
+        <a
+          href={link}
+          target="_blank"
+          rel="noreferrer"
+          className={iconButtonClassName}
+        >
+          {icon}
+        </a>
+      );
+    }
+
     return (
-      <Link to={route} className={iconButtonClassName}>
+      <Link to={link} className={iconButtonClassName}>
         {icon}
       </Link>
     );
-
-  if (onClick)
-    return (
-      <button type="button" onClick={onClick} className={iconButtonClassName}>
-        {icon}
-      </button>
-    );
+  }
 
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noreferrer"
+    <button
+      type="button"
       className={iconButtonClassName}
+      onClick={onClick}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...attributes}
     >
       {icon}
-    </a>
+    </button>
   );
 }
 
 IconButton.propTypes = {
-  url: PropTypes.string,
-  route: PropTypes.string,
+  link: PropTypes.string,
   onClick: PropTypes.func,
   icon: PropTypes.node.isRequired,
   className: PropTypes.string,
 };
 
 IconButton.defaultProps = {
-  url: '',
-  route: '',
+  link: '',
   onClick: null,
   className: '',
 };

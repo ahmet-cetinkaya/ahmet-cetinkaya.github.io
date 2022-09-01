@@ -1,7 +1,7 @@
 @import '../../../shared/assets/styles/index.scss';
 
 .ac-icon-button {
-  @extend .rounded-circle, .ac-hover-circle-background, .mx-1;
+  @extend .rounded-circle, .ac-hover-circle-background, .mx-1, .border-0;
   padding: $small-size;
   height: 3rem;
   width: 3rem;

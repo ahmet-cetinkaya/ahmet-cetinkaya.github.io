@@ -1,13 +1,12 @@
 const path = require(`path`);
 const {createFilePath} = require(`gatsby-source-filesystem`);
+const redirects = require('./src/shared/assets/data/redirects.json');
 
 exports.createPages = async ({graphql, actions, reporter}) => {
   const {createPage} = actions;
 
-  // Define a template for blog post
+  // Blog Post Pages
   const blogPost = path.resolve(`./src/templates/blog-post.jsx`);
-
-  // Get all markdown blog posts sorted by date
   const result = await graphql(
     `
       {
@@ -59,6 +58,18 @@ exports.createPages = async ({graphql, actions, reporter}) => {
           nextPostId,
         },
       });
+    });
+  });
+
+  // Redirect Pages
+  const redirectComponent = path.resolve(`./src/templates/redirect.jsx`);
+  redirects.forEach(redirect => {
+    createPage({
+      path: redirect.from,
+      component: redirectComponent,
+      context: {
+        redirectTo: redirect.to,
+      },
     });
   });
 };

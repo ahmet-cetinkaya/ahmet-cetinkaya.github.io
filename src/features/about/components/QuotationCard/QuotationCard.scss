@@ -1,0 +1,37 @@
+@import '../../../../shared/assets/styles/index.scss';
+
+.ac-quotation-card-item {
+  @extend .p-4;
+  position: relative;
+
+  .ac-quotation-card-content {
+    @extend .ac-bg-dark-color-2, .p-5, .rounded, .border, .border-secondary;
+
+    .ac-quotation-card-picture {
+      position: absolute;
+      top: -1rem;
+      left: -1rem;
+      width: 80px;
+      height: 80px;
+    }
+
+    .ac-quotation-card-icon {
+      @extend .d-block, .position-absolute, .text-white;
+      left: 3rem;
+      bottom: 3rem;
+      line-height: 1.25rem;
+      font-size: 1.25rem;
+      opacity: 0.3;
+    }
+
+    .ac-quotation-card-icon-big {
+      @extend .d-block, .position-absolute, .text-white;
+      line-height: 44px;
+      font-size: 44px;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      opacity: 0.1;
+    }
+  }
+}

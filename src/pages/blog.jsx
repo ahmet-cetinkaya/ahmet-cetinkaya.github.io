@@ -5,7 +5,7 @@ import Seo from '../core/components/Seo/Seo';
 import {getPostUrl} from '../features/blog/utils/postHelper';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
-function BlogIndex({data, location}) {
+function Blog({data, location}) {
   const posts = data.allMarkdownRemark.nodes;
 
   return (
@@ -45,10 +45,12 @@ function BlogIndex({data, location}) {
     </CardLayout>
   );
 }
-export default BlogIndex;
+export default Blog;
 
-export function Head() {
-  return <Seo title="All posts" />;
+export function Head({data}) {
+  // todo: use instead usei18next (https://github.com/microapps/gatsby-plugin-react-i18next/issues/150)
+  const locales = JSON.parse(data.locales.edges[0].node.data);
+  return <Seo title={locales.blog} />;
 }
 
 export const pageQuery = graphql`

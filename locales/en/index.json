@@ -1,7 +1,17 @@
 {
+  "hi": "Hi",
   "home": "Home",
   "aboutMe": "About Me",
   "portfolio": "Portfolio",
   "blog": "Blog",
-  "contactMe": "Contact Me"
+  "contactMe": "Contact Me",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "E-Mail",
+  "age": "Age",
+  "languages": "Languages",
+  "location": "Location",
+  "turkish": "Turkish",
+  "english": "English",
+  "turkey": "Turkey"
 }

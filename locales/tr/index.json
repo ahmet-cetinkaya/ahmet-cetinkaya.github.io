@@ -1,7 +1,17 @@
 {
+  "hi": "Merhaba",
   "home": "Ana Sayfa",
   "aboutMe": "Hakkımda",
   "portfolio": "Portföy",
   "blog": "Blog",
-  "contactMe": "Bana Ulaşın"
+  "contactMe": "Bana Ulaşın",
+  "firstName": "Ad",
+  "lastName": "Soyad",
+  "email": "E-posta",
+  "age": "Yaş",
+  "languages": "Diller",
+  "location": "Konum",
+  "turkish": "Türkçe",
+  "english": "İngilizce",
+  "turkey": "Türkiye"
 }

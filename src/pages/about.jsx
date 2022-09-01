@@ -3,23 +3,23 @@ import {graphql} from 'gatsby';
 
 import Seo from '../core/components/Seo/Seo';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
-import HomePage from '../features/home/pages/HomePage/HomePage';
+import AboutPage from '../features/about/pages/AboutPage/AboutPage';
 
-function Index({location}) {
+function About({location}) {
   return (
     <CardLayout location={location}>
-      <HomePage />
+      <AboutPage />
     </CardLayout>
   );
 }
-export default Index;
+export default About;
 
 export function Head({data}) {
   // todo: use instead usei18next (https://github.com/microapps/gatsby-plugin-react-i18next/issues/150)
   const locales = JSON.parse(
     data.locales.edges.find(edge => edge.node.ns === 'index').node.data
   );
-  return <Seo title={locales.hi} />;
+  return <Seo title={locales.aboutMe} />;
 }
 
 export const pageQuery = graphql`

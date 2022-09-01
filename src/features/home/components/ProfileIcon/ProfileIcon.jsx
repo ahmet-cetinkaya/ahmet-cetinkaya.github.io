@@ -16,7 +16,7 @@ function ProfileIcon() {
     profileIconMoveEffectTimeout = true;
     setTimeout(() => {
       profileIconMoveEffectTimeout = false;
-    }, 20);
+    }, 10);
   };
 
   const profileIconMoveEffect = event => {

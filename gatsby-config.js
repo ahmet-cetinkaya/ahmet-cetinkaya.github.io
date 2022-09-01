@@ -112,12 +112,12 @@ module.exports = {
         name: `Ahmet Çetinkaya`,
         short_name: `ahmetcetinkaya`,
         start_url: `/`,
-        background_color: `#ffffff`,
+        background_color: `#352e6a`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
         // theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/shared/assets/images/icon.png`, // This path is relative to the root of the site.
+        icon: `src/shared/assets/images/profile-pic.png`, // This path is relative to the root of the site.
       },
     },
     'gatsby-plugin-sass',

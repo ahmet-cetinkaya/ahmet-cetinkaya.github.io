@@ -14,3 +14,5 @@ jobs:
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
           deploy-branch: gh-pages
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}

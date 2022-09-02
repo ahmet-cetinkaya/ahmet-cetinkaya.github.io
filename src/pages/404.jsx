@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {graphql} from 'gatsby';
+import { graphql } from 'gatsby';
 
 import Seo from '../core/components/Seo/Seo';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
-function NotFoundPage({data, location}) {
+function NotFoundPage({ data, location }) {
   const siteTitle = data.site.siteMetadata.title;
 
   return (
@@ -22,7 +22,7 @@ export function Head() {
 
 export const pageQuery = graphql`
   query ($language: String!) {
-    locales: allLocale(filter: {language: {eq: $language}}) {
+    locales: allLocale(filter: { language: { eq: $language } }) {
       edges {
         node {
           ns

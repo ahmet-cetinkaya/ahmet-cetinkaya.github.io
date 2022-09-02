@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-function IconLabel({icon, name, className}) {
+function IconLabel({ icon, name, className }) {
   return (
     <div className={classNames('ac-icon-label', className)}>
       {icon}

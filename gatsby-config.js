@@ -11,7 +11,7 @@ module.exports = {
       summary: 'Computer Engineer, Software Developer and Lifetime Learner',
     },
     description: aboutLocale.shortBio,
-    siteUrl: 'https://ahmetcetinkaya.me/',
+    siteUrl: process.env.SITE_URL,
     social: {
       twitter: 'ahmetctnky_dev',
     },
@@ -73,14 +73,14 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({query: {site, allMarkdownRemark}}) =>
-              allMarkdownRemark.nodes.map(node => ({
+            serialize: ({ query: { site, allMarkdownRemark } }) =>
+              allMarkdownRemark.nodes.map((node) => ({
                 ...node.frontmatter,
                 description: node.excerpt,
                 date: node.frontmatter.date,
                 url: site.siteMetadata.siteUrl + node.fields.slug,
                 guid: site.siteMetadata.siteUrl + node.fields.slug,
-                custom_elements: [{'content:encoded': node.html}],
+                custom_elements: [{ 'content:encoded': node.html }],
               })),
             query: `
               {
@@ -171,6 +171,6 @@ module.exports = {
         windowKey: '__PRELOADED_STATE__',
       },
     },
-    'gatsby-plugin-sitemap'
+    'gatsby-plugin-sitemap',
   ],
 };

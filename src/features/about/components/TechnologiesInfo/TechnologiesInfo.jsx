@@ -1,30 +1,30 @@
 import './TechnologiesInfo.scss';
 
-import {SiCsharp} from '@react-icons/all-files/si/SiCsharp';
-import {SiDotNet} from '@react-icons/all-files/si/SiDotNet';
-import {SiJavascript} from '@react-icons/all-files/si/SiJavascript';
-import {SiTypescript} from '@react-icons/all-files/si/SiTypescript';
-import {SiNodeDotJs} from '@react-icons/all-files/si/SiNodeDotJs';
-import {SiReact} from '@react-icons/all-files/si/SiReact';
-import {SiAngular} from '@react-icons/all-files/si/SiAngular';
-import {SiJava} from '@react-icons/all-files/si/SiJava';
-import {SiSpring} from '@react-icons/all-files/si/SiSpring';
-import {SiMicrosoftsqlserver} from '@react-icons/all-files/si/SiMicrosoftsqlserver';
-import {SiMysql} from '@react-icons/all-files/si/SiMysql';
-import {SiPostgresql} from '@react-icons/all-files/si/SiPostgresql';
-import {SiMongodb} from '@react-icons/all-files/si/SiMongodb';
-import {SiAmazonaws} from '@react-icons/all-files/si/SiAmazonaws';
-import {SiDart} from '@react-icons/all-files/si/SiDart';
-import {SiFlutter} from '@react-icons/all-files/si/SiFlutter';
-import {SiUnity} from '@react-icons/all-files/si/SiUnity';
-import {SiAdobe} from '@react-icons/all-files/si/SiAdobe';
+import { SiCsharp } from '@react-icons/all-files/si/SiCsharp';
+import { SiDotNet } from '@react-icons/all-files/si/SiDotNet';
+import { SiJavascript } from '@react-icons/all-files/si/SiJavascript';
+import { SiTypescript } from '@react-icons/all-files/si/SiTypescript';
+import { SiNodeDotJs } from '@react-icons/all-files/si/SiNodeDotJs';
+import { SiReact } from '@react-icons/all-files/si/SiReact';
+import { SiAngular } from '@react-icons/all-files/si/SiAngular';
+import { SiJava } from '@react-icons/all-files/si/SiJava';
+import { SiSpring } from '@react-icons/all-files/si/SiSpring';
+import { SiMicrosoftsqlserver } from '@react-icons/all-files/si/SiMicrosoftsqlserver';
+import { SiMysql } from '@react-icons/all-files/si/SiMysql';
+import { SiPostgresql } from '@react-icons/all-files/si/SiPostgresql';
+import { SiMongodb } from '@react-icons/all-files/si/SiMongodb';
+import { SiAmazonaws } from '@react-icons/all-files/si/SiAmazonaws';
+import { SiDart } from '@react-icons/all-files/si/SiDart';
+import { SiFlutter } from '@react-icons/all-files/si/SiFlutter';
+import { SiUnity } from '@react-icons/all-files/si/SiUnity';
+import { SiAdobe } from '@react-icons/all-files/si/SiAdobe';
 import React from 'react';
-import {useI18next} from 'gatsby-plugin-react-i18next';
+import { useI18next } from 'gatsby-plugin-react-i18next';
 import IconLabel from '../../../../core/components/IconLabel/IconLabel';
 import Title from '../../../../shared/components/Title/Title';
 
 function TechnologiesInfo() {
-  const {t} = useI18next();
+  const { t } = useI18next();
 
   const technologiesInfoFields = [
     {
@@ -104,7 +104,7 @@ function TechnologiesInfo() {
   return (
     <>
       <Title title={t('technologiesIUse')} />
-      {technologiesInfoFields.map(field => (
+      {technologiesInfoFields.map((field) => (
         <IconLabel
           key={field.name}
           icon={field.icon}

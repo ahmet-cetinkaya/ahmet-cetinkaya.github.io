@@ -1,16 +1,16 @@
 import './Testimonials.scss';
 
 import React from 'react';
-import {useI18next} from 'gatsby-plugin-react-i18next';
-import {FaChevronLeft} from '@react-icons/all-files/fa/FaChevronLeft';
-import {FaChevronRight} from '@react-icons/all-files/fa/FaChevronRight';
+import { useI18next } from 'gatsby-plugin-react-i18next';
+import { FaChevronLeft } from '@react-icons/all-files/fa/FaChevronLeft';
+import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
 import classNames from 'classnames';
 import Title from '../../../../shared/components/Title/Title';
 import IconButton from '../../../../core/components/IconButton/IconButton';
 import QuotationCard from '../QuotationCard/QuotationCard';
 
 function Testimonials() {
-  const {t} = useI18next();
+  const { t } = useI18next();
   const testimonials = [
     {
       name: 'Engin Demiroğ',
@@ -46,22 +46,24 @@ function Testimonials() {
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          {testimonials.map(({name}, index) => (
+          {testimonials.map(({ name }, index) => (
             <button
               type="button"
               data-bs-target="#testimonialsCarousel"
               data-bs-slide-to={index}
-              className={classNames({active: index === 0})}
+              className={classNames({ active: index === 0 })}
               aria-current="true"
               aria-label={`${name} ${t('testimonials')}`}
             />
           ))}
         </div>
 
-        <div className="carousel-inner p-3 w-75">
-          {testimonials.map(({name, text, bio, imageUrl, link}, index) => (
+        <div className="carousel-inner ac-testimonial-carousel-inner">
+          {testimonials.map(({ name, text, bio, imageUrl, link }, index) => (
             <div
-              className={classNames('carousel-item', {active: index === 0})}
+              className={classNames('carousel-item', {
+                active: index === 0,
+              })}
               data-bs-interval="4000"
             >
               <QuotationCard

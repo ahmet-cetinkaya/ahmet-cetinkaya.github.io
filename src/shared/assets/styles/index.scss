@@ -4,11 +4,17 @@
 @import './colors.scss';
 @import './abstracts.scss';
 @import './utils.scss';
+@import 'normalize.css/normalize.css'; // Makes browsers render all elements more consistently and in line with modern standards
 @import 'prismjs/themes/prism.css'; // Highlighting for code blocks
 
 // General
+html{
+  overflow-x: hidden;
+}
 body {
   font-family: 'Poppins', Helvetica, Arial, sans-serif !important;
+  position: relative;
+  overflow-x: hidden;
 }
 a {
   @extend .ac-text-accent;

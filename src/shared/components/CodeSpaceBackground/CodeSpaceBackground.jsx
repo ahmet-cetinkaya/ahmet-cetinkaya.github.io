@@ -1,12 +1,12 @@
 import './CodeSpaceBackground.scss';
 
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {createSetBackgroundStyleAction} from '../../store/background/background.actions';
-import {moveBackgroundPositionOnMouseMove} from '../../../core/utils/animation/animationHelper';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSetBackgroundStyleAction } from '../../store/background/background.actions';
+import { moveBackgroundPositionOnMouseMove } from '../../../core/utils/animation/animationHelper';
 
 function CodeSpaceBackground() {
-  const {style} = useSelector(state => state.backgroundReducer);
+  const { style } = useSelector((state) => state.backgroundReducer);
   const storeDispatch = useDispatch();
 
   let backgroundPositionTimeout = false;
@@ -18,7 +18,7 @@ function CodeSpaceBackground() {
     }, 40);
   };
 
-  const setBackgroundPosition = event => {
+  const setBackgroundPosition = (event) => {
     if (backgroundPositionTimeout) return;
     if (document.body.clientWidth <= 992) return;
 

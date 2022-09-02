@@ -3,20 +3,18 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import Seo from '../core/components/Seo/Seo';
 
-
-function Redirect({pageContext : {redirectTo}}) {
-  
-  useEffect(()=>{
+function Redirect({ pageContext: { redirectTo } }) {
+  useEffect(() => {
     window.location.href = redirectTo;
-  },[])
+  }, []);
 
-  return <div/>;
+  return <div />;
 }
 
-export function Head({data}) {
+export function Head({ data }) {
   // todo: use instead usei18next (https://github.com/microapps/gatsby-plugin-react-i18next/issues/150)
   const locales = JSON.parse(
-    data.locales.edges.find(edge => edge.node.ns === 'redirect').node.data
+    data.locales.edges.find((edge) => edge.node.ns === 'redirect').node.data
   );
   return (
     <Seo
@@ -30,7 +28,7 @@ export default Redirect;
 
 export const pageQuery = graphql`
   query ($language: String!) {
-    locales: allLocale(filter: {language: {eq: $language}}) {
+    locales: allLocale(filter: { language: { eq: $language } }) {
       edges {
         node {
           ns

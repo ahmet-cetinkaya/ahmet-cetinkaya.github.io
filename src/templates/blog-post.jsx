@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {Link, graphql} from 'gatsby';
+import { Link, graphql } from 'gatsby';
 
 import Bio from '../shared/components/Bio/Bio';
 import Seo from '../core/components/Seo/Seo';
-import {getPostUrl} from '../features/blog/utils/postHelper';
+import { getPostUrl } from '../features/blog/utils/postHelper';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
 function BlogPostTemplate({
-  data: {previous, next, site, markdownRemark: post},
+  data: { previous, next, site, markdownRemark: post },
   location,
 }) {
   const siteTitle = site.siteMetadata?.title || `Title`;
@@ -24,7 +24,7 @@ function BlogPostTemplate({
           <p>{post.frontmatter.date}</p>
         </header>
         <section
-          dangerouslySetInnerHTML={{__html: post.html}}
+          dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
         />
         <hr />
@@ -62,7 +62,7 @@ function BlogPostTemplate({
   );
 }
 
-export function Head({data: {markdownRemark: post}}) {
+export function Head({ data: { markdownRemark: post } }) {
   return (
     <Seo
       title={post.frontmatter.title}
@@ -84,7 +84,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    markdownRemark(id: {eq: $id}) {
+    markdownRemark(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
       html
@@ -94,7 +94,7 @@ export const pageQuery = graphql`
         description
       }
     }
-    previous: markdownRemark(id: {eq: $previousPostId}) {
+    previous: markdownRemark(id: { eq: $previousPostId }) {
       fields {
         slug
       }
@@ -102,7 +102,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    next: markdownRemark(id: {eq: $nextPostId}) {
+    next: markdownRemark(id: { eq: $nextPostId }) {
       fields {
         slug
       }

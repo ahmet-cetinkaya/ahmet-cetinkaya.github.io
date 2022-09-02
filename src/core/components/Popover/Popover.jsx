@@ -1,18 +1,18 @@
 import './Popover.scss';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {usePopper} from 'react-popper';
+import { usePopper } from 'react-popper';
 import classNames from 'classnames';
 
-function Popover({children, title, content, trigger, placement, offset}) {
+function Popover({ children, title, content, trigger, placement, offset }) {
   const [isShow, setIsShow] = useState(false);
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
-  const {styles, attributes} = usePopper(referenceElement, popperElement, {
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     modifiers: [
-      {name: 'arrow', options: {element: arrowElement}},
+      { name: 'arrow', options: { element: arrowElement } },
       {
         name: 'offset',
         options: {
@@ -37,7 +37,7 @@ function Popover({children, title, content, trigger, placement, offset}) {
 
     switch (trigger) {
       case 'click':
-        return {onClick: handleTrigger};
+        return { onClick: handleTrigger };
       case 'hover':
         return hoverTriggerEventAttributes;
       case 'focus':

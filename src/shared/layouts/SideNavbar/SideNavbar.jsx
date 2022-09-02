@@ -1,19 +1,19 @@
 import './SideNavbar.scss';
 
 import React from 'react';
-import {FaBars} from '@react-icons/all-files/fa/FaBars';
-import {FaHome} from '@react-icons/all-files/fa/FaHome';
-import {FaAddressCard} from '@react-icons/all-files/fa/FaAddressCard';
-import {FaBriefcase} from '@react-icons/all-files/fa/FaBriefcase';
-import {FaBook} from '@react-icons/all-files/fa/FaBook';
-import {FaEnvelope} from '@react-icons/all-files/fa/FaEnvelope';
-import {Link, useTranslation} from 'gatsby-plugin-react-i18next';
+import { FaBars } from '@react-icons/all-files/fa/FaBars';
+import { FaHome } from '@react-icons/all-files/fa/FaHome';
+import { FaAddressCard } from '@react-icons/all-files/fa/FaAddressCard';
+import { FaBriefcase } from '@react-icons/all-files/fa/FaBriefcase';
+import { FaBook } from '@react-icons/all-files/fa/FaBook';
+import { FaEnvelope } from '@react-icons/all-files/fa/FaEnvelope';
+import { Link, useTranslation } from 'gatsby-plugin-react-i18next';
 import PropTypes from 'prop-types';
 
-import {isUrl} from '../../../core/utils/validation/regexHelper';
+import { isUrl } from '../../../core/utils/validation/regexHelper';
 
 function SideNavbar() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const navItems = [
     {
@@ -69,7 +69,7 @@ function SideNavbar() {
         className="collapse navbar-collapse mt-3 mt-lg-0 rounded"
       >
         <ul className="navbar-nav flex-column">
-          {navItems.map(navItem => {
+          {navItems.map((navItem) => {
             const navLinkClassName = `nav-link ac-nav-link${
               navItem.isDisable ? ' disabled' : ''
             }`;
@@ -103,7 +103,7 @@ SideNavbar.defaultProps = {};
 
 export default SideNavbar;
 
-function NavItemIcon({name, icon}) {
+function NavItemIcon({ name, icon }) {
   return (
     <>
       {icon}

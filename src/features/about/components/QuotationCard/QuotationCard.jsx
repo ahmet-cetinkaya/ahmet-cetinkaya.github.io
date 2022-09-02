@@ -2,11 +2,11 @@ import './QuotationCard.scss';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {FaQuoteRight} from '@react-icons/all-files/fa/FaQuoteRight';
-import {FaQuoteLeft} from '@react-icons/all-files/fa/FaQuoteLeft';
-import {FaChevronRight} from '@react-icons/all-files/fa/FaChevronRight';
+import { FaQuoteRight } from '@react-icons/all-files/fa/FaQuoteRight';
+import { FaQuoteLeft } from '@react-icons/all-files/fa/FaQuoteLeft';
+import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
 
-function QuotationCard({name, text, bio, imageUrl, link}) {
+function QuotationCard({ name, text, bio, imageUrl, link }) {
   const content = (
     <QuotationCardContent
       text={text}
@@ -51,7 +51,7 @@ QuotationCard.defaultProps = {
 
 export default QuotationCard;
 
-function QuotationCardContent({text, name, bio, imageUrl, link}) {
+function QuotationCardContent({ text, name, bio, imageUrl, link }) {
   return (
     <div className="ac-quotation-card-content">
       {imageUrl && (

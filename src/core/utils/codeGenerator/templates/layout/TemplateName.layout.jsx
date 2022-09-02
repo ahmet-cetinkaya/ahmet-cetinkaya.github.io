@@ -3,7 +3,7 @@ import './TemplateName.layout.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-function TemplateName({children}) {
+function TemplateName({ children }) {
   return (
     <div>
       TemplateName Component
@@ -12,7 +12,7 @@ function TemplateName({children}) {
   );
 }
 
-TemplateName.propTypes = {children: PropTypes.elementType.isRequired};
+TemplateName.propTypes = { children: PropTypes.elementType.isRequired };
 
 TemplateName.defaultProps = {};
 

@@ -1,11 +1,11 @@
 import './IconButton.scss';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Link} from 'gatsby-plugin-react-i18next';
+import { Link } from 'gatsby-plugin-react-i18next';
 import classNames from 'classnames';
-import {isUrl} from '../../utils/validation/regexHelper';
+import { isUrl } from '../../utils/validation/regexHelper';
 
-function IconButton({link, onClick, icon, className, ...attributes}) {
+function IconButton({ link, onClick, icon, className, ...attributes }) {
   const iconButtonClassName = classNames('ac-icon-button', className);
 
   if (link) {

@@ -1,19 +1,19 @@
 import './SocialLinks.scss';
 
 import React from 'react';
-import {SiGithub} from '@react-icons/all-files/si/SiGithub';
-import {SiLinkedin} from '@react-icons/all-files/si/SiLinkedin';
-import {FaRegEnvelope} from '@react-icons/all-files/fa/FaRegEnvelope';
-import {FaItchIo} from '@react-icons/all-files/fa/FaItchIo';
-import {SiTwitter} from '@react-icons/all-files/si/SiTwitter';
-import {SiInstagram} from '@react-icons/all-files/si/SiInstagram';
-import {SiDiscord} from '@react-icons/all-files/si/SiDiscord';
+import { SiGithub } from '@react-icons/all-files/si/SiGithub';
+import { SiLinkedin } from '@react-icons/all-files/si/SiLinkedin';
+import { FaRegEnvelope } from '@react-icons/all-files/fa/FaRegEnvelope';
+import { FaItchIo } from '@react-icons/all-files/fa/FaItchIo';
+import { SiTwitter } from '@react-icons/all-files/si/SiTwitter';
+import { SiInstagram } from '@react-icons/all-files/si/SiInstagram';
+import { SiDiscord } from '@react-icons/all-files/si/SiDiscord';
 import Popover from '../../../core/components/Popover/Popover';
 import IconButton from '../../../core/components/IconButton/IconButton';
 
 function SocialLinks() {
   const getLinks = () => {
-    const icon = {size: '1.8rem'};
+    const icon = { size: '1.8rem' };
     return [
       {
         name: 'Github',
@@ -55,7 +55,7 @@ function SocialLinks() {
 
   return (
     <div className="d-flex overflow-auto w-100 py-2">
-      {getLinks().map(({name, url, icon}) => (
+      {getLinks().map(({ name, url, icon }) => (
         <Popover key={name} content={name} placement="bottom">
           <IconButton link={url} icon={icon} />
         </Popover>

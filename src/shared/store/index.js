@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from 'redux';
+import { combineReducers, createStore } from 'redux';
 
 import backgroundReducer from './background/background.reducer';
 import cardReducer from './card/card.reducer';
@@ -8,4 +8,4 @@ const reducers = combineReducers({
   cardReducer,
 });
 
-export default preloadedState => createStore(reducers, preloadedState);
+export default (preloadedState) => createStore(reducers, preloadedState);

@@ -1,10 +1,10 @@
 import './PersonalInfo.scss';
 
 import React from 'react';
-import {useI18next} from 'gatsby-plugin-react-i18next';
+import { useI18next } from 'gatsby-plugin-react-i18next';
 
 function PersonalInfo() {
-  const {t} = useI18next();
+  const { t } = useI18next();
 
   const personalInformationFields = [
     {
@@ -35,7 +35,7 @@ function PersonalInfo() {
 
   return (
     <>
-      {personalInformationFields.map(field => (
+      {personalInformationFields.map((field) => (
         <div className="mb-3 overflow-auto">
           <span className="ac-text-accent">{field.name}</span>
           <span className="fw-light ms-3">{field.info}</span>

@@ -1,12 +1,12 @@
 import './ChangeLanguageButton.scss';
 
 import React from 'react';
-import {useI18next} from 'gatsby-plugin-react-i18next/dist';
-import {MdLanguage} from '@react-icons/all-files/md/MdLanguage';
+import { useI18next } from 'gatsby-plugin-react-i18next/dist';
+import { MdLanguage } from '@react-icons/all-files/md/MdLanguage';
 import classNames from 'classnames';
 
-function ChangeLanguageButton({className}) {
-  const {changeLanguage, language, languages} = useI18next();
+function ChangeLanguageButton({ className }) {
+  const { changeLanguage, language, languages } = useI18next();
 
   const handleSwitchLanguage = () => {
     const languageToSwitch =

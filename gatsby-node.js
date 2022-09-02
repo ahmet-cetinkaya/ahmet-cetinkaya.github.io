@@ -1,9 +1,9 @@
 const path = require(`path`);
-const {createFilePath} = require(`gatsby-source-filesystem`);
+const { createFilePath } = require(`gatsby-source-filesystem`);
 const redirects = require('./src/shared/assets/data/redirects.json');
 
-exports.createPages = async ({graphql, actions, reporter}) => {
-  const {createPage} = actions;
+exports.createPages = async ({ graphql, actions, reporter }) => {
+  const { createPage } = actions;
 
   // Blog Post Pages
   const blogPost = path.resolve(`./src/templates/blog-post.jsx`);
@@ -11,7 +11,7 @@ exports.createPages = async ({graphql, actions, reporter}) => {
     `
       {
         allMarkdownRemark(
-          sort: {fields: [frontmatter___date], order: ASC}
+          sort: { fields: [frontmatter___date], order: ASC }
           limit: 1000
         ) {
           nodes {
@@ -36,8 +36,8 @@ exports.createPages = async ({graphql, actions, reporter}) => {
   const posts = result.data.allMarkdownRemark.nodes;
 
   const languages = ['tr', 'en'];
-  languages.forEach(language => {
-    const postsByLanguage = posts.filter(post =>
+  languages.forEach((language) => {
+    const postsByLanguage = posts.filter((post) =>
       post.fields.slug.startsWith(`/${language}`)
     );
 
@@ -63,7 +63,7 @@ exports.createPages = async ({graphql, actions, reporter}) => {
 
   // Redirect Pages
   const redirectComponent = path.resolve(`./src/templates/redirect.jsx`);
-  redirects.forEach(redirect => {
+  redirects.forEach((redirect) => {
     createPage({
       path: redirect.from,
       component: redirectComponent,
@@ -74,11 +74,11 @@ exports.createPages = async ({graphql, actions, reporter}) => {
   });
 };
 
-exports.onCreateNode = ({node, actions, getNode}) => {
-  const {createNodeField} = actions;
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions;
 
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({node, getNode});
+    const value = createFilePath({ node, getNode });
 
     createNodeField({
       name: `slug`,
@@ -88,8 +88,8 @@ exports.onCreateNode = ({node, actions, getNode}) => {
   }
 };
 
-exports.createSchemaCustomization = ({actions}) => {
-  const {createTypes} = actions;
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions;
 
   // Explicitly define the siteMetadata {} object
   // This way those will always be defined even if removed from gatsby-config.js

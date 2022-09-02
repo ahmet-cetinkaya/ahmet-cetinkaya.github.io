@@ -1,17 +1,17 @@
 import * as React from 'react';
-import {Link, graphql} from 'gatsby';
+import { Link, graphql } from 'gatsby';
 
 import Seo from '../core/components/Seo/Seo';
-import {getPostUrl} from '../features/blog/utils/postHelper';
+import { getPostUrl } from '../features/blog/utils/postHelper';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 
-function Blog({data, location}) {
+function Blog({ data, location }) {
   const posts = data.allMarkdownRemark.nodes;
 
   return (
     <CardLayout location={location}>
-      <ol style={{listStyle: `none`}}>
-        {posts.map(post => {
+      <ol style={{ listStyle: `none` }}>
+        {posts.map((post) => {
           const title = post.frontmatter.title || post.fields.slug;
 
           return (
@@ -47,7 +47,7 @@ function Blog({data, location}) {
 }
 export default Blog;
 
-export function Head({data}) {
+export function Head({ data }) {
   // todo: use instead usei18next (https://github.com/microapps/gatsby-plugin-react-i18next/issues/150)
   const locales = JSON.parse(data.locales.edges[0].node.data);
   return <Seo title={locales.blog} />;
@@ -55,7 +55,7 @@ export function Head({data}) {
 
 export const pageQuery = graphql`
   query ($language: String!) {
-    locales: allLocale(filter: {language: {eq: $language}}) {
+    locales: allLocale(filter: { language: { eq: $language } }) {
       edges {
         node {
           ns
@@ -69,7 +69,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(sort: {fields: [frontmatter___date], order: DESC}) {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
         excerpt
         fields {

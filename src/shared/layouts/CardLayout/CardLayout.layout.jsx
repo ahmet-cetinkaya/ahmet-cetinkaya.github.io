@@ -1,11 +1,11 @@
 import './CardLayout.layout.scss';
 
 import PropTypes from 'prop-types';
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import {useI18next} from 'gatsby-plugin-react-i18next';
-import {tiltElementOnMouseMove} from '../../../core/utils/animation/animationHelper';
+import { useI18next } from 'gatsby-plugin-react-i18next';
+import { tiltElementOnMouseMove } from '../../../core/utils/animation/animationHelper';
 import CodeSpaceBackground from '../../components/CodeSpaceBackground/CodeSpaceBackground';
 import {
   createAddCardClassAction,
@@ -16,10 +16,10 @@ import {
 import SideNavbar from '../SideNavbar/SideNavbar';
 import ChangeLanguageButton from '../../../core/components/ChangeLanguageButton/ChangeLanguageButton';
 
-function CardLayout({location, children}) {
+function CardLayout({ location, children }) {
   const storeDispatch = useDispatch();
-  const {classes, style} = useSelector(state => state.cardReducer);
-  const {languages} = useI18next();
+  const { classes, style } = useSelector((state) => state.cardReducer);
+  const { languages } = useI18next();
   let cardTransformTimeout = false;
 
   const setCardTransformTimeout = () => {
@@ -32,7 +32,7 @@ function CardLayout({location, children}) {
   const resetCardTransformStyle = () =>
     storeDispatch(createResetCardStateAction(['style']));
 
-  const setCardTransformStyle = event => {
+  const setCardTransformStyle = (event) => {
     if (cardTransformTimeout) return;
     if (document && document.body.clientWidth <= 992) {
       resetCardTransformStyle();
@@ -41,7 +41,9 @@ function CardLayout({location, children}) {
 
     setCardTransformTimeout();
     storeDispatch(
-      createSetCardStyleAction({transform: tiltElementOnMouseMove(event, 4)})
+      createSetCardStyleAction({
+        transform: tiltElementOnMouseMove(event, 4),
+      })
     );
   };
 
@@ -50,7 +52,7 @@ function CardLayout({location, children}) {
     const rootPath = `${__PATH_PREFIX__}`;
     const isRootPath = [
       `${rootPath}/`,
-      ...languages.map(language => `${rootPath}/${language}/`),
+      ...languages.map((language) => `${rootPath}/${language}/`),
     ].includes(location.pathname);
     const extendedClassName = 'ac-card-layout-extended';
     if (!isRootPath) storeDispatch(createAddCardClassAction(extendedClassName));

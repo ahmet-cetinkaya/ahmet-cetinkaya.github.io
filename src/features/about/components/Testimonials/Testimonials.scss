@@ -1,0 +1,9 @@
+@import '../../../../shared/assets/styles/index.scss';
+
+.ac-testimonial-carousel-inner {
+  width: 75% !important;
+
+  @media #{$media-max-md} {
+    width: 100% !important;
+  }
+}

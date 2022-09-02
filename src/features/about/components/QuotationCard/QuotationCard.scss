@@ -1,37 +1,61 @@
 @import '../../../../shared/assets/styles/index.scss';
 
 .ac-quotation-card-item {
-  @extend .p-4;
+  @extend .px-1, .py-3, .px-md-5, .py-md-5;
   position: relative;
 
   .ac-quotation-card-content {
-    @extend .ac-bg-dark-color-2, .p-5, .rounded, .border, .border-secondary;
+    @extend .ac-bg-dark-color-2, .rounded, .border, .border-secondary;
+    padding: 2rem;
+
+    @media #{$media-max-md} {
+      padding: 4rem 1rem;
+    }
 
     .ac-quotation-card-picture {
       position: absolute;
-      top: -1rem;
-      left: -1rem;
+      top: 0.5rem;
+      left: 0.5rem;
       width: 80px;
       height: 80px;
+
+      @media #{$media-max-md} {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+      }
     }
 
     .ac-quotation-card-icon {
-      @extend .d-block, .position-absolute, .text-white;
-      left: 3rem;
-      bottom: 3rem;
-      line-height: 1.25rem;
+      @extend .text-white;
+      position: absolute;
+      left: 4rem;
+      bottom: 4rem;
       font-size: 1.25rem;
       opacity: 0.3;
+
+      @media #{$media-max-md} {
+        left: 2rem;
+        top: 2rem;
+      }
     }
 
     .ac-quotation-card-icon-big {
-      @extend .d-block, .position-absolute, .text-white;
-      line-height: 44px;
-      font-size: 44px;
-      right: 0;
-      bottom: 0;
+      @extend .text-white;
+      position: absolute;
+      font-size: 3rem;
+      right: 1rem;
+      bottom: 0.5rem;
       z-index: -1;
       opacity: 0.1;
+
+      @media #{$media-max-md} {
+        right: 1rem;
+        bottom: 1rem;
+        z-index: 1;
+        opacity: 0.05;
+      }
     }
   }
 }

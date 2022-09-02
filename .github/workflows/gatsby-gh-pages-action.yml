@@ -16,3 +16,4 @@ jobs:
           deploy-branch: gh-pages
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
+          GOOGLE_ANALYTICS_TRACKING_ID: ${{ secrets.GOOGLE_ANALYTICS_TRACKING_ID }}

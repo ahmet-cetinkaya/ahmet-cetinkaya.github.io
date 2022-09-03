@@ -49,6 +49,7 @@
   position: absolute;
   top: -1px;
   right: -1px;
+  z-index: 99;
 
   @media #{$media-max-lg} {
     top: 2.3rem;

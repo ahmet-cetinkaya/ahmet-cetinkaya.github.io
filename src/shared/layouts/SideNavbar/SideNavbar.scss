@@ -5,7 +5,7 @@
   position: absolute !important;
   top: 0;
   right: -5rem;
-  z-index: 1;
+  z-index: 99;
   list-style: none;
 
   @media #{$media-max-lg} {

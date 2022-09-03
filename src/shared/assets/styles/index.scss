@@ -1,14 +1,14 @@
 @import './variables.scss';
-@import '../../../core/assets/styles/index.scss';
-@import './fonts.scss';
 @import './colors.scss';
+@import './bootstrap-extends.scss';
 @import './abstracts.scss';
 @import './utils.scss';
+@import './fonts.scss';
 @import 'normalize.css/normalize.css'; // Makes browsers render all elements more consistently and in line with modern standards
 @import 'prismjs/themes/prism.css'; // Highlighting for code blocks
 
 // General
-html{
+html {
   overflow-x: hidden;
 }
 body {

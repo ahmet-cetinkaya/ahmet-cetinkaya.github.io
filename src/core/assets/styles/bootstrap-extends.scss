@@ -5,9 +5,30 @@ $border-radius: $medium-size;
 $border-radius-lg: $medium-size-2;
 @import 'bootstrap/scss/bootstrap.scss';
 
+@each $color, $value in $theme-colors {
+  @if ((lightness($value)) < 60 and (hue($value)) > 45) {
+    .bg-#{$color},
+    .btn-#{$color},
+    .btn-outline-#{$color}:hover {
+      @extend .text-light;
+    }
+  } @else {
+    .bg-#{$color},
+    .btn-#{$color},
+    .btn-outline-#{$color}:hover {
+      @extend .text-dark;
+    }
+
+    .btn-outline-#{$color} {
+      @extend .text-light;
+    }
+  }
+}
+
 .rounded-4 {
   border-radius: $medium-size-3 !important;
 }
+
 .carousel.ac-vertical {
   .carousel-item-next.carousel-item-start,
   .carousel-item-prev.carousel-item-end {
@@ -24,6 +45,37 @@ $border-radius-lg: $medium-size-2;
     transform: translate3d(0, -100%, 0);
   }
 }
+
 .fw-900 {
   font-weight: 900;
+}
+
+.dropdown {
+  button {
+    &::after {
+      @extend .ms-2;
+    }
+  }
+
+  .dropdown-menu {
+    li {
+      &:first-child {
+        .dropdown-item:hover {
+          border-top-left-radius: $small-size;
+          border-top-right-radius: $small-size;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+
+      &:last-child {
+        .dropdown-item:hover {
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          border-bottom-left-radius: $small-size;
+          border-bottom-right-radius: $small-size;
+        }
+      }
+    }
+  }
 }

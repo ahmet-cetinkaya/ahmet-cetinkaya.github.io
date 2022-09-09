@@ -4,14 +4,8 @@ module.exports = {
     es2021: true,
   },
   extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 12,
-    sourceType: 'module',
-  },
-  plugins: ['react'],
+  parser: 'babel-eslint',
+  plugins: ['react', '@babel/plugin-proposal-private-methods'],
   rules: {
     'react/prop-types': 0,
   },

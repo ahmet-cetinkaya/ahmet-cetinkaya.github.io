@@ -1,6 +1,7 @@
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const redirects = require('./src/shared/assets/data/redirects.json');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
@@ -128,4 +129,15 @@ exports.createSchemaCustomization = ({ actions }) => {
       slug: String
     }
   `);
+};
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    plugins: [
+      new FilterWarningsPlugin({
+        exclude:
+          /mini-css-extract-plugin[^]*Conflicting order. Following module has been added:/,
+      }),
+    ],
+  });
 };

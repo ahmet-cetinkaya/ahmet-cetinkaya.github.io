@@ -11,37 +11,38 @@ import { Link, useTranslation } from 'gatsby-plugin-react-i18next';
 import PropTypes from 'prop-types';
 
 import { isUrl } from '../../../core/utils/validation/regexHelper';
+import locales from '../../constants/localesKeys';
 
 function SideNavbar() {
   const { t } = useTranslation();
 
   const navItems = [
     {
-      name: t('home'),
+      name: t(locales.index.home),
       link: '/',
       icon: <FaHome className="ac-nav-link-icon" />,
       isDisable: false,
     },
     {
-      name: t('aboutMe'),
+      name: t(locales.index.aboutMe),
       link: '/about',
       icon: <FaAddressCard className="ac-nav-link-icon" />,
       isDisable: false,
     },
     {
-      name: t('portfolio'),
+      name: t(locales.index.portfolio),
       link: '/portfolio',
       icon: <FaBriefcase className="ac-nav-link-icon" />,
-      isDisable: true,
+      isDisable: false,
     },
     {
-      name: t('blog'),
+      name: t(locales.index.blog),
       link: '/blog',
       icon: <FaBook className="ac-nav-link-icon" />,
       isDisable: true,
     },
     {
-      name: t('contactMe'),
+      name: t(locales.index.contactMe),
       link: 'mailto:ahmetcetinkaya7@outlook.com',
       icon: <FaEnvelope className="ac-nav-link-icon" />,
       isDisable: false,

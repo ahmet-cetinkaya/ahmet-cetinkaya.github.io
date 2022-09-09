@@ -2,41 +2,42 @@ import './PersonalInfo.scss';
 
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
+import locales from '../../../../shared/constants/localesKeys';
 
 function PersonalInfo() {
   const { t } = useI18next();
 
   const personalInformationFields = [
     {
-      name: t('firstName'),
+      name: t(locales.index.firstName),
       info: 'Ahmet',
     },
     {
-      name: t('lastName'),
+      name: t(locales.index.lastName),
       info: 'Çetinkaya',
     },
     {
-      name: t('age'),
+      name: t(locales.index.age),
       info: (new Date().getFullYear() - 1999 - 1).toString(),
     },
     {
-      name: t('email'),
+      name: t(locales.index.email),
       info: 'ahmetcetinkaya7@outlook.com',
     },
     {
-      name: t('languages'),
-      info: `${t('turkish')}, ${t('english')}`,
+      name: t(locales.index.languages),
+      info: `${t(locales.index.turkish)}, ${t(locales.index.english)}`,
     },
     {
-      name: t('location'),
-      info: `${t('turkey')}, Antalya`,
+      name: t(locales.index.location),
+      info: `${t(locales.index.turkey)}, Antalya`,
     },
   ];
 
   return (
     <>
       {personalInformationFields.map((field) => (
-        <div className="mb-3 overflow-auto">
+        <div key={field.name} className="mb-3 overflow-auto">
           <span className="ac-text-accent">{field.name}</span>
           <span className="fw-light ms-3">{field.info}</span>
         </div>

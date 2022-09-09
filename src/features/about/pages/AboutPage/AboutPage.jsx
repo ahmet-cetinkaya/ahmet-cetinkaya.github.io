@@ -7,17 +7,18 @@ import SocialLinks from '../../../../shared/components/SocialLinks/SocialLinks';
 import PersonalInfo from '../../components/PersonalInfo/PersonalInfo';
 import TechnologiesInfo from '../../components/TechnologiesInfo/TechnologiesInfo';
 import Testimonials from '../../components/Testimonials/Testimonials';
+import locales from '../../../../shared/constants/localesKeys';
 
 function AboutPage() {
   const { t } = useI18next();
 
   return (
     <>
-      <SilhouetteTitle title={t('aboutMe')} />
+      <SilhouetteTitle title={t(locales.index.aboutMe)} />
 
       <div className="row">
         <div className="col-xxl-8 px-xs-2 px-sm-5">
-          <p>{t('bio')}</p>
+          <p>{t(locales.about.bio)}</p>
           <span className="d-flex justify-content-center mb-2">
             <SocialLinks />
           </span>

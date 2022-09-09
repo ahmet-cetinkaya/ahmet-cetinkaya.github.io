@@ -9,6 +9,8 @@ import { SiReact } from '@react-icons/all-files/si/SiReact';
 import { SiAngular } from '@react-icons/all-files/si/SiAngular';
 import { SiJava } from '@react-icons/all-files/si/SiJava';
 import { SiSpring } from '@react-icons/all-files/si/SiSpring';
+import { SiPhp } from '@react-icons/all-files/si/SiPhp';
+import { SiLaravel } from '@react-icons/all-files/si/SiLaravel';
 import { SiMicrosoftsqlserver } from '@react-icons/all-files/si/SiMicrosoftsqlserver';
 import { SiMysql } from '@react-icons/all-files/si/SiMysql';
 import { SiPostgresql } from '@react-icons/all-files/si/SiPostgresql';
@@ -20,8 +22,9 @@ import { SiUnity } from '@react-icons/all-files/si/SiUnity';
 import { SiAdobe } from '@react-icons/all-files/si/SiAdobe';
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
-import IconLabel from '../../../../core/components/IconLabel/IconLabel';
+import Label from '../../../../core/components/Label/Label';
 import Title from '../../../../shared/components/Title/Title';
+import locales from '../../../../shared/constants/localesKeys';
 
 function TechnologiesInfo() {
   const { t } = useI18next();
@@ -36,14 +39,6 @@ function TechnologiesInfo() {
       name: 'ASP.NET',
     },
     {
-      icon: <SiJava color="#ED8B00" />,
-      name: 'Java',
-    },
-    {
-      icon: <SiSpring color="#6DB33F" />,
-      name: 'Spring',
-    },
-    {
       icon: <SiJavascript color="#F0D91E" />,
       name: 'Javascript',
     },
@@ -56,12 +51,12 @@ function TechnologiesInfo() {
       name: 'NodeJS',
     },
     {
-      icon: <SiReact color="#5FD4F4" />,
-      name: 'React',
-    },
-    {
       icon: <SiAngular color="#DD0031" />,
       name: 'Angular',
+    },
+    {
+      icon: <SiReact color="#5FD4F4" />,
+      name: 'React',
     },
     {
       icon: <SiDart color="#0175C2" />,
@@ -70,6 +65,22 @@ function TechnologiesInfo() {
     {
       icon: <SiFlutter color="#02569B" />,
       name: 'Flutter',
+    },
+    {
+      icon: <SiJava color="#ED8B00" />,
+      name: 'Java',
+    },
+    {
+      icon: <SiSpring color="#6DB33F" />,
+      name: 'Spring',
+    },
+    {
+      icon: <SiPhp color="#777BB4" />,
+      name: 'PHP',
+    },
+    {
+      icon: <SiLaravel color="#FF2D20" />,
+      name: 'Laravel',
     },
     {
       icon: <SiMicrosoftsqlserver color="#CC2927" />,
@@ -103,9 +114,9 @@ function TechnologiesInfo() {
 
   return (
     <>
-      <Title title={t('technologiesIUse')} />
+      <Title title={t(locales.about.technologiesIUse)} className="mb-3 mt-5" />
       {technologiesInfoFields.map((field) => (
-        <IconLabel
+        <Label
           key={field.name}
           icon={field.icon}
           name={field.name}

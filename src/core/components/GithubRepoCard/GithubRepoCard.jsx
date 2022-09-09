@@ -26,6 +26,7 @@ function GithubRepoCard({
     <div className={classNames(containerClassName)}>
       <a
         href={githubRepoModel.url}
+        target="_blank"
         className={classNames(cardClassName, 'ac-github-repo-card')}
       >
         <div className="mb-1">

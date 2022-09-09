@@ -1,0 +1,11 @@
+{
+  "personal": "Personal",
+  "contribute": "I Contributed",
+  "projects": "Projects",
+  "pinned": "Pinned",
+  "mostSupported": "Most Supported",
+  "recent": "Recent",
+  "githubReposListedFromCache": "GitHub Repositories listed from cache",
+  "githubReposListed": "GitHub Repositories listed",
+  "errorFetchingGithubRepos": "An error occurred while retrieving Github Repo information."
+}

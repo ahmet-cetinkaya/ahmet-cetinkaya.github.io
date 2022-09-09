@@ -17,3 +17,4 @@ jobs:
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
           GOOGLE_ANALYTICS_TRACKING_ID: ${{ secrets.GOOGLE_ANALYTICS_TRACKING_ID }}
+          GATSBY_GITHUB_API_URL: ${{ secrets.GATSBY_GITHUB_API_URL }}

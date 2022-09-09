@@ -1,0 +1,22 @@
+@import '../../../../shared/assets/styles/index.scss';
+
+.ac-github-portfolio {
+  .nav-link {
+    @extend .link-light;
+
+    &.active {
+      @extend .link-dark;
+    }
+  }
+
+  .ac-elastic-nav-pill-background {
+    @extend .ac-bg-accent-color, .rounded-pill;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    height: 2.5rem;
+    border-radius: 5px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}

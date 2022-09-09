@@ -13,6 +13,8 @@ module.exports = {
     description: aboutLocale.shortBio,
     siteUrl: process.env.SITE_URL,
     social: {
+      github: 'ahmet-cetinkaya',
+      githubForks: 'ahmet-cetinkaya-forks',
       twitter: 'ahmetctnky_dev',
     },
   },

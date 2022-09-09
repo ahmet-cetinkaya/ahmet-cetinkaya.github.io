@@ -61,7 +61,8 @@ export default class GithubApiAdapter {
 
     if (reposResponse.status !== 200) {
       const cacheResponse = localStorage.getItem(cacheKey);
-      if (!cacheResponse) return new ErrorDataResult('errorFetchingRepos');
+      if (!cacheResponse)
+        return new ErrorDataResult('errorFetchingGithubRepos');
 
       return new SuccessDataResult(
         'githubReposListedFromCache',

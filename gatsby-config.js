@@ -13,9 +13,9 @@ module.exports = {
     description: aboutLocale.shortBio,
     siteUrl: process.env.SITE_URL,
     social: {
-      github: 'ahmet-cetinkaya',
-      githubForks: 'ahmet-cetinkaya-forks',
-      twitter: 'ahmetctnky_dev',
+      linkedin: 'https://www.linkedin.com/in/ahmet-cetinkaya',
+      github: 'https://github.com/ahmet-cetinkaya',
+      twitter: 'https://twitter.com/ahmetctnky_dev',
     },
   },
   plugins: [

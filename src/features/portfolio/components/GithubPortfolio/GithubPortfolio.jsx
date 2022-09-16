@@ -9,23 +9,35 @@ import GithubApiAdapter from '../../../../core/services/githubApiAdapter';
 import GithubRepoCard from '../../../../core/components/GithubRepoCard/GithubRepoCard';
 import locales from '../../../../shared/constants/localesKeys';
 import Title from '../../../../shared/components/Title/Title';
+import GhPinnedReposAdapter from '../../../../core/services/ghPinnedReposAdapter';
 
-function GithubPortfolio({ personal, forks }) {
+function GithubPortfolio({ personal, forks, options }) {
+  const customFilterTypes = {
+    pinned: 'pinned',
+  };
+  const customSortTypes = {
+    stars: 'starts',
+  };
+
   const firstTabRef = useRef(null);
   const [elasticNavPillBackgroundStyle, setElasticNavPillBackgroundStyle] =
     useState({ top: 0, left: 0, width: 0 });
-  const [currentFilterLabelLocaleKey, setCurrentFilterLabelLocaleKey] =
-    useState(locales.portfolio.pinned);
-  const [personalGithubRepos, setPersonalGithubRepos] = useState(
-    new Array(6).fill(null)
-  );
-  const [iContributedGithubRepos, setIContributedGithubRepos] = useState(
-    new Array(6).fill(null)
-  );
+  const [currentFilterAndSort, setCurrentFilterAndSort] = useState({
+    label: locales.portfolio.pinned,
+    filterType: customFilterTypes.pinned,
+    sortType: null,
+  });
+  const [personalGithubRepos, setPersonalGithubRepos] = useState(null);
+  const [iContributedGithubRepos, setIContributedGithubRepos] = useState(null);
+  const [pinnedRepoUrls, setPinnedRepoUrls] = useState([]);
   const [error, setError] = useState(null);
+  const [loadingCount, setLoadingCount] = useState(0);
 
   const githubApiAdapter = new GithubApiAdapter(
     process.env.GATSBY_GITHUB_API_URL
+  );
+  const ghPinnedReposAdapter = new GhPinnedReposAdapter(
+    process.env.GATSBY_GH_PINNED_REPOS_API_URL
   );
   const { t } = useI18next();
 
@@ -45,120 +57,113 @@ function GithubPortfolio({ personal, forks }) {
       viewAllUrl: `https://github.com/orgs/${forks.userName}/repositories`,
     },
   ];
-  const customFilterTypes = {
-    pinned: 'pinned',
-  };
-  const customSortTypes = {
-    stars: 'starts',
-  };
-  const filterOptions = [
+  const filterAndSortOptions = [
     {
       name: t(locales.portfolio.pinned),
       onClick: () =>
-        handleFilterClick(locales.portfolio.pinned, {
-          customFilterType: customFilterTypes.pinned,
+        handleFilterAndSortClick(locales.portfolio.pinned, {
+          filterType: customFilterTypes.pinned,
         }),
     },
     {
       name: t(locales.portfolio.mostSupported),
       onClick: () =>
-        handleFilterClick(locales.portfolio.mostSupported, {
-          customSortType: customSortTypes.stars,
+        handleFilterAndSortClick(locales.portfolio.mostSupported, {
+          sortType: customSortTypes.stars,
         }),
     },
     {
       name: t(locales.portfolio.recent),
       onClick: () =>
-        handleFilterClick(locales.portfolio.recent, {
+        handleFilterAndSortClick(locales.portfolio.recent, {
           sortType: GithubApiAdapter.repoSortTypes.pushed,
         }),
     },
   ];
-  // todo: get pinned repo by dynamic way
-  const pinnedRepoUrls = {
-    'ahmet-cetinkaya': [
-      'https://github.com/ahmet-cetinkaya/rentacar-project-backend-dotnet',
-      'https://github.com/ahmet-cetinkaya/rentacar-project-frontend-angular',
-      'https://github.com/ahmet-cetinkaya/hrms-project-backend',
-      'https://github.com/ahmet-cetinkaya/ReCapProject',
-      'https://github.com/ahmet-cetinkaya/ReCapProject-Frontend',
-      'https://github.com/ahmet-cetinkaya/northwind-project-backend-aspnet',
-    ],
-    'ahmet-cetinkaya-forks': [
-      'https://github.com/ahmet-cetinkaya-forks/DevArchitecture',
-      'https://github.com/ahmet-cetinkaya-forks/etiya-angular',
-    ],
-  };
 
-  const getGithubReposForPreview = async (
+  const getPinnedReposByUser = async (userName) => {
+    setLoadingCount((prev) => prev + 1);
+
+    const ghPinnedReposAdapterResponse =
+      await ghPinnedReposAdapter.getPinnedRepos(userName);
+    if (!ghPinnedReposAdapterResponse.isSuccess) {
+      setError(ghPinnedReposAdapterResponse.message);
+      setLoadingCount((prev) => prev - 1);
+      return;
+    }
+
+    setPinnedRepoUrls((prev) =>
+      prev.concat(
+        ghPinnedReposAdapterResponse.data.map((pinnedRepo) => pinnedRepo.link)
+      )
+    );
+    setLoadingCount((prev) => prev - 1);
+  };
+  const getAllGithubReposByUser = async (
     userName,
     userType,
-    setStateCallback,
-    { sortType, customSortType, customFilterType } = {}
+    setStateCallback
   ) => {
+    setLoadingCount((prev) => prev + 1);
+
     const githubReposResponse = await githubApiAdapter.getRepos(
       userName,
-      userType,
-      {
-        sortType: sortType,
-        page: 1,
-        pageSize: customSortType || customFilterType ? null : 6,
-      }
+      userType
     );
+
+    setLoadingCount((prev) => prev - 1);
+
     if (!githubReposResponse.isSuccess) {
       setError(githubReposResponse.message);
       return;
     }
-    if (error) setError(null);
-
-    let githubRepos = githubReposResponse.data;
-
-    if (customFilterType === customFilterTypes.pinned) {
-      githubRepos = pinnedRepoUrls[userName]
-        .map((pinnedRepoUrl) =>
-          githubRepos.find((repo) => repo.url === pinnedRepoUrl)
-        )
-        .slice(0, 6);
-    }
-    if (customSortType === customSortTypes.stars)
-      githubRepos = githubRepos
-        .sort((a, b) => b.stargazerCount - a.stargazerCount)
-        .slice(0, 6);
-
-    setStateCallback(githubRepos);
+    setStateCallback(githubReposResponse.data);
   };
-  const getAllGithubTabsRepos = ({
-    sortType,
-    customSortType,
-    customFilterType,
-  } = {}) => {
+  const getAllGithubTabsRepos = () => {
     tabs.forEach((tab) => {
-      getGithubReposForPreview(
+      getAllGithubReposByUser(
         tab.owner.userName,
         tab.owner.userType,
-        tab.owner.userName === personal.userName
+        tab.id === 'personal'
           ? setPersonalGithubRepos
-          : setIContributedGithubRepos,
-        {
-          sortType,
-          customSortType,
-          customFilterType,
-        }
+          : setIContributedGithubRepos
       );
+      getPinnedReposByUser(tab.owner.userName);
     });
   };
-  const loadingRepos = () => {
-    const emptyRepos = new Array(6).fill(null);
-    setPersonalGithubRepos(emptyRepos);
-    setIContributedGithubRepos(emptyRepos);
+  const filterAndSortRepos = (repos) => {
+    let filteredAndSortedRepos = [...repos];
+    filteredAndSortedRepos = filteredAndSortedRepos.filter(
+      (repo) => !options.ignoreUrls.includes(repo.url)
+    );
+
+    switch (currentFilterAndSort.filterType) {
+      case customFilterTypes.pinned:
+        filteredAndSortedRepos = filteredAndSortedRepos.filter((repo) =>
+          pinnedRepoUrls.includes(repo.url)
+        );
+        break;
+    }
+    switch (currentFilterAndSort.sortType) {
+      case customSortTypes.stars:
+        filteredAndSortedRepos = filteredAndSortedRepos
+          .sort((a, b) => b.stargazerCount - a.stargazerCount)
+          .slice(0, 6);
+        break;
+      case GithubApiAdapter.repoSortTypes.pushed:
+        filteredAndSortedRepos = filteredAndSortedRepos
+          .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))
+          .slice(0, 6);
+        break;
+    }
+
+    return filteredAndSortedRepos;
   };
-  const handleFilterClick = (
+  const handleFilterAndSortClick = (
     labelLocaleKey,
-    { sortType, customSortType, customFilterType } = {}
+    { sortType, filterType } = {}
   ) => {
-    loadingRepos();
-    setCurrentFilterLabelLocaleKey(labelLocaleKey);
-    getAllGithubTabsRepos({ sortType, customSortType, customFilterType });
+    setCurrentFilterAndSort({ label: labelLocaleKey, sortType, filterType });
   };
   const moveElasticNavPillBackground = (e) => {
     setElasticNavPillBackgroundStyle({
@@ -170,9 +175,7 @@ function GithubPortfolio({ personal, forks }) {
 
   useEffect(() => {
     moveElasticNavPillBackground({ target: firstTabRef.current });
-    getAllGithubTabsRepos({
-      customFilterType: customFilterTypes.pinned,
-    });
+    getAllGithubTabsRepos();
   }, []);
 
   return (
@@ -218,10 +221,10 @@ function GithubPortfolio({ personal, forks }) {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {t(currentFilterLabelLocaleKey)}
+              {t(currentFilterAndSort.label)}
             </button>
             <ul className="dropdown-menu ac-bg-dark-color-2">
-              {filterOptions.map((filterOption) => (
+              {filterAndSortOptions.map((filterOption) => (
                 <li key={filterOption.name}>
                   <button
                     type="button"
@@ -251,7 +254,10 @@ function GithubPortfolio({ personal, forks }) {
               >
                 <div className="row">
                   {tab.repos &&
-                    tab.repos.map((repo) => (
+                    (loadingCount
+                      ? new Array(6).fill(null)
+                      : filterAndSortRepos(tab.repos)
+                    ).map((repo) => (
                       <GithubRepoCard
                         key={repo ? repo.name : Math.random()}
                         githubRepoModel={repo}
@@ -294,8 +300,15 @@ GithubPortfolio.propTypes = {
     userName: PropTypes.string.isRequired,
     userType: PropTypes.string.isRequired,
   }).isRequired,
+  options: PropTypes.shape({
+    ignoreUrls: PropTypes.arrayOf(PropTypes.string),
+  }),
 };
 
-GithubPortfolio.defaultProps = {};
+GithubPortfolio.defaultProps = {
+  options: {
+    ignoreUrls: [],
+  },
+};
 
 export default GithubPortfolio;

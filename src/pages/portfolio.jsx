@@ -4,25 +4,11 @@ import { graphql } from 'gatsby';
 import Seo from '../core/components/Seo/Seo';
 import CardLayout from '../shared/layouts/CardLayout/CardLayout.layout';
 import PortfolioPage from '../features/portfolio/pages/PortfolioPage/PortfolioPage';
-import GithubApiAdapter from '../core/services/githubApiAdapter';
 
-function Portfolio({ data, location }) {
-  const { github, githubForks } = data.site.siteMetadata.social;
-
+function Portfolio({ location }) {
   return (
     <CardLayout location={location}>
-      <PortfolioPage
-        github={{
-          personal: {
-            userName: github,
-            userType: GithubApiAdapter.userTypes.user,
-          },
-          forks: {
-            userName: githubForks,
-            userType: GithubApiAdapter.userTypes.organization,
-          },
-        }}
-      />
+      <PortfolioPage />
     </CardLayout>
   );
 }
@@ -50,10 +36,6 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
-        social {
-          github
-          githubForks
-        }
       }
     }
   }

@@ -43,7 +43,8 @@
     "react-popper": "^2.3.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
-    "sass": "^1.54.4"
+    "sass": "^1.54.4",
+    "three": "^0.144.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-methods": "^7.18.6",

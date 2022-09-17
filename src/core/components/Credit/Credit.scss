@@ -1,0 +1,12 @@
+@import '../../../shared/assets/styles/index.scss';
+
+.ac-credit-button {
+  @extend .btn, .ac-text-color-3;
+  margin-bottom: -1px;
+  margin-right: -1px;
+
+  &:hover {
+    color: white !important;
+    border-color: white !important;
+  }
+}

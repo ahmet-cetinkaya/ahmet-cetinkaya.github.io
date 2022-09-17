@@ -91,7 +91,7 @@ Popover.propTypes = {
     PropTypes.node,
   ]).isRequired,
   title: PropTypes.string,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   trigger: PropTypes.oneOf(['click', 'hover', 'focus', 'hover focus']),
   placement: PropTypes.oneOf([
     'top',

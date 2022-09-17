@@ -1,6 +1,7 @@
 import axios from 'axios';
 import GithubRepoModel from '../models/githubRepoModel';
-import { ErrorDataResult, SuccessDataResult } from '../models/result';
+import ErrorDataResult from '../models/result/errorDataResult';
+import SuccessDataResult from '../models/result/successDataResult';
 
 const githubLanguagesData = require('../assets/data/githubLanguages.json');
 
@@ -23,6 +24,7 @@ export default class GithubApiAdapter {
   };
 
   #apiUrl;
+
   #http;
 
   constructor(apiUrl) {

@@ -1,8 +1,10 @@
 import axios from 'axios';
-import { ErrorDataResult, SuccessDataResult } from '../models/result';
+import ErrorDataResult from '../models/result/errorDataResult';
+import SuccessDataResult from '../models/result/successDataResult';
 
 export default class GhPinnedReposAdapter {
   #apiUrl;
+
   #http;
 
   constructor(apiUrl) {

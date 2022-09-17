@@ -1,7 +1,7 @@
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
-const redirects = require('./src/shared/assets/data/redirects.json');
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
+const redirects = require('./src/shared/assets/data/redirects.json');
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;

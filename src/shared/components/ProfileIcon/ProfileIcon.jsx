@@ -2,7 +2,7 @@ import './ProfileIcon.scss';
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'gatsby-plugin-react-i18next';
-import { moveBackgroundPositionOnMouseMove } from '../../../../core/utils/animation/animationHelper';
+import { moveBackgroundPositionOnMouseMove } from '../../../core/utils/animation/animationHelper';
 
 function ProfileIcon() {
   const [style, setStyle] = useState({

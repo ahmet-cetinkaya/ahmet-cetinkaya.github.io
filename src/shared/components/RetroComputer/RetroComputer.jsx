@@ -1,9 +1,7 @@
 import './RetroComputer.scss';
 
-import React, { useCallback, useState } from 'react';
-import { useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
-import locales from '../../../shared/constants/localesKeys';
 import {
   AmbientLight,
   OrthographicCamera,
@@ -14,7 +12,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { useEffect } from 'react';
+import locales from '../../constants/localesKeys';
 import { loadGLTFModel } from '../../../core/utils/three/modelHelpers';
 import { easeOutCirc } from '../../../core/utils/animation/easingHelper';
 
@@ -23,13 +21,18 @@ function RetroComputer() {
   const [loading, setLoading] = useState(true);
   const { t } = useI18next();
   const [renderer, setRenderer] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [camera, setCamera] = useState();
   const [target] = useState(new Vector3(-0.5, -1, 0));
   const [initialCameraPosition] = useState(
     new Vector3(20 * Math.sin(0.2 * Math.PI), 10, 50 * Math.cos(0.2 * Math.PI))
   );
   const [scene] = useState(new Scene());
+  // eslint-disable-next-line no-unused-vars
   const [controls, setControls] = useState();
+
+  // eslint-disable-next-line no-unused-vars
+  let animationReq = null;
 
   const handleWindowResize = useCallback(() => {
     const { current: container } = containerRef;
@@ -45,15 +48,15 @@ function RetroComputer() {
       const scW = container.clientWidth;
       const scH = container.clientHeight;
 
-      const renderer = new WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(scW, scH);
-      renderer.outputEncoding = sRGBEncoding;
-      container.appendChild(renderer.domElement);
-      setRenderer(renderer);
+      const newRenderer = new WebGLRenderer({ antialias: true, alpha: true });
+      newRenderer.setPixelRatio(window.devicePixelRatio);
+      newRenderer.setSize(scW, scH);
+      newRenderer.outputEncoding = sRGBEncoding;
+      container.appendChild(newRenderer.domElement);
+      setRenderer(newRenderer);
 
       const scale = scH * 0.005 + 4.8;
-      const camera = new OrthographicCamera(
+      const newCamera = new OrthographicCamera(
         -scale,
         scale,
         scale,
@@ -61,9 +64,9 @@ function RetroComputer() {
         0.01,
         50000
       );
-      camera.position.copy(initialCameraPosition);
-      camera.lookAt(target);
-      setCamera(camera);
+      newCamera.position.copy(initialCameraPosition);
+      newCamera.lookAt(target);
+      setCamera(newCamera);
 
       const ambientLight = new AmbientLight(0x343434, 2);
       scene.add(ambientLight);
@@ -73,58 +76,61 @@ function RetroComputer() {
       pointLight.distance = 4.8;
       scene.add(pointLight);
 
-      const controls = new OrbitControls(camera, renderer.domElement);
-      controls.autoRotate = true;
-      controls.target = target;
-      setControls(controls);
+      const newControls = new OrbitControls(newCamera, newRenderer.domElement);
+      newControls.autoRotate = true;
+      newControls.target = target;
+      setControls(newControls);
 
       await loadGLTFModel(
         scene,
-        'assets/models/retro-computer.glb',
+        '/assets/models/retro-computer.glb',
         'retro-computer',
         { scale: 22, receiveShadow: false, castShadow: false }
       );
 
       setLoading(false);
 
-      let req = null;
       let frame = 0;
       const animate = () => {
-        req = requestAnimationFrame(animate);
+        animationReq = requestAnimationFrame(animate);
         frame = frame <= 100 ? frame + 1 : frame;
         if (frame <= 100) {
           const rotateSpeed = -easeOutCirc(frame / 120) * Math.PI * 19.8;
 
-          camera.position.y = 10;
-          camera.position.x =
+          newCamera.position.y = 10;
+          newCamera.position.x =
             initialCameraPosition.x * Math.cos(rotateSpeed) +
             initialCameraPosition.z * Math.sin(rotateSpeed);
-          camera.position.z =
+          newCamera.position.z =
             initialCameraPosition.z * Math.cos(rotateSpeed) -
             initialCameraPosition.x * Math.sin(rotateSpeed);
-          camera.lookAt(target);
+          newCamera.lookAt(target);
         } else {
-          controls.update();
+          newControls.update();
         }
 
-        renderer.render(scene, camera);
+        newRenderer.render(scene, newCamera);
       };
       animate();
     }
   };
 
   const dispose3dScene = () => {
-    cancelAnimationFrame(req);
+    if (!renderer) return;
+    cancelAnimationFrame(animationReq);
     renderer.dispose();
   };
 
   useEffect(() => {
     create3dScene();
-
-    () => {
-      dispose3dScene();
-    };
   }, []);
+
+  useEffect(
+    () => () => {
+      dispose3dScene();
+    },
+    [renderer]
+  );
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowResize, false);

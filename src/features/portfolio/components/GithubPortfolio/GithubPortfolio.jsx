@@ -57,6 +57,12 @@ function GithubPortfolio({ personal, forks, options }) {
       viewAllUrl: `https://github.com/orgs/${forks.userName}/repositories`,
     },
   ];
+  const handleFilterAndSortClick = (
+    labelLocaleKey,
+    { sortType, filterType } = {}
+  ) => {
+    setCurrentFilterAndSort({ label: labelLocaleKey, sortType, filterType });
+  };
   const filterAndSortOptions = [
     {
       name: t(locales.portfolio.pinned),
@@ -143,6 +149,8 @@ function GithubPortfolio({ personal, forks, options }) {
           pinnedRepoUrls.includes(repo.url)
         );
         break;
+      default:
+        break;
     }
     switch (currentFilterAndSort.sortType) {
       case customSortTypes.stars:
@@ -155,15 +163,11 @@ function GithubPortfolio({ personal, forks, options }) {
           .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))
           .slice(0, 6);
         break;
+      default:
+        break;
     }
 
     return filteredAndSortedRepos;
-  };
-  const handleFilterAndSortClick = (
-    labelLocaleKey,
-    { sortType, filterType } = {}
-  ) => {
-    setCurrentFilterAndSort({ label: labelLocaleKey, sortType, filterType });
   };
   const moveElasticNavPillBackground = (e) => {
     setElasticNavPillBackgroundStyle({

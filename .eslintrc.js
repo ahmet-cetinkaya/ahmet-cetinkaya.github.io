@@ -5,7 +5,7 @@ module.exports = {
   },
   extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
   parser: 'babel-eslint',
-  plugins: ['react', '@babel/plugin-proposal-private-methods'],
+  plugins: ['react'],
   rules: {
     'react/prop-types': 0,
   },

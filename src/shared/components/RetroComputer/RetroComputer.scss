@@ -11,6 +11,11 @@
   height: 30rem;
   overflow: hidden;
 
+  @media #{$media-xs} {
+    width: 20rem;
+    height: 20rem;
+  }
+
   .ac-loading {
     position: absolute;
     left: 50%;

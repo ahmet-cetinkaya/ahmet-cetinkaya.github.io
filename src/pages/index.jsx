@@ -19,7 +19,10 @@ export function Head({ data }) {
   const locales = JSON.parse(
     data.locales.edges.find((edge) => edge.node.ns === 'index').node.data
   );
-  return <Seo title={locales.hi} />;
+  const aboutLocales = JSON.parse(
+    data.locales.edges.find((edge) => edge.node.ns === 'about').node.data
+  );
+  return <Seo title={locales.hi} description={aboutLocales.shortBio} />;
 }
 
 export const pageQuery = graphql`

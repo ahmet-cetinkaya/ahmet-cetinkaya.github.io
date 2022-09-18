@@ -19,12 +19,8 @@ function HomeCredits() {
     <div className="w-100 d-flex justify-content-end align-items-end">
       <Credit
         content={credits.map((credit) => (
-          <div>
-            <a
-              href="https://sketchfab.com/3d-models/retro-computer-9439cb5e09cc44caa63dfbfb299df45f"
-              target="_blank"
-              rel="noreferrer"
-            >
+          <div key={credit.title}>
+            <a href={credit.link} target="_blank" rel="noreferrer">
               {credit.title}
             </a>{' '}
             by{' '}

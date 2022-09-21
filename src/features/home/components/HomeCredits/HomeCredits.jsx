@@ -7,7 +7,7 @@ function HomeCredits() {
   const credits = [
     {
       title: 'Retro Computer 3D Model',
-      link: 'https://sketchfab.com/3d-models/retro-computer-3d-model-8c3b3b3b3b3b4b3b8b3b3b3b3b3b3b3b',
+      link: 'https://skfb.ly/6URHQ',
       author: 'dogflesh',
       authorLink: 'https://sketchfab.com/dogflesh',
       license: 'CC BY 4.0',

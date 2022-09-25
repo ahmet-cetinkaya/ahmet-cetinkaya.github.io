@@ -25,24 +25,27 @@
 ## 💻 About The Project
 A personal website project where I introduce myself and share my portfolio and blog posts.
 
-<p align="center"><img src="https://user-images.githubusercontent.com/53148314/188260692-ae2cfe7a-a95c-427a-8232-edb0c5d62904.gif" alt="Ahmet Çetinkaya" width="600"/></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/53148314/192152720-36fe66f3-1bcf-40a7-a46f-1c85eb5852ce.gif" alt="Ahmet Çetinkaya" width="600"/></p>
 
 ### Built With
-[![Ahmet Çetinkaya gatsbyjs](https://img.shields.io/badge/Gatsby-663399?style=for-the-badge&logo=gatsby&logoColor=white)](https://gatsbyjs.com/)
 [![Ahmet Çetinkaya reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
+[![Ahmet Çetinkaya gatsbyjs](https://img.shields.io/badge/Gatsby-663399?style=for-the-badge&logo=gatsby&logoColor=white)](https://gatsbyjs.com/)
+[![Ahmet Çetinkaya redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)
+[![Ahmet Çetinkaya threejs](https://img.shields.io/badge/ThreeJs-black?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
+[![Ahmet Çetinkaya scss](https://img.shields.io/badge/Scss-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com/)
 
 ### Color Reference
 
-| Color          | Hex                                                                    |
-| -------------- | ---------------------------------------------------------------------- |
-| Accent Color   | ![#f4d03e](https://via.placeholder.com/10/f4d03e?text=+) #f4d03e       |
-| Accent Color 2 | ![#38296e](https://via.placeholder.com/10/38296e?text=+) #38296e       |
-| Light Color    | ![#fffffff5](https://via.placeholder.com/10/fffffff5?text=+) #fffffff5 |
-| Light Color 2  | ![#ffffffab](https://via.placeholder.com/10/ffffffab?text=+) #ffffffab |
-| Light Color 3  | ![#ffffffab](https://via.placeholder.com/10/ffffffab?text=+) #ffffffab |
-| Dark Color     | ![#100f10](https://via.placeholder.com/10/100f10?text=+) #100f10       |
-| Dark Color 2   | ![#1b1b1b](https://via.placeholder.com/10/1b1b1b?text=+) #1b1b1b       |
-| Dark Color 3   | ![#444444](https://via.placeholder.com/10/444444?text=+) #444444       |
+| Color          | Hex         |
+| -------------- | ----------- |
+| Accent Color   | `#f4d03e`   |
+| Accent Color 2 | `#38296e`   |
+| Light Color    | `#fffffff5` |
+| Light Color 2  | `#ffffffab` |
+| Light Color 3  | `#ffffffab` |
+| Dark Color     | `#100f10`   |
+| Dark Color 2   | `#1b1b1b`   |
+| Dark Color 3   | `#444444`   |
 
 ## ⚙️ Getting Started
 

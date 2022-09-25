@@ -78,6 +78,9 @@ function RetroComputer() {
 
       const newControls = new OrbitControls(newCamera, newRenderer.domElement);
       newControls.autoRotate = true;
+      newControls.enablePan = false;
+      newControls.minZoom = 0.4;
+      newControls.maxZoom = 5;
       newControls.target = target;
       setControls(newControls);
 

@@ -1,20 +1,21 @@
 import './RetroComputer.scss';
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { useI18next } from 'gatsby-plugin-react-i18next';
 import {
   AmbientLight,
   OrthographicCamera,
   PointLight,
   Scene,
-  sRGBEncoding,
   Vector3,
   WebGLRenderer,
+  sRGBEncoding,
 } from 'three';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import locales from '../../constants/localesKeys';
-import { loadGLTFModel } from '../../../core/utils/three/modelHelpers';
 import { easeOutCirc } from '../../../core/utils/animation/easingHelper';
+import { loadGLTFModel } from '../../../core/utils/three/modelHelpers';
+import locales from '../../constants/localesKeys';
+import { useI18next } from 'gatsby-plugin-react-i18next';
 
 function RetroComputer() {
   const containerRef = useRef();
@@ -88,7 +89,7 @@ function RetroComputer() {
         scene,
         '/assets/models/retro-computer.glb',
         'retro-computer',
-        { scale: 22, receiveShadow: false, castShadow: false }
+        { scale: 16.55, receiveShadow: false, castShadow: false }
       );
 
       setLoading(false);

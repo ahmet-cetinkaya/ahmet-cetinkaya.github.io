@@ -1,11 +1,11 @@
 import './PortfolioPage.scss';
 
-import React from 'react';
-import { useI18next } from 'gatsby-plugin-react-i18next';
+import GithubApiAdapter from '../../../../core/services/githubApiAdapter';
 import GithubPortfolio from '../../components/GithubPortfolio/GithubPortfolio';
+import React from 'react';
 import SilhouetteTitle from '../../../../shared/components/SilhouetteTitle/SilhouetteTitle';
 import locales from '../../../../shared/constants/localesKeys';
-import GithubApiAdapter from '../../../../core/services/githubApiAdapter';
+import { useI18next } from 'gatsby-plugin-react-i18next';
 
 const aboutData = require('../../../../shared/assets/data/about.json');
 const portfolioData = require('../../../../shared/assets/data/portfolio.json');
@@ -22,6 +22,10 @@ function PortfolioPage() {
       userName: aboutData.links.githubForks.userName,
       userType: GithubApiAdapter.userTypes.organization,
     },
+    instruction: {
+      userName: aboutData.links.githubInstruction.userName,
+      userType: GithubApiAdapter.userTypes.organization,
+    },
   };
 
   return (
@@ -31,6 +35,7 @@ function PortfolioPage() {
       <GithubPortfolio
         personal={github.personal}
         forks={github.forks}
+        instruction={github.instruction}
         options={{ ignoreUrls: portfolioData.ignoreRepoUrls }}
       />
     </>

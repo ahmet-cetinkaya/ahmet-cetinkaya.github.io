@@ -18,6 +18,9 @@ function ProfileTitles() {
         <div className="carousel-item" data-bs-interval="2000">
           <h6 className="ac-text-color-3 fw-light">Game Developer</h6>
         </div>
+        <div className="carousel-item" data-bs-interval="2000">
+          <h6 className="ac-text-color-3 fw-light">Instructor</h6>
+        </div>
         <div className="carousel-item" data-bs-interval="3000">
           <h6 className="ac-text-color-3 fw-light">Learner</h6>
         </div>

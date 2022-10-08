@@ -1,17 +1,18 @@
 import './GithubPortfolio.scss';
 
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useI18next } from 'gatsby-plugin-react-i18next';
-import classNames from 'classnames';
-import { SiGithub } from '@react-icons/all-files/si/SiGithub';
+
+import GhPinnedReposAdapter from '../../../../core/services/ghPinnedReposAdapter';
 import GithubApiAdapter from '../../../../core/services/githubApiAdapter';
 import GithubRepoCard from '../../../../core/components/GithubRepoCard/GithubRepoCard';
-import locales from '../../../../shared/constants/localesKeys';
+import PropTypes from 'prop-types';
+import { SiGithub } from '@react-icons/all-files/si/SiGithub';
 import Title from '../../../../shared/components/Title/Title';
-import GhPinnedReposAdapter from '../../../../core/services/ghPinnedReposAdapter';
+import classNames from 'classnames';
+import locales from '../../../../shared/constants/localesKeys';
+import { useI18next } from 'gatsby-plugin-react-i18next';
 
-function GithubPortfolio({ personal, forks, options }) {
+function GithubPortfolio({ personal, forks, instruction, options }) {
   const customFilterTypes = {
     pinned: 'pinned',
   };
@@ -29,6 +30,7 @@ function GithubPortfolio({ personal, forks, options }) {
   });
   const [personalGithubRepos, setPersonalGithubRepos] = useState(null);
   const [iContributedGithubRepos, setIContributedGithubRepos] = useState(null);
+  const [instructionGithubRepos, setinstructionGithubRepos] = useState(null);
   const [pinnedRepoUrls, setPinnedRepoUrls] = useState([]);
   const [error, setError] = useState(null);
   const [loadingCount, setLoadingCount] = useState(0);
@@ -55,6 +57,13 @@ function GithubPortfolio({ personal, forks, options }) {
       owner: forks,
       repos: iContributedGithubRepos,
       viewAllUrl: `https://github.com/orgs/${forks.userName}/repositories`,
+    },
+    {
+      id: 'instruction',
+      name: t(locales.portfolio.instruction),
+      owner: instruction,
+      repos: instructionGithubRepos,
+      viewAllUrl: `https://github.com/orgs/${instruction.userName}/repositories`,
     },
   ];
   const handleFilterAndSortClick = (
@@ -127,12 +136,16 @@ function GithubPortfolio({ personal, forks, options }) {
   };
   const getAllGithubTabsRepos = () => {
     tabs.forEach((tab) => {
+      const setStateCallback =
+        tab.id === 'personal'
+          ? setPersonalGithubRepos
+          : tab.id === 'iContributed'
+          ? setIContributedGithubRepos
+          : setinstructionGithubRepos;
       getAllGithubReposByUser(
         tab.owner.userName,
         tab.owner.userType,
-        tab.id === 'personal'
-          ? setPersonalGithubRepos
-          : setIContributedGithubRepos
+        setStateCallback
       );
       getPinnedReposByUser(tab.owner.userName);
     });

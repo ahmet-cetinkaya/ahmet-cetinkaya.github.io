@@ -141,6 +141,7 @@ module.exports = {
         siteUrl: process.env.SITE_URL,
         // if you are using trailingSlash gatsby config include it here, as well (the default is 'always')
         trailingSlash: 'always',
+        redirect: false,
         // you can pass any i18next options
         i18nextOptions: {
           interpolation: {

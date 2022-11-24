@@ -18,10 +18,6 @@ function PortfolioPage() {
       userName: aboutData.links.github.userName,
       userType: GithubApiAdapter.userTypes.user,
     },
-    forks: {
-      userName: aboutData.links.githubForks.userName,
-      userType: GithubApiAdapter.userTypes.organization,
-    },
     instruction: {
       userName: aboutData.links.githubInstruction.userName,
       userType: GithubApiAdapter.userTypes.organization,
@@ -34,7 +30,6 @@ function PortfolioPage() {
 
       <GithubPortfolio
         personal={github.personal}
-        forks={github.forks}
         instruction={github.instruction}
         options={{ ignoreUrls: portfolioData.ignoreRepoUrls }}
       />

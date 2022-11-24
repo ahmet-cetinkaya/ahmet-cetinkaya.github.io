@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import locales from '../../../../shared/constants/localesKeys';
 import { useI18next } from 'gatsby-plugin-react-i18next';
 
-function GithubPortfolio({ personal, forks, instruction, options }) {
+function GithubPortfolio({ personal, instruction, options }) {
   const customFilterTypes = {
     pinned: 'pinned',
   };
@@ -29,7 +29,6 @@ function GithubPortfolio({ personal, forks, instruction, options }) {
     sortType: null,
   });
   const [personalGithubRepos, setPersonalGithubRepos] = useState(null);
-  const [iContributedGithubRepos, setIContributedGithubRepos] = useState(null);
   const [instructionGithubRepos, setinstructionGithubRepos] = useState(null);
   const [pinnedRepoUrls, setPinnedRepoUrls] = useState([]);
   const [error, setError] = useState(null);
@@ -48,15 +47,19 @@ function GithubPortfolio({ personal, forks, instruction, options }) {
       id: 'personal',
       name: t(locales.portfolio.personal),
       owner: personal,
-      repos: personalGithubRepos,
+      repos: personalGithubRepos
+        ? personalGithubRepos.filter((repo) => !repo.isFork)
+        : null,
       viewAllUrl: `https://github.com/${personal.userName}?tab=repositories`,
     },
     {
       id: 'iContributed',
       name: t(locales.portfolio.contribute),
-      owner: forks,
-      repos: iContributedGithubRepos,
-      viewAllUrl: `https://github.com/orgs/${forks.userName}/repositories`,
+      owner: personal,
+      repos: personalGithubRepos
+        ? personalGithubRepos.filter((repo) => repo.isFork)
+        : null,
+      viewAllUrl: `https://github.com/${personal.userName}?tab=repositories`,
     },
     {
       id: 'instruction',
@@ -136,11 +139,11 @@ function GithubPortfolio({ personal, forks, instruction, options }) {
   };
   const getAllGithubTabsRepos = () => {
     tabs.forEach((tab) => {
+      if (tab.id === 'iContributed') return;
+
       const setStateCallback =
         tab.id === 'personal'
           ? setPersonalGithubRepos
-          : tab.id === 'iContributed'
-          ? setIContributedGithubRepos
           : setinstructionGithubRepos;
       getAllGithubReposByUser(
         tab.owner.userName,
@@ -158,6 +161,13 @@ function GithubPortfolio({ personal, forks, instruction, options }) {
 
     switch (currentFilterAndSort.filterType) {
       case customFilterTypes.pinned:
+        if (
+          !filteredAndSortedRepos.some((repo) =>
+            pinnedRepoUrls.includes(repo.url)
+          )
+        )
+          break;
+
         filteredAndSortedRepos = filteredAndSortedRepos.filter((repo) =>
           pinnedRepoUrls.includes(repo.url)
         );
@@ -165,22 +175,23 @@ function GithubPortfolio({ personal, forks, instruction, options }) {
       default:
         break;
     }
+
     switch (currentFilterAndSort.sortType) {
       case customSortTypes.stars:
-        filteredAndSortedRepos = filteredAndSortedRepos
-          .sort((a, b) => b.stargazerCount - a.stargazerCount)
-          .slice(0, 6);
+        filteredAndSortedRepos = filteredAndSortedRepos.sort(
+          (a, b) => b.stargazerCount - a.stargazerCount
+        );
         break;
       case GithubApiAdapter.repoSortTypes.pushed:
-        filteredAndSortedRepos = filteredAndSortedRepos
-          .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))
-          .slice(0, 6);
+        filteredAndSortedRepos = filteredAndSortedRepos.sort(
+          (a, b) => new Date(b.pushedAt) - new Date(a.pushedAt)
+        );
         break;
       default:
         break;
     }
 
-    return filteredAndSortedRepos;
+    return filteredAndSortedRepos.slice(0, 6);
   };
   const moveElasticNavPillBackground = (e) => {
     setElasticNavPillBackgroundStyle({

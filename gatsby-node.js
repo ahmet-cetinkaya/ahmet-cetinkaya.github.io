@@ -51,7 +51,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       const postSlug = post.fields.slug.split('/').at(-2);
 
       createPage({
-        path: `blog/${postSlug}`,
+        path: `blog/${postSlug}/`,
         component: blogPost,
         context: {
           id: post.id,
@@ -66,7 +66,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const redirectComponent = path.resolve(`./src/templates/redirect.jsx`);
   redirects.forEach((redirect) => {
     createPage({
-      path: redirect.from,
+      path: `${redirect.from}/`,
       component: redirectComponent,
       context: {
         redirectTo: redirect.to,

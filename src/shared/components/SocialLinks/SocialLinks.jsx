@@ -1,15 +1,12 @@
 import './SocialLinks.scss';
 
 import React from 'react';
-import { SiGithub } from '@react-icons/all-files/si/SiGithub';
-import { SiLinkedin } from '@react-icons/all-files/si/SiLinkedin';
-import { FaRegEnvelope } from '@react-icons/all-files/fa/FaRegEnvelope';
-import { FaItchIo } from '@react-icons/all-files/fa/FaItchIo';
-import { SiTwitter } from '@react-icons/all-files/si/SiTwitter';
-import { SiInstagram } from '@react-icons/all-files/si/SiInstagram';
-import { SiDiscord } from '@react-icons/all-files/si/SiDiscord';
 import Popover from '../../../core/components/Popover/Popover';
 import IconButton from '../../../core/components/IconButton/IconButton';
+import { SiGithub, SiLinkedin, SiTwitter, SiInstagram, SiDiscord } from 'react-icons/si';
+import { FaRegEnvelope, FaItchIo } from 'react-icons/fa';
+import { BsMastodon } from 'react-icons/bs';
+import aboutData from '../../assets/data/about.json'
 
 function SocialLinks() {
   const getLinks = () => {
@@ -17,37 +14,42 @@ function SocialLinks() {
     return [
       {
         name: 'Github',
-        url: 'https://github.com/ahmet-cetinkaya',
+        url: aboutData.links.github.url,
         icon: <SiGithub size={icon.size} />,
       },
       {
         name: 'LinkedIn',
-        url: 'https://www.linkedin.com/in/ahmet-cetinkaya/',
+        url: aboutData.links.linkedin.url,
         icon: <SiLinkedin size={icon.size} />,
       },
       {
-        name: 'ahmetcetinkaya7@outlook.com',
-        url: 'mailto:ahmetcetinkaya7@outlook.com',
+        name: aboutData.links.email.userName,
+        url: aboutData.links.email.url,
         icon: <FaRegEnvelope size={icon.size} />,
       },
       {
         name: 'itchio',
-        url: 'https://ahmetcetinkaya.itch.io/',
+        url: aboutData.links.itchio.url,
         icon: <FaItchIo size={icon.size} />,
       },
       {
+        name: 'Mastodon',
+          url: aboutData.links.mastodon.url,
+        icon: <BsMastodon size={icon.size} />,
+      },
+      {
         name: 'Twitter',
-        url: 'https://twitter.com/ahmetctnky_dev',
+          url: aboutData.links.twitter.url,
         icon: <SiTwitter size={icon.size} />,
       },
       {
         name: 'Instagram',
-        url: 'https://www.instagram.com/ahmetcetinkaya.raw/',
+        url: aboutData.links.instagram.url,
         icon: <SiInstagram size={icon.size} />,
       },
       {
         name: 'Discord',
-        url: 'https://discordapp.com/users/248840559039348736',
+        url: aboutData.links.discord.url,
         icon: <SiDiscord size={icon.size} />,
       },
     ];

@@ -7,7 +7,7 @@ import classNames from 'classnames';
 function Label({ icon, name, className }) {
   return (
     <div className={classNames('ac-icon-label', className)}>
-      {icon && icon}
+      {!!icon && icon}
       <span className={classNames('fw-light', { 'ms-2': icon })}>{name}</span>
     </div>
   );

@@ -3,12 +3,20 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'gatsby-plugin-react-i18next';
 import classNames from 'classnames';
-import { isUrl } from '../../utils/validation/regexHelper';
+import { isUrl, isEmail } from '../../utils/validation/regexHelper';
+import Obfuscate from 'react-obfuscate';
 
 function IconButton({ link, onClick, icon, className, ...attributes }) {
   const iconButtonClassName = classNames('ac-icon-button', className);
 
   if (link) {
+    if (isEmail(link))
+      return (
+        <Obfuscate email={link} className={iconButtonClassName}>
+          {icon}
+        </Obfuscate>
+      );
+
     if (isUrl(link)) {
       return (
         <a

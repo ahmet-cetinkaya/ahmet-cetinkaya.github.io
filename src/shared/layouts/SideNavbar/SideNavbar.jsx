@@ -1,12 +1,14 @@
 import './SideNavbar.scss';
 
 import React from 'react';
-import { FaBars } from '@react-icons/all-files/fa/FaBars';
-import { FaHome } from '@react-icons/all-files/fa/FaHome';
-import { FaAddressCard } from '@react-icons/all-files/fa/FaAddressCard';
-import { FaBriefcase } from '@react-icons/all-files/fa/FaBriefcase';
-import { FaBook } from '@react-icons/all-files/fa/FaBook';
-import { FaEnvelope } from '@react-icons/all-files/fa/FaEnvelope';
+import {
+  FaHome,
+  FaAddressCard,
+  FaBriefcase,
+  FaBook,
+  FaEnvelope,
+  FaBars,
+} from 'react-icons/fa';
 import { Link, useTranslation } from 'gatsby-plugin-react-i18next';
 import PropTypes from 'prop-types';
 

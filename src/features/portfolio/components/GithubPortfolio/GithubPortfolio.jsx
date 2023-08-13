@@ -6,7 +6,7 @@ import GhPinnedReposAdapter from '../../../../core/services/ghPinnedReposAdapter
 import GithubApiAdapter from '../../../../core/services/githubApiAdapter';
 import GithubRepoCard from '../../../../core/components/GithubRepoCard/GithubRepoCard';
 import PropTypes from 'prop-types';
-import { SiGithub } from '@react-icons/all-files/si/SiGithub';
+import { SiGithub } from 'react-icons/si';
 import Title from '../../../../shared/components/Title/Title';
 import classNames from 'classnames';
 import locales from '../../../../shared/constants/localesKeys';

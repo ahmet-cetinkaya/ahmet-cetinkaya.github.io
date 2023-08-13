@@ -2,7 +2,7 @@ import './ChangeLanguageButton.scss';
 
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next/dist';
-import { MdLanguage } from '@react-icons/all-files/md/MdLanguage';
+import { MdLanguage } from 'react-icons/md';
 import classNames from 'classnames';
 
 function ChangeLanguageButton({ className }) {

@@ -47,22 +47,23 @@ function CardLayout({ location, children }) {
     );
   };
 
-  const setIsCardLayoutExtended = () => {
-    // eslint-disable-next-line no-undef
-    const rootPath = `${__PATH_PREFIX__}`;
-    const isRootPath = [
-      `${rootPath}/`,
-      ...languages.map((language) => `${rootPath}/${language}/`),
-    ].includes(location.pathname);
-    const extendedClassName = 'ac-card-layout-extended';
-    if (!isRootPath) storeDispatch(createAddCardClassAction(extendedClassName));
-    else storeDispatch(createRemoveCardClassAction(extendedClassName));
-  };
+  //TODO: Fix wrong popper position when card layout is extended
+  // const setIsCardLayoutExtended = () => {
+  //   // eslint-disable-next-line no-undef
+  //   const rootPath = `${__PATH_PREFIX__}`;
+  //   const isRootPath = [
+  //     `${rootPath}/`,
+  //     ...languages.map((language) => `${rootPath}/${language}/`),
+  //   ].includes(location.pathname);
+  //   const extendedClassName = 'ac-card-layout-extended';
+  //   if (!isRootPath) storeDispatch(createAddCardClassAction(extendedClassName));
+  //   else storeDispatch(createRemoveCardClassAction(extendedClassName));
+  // };
 
   useEffect(() => {
     document.addEventListener('mousemove', setCardTransformStyle.bind(this));
     document.addEventListener('mouseleave', resetCardTransformStyle.bind(this));
-    setIsCardLayoutExtended();
+    // setIsCardLayoutExtended();
   }, []);
 
   useEffect(

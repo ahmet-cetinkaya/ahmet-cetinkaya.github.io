@@ -3,6 +3,7 @@ import './PersonalInfo.scss';
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
 import locales from '../../../../shared/constants/localesKeys';
+import Obfuscate from 'react-obfuscate';
 
 function PersonalInfo() {
   const { t } = useI18next();
@@ -39,7 +40,13 @@ function PersonalInfo() {
       {personalInformationFields.map((field) => (
         <div key={field.name} className="mb-3 overflow-auto">
           <span className="ac-text-accent">{field.name}</span>
-          <span className="fw-light ms-3">{field.info}</span>
+          <span className="fw-light ms-3">
+            {field.name === t(locales.index.email) ? (
+              <Obfuscate email={field.info} />
+            ) : (
+              field.info
+            )}
+          </span>
         </div>
       ))}
     </>

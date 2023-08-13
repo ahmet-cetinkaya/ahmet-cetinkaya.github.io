@@ -12,6 +12,10 @@
     "to": "https://ahmetcetinkaya.itch.io/"
   },
   {
+    "from": "mastodon",
+    "to": "https://mastodon.social/@ahmetcetinkaya"
+  },
+  {
     "from": "twitter",
     "to": "https://twitter.com/ahmetctnky_dev"
   },

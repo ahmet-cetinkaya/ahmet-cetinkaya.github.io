@@ -1,30 +1,32 @@
 import './TechnologiesInfo.scss';
 
-import { SiCsharp } from '@react-icons/all-files/si/SiCsharp';
-import { SiDotNet } from '@react-icons/all-files/si/SiDotNet';
-import { SiJavascript } from '@react-icons/all-files/si/SiJavascript';
-import { SiTypescript } from '@react-icons/all-files/si/SiTypescript';
-import { SiNodeDotJs } from '@react-icons/all-files/si/SiNodeDotJs';
-import { SiReact } from '@react-icons/all-files/si/SiReact';
-import { SiAngular } from '@react-icons/all-files/si/SiAngular';
-import { SiJava } from '@react-icons/all-files/si/SiJava';
-import { SiSpring } from '@react-icons/all-files/si/SiSpring';
-import { SiPhp } from '@react-icons/all-files/si/SiPhp';
-import { SiLaravel } from '@react-icons/all-files/si/SiLaravel';
-import { SiMicrosoftsqlserver } from '@react-icons/all-files/si/SiMicrosoftsqlserver';
-import { SiMysql } from '@react-icons/all-files/si/SiMysql';
-import { SiPostgresql } from '@react-icons/all-files/si/SiPostgresql';
-import { SiMongodb } from '@react-icons/all-files/si/SiMongodb';
-import { SiAmazonaws } from '@react-icons/all-files/si/SiAmazonaws';
-import { SiDart } from '@react-icons/all-files/si/SiDart';
-import { SiFlutter } from '@react-icons/all-files/si/SiFlutter';
-import { SiUnity } from '@react-icons/all-files/si/SiUnity';
-import { SiAdobe } from '@react-icons/all-files/si/SiAdobe';
+import {
+  SiCsharp,
+  SiDotnet,
+  SiJavascript,
+  SiTypescript,
+  SiNodedotjs,
+  SiAngular,
+  SiReact,
+  SiDart,
+  SiFlutter,
+  SiSpring,
+  SiPhp,
+  SiLaravel,
+  SiMicrosoftsqlserver,
+  SiMysql,
+  SiPostgresql,
+  SiMongodb,
+  SiAmazonaws,
+  SiUnity,
+  SiAdobe,
+} from 'react-icons/si';
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
 import Label from '../../../../core/components/Label/Label';
 import Title from '../../../../shared/components/Title/Title';
 import locales from '../../../../shared/constants/localesKeys';
+import { FaJava } from 'react-icons/fa';
 
 function TechnologiesInfo() {
   const { t } = useI18next();
@@ -35,7 +37,7 @@ function TechnologiesInfo() {
       name: 'C#',
     },
     {
-      icon: <SiDotNet color="#5C2D91" />,
+      icon: <SiDotnet color="#5C2D91" />,
       name: 'ASP.NET',
     },
     {
@@ -47,7 +49,7 @@ function TechnologiesInfo() {
       name: 'Typescript',
     },
     {
-      icon: <SiNodeDotJs color="#43853D" />,
+      icon: <SiNodedotjs color="#43853D" />,
       name: 'NodeJS',
     },
     {
@@ -67,7 +69,7 @@ function TechnologiesInfo() {
       name: 'Flutter',
     },
     {
-      icon: <SiJava color="#ED8B00" />,
+      icon: <FaJava color="#ED8B00" />,
       name: 'Java',
     },
     {

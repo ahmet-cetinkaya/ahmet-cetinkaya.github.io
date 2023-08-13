@@ -2,9 +2,7 @@ import './QuotationCard.scss';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaQuoteRight } from '@react-icons/all-files/fa/FaQuoteRight';
-import { FaQuoteLeft } from '@react-icons/all-files/fa/FaQuoteLeft';
-import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
+import { FaQuoteLeft, FaQuoteRight, FaChevronRight } from 'react-icons/fa';
 
 function QuotationCard({ name, text, bio, imageUrl, link }) {
   const content = (

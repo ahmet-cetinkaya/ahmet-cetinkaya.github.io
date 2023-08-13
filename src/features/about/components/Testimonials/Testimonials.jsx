@@ -2,8 +2,7 @@ import './Testimonials.scss';
 
 import React from 'react';
 import { useI18next } from 'gatsby-plugin-react-i18next';
-import { FaChevronLeft } from '@react-icons/all-files/fa/FaChevronLeft';
-import { FaChevronRight } from '@react-icons/all-files/fa/FaChevronRight';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import classNames from 'classnames';
 import Title from '../../../../shared/components/Title/Title';
 import IconButton from '../../../../core/components/IconButton/IconButton';

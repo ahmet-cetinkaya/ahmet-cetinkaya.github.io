@@ -2,9 +2,8 @@ import './GithubRepoCard.scss';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GoRepo } from '@react-icons/all-files/go/GoRepo';
-import { FaCircle } from '@react-icons/all-files/fa/FaCircle';
-import { FaRegStar } from '@react-icons/all-files/fa/FaRegStar';
+import { GoRepo } from 'react-icons/go';
+import { FaCircle, FaRegStar } from 'react-icons/fa';
 import classNames from 'classnames';
 
 import GithubRepoModel from '../../models/githubRepoModel';

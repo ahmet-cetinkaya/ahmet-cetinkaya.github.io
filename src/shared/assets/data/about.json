@@ -16,6 +16,10 @@
       "userName": "ahmetcetinkaya7@outlook.com",
       "url": "mailto:ahmetcetinkaya7@outlook.com"
     },
+    "mastodon": {
+      "userName": "@ahmetcetinkaya@mastodon.social",
+      "url": "https://mastodon.social/@ahmetcetinkaya"
+    },
     "twitter": {
       "userName": "ahmetctnky_dev",
       "url": "https://twitter.com/ahmetctnky_dev"

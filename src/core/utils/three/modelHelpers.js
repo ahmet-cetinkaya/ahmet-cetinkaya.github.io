@@ -1,5 +1,5 @@
-/* eslint-disable import/prefer-default-export */
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 export async function loadGLTFModel(
   scene,
@@ -7,8 +7,15 @@ export async function loadGLTFModel(
   objectName,
   { scale = 1, receiveShadow = true, castShadow = true } = {}
 ) {
-  const loader = new GLTFLoader();
-  const gltf = await loader.loadAsync(glbPath);
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('/js/three/draco/gltf/');
+  dracoLoader.setDecoderConfig({ type: 'js' });
+  dracoLoader.preload();
+
+  const gltfLoader = new GLTFLoader();
+  gltfLoader.setDRACOLoader(dracoLoader);
+
+  const gltf = await gltfLoader.loadAsync(glbPath);
 
   const object = gltf.scene;
   object.name = objectName;

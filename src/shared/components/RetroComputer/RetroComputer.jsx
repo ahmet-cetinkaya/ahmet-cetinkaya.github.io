@@ -4,10 +4,10 @@ import {
   AmbientLight,
   OrthographicCamera,
   PointLight,
+  SRGBColorSpace,
   Scene,
   Vector3,
   WebGLRenderer,
-  sRGBEncoding,
 } from 'three';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -52,7 +52,7 @@ function RetroComputer() {
       const newRenderer = new WebGLRenderer({ antialias: true, alpha: true });
       newRenderer.setPixelRatio(window.devicePixelRatio);
       newRenderer.setSize(scW, scH);
-      newRenderer.outputEncoding = sRGBEncoding;
+      newRenderer.outputColorSpace = SRGBColorSpace;
       container.appendChild(newRenderer.domElement);
       setRenderer(newRenderer);
 
@@ -69,10 +69,10 @@ function RetroComputer() {
       newCamera.lookAt(target);
       setCamera(newCamera);
 
-      const ambientLight = new AmbientLight(0x343434, 2);
+      const ambientLight = new AmbientLight("#fff", 1.2);
       scene.add(ambientLight);
 
-      const pointLight = new PointLight(0x4b15e0, 8);
+      const pointLight = new PointLight("#965eff", 160);
       pointLight.position.set(0.25, 0.5, 5);
       pointLight.distance = 4.8;
       scene.add(pointLight);
@@ -87,7 +87,7 @@ function RetroComputer() {
 
       await loadGLTFModel(
         scene,
-        '/assets/models/retro-computer.glb',
+        '/assets/models/retro-computer-draco-optimized.gltf',
         'retro-computer',
         { scale: 16.55, receiveShadow: false, castShadow: false }
       );

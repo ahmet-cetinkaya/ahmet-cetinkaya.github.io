@@ -23,11 +23,13 @@
 </p>
 
 ## 💻 About The Project
+
 A personal website project where I introduce myself and share my portfolio and blog posts.
 
 <p align="center"><img src="https://user-images.githubusercontent.com/53148314/192152720-36fe66f3-1bcf-40a7-a46f-1c85eb5852ce.gif" alt="Ahmet Çetinkaya" width="600"/></p>
 
 ### Built With
+
 [![Ahmet Çetinkaya reactjs](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
 [![Ahmet Çetinkaya gatsbyjs](https://img.shields.io/badge/Gatsby-663399?style=for-the-badge&logo=gatsby&logoColor=white)](https://gatsbyjs.com/)
 [![Ahmet Çetinkaya redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)

@@ -69,10 +69,10 @@ function RetroComputer() {
       newCamera.lookAt(target);
       setCamera(newCamera);
 
-      const ambientLight = new AmbientLight("#fff", 1.2);
+      const ambientLight = new AmbientLight('#fff', 1.2);
       scene.add(ambientLight);
 
-      const pointLight = new PointLight("#965eff", 160);
+      const pointLight = new PointLight('#965eff', 160);
       pointLight.position.set(0.25, 0.5, 5);
       pointLight.distance = 4.8;
       scene.add(pointLight);

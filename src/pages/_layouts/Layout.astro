@@ -1,0 +1,52 @@
+---
+import '~/application/shared/assets/styles/tailwind.css';
+
+import { I18N } from 'astrowind:config';
+
+import CommonMeta from '~/pages/_components/CommonMeta.astro';
+import Favicons from '~/pages/_components/Favicons.astro';
+import ApplyColorMode from '~/application/shared/components/ApplyColorMode.astro';
+import Metadata from '~/pages/_components/Metadata.astro';
+import SiteVerification from '~/pages/_components/SiteVerification.astro';
+import Analytics from '~/pages/_components/Analytics.astro';
+import BasicScripts from '~/application/shared/components/BasicScripts.astro';
+
+// Comment the line below to disable View Transitions
+import { ViewTransitions } from 'astro:transitions';
+
+import type { MetaData as MetaDataType } from '~/types';
+
+export interface Props {
+  metadata?: MetaDataType;
+}
+
+const { metadata = {} } = Astro.props;
+const { language, textDirection } = I18N;
+---
+
+<!doctype html>
+<html lang={language} dir={textDirection} class="2xl:text-[20px]">
+  <head>
+    <CommonMeta />
+    <Favicons />
+    <ApplyColorMode />
+    <Metadata {...metadata} />
+    <SiteVerification />
+    <Analytics />
+
+    <!-- Comment the line below to disable View Transitions -->
+    <ViewTransitions fallback="swap" />
+  </head>
+
+  <body class="text-default bg-page tracking-tight antialiased">
+    <slot />
+
+    <BasicScripts />
+
+    <style is:global>
+      img {
+        content-visibility: auto;
+      }
+    </style>
+  </body>
+</html>

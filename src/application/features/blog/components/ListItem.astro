@@ -1,0 +1,118 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Icon } from 'astro-icon/components';
+import Image from '~/application/shared/components/ui/Image.astro';
+import PostTags from '~/application/features/blog/components/Tags.astro';
+
+import { APP_BLOG } from 'astrowind:config';
+import type { Post } from '~/types';
+
+import { getPermalink } from '~/application/shared/utils/permalinks';
+import { findImage } from '~/application/shared/utils/images';
+import { getFormattedDate } from '~/application/shared/utils/utils';
+
+export interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const image = (await findImage(post.image)) as ImageMetadata | undefined;
+
+const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
+---
+
+<article class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 ${image ? 'md:grid-cols-2' : ''}`}>
+  {
+    image &&
+      (link ? (
+        <a class="group relative block" href={link ?? 'javascript:void(0)'}>
+          <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg dark:bg-slate-700 md:h-72 md:pb-[75%] lg:pb-[56.25%]">
+            {image && (
+              <Image
+                src={image}
+                class="absolute inset-0 mb-6 h-full w-full rounded bg-gray-400 object-cover shadow-lg dark:bg-slate-700"
+                widths={[400, 900]}
+                width={900}
+                sizes="(max-width: 900px) 400px, 900px"
+                alt={post.title}
+                aspectRatio="16:9"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </div>
+        </a>
+      ) : (
+        <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg dark:bg-slate-700 md:h-72 md:pb-[75%] lg:pb-[56.25%]">
+          {image && (
+            <Image
+              src={image}
+              class="absolute inset-0 mb-6 h-full w-full rounded bg-gray-400 object-cover shadow-lg dark:bg-slate-700"
+              widths={[400, 900]}
+              width={900}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={post.title}
+              aspectRatio="16:9"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </div>
+      ))
+  }
+  <div class="mt-2">
+    <header>
+      <div class="mb-1">
+        <span class="text-sm">
+          <Icon name="tabler:clock" class="-mt-0.5 inline-block h-3.5 w-3.5 dark:text-gray-400" />
+          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+          {
+            post.author && (
+              <>
+                {' '}
+                · <Icon name="tabler:user" class="-mt-0.5 inline-block h-3.5 w-3.5 dark:text-gray-400" />
+                <span>{post.author.replaceAll('-', ' ')}</span>
+              </>
+            )
+          }
+          {
+            post.category && (
+              <>
+                {' '}
+                ·{' '}
+                <a class="hover:underline" href={getPermalink(post.category.slug, 'category')}>
+                  {post.category.title}
+                </a>
+              </>
+            )
+          }
+        </span>
+      </div>
+      <h2 class="font-heading mb-2 text-xl font-bold leading-tight dark:text-slate-300 sm:text-2xl">
+        {
+          link ? (
+            <a
+              class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700"
+              href={link}
+            >
+              {post.title}
+            </a>
+          ) : (
+            post.title
+          )
+        }
+      </h2>
+    </header>
+
+    {post.excerpt && <p class="text-muted flex-grow text-lg dark:text-slate-400">{post.excerpt}</p>}
+    {
+      post.tags && Array.isArray(post.tags) ? (
+        <footer class="mt-5">
+          <PostTags tags={post.tags} />
+        </footer>
+      ) : (
+        <Fragment />
+      )
+    }
+  </div>
+</article>

@@ -1,0 +1,23 @@
+---
+import Layout from '~/pages/_layouts/Layout.astro';
+import Header from '~/application/shared/components/Header.astro';
+
+import { headerData } from '~/navigation';
+
+import type { MetaData } from '~/types';
+
+export interface Props {
+  metadata?: MetaData;
+}
+
+const { metadata } = Astro.props;
+---
+
+<Layout metadata={metadata}>
+  <slot name="header">
+    <Header {...headerData} isSticky showRssFeed showToggleTheme />
+  </slot>
+  <main>
+    <slot />
+  </main>
+</Layout>

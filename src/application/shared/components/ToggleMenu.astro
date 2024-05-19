@@ -1,0 +1,29 @@
+---
+export interface Props {
+  label?: string;
+  class?: string;
+}
+
+const {
+  label = 'Toggle Menu',
+  class: className = 'flex flex-col h-12 w-12 rounded justify-center items-center cursor-pointer group',
+} = Astro.props;
+---
+
+<button type="button" class={className} aria-label={label} data-aw-toggle-menu>
+  <span class="sr-only">{label}</span>
+  <slot>
+    <span
+      aria-hidden="true"
+      class="ease my-1 h-0.5 w-6 transform rounded-full bg-black opacity-80 transition duration-200 group-[.expanded]:translate-y-2.5 group-[.expanded]:rotate-45 dark:bg-white"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="ease my-1 h-0.5 w-6 transform rounded-full bg-black opacity-80 transition duration-200 group-[.expanded]:opacity-0 dark:bg-white"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="ease my-1 h-0.5 w-6 transform rounded-full bg-black opacity-80 transition duration-200 group-[.expanded]:-translate-y-2.5 group-[.expanded]:-rotate-45 dark:bg-white"
+    ></span>
+  </slot>
+</button>

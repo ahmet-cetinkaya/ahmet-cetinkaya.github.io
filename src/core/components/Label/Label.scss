@@ -1,8 +1,0 @@
-@import '../../assets/styles/bootstrap-extends.scss';
-
-.ac-icon-label {
-  @extend .d-inline-block, .p-2, .me-2, .mb-2;
-  width: -webkit-fit-content !important;
-  width: -moz-fit-content !important;
-  width: fit-content !important;
-}

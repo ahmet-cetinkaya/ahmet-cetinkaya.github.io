@@ -1,6 +1,6 @@
 ---
 import Layout from '~/pages/_layouts/Layout.astro';
-import Header from '~/application/shared/components/Header.astro';
+import Taskbar from '~/application/features/desktop/components/Taskbar.astro';
 
 import { headerData } from '~/navigation';
 
@@ -15,7 +15,7 @@ const { metadata } = Astro.props;
 
 <Layout metadata={metadata}>
   <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme />
+    <Taskbar {...headerData} isSticky showRssFeed showToggleTheme />
   </slot>
   <main>
     <slot />

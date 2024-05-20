@@ -7,6 +7,7 @@ import Button from '~/application/shared/components/ui/Button.astro';
 import { getHomePermalink } from '~/application/shared/utils/permalinks';
 import { trimSlash, getAsset } from '~/application/shared/utils/permalinks';
 import type { CallToAction } from '~/types';
+import Clock from './Clock.astro';
 
 interface Link {
   text?: string;
@@ -157,6 +158,8 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
             ''
           )
         }
+
+        <Clock id="taskbarClock" />
       </div>
     </div>
   </div>

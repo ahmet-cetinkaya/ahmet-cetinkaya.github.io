@@ -1,20 +1,18 @@
 import { Entity } from '@corePackages/ahmet-cetinkaya-core/domain/abstraction/Entity';
 
-export type OrganizationIdType = number;
+export type OrganizationId = number;
 
-export class Organization extends Entity<OrganizationIdType> {
-  name: string;
-  logoUrl: string;
-  description: string;
-  location: string;
-  websiteUrl: string;
-
-  constructor({ id, name, logoUrl, description, location, websiteUrl, createdDate, updatedDate }: Organization) {
-    super({ id, createdDate, updatedDate });
-    this.name = name;
-    this.logoUrl = logoUrl;
-    this.description = description;
-    this.location = location;
-    this.websiteUrl = websiteUrl;
+export class Organization extends Entity<OrganizationId> {
+  constructor(
+    id: OrganizationId,
+    public name: string,
+    public logoUrl: string,
+    public description: string,
+    public location: string,
+    public websiteUrl: string,
+    createdDate: Date,
+    updatedDate?: Date,
+  ) {
+    super(id, createdDate, updatedDate);
   }
 }

@@ -1,21 +1,18 @@
 import { Entity } from '@corePackages/ahmet-cetinkaya-core/domain/abstraction/Entity';
-import type { Icon } from '~/domain/constants/Icons';
 import type { Category, CategoryId } from './Category';
 
-export enum Apps {
-  AboutMe = 1,
-  Contact,
-  Blog,
+export enum Commands {
+  Shutdown = 1,
+  Restart = 2,
 }
 
-export type AppId = Apps;
+export type CommandId = Commands;
 
-export class App extends Entity<AppId> {
+export class Command extends Entity<CommandId> {
   constructor(
-    id: AppId,
+    id: CommandId,
     public categoryId: CategoryId,
     public name: string,
-    public icon: Icon,
     public execute: () => void,
     createdDate: Date,
     updatedDate?: Date,

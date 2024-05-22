@@ -1,13 +1,17 @@
 import { Entity } from '@corePackages/ahmet-cetinkaya-core/domain/abstraction/Entity';
 
-export type TechnologyId = number;
+export enum Categories {
+  System = 1,
+  Apps,
+  Power,
+}
 
-export class Technology extends Entity<TechnologyId> {
+export type CategoryId = Categories;
+
+export class Category extends Entity<CategoryId> {
   constructor(
-    id: TechnologyId,
+    id: CategoryId,
     public name: string,
-    public icon: string,
-    public linkedTechnologyIds: TechnologyId[],
     createdDate: Date,
     updatedDate?: Date,
   ) {

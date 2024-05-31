@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { StoreBase } from './abstraction/StoreBase';
-import { ReactStoreBase } from './abstraction/ReactStoreBase';
+import type { IReactStore } from './abstraction/IReactStore';
+import type { IStore } from './abstraction/IStore';
 
-export class ReactStore extends ReactStoreBase {
-  useStore<TValue>(store: StoreBase<TValue>): TValue {
+export class ReactStore implements IReactStore {
+  useStore<TValue>(store: IStore<TValue>): TValue {
     const [value, setValue] = useState<TValue>(store.get());
 
     useEffect(() => {

@@ -3,7 +3,7 @@ export abstract class Entity<TId> {
   createdDate: Date;
   updatedDate?: Date;
 
-  constructor({ id, createdDate, updatedDate }: Entity<TId>) {
+  constructor(id, createdDate, updatedDate) {
     this.id = id;
     this.createdDate = createdDate;
     this.updatedDate = updatedDate;

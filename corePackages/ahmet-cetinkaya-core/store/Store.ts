@@ -1,11 +1,9 @@
-import { StoreBase } from './abstraction/StoreBase';
+import type { IStore } from './abstraction/IStore';
 
-export class Store<TValue> extends StoreBase<TValue> {
+export class Store<TValue> implements IStore<TValue> {
   protected _listeners: ((value: TValue) => void)[] = [];
 
-  constructor(protected _value: TValue) {
-    super();
-  }
+  constructor(protected _value: TValue) {}
 
   get() {
     return this._value;
@@ -13,7 +11,7 @@ export class Store<TValue> extends StoreBase<TValue> {
 
   set(value: TValue) {
     this._value = value;
-    this._listeners.forEach((listener) => listener(value));
+    for (const listener of this._listeners) listener(this.get());
   }
 
   subscribe(listener: (value: TValue) => void) {

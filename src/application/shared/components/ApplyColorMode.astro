@@ -4,7 +4,7 @@ import { UI } from 'astrowind:config';
 // TODO: This code is temporary
 ---
 
-<script is:inline define:vars={{ defaultTheme: UI.theme || 'system' }}>
+<script define:vars={{ defaultTheme: UI.theme || 'system' }}>
   function applyTheme(theme) {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');

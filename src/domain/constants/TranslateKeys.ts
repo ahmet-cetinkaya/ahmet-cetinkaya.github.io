@@ -19,5 +19,5 @@ export enum TranslateKeys {
   Power_Power = 'Power_Power',
   Commands_Restart = 'Commands_Restart',
   Commands_Shutdown = 'Commands_Shutdown',
-  System_System = "System_System",
+  System_System = 'System_System',
 }

@@ -4,7 +4,12 @@ export class PaginationResult<T> {
     public readonly pageSize: number,
     public readonly items: T[],
     public readonly totalItems: number,
-  ) {}
+  ) {
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
+    this.items = items;
+    this.totalItems = totalItems;
+  }
 
   get totalPages(): number {
     return Math.ceil(this.totalItems / this.pageSize);

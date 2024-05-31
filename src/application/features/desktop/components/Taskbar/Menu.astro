@@ -1,0 +1,38 @@
+---
+import type { IAppsService } from '~/application/features/app/services/abstraction/IAppsService';
+import type { ICategoriesService } from '~/application/features/categories/services/abstraction/ICategoriesService';
+import Dropdown, { type DropdownItem } from '~/application/shared/components/ui/Dropdown';
+import Image from '~/application/shared/components/ui/Image.astro';
+import { Container } from '~/container';
+import AhmetCetinkayaLogo from '~/content/assets/images/ahmet-cetinkaya-logo.svg';
+
+const categoriesService: ICategoriesService = Container.CategoriesService;
+const appsService: IAppsService = Container.AppsService;
+
+const categories = await categoriesService.getAll();
+
+const menuItems: DropdownItem[] = [];
+for (const category of categories) {
+  const categoryMenuHeader: DropdownItem = {
+    text: category.name,
+    items: [],
+  };
+
+  const apps = await appsService.getAll((app) => app.categoryId === category.id);
+  categoryMenuHeader.items!.push(
+    ...apps.map(
+      (app) =>
+        ({
+          text: app.name,
+          href: app.path,
+        }) as DropdownItem,
+    ),
+  );
+
+  if (categoryMenuHeader.items!.length > 0) menuItems.push(categoryMenuHeader);
+}
+---
+
+<Dropdown menuItems={menuItems} client:only="solid-js" transition:persist>
+  <Image src={AhmetCetinkayaLogo.src} class="h-5 w-5" alt="Menu" transition:persist />
+</Dropdown>

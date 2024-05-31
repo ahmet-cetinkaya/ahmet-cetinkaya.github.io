@@ -1,8 +1,6 @@
 ---
 import Layout from '~/pages/_layouts/Layout.astro';
-import Taskbar from '~/application/features/desktop/components/Taskbar.astro';
-
-import { headerData } from '~/navigation';
+import Taskbar from '~/application/features/desktop/components/Taskbar/Taskbar.astro';
 
 import type { MetaData } from '~/types';
 
@@ -13,10 +11,8 @@ export interface Props {
 const { metadata } = Astro.props;
 ---
 
-<Layout metadata={metadata}>
-  <slot name="header">
-    <Taskbar {...headerData} isSticky showRssFeed showToggleTheme />
-  </slot>
+<Layout metadata={metadata} transition:persist>
+  <Taskbar transition:persist />
   <main>
     <slot />
   </main>

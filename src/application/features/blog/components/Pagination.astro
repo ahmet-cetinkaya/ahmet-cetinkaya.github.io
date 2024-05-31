@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { getPermalink } from '~/application/shared/utils/permalinks';
-import Button from '~/application/shared/components/ui/Button.astro';
+import Link from '~/application/shared/components/ui/Link';
 
 export interface Props {
   prevUrl?: string;
@@ -17,19 +17,19 @@ const { prevUrl, nextUrl, prevText = 'Newer posts', nextText = 'Older posts' } =
   (prevUrl || nextUrl) && (
     <div class="container flex">
       <div class="container mx-auto flex flex-row justify-between">
-        <Button
-          variant="tertiary"
-          class={`mr-2 px-3 md:px-3 ${!prevUrl ? 'invisible' : ''}`}
+        <Link
+          variant="link"
+          className={`mr-2 px-3 md:px-3 ${!prevUrl ? 'invisible' : ''}`}
           href={getPermalink(prevUrl)}
         >
           <Icon name="tabler:chevron-left" class="h-6 w-6" />
           <p class="ml-2">{prevText}</p>
-        </Button>
+        </Link>
 
-        <Button variant="tertiary" class={`px-3 md:px-3 ${!nextUrl ? 'invisible' : ''}`} href={getPermalink(nextUrl)}>
+        <Link variant="link" className={`px-3 md:px-3 ${!nextUrl ? 'invisible' : ''}`} href={getPermalink(nextUrl)}>
           <span class="mr-2">{nextText}</span>
           <Icon name="tabler:chevron-right" class="h-6 w-6" />
-        </Button>
+        </Link>
       </div>
     </div>
   )

@@ -10,14 +10,14 @@ export const buttonVariantClassNames = {
 type ButtonType = 'button' | 'submit' | 'reset';
 type ButtonVariant = keyof typeof buttonVariantClassNames;
 interface Props {
-  variant?: ButtonVariant;
-  children: JSX.Element;
   type?: ButtonType;
+  children: JSX.Element;
+  variant?: ButtonVariant;
   className?: string;
   onClick?: (e: MouseEvent) => void;
 }
 
-export default function Button({ variant = 'primary', children, type = 'button', className, onClick }: Props) {
+export default function Button({ type = 'button', children, variant = 'primary', className, onClick }: Props) {
   return (
     <button type={type} class={twMerge(buttonVariantClassNames[variant], className)} onClick={onClick}>
       {children}

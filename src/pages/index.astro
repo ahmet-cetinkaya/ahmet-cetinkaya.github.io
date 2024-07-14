@@ -1,7 +1,5 @@
 ---
-import PageLayout from '~/pages/_layouts/PageLayout.astro';
-
-import BlogLatestPosts from '~/application/features/blog/components/BlogLatestPosts.astro';
+import DesktopLayout from '~/pages/_layouts/DesktopLayout.astro';
 
 const metadata = {
   title: 'Ahmet Çetinkaya',
@@ -9,9 +7,4 @@ const metadata = {
 };
 ---
 
-<PageLayout metadata={metadata}>
-  <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`Blog posts are a great way to share your knowledge and engage with your audience.`}
-  />
-</PageLayout>
+<DesktopLayout metadata={metadata} />

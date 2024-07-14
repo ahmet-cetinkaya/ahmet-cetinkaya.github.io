@@ -3,7 +3,7 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import merge from 'lodash.merge';
 import type { ImageMetadata } from 'astro';
-import PageLayout from '~/pages/_layouts/PageLayout.astro';
+import DesktopLayout from '~/pages/_layouts/DesktopLayout.astro';
 import SinglePost from '~/application/features/blog/components/SinglePost.astro';
 import ToBlogLink from '~/application/features/blog/components/ToBlogLink.astro';
 
@@ -45,10 +45,10 @@ const metadata = merge(
 ) as MetaData;
 ---
 
-<PageLayout metadata={metadata}>
+<DesktopLayout metadata={metadata}>
   <SinglePost post={{ ...post, image: image }} url={url}>
     {post.Content ? <post.Content /> : <Fragment set:html={post.content || ''} />}
   </SinglePost>
   <ToBlogLink />
   <RelatedPosts post={post} />
-</PageLayout>
+</DesktopLayout>

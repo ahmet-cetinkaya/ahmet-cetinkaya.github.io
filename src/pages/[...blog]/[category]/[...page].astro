@@ -2,7 +2,7 @@
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 import { blogCategoryRobots, getStaticPathsBlogCategory } from '~/application/shared/utils/blog';
 
-import PageLayout from '~/pages/_layouts/PageLayout.astro';
+import DesktopLayout from '~/pages/_layouts/DesktopLayout.astro';
 import BlogList from '~/application/features/blog/components/List.astro';
 import Headline from '~/application/features/blog/components/Headline.astro';
 import Pagination from '~/application/features/blog/components/Pagination.astro';
@@ -28,10 +28,10 @@ const metadata = {
 };
 ---
 
-<PageLayout metadata={metadata}>
+<DesktopLayout metadata={metadata}>
   <section class="mx-auto max-w-4xl px-4 py-12 sm:py-16 md:px-6 lg:py-20">
     <Headline>{category.title}</Headline>
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
   </section>
-</PageLayout>
+</DesktopLayout>

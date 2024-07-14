@@ -9,15 +9,22 @@ const linkVariantClassNames = {
 type LinkVariant = keyof typeof linkVariantClassNames;
 interface Props {
   href: string;
-  onClick?: (e: MouseEvent) => void;
   children: JSX.Element;
+  draggable?: boolean;
   variant?: LinkVariant;
-  className?: string;
+  class?: string;
+  onClick?: (e: MouseEvent) => void;
+  onDragStart?: (e: DragEvent) => void;
 }
 
-export default function Link({ href, onClick, children, variant = 'primary', className }: Props) {
+export default function Link({ href, children, variant = 'primary', class: className, onClick, onDragStart }: Props) {
   return (
-    <a href={href} onClick={onClick} class={twMerge(linkVariantClassNames[variant], className)}>
+    <a
+      href={href}
+      class={twMerge(linkVariantClassNames[variant], className)}
+      onClick={onClick}
+      onDragStart={onDragStart}
+    >
       {children}
     </a>
   );

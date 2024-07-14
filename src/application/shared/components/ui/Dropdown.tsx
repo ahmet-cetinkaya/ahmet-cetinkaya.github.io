@@ -74,7 +74,7 @@ function MenuItem({ item }: MenuItemProps) {
     'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer';
   if (item.href)
     return (
-      <Link href={item.href} onClick={item.onClick} className={className} variant="link">
+      <Link href={item.href} onClick={item.onClick} class={className} variant="link">
         {item.text}
       </Link>
     );

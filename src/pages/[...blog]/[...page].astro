@@ -1,7 +1,7 @@
 ---
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
-import PageLayout from '~/pages/_layouts/PageLayout.astro';
+import DesktopLayout from '~/pages/_layouts/DesktopLayout.astro';
 import BlogList from '~/application/features/blog/components/List.astro';
 import Headline from '~/application/shared/components/ui/Headline.astro';
 import Pagination from '~/application/features/blog/components/Pagination.astro';
@@ -35,7 +35,7 @@ const metadata = {
 };
 ---
 
-<PageLayout metadata={metadata}>
+<DesktopLayout metadata={metadata}>
   <section class="mx-auto max-w-4xl px-6 py-12 sm:px-6 sm:py-16 lg:py-20">
     <Headline subtitle="Page Headline"> The Blog </Headline>
     <BlogList posts={page.data} />
@@ -45,4 +45,4 @@ const metadata = {
       <PostTags tags={allTags}  title="Search by Tags:" />
     -->
   </section>
-</PageLayout>
+</DesktopLayout>

@@ -1,5 +1,5 @@
 ---
-import PageLayout from '~/pages/_layouts/PageLayout.astro';
+import DesktopLayout from '~/pages/_layouts/DesktopLayout.astro';
 
 const metadata = {
   title: 'Ahmet Çetinkaya',
@@ -7,33 +7,21 @@ const metadata = {
 };
 ---
 
-<PageLayout metadata={metadata} />
+<DesktopLayout metadata={metadata} />
 
 <script>
-  import { CryptoExtensions } from '@corePackages/ahmet-cetinkaya-core/crypto/CryptoExtensions';
-  import { Container } from '~/container';
-  import { App, Apps } from '~/domain/models/App';
+  import { Apps } from '~/domain/models/App';
+  import { openApp } from './_scripts/app';
 
   await onAstroInit();
+  document.addEventListener('astro:after-swap', onAstroAfterSwap);
 
   async function onAstroInit() {
-    await openAboutMeApp();
+    await openApp(Apps.AboutMe);
   }
 
-  async function openAboutMeApp() {
-    const appsService = Container.AppsService;
-    const windowsService = Container.WindowsService;
-
-    const app: App | null = await appsService.get((app) => app.id === Apps.AboutMe);
-    if (!app) return;
-
-    await windowsService.add({
-      id: CryptoExtensions.generateNanoId(),
-      title: app.name,
-      appId: app.id,
-      isMinimized: false,
-      layer: 0,
-      createdDate: new Date(),
-    });
+  async function onAstroAfterSwap() {
+    if (!document.location.pathname.endsWith('/about-me')) return;
+    await openApp(Apps.AboutMe);
   }
 </script>

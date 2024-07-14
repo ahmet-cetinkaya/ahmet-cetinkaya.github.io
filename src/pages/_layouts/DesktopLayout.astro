@@ -1,0 +1,25 @@
+---
+import Layout from '~/pages/_layouts/Layout.astro';
+import Taskbar from '~/application/features/desktop/components/Taskbar/Taskbar.astro';
+
+import type { MetaData } from '~/types';
+import Desktop from '~/application/features/desktop/components/Taskbar/Desktop';
+
+export interface Props {
+  metadata?: MetaData;
+}
+
+const { metadata } = Astro.props;
+---
+
+<Layout metadata={metadata}>
+  <div class="flex h-screen flex-col">
+    <Taskbar />
+
+    <main class="flex-grow">
+      <span transition:persist>
+        <Desktop client:only="solid-js" />
+      </span>
+    </main>
+  </div>
+</Layout>

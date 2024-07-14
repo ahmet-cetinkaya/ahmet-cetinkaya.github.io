@@ -53,20 +53,25 @@ export class WindowsService implements IWindowsService {
     const windows = this._windowsStore.get();
     const windowIndexToActive = windows.findIndex((w) => w.id === id);
     if (!window) return Promise.reject('Window not found.');
-    const windowToActive = windows[windowIndexToActive];
-    if (windowToActive.layer === windows.length) return Promise.resolve();
 
+    const windowToActive = windows[windowIndexToActive];
+    if (this.isActivated(windowToActive)) return Promise.resolve();
+
+    let layerToActiveWindow = 0;
     for (let i = 0; i < windows.length; ++i) {
       if (i === windowIndexToActive) continue;
       if (windows[i].isMinimized) continue;
       if (windows[i].layer! < windowToActive.layer!) continue;
 
+      if (windows[i].layer! > layerToActiveWindow) layerToActiveWindow = windows[i].layer!;
       windows[i].layer = windows[i].layer! - 1;
       windows[i].updatedDate = new Date();
     }
-    windowToActive.layer = windows.length - 1;
+
+    windowToActive.layer = layerToActiveWindow;
     if (windowToActive.isMinimized) windowToActive.isMinimized = false;
     windowToActive.updatedDate = new Date();
+
     this._windowsStore.set(windows);
 
     return Promise.resolve();

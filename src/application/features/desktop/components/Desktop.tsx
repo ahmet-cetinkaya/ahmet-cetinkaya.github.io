@@ -1,15 +1,18 @@
-import { EventFunctions } from '@corePackages/ahmet-cetinkaya-core/dom/events/EventFunctions';
 import { createMemo, createSignal, For, onCleanup, onMount, type JSX } from 'solid-js';
 import Link from '~/application/shared/components/ui/Link';
 import { Container } from '~/container';
+import { CryptoExtensions } from '~/core/acore-ts/crypto/CryptoExtensions';
+import { EventFunctions } from '~/core/acore-ts/dom/events/EventFunctions';
 import type { App } from '~/domain/models/App';
 import { Categories } from '~/domain/models/Category';
+import { Window } from '~/domain/models/Window';
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
 
 export default function Desktop() {
   const appsService = createMemo(() => Container.AppsService);
+  const windowsService = createMemo(() => Container.WindowsService);
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
@@ -96,6 +99,13 @@ export default function Desktop() {
     setDraggedShortcut(null);
   }
 
+  function onShortcutClick(shortcut: DesktopShortcut) {
+    if (!shortcut) return;
+
+    const window = new Window(CryptoExtensions.generateNanoId(), shortcut.id, shortcut.name);
+    windowsService().add(window);
+  }
+
   return (
     <div ref={containerRef} class="flex h-full flex-row">
       <For each={matrix()}>
@@ -113,6 +123,7 @@ export default function Desktop() {
                       label={col.name}
                       icon={col.icon}
                       href={col.path}
+                      onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}
                     />
                   ) : (
@@ -128,19 +139,21 @@ export default function Desktop() {
   );
 }
 
-//#region DesktopShortcut
-
+//#region Desktop Shortcut
 interface DesktopShortcutProps {
   label: string;
   href: string;
   icon: JSX.Element;
-  onDragStart: () => void;
+  onClick?: () => void;
+  onDragStart?: () => void;
 }
-function DesktopShortcut({ label, href, icon, onDragStart }: DesktopShortcutProps) {
+
+function DesktopShortcut({ label, href, icon, onClick, onDragStart }: DesktopShortcutProps) {
   return (
     <Link
       href={href}
       draggable={true}
+      onClick={onClick}
       onDragStart={onDragStart}
       class="flex h-full w-full flex-col items-center justify-center"
     >
@@ -151,13 +164,10 @@ function DesktopShortcut({ label, href, icon, onDragStart }: DesktopShortcutProp
     </Link>
   );
 }
-
 //#endregion
 
-//#region DesktopEmptyGrid
-
+//#region Desktop Empty Grid
 function DesktopEmptyGrid() {
   return <div class="h-full w-full" />;
 }
-
 //#endregion

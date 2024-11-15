@@ -1,4 +1,4 @@
-import { PaginationResult } from '@corePackages/ahmet-cetinkaya-core/repository/PaginationResult';
+import { PaginationResult } from '~/core/acore-ts/repository/PaginationResult';
 import CategoriesData from '~/content/categories';
 import type { Category } from '~/domain/models/Category';
 import type { ICategoriesService } from '../../categories/services/abstraction/ICategoriesService';

@@ -6,7 +6,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@corePackages/*": ["corePackages/*"]
+      "@corePackages/*": ["src/core/*"]
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js"

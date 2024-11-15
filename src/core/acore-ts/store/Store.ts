@@ -10,6 +10,8 @@ export class Store<TValue> implements IStore<TValue> {
   }
 
   set(value: TValue) {
+    if (this._value === value) return;
+
     this._value = value;
     for (const listener of this._listeners) listener(this.get());
   }
@@ -18,7 +20,7 @@ export class Store<TValue> implements IStore<TValue> {
     this._listeners.push(listener);
   }
 
-  unSubscribe(listener: (value: TValue) => void) {
+  unsubscribe(listener: (value: TValue) => void) {
     const index = this._listeners.indexOf(listener);
     if (index !== -1) this._listeners.splice(index, 1);
   }

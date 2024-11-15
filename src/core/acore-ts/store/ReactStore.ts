@@ -13,7 +13,7 @@ export class ReactStore implements IReactStore {
       store.subscribe(listener);
 
       return () => {
-        store.unSubscribe(listener);
+        store.unsubscribe(listener);
       };
     }, [store]);
 

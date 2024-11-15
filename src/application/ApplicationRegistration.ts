@@ -1,5 +1,5 @@
-import type { I18nBase } from '@corePackages/ahmet-cetinkaya-core/i18n/abstraction/I18nBase';
-import { I18n } from '@corePackages/ahmet-cetinkaya-core/i18n/I18n';
+import type { I18nBase } from '~/core/acore-ts/i18n/abstraction/I18nBase';
+import { I18n } from '~/core/acore-ts/i18n/I18n';
 
 export interface IApplicationRegistration {
   i18n: I18nBase;

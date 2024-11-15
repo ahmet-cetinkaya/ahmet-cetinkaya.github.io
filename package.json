@@ -22,6 +22,7 @@
     "astro": "^4.16.10",
     "astro-embed": "^0.7.4",
     "astro-icon": "^1.1.2",
+    "astro-imagetools": "^0.9.0",
     "classnames": "^2.5.1",
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",

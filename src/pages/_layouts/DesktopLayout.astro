@@ -3,7 +3,8 @@ import Layout from '~/pages/_layouts/Layout.astro';
 import Taskbar from '~/application/features/desktop/components/Taskbar/Taskbar.astro';
 
 import type { MetaData } from '~/types';
-import Desktop from '~/application/features/desktop/components/Taskbar/Desktop';
+import Desktop from '~/application/features/desktop/components/Desktop';
+import WindowManager from '~/application/features/desktop/components/WindowManager';
 
 export interface Props {
   metadata?: MetaData;
@@ -18,7 +19,8 @@ const { metadata } = Astro.props;
 
     <main class="flex-grow">
       <span transition:persist>
-        <Desktop client:only="solid-js" />
+        <Desktop client:only="solid-js" transition:persist />
+        <WindowManager client:only="solid-js" transition:persist />
       </span>
     </main>
   </div>

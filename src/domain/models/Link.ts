@@ -1,4 +1,4 @@
-import { Entity } from '@corePackages/ahmet-cetinkaya-core/domain/abstraction/Entity';
+import { Entity } from '~/core/acore-ts/domain/abstraction/Entity';
 import type { Icon } from '~/domain/constants/Icons';
 
 export type LinkId = number;

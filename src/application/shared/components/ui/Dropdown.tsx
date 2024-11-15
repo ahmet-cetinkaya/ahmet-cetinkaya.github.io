@@ -1,5 +1,5 @@
-import { CryptoExtensions } from '@corePackages/ahmet-cetinkaya-core/crypto/CryptoExtensions';
 import { createMemo, createSignal, onCleanup, onMount, type JSX } from 'solid-js';
+import { CryptoExtensions } from '~/core/acore-ts/crypto/CryptoExtensions';
 import Button from './Button';
 import Link from './Link';
 
@@ -14,9 +14,8 @@ interface Props {
   children: JSX.Element;
 }
 export default function Dropdown({ children: toggleButtonChildren, menuItems }: Props) {
-  const [isOpen, setIsOpen] = createSignal(false);
-
   const id = createMemo(() => CryptoExtensions.generateNanoId());
+  const [isOpen, setIsOpen] = createSignal(false);
 
   onMount(() => {
     document.addEventListener('click', onClickOutside.bind(this));
@@ -66,9 +65,11 @@ export default function Dropdown({ children: toggleButtonChildren, menuItems }: 
   );
 }
 
+//#region MenuItem
 interface MenuItemProps {
   item: DropdownItem;
 }
+
 function MenuItem({ item }: MenuItemProps) {
   const className =
     'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer';
@@ -85,3 +86,4 @@ function MenuItem({ item }: MenuItemProps) {
       </Button>
     );
 }
+//#endregion

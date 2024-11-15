@@ -1,11 +1,6 @@
-import type { IObservable } from '@corePackages/ahmet-cetinkaya-core/async/abstraction/IObservable';
-import type {
-  IAddable,
-  IGettable,
-  IRemovable,
-  IUpdatable,
-} from '@corePackages/ahmet-cetinkaya-core/repository/abstraction/IRepository';
-import type { Window, WindowId } from '~/domain/models/Window';
+import type { IObservable } from '~/core/acore-ts/async/abstraction/IObservable';
+import type { IAddable, IGettable, IRemovable, IUpdatable } from '~/core/acore-ts/repository/abstraction/IRepository';
+import type { Window } from '~/domain/models/Window';
 
 export interface IWindowsService
   extends IAddable<Window>,
@@ -13,8 +8,8 @@ export interface IWindowsService
     IObservable<Window[]>,
     IUpdatable<Window>,
     IRemovable<Window> {
-  active(id: WindowId): Promise<void>;
-  minimize(id: WindowId): Promise<void>;
+  active(window: Window): Promise<void>;
+  minimize(window: Window): Promise<void>;
   isActivated(window: Window): boolean;
-  getActivated(): Window | null;
+  getActivedWindow(): Window | null;
 }

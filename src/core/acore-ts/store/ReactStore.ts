@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import type { IReactStore } from './abstraction/IReactStore';
-import type { IStore } from './abstraction/IStore';
+import { useEffect, useState } from "react";
+import type { IReactStore } from "./abstraction/IReactStore";
+import type { IStore } from "./abstraction/IStore";
 
 export class ReactStore implements IReactStore {
   useStore<TValue>(store: IStore<TValue>): TValue {

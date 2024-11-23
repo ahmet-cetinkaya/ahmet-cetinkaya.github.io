@@ -1,4 +1,4 @@
-import type { PaginationResult } from '../PaginationResult';
+import type { PaginationResult } from "../PaginationResult";
 
 export interface IListable<T> {
   getAll(predicate?: (x: T) => boolean): Promise<T[]>;

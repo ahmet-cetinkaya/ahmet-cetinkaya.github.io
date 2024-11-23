@@ -1,4 +1,4 @@
-import { Position } from './models/Position';
+import { Position } from "./models/Position";
 
 export class DragHelper {
   static makeDraggableElement(
@@ -13,22 +13,22 @@ export class DragHelper {
       pos3 = 0,
       pos4 = 0;
 
-    const headerElement = element.querySelector('header') as HTMLElement;
+    const headerElement = element.querySelector("header") as HTMLElement;
     const dragElement = headerElement || element;
 
-    dragElement.addEventListener('mousedown', dragMouseDown);
+    dragElement.addEventListener("mousedown", dragMouseDown);
 
     function dragMouseDown(event: MouseEvent) {
       const targetTag = (event.target as HTMLElement).tagName;
-      if (['BUTTON', 'A', 'INPUT', 'TEXTAREA', 'SELECT'].includes(targetTag)) {
+      if (["BUTTON", "A", "INPUT", "TEXTAREA", "SELECT"].includes(targetTag)) {
         return; // Allow default action for interactive elements
       }
 
       event.preventDefault();
       pos3 = event.clientX;
       pos4 = event.clientY;
-      document.addEventListener('mouseup', closeDragElement);
-      document.addEventListener('mousemove', elementDrag);
+      document.addEventListener("mouseup", closeDragElement);
+      document.addEventListener("mousemove", elementDrag);
       options.onDragStart?.(event, new Position(element.offsetTop, element.offsetLeft));
     }
 
@@ -55,14 +55,14 @@ export class DragHelper {
         element.style.left = `${newLeft}px`;
       }
 
-      element.style.cursor = 'grabbing';
+      element.style.cursor = "grabbing";
     }
 
     function closeDragElement(event: MouseEvent) {
-      document.removeEventListener('mouseup', closeDragElement);
-      document.removeEventListener('mousemove', elementDrag);
+      document.removeEventListener("mouseup", closeDragElement);
+      document.removeEventListener("mousemove", elementDrag);
 
-      element.style.cursor = 'default';
+      element.style.cursor = "default";
       options.onDragEnd?.(event, new Position(element.offsetTop, element.offsetLeft));
     }
   }

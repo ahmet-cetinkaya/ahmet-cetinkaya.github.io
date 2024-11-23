@@ -1,4 +1,4 @@
-import type { IObservable } from '../../async/abstraction/IObservable';
+import type { IObservable } from "../../async/abstraction/IObservable";
 
 export interface IStore<TValue> extends IObservable<TValue> {
   get(): TValue;

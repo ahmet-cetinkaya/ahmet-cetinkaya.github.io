@@ -1,0 +1,46 @@
+---
+import { SEO } from "astro-seo";
+
+export interface Props {
+  title?: string;
+  ignoreTitleTemplate?: boolean;
+  canonical?: string;
+  robots?: {
+    index?: boolean;
+    follow?: boolean;
+  };
+  description?: string;
+  openGraph?: {
+    basic: {
+      title: string;
+      type: string;
+      image: string;
+      url?: string | URL;
+    };
+    optional?: {
+      audio?: string;
+      description?: string;
+      determiner?: string;
+      locale?: string;
+      localeAlternate?: string[];
+      siteName?: string;
+      video?: string;
+    };
+  };
+  twitter?: {
+    creator?: string;
+  };
+  extend?: {
+    link?: { rel: string; href: string }[];
+    meta?: { name: string; content: string }[];
+  };
+}
+---
+
+<SEO
+  title={Astro.props.title}
+  description={Astro.props.description}
+  openGraph={Astro.props.openGraph}
+  twitter={Astro.props.twitter}
+  extend={Astro.props.extend}
+/>

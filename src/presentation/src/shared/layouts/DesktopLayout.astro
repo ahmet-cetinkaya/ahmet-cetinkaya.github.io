@@ -1,0 +1,21 @@
+---
+import Desktop from "../../features/desktop/components/Desktop";
+import Taskbar from "../../features/desktop/components/Taskbar/Taskbar.astro";
+import WindowManager from "../../features/desktop/components/WindowManager";
+import Layout, { type Props as LayoutProps } from "./Layout.astro";
+
+export interface Props extends LayoutProps {}
+---
+
+<Layout metaData={Astro.props.metaData}>
+  <div class="flex h-screen flex-col">
+    <Taskbar />
+
+    <main class="flex-grow">
+      <span transition:persist>
+        <Desktop client:only="solid-js" transition:persist />
+        <WindowManager client:only="solid-js" transition:persist />
+      </span>
+    </main>
+  </div>
+</Layout>

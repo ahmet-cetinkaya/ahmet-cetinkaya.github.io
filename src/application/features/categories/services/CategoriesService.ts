@@ -1,7 +1,7 @@
-import { PaginationResult } from '~/core/acore-ts/repository/PaginationResult';
-import CategoriesData from '~/content/categories';
-import type { Category } from '~/domain/models/Category';
-import type { ICategoriesService } from '../../categories/services/abstraction/ICategoriesService';
+import { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
+import { CategoriesData } from "~/domain/data/Categories";
+import type { Category } from "~/domain/models/Category";
+import type { ICategoriesService } from "../../categories/services/abstraction/ICategoriesService";
 
 export class CategoriesService implements ICategoriesService {
   private _data: Category[] | undefined;

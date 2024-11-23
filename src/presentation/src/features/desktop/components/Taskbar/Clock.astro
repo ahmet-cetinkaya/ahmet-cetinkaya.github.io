@@ -1,0 +1,39 @@
+---
+import { Time } from "~/core/acore-ts/time/constants/Time";
+
+export interface Props {
+  id?: string;
+}
+---
+
+<span id="clock">
+  <span>00</span>:<span>00</span>
+</span>
+
+<script define:vars={{ Time }}>
+  function init() {
+    const clockContainer = document.querySelector("#clock"),
+      timeSections = clockContainer.querySelectorAll("span");
+
+    function updateClock() {
+      const now = new Date(),
+        hours = now.getHours(),
+        minutes = now.getMinutes();
+
+      const [hourSection, minuteSection] = timeSections;
+      hourSection.textContent = String(hours).padStart(2, "0");
+      minuteSection.textContent = String(minutes).padStart(2, "0");
+    }
+
+    updateClock();
+    const timeRemainingToNextMinute = (Time.SecondsInMinute - new Date().getSeconds()) * Time.MillisInSecond;
+    setTimeout(() => {
+      updateClock();
+
+      setInterval(updateClock, Time.MillisInMinute);
+    }, timeRemainingToNextMinute);
+  }
+  init();
+
+  document.addEventListener("astro:after-swap", init);
+</script>

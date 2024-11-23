@@ -1,4 +1,4 @@
-import type { IStore } from './abstraction/IStore';
+import type { IStore } from "./abstraction/IStore";
 
 export class Store<TValue> implements IStore<TValue> {
   protected _listeners: ((value: TValue) => void)[] = [];

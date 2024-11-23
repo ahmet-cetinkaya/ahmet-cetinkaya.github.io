@@ -1,10 +1,10 @@
-import type { I18nBase } from './abstraction/I18nBase';
+import type { I18nBase } from "./abstraction/I18nBase";
 
 export class I18n implements I18nBase {
   protected translations: Record<string, Record<string, string>> = {};
 
   getLocaleFromUrl(url: URL, defaultLocale: string): string {
-    const [, locale] = url.pathname.split('/');
+    const [, locale] = url.pathname.split("/");
 
     return locale || defaultLocale;
   }
@@ -14,7 +14,7 @@ export class I18n implements I18nBase {
     if (currentLocale === locale) return url;
 
     const newUrl = new URL(url instanceof URL ? url.href : url);
-    if (currentLocale !== defaultLocale) newUrl.pathname = newUrl.pathname.replace(`/${currentLocale}`, '');
+    if (currentLocale !== defaultLocale) newUrl.pathname = newUrl.pathname.replace(`/${currentLocale}`, "");
     if (locale !== defaultLocale) newUrl.pathname = `/${locale}${newUrl.pathname}`;
 
     return newUrl;

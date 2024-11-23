@@ -1,7 +1,7 @@
-import AppsData from '~/content/apps';
-import { PaginationResult } from '~/core/acore-ts/repository/PaginationResult';
-import type { App } from '~/domain/models/App';
-import type { IAppsService } from './abstraction/IAppsService';
+import { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
+import { AppsData } from "~/domain/data/Apps";
+import type { App } from "~/domain/models/App";
+import type { IAppsService } from "./abstraction/IAppsService";
 
 export class AppsService implements IAppsService {
   private _data: App[] = AppsData;
@@ -25,7 +25,7 @@ export class AppsService implements IAppsService {
 
   async get(predicate: (x: App) => boolean): Promise<App> {
     const item = this._data!.find(predicate);
-    if (!item) throw new Error('Item not found');
+    if (!item) throw new Error("Item not found");
     return item;
   }
 }

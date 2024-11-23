@@ -1,0 +1,14 @@
+{
+  "name": "acore-ts",
+  "type": "module",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "tailwind-merge": "^2.5.4"
+  }
+}

@@ -1,0 +1,35 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import CommonMeta from "../components/CommonMeta.astro";
+import Favicons from "../components/Favicons.astro";
+import Metadata, { type Props as MetadataProps } from "../components/Metadata.astro";
+import SiteVerification from "../components/SiteVerification.astro";
+
+export interface Props {
+  metaData: MetadataProps;
+}
+---
+
+<!doctype html>
+<html class="2xl:text-[20px]">
+  <!-- lang={language} dir={textDirection} -->
+  <head>
+    <CommonMeta />
+    <Favicons />
+
+    <Metadata {...Astro.props.metaData} />
+    <SiteVerification />
+
+    <ViewTransitions fallback="swap" />
+  </head>
+
+  <body class="text-default bg-page tracking-tight antialiased">
+    <slot />
+
+    <style is:global>
+      img {
+        content-visibility: auto;
+      }
+    </style>
+  </body>
+</html>

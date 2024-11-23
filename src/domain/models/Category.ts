@@ -1,17 +1,13 @@
-import { Entity } from '~/core/acore-ts/domain/abstraction/Entity';
-
-export enum Categories {
-  System = 1,
-  Apps,
-  Power,
-}
+import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import type { Categories } from "../data/Categories";
+import type { TranslationKey } from "../data/Translations";
 
 export type CategoryId = Categories;
 
 export class Category extends Entity<CategoryId> {
   constructor(
     id: CategoryId,
-    public name: string,
+    public name: TranslationKey,
     createdDate: Date,
     updatedDate?: Date,
   ) {

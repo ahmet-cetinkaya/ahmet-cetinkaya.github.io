@@ -1,8 +1,8 @@
-import { ArrayExtensions } from '~/core/acore-ts/data/array/ArrayExtensions';
-import { Store } from '~/core/acore-ts/store/Store';
-import type { IStore } from '~/core/acore-ts/store/abstraction/IStore';
-import type { Window } from '~/domain/models/Window';
-import type { IWindowsService } from './abstraction/IWindowsService';
+import { ArrayExtensions } from "~/core/acore-ts/data/array/ArrayExtensions";
+import { Store } from "~/core/acore-ts/store/Store";
+import type { IStore } from "~/core/acore-ts/store/abstraction/IStore";
+import type { Window } from "~/domain/models/Window";
+import type { IWindowsService } from "./abstraction/IWindowsService";
 
 export class WindowsService implements IWindowsService {
   private readonly _windowsStore: IStore<Window[]> = new Store<Window[]>([]);
@@ -30,7 +30,7 @@ export class WindowsService implements IWindowsService {
     const existsAppWindow = windows.find((w) => w.appId === window.appId);
     if (existsAppWindow) {
       this.active(existsAppWindow);
-      return Promise.reject(new Error('App window already exists.'));
+      return Promise.reject(new Error("App window already exists."));
     }
 
     window.layer = Math.max(ArrayExtensions.max(windows, (w) => w.layer!) + 1, 1);
@@ -44,7 +44,7 @@ export class WindowsService implements IWindowsService {
     const windows = this._windowsStore.get();
 
     const windowIndexToUpdate = windows.findIndex((w) => w.id === window.id);
-    if (windowIndexToUpdate < 0) return Promise.reject('Window not found.');
+    if (windowIndexToUpdate < 0) return Promise.reject("Window not found.");
 
     window.updatedDate = new Date();
     this._windowsStore.set([...windows.map((w) => ({ ...w }))]);
@@ -65,8 +65,8 @@ export class WindowsService implements IWindowsService {
   active(window: Window): Promise<void> {
     const windows = this._windowsStore.get();
     const windowIndexToActive = windows.findIndex((w) => w.id === window.id);
-    if (windowIndexToActive === -1) return Promise.reject('Window not found.');
-    if (this.isActivated(windows[windowIndexToActive])) return Promise.reject('Window already activated.');
+    if (windowIndexToActive === -1) return Promise.reject("Window not found.");
+    if (this.isActivated(windows[windowIndexToActive])) return Promise.reject("Window already activated.");
 
     const maxLayer = Math.max(
       ArrayExtensions.max(windows, (w) => w.layer!),
@@ -91,7 +91,7 @@ export class WindowsService implements IWindowsService {
   minimize(window: Window): Promise<void> {
     const windows = this._windowsStore.get();
     const windowIndexToMinimize = windows.findIndex((w) => w.id === window.id);
-    if (windowIndexToMinimize === -1) return Promise.reject('Window not found.');
+    if (windowIndexToMinimize === -1) return Promise.reject("Window not found.");
 
     window.layer = 0;
     window.isMinimized = true;

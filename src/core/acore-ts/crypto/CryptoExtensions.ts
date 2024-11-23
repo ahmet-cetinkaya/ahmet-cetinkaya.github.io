@@ -1,7 +1,7 @@
 export class CryptoExtensions {
   public static generateNanoId(length: number = 8): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let id = '';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
 
     for (let i = 0; i < length; i++) {
       if (i === 0) {

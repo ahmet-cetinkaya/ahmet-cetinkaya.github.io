@@ -1,14 +1,8 @@
-import { Entity } from '~/core/acore-ts/domain/abstraction/Entity';
-import type { Icon } from '~/domain/constants/Icons';
-import type { Category, CategoryId } from './Category';
-
-export enum Apps {
-  AboutMe = 1,
-  Contact,
-  Blog,
-  Shutdown,
-  Restart,
-}
+import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import type { Apps } from "../data/Apps";
+import type { IconId } from "../data/Icons";
+import type { TranslationKey } from "../data/Translations";
+import type { CategoryId } from "./Category";
 
 export type AppId = Apps;
 
@@ -16,12 +10,12 @@ export class App extends Entity<AppId> {
   constructor(
     id: AppId,
     public categoryId: CategoryId,
-    public name: string,
-    public icon: Icon,
+    public name: TranslationKey,
+    public icon: IconId,
     public path: string,
     createdDate: Date,
+    public process?: () => void,
     updatedDate?: Date,
-    public category?: Category,
   ) {
     super(id, createdDate, updatedDate);
   }

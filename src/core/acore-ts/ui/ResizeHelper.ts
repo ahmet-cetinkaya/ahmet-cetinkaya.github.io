@@ -1,4 +1,4 @@
-import type { Size } from './models/Size';
+import type { Size } from "./models/Size";
 
 export class ResizeHelper {
   static makeResizableElement(
@@ -8,11 +8,11 @@ export class ResizeHelper {
       onResizeEnd?: (event: MouseEvent, size: Size) => void;
     } = {},
   ) {
-    const resizers = document.createElement('div');
-    resizers.className = 'resizers';
+    const resizers = document.createElement("div");
+    resizers.className = "resizers";
 
-    const cornerResizerStyle = 'width: 8px; height: 8px; position: absolute; z-index: 1;';
-    const edgeResizerStyle = 'position: absolute;';
+    const cornerResizerStyle = "width: 8px; height: 8px; position: absolute; z-index: 1;";
+    const edgeResizerStyle = "position: absolute;";
 
     resizers.innerHTML = `
       <div class="resizer top-left" style="${cornerResizerStyle} top: 0; left: 0; cursor: nwse-resize;"></div>
@@ -26,7 +26,7 @@ export class ResizeHelper {
     `;
     element.appendChild(resizers);
 
-    const resizersElements = resizers.querySelectorAll('.resizer');
+    const resizersElements = resizers.querySelectorAll(".resizer");
     let originalWidth = 0;
     let originalHeight = 0;
     let originalX = 0;
@@ -35,7 +35,7 @@ export class ResizeHelper {
     let originalMouseY = 0;
 
     resizersElements.forEach((resizer) => {
-      resizer.addEventListener('mousedown', (event: MouseEvent) => {
+      resizer.addEventListener("mousedown", (event: MouseEvent) => {
         event.preventDefault();
         originalWidth = element.offsetWidth;
         originalHeight = element.offsetHeight;
@@ -44,44 +44,44 @@ export class ResizeHelper {
         originalMouseX = event.clientX;
         originalMouseY = event.clientY;
 
-        document.addEventListener('mousemove', resize);
-        document.addEventListener('mouseup', stopResize);
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
         options.onResizeStart?.(event, { width: originalWidth, height: originalHeight });
       });
 
       function resize(event: MouseEvent) {
-        if (resizer.classList.contains('bottom-right')) {
+        if (resizer.classList.contains("bottom-right")) {
           element.style.width = `${originalWidth + (event.clientX - originalMouseX)}px`;
           element.style.height = `${originalHeight + (event.clientY - originalMouseY)}px`;
-        } else if (resizer.classList.contains('bottom-left')) {
+        } else if (resizer.classList.contains("bottom-left")) {
           element.style.width = `${originalWidth - (event.clientX - originalMouseX)}px`;
           element.style.height = `${originalHeight + (event.clientY - originalMouseY)}px`;
           element.style.left = `${originalX + (event.clientX - originalMouseX)}px`;
-        } else if (resizer.classList.contains('top-right')) {
+        } else if (resizer.classList.contains("top-right")) {
           element.style.width = `${originalWidth + (event.clientX - originalMouseX)}px`;
           element.style.height = `${originalHeight - (event.clientY - originalMouseY)}px`;
           element.style.top = `${originalY + (event.clientY - originalMouseY)}px`;
-        } else if (resizer.classList.contains('top-left')) {
+        } else if (resizer.classList.contains("top-left")) {
           element.style.width = `${originalWidth - (event.clientX - originalMouseX)}px`;
           element.style.height = `${originalHeight - (event.clientY - originalMouseY)}px`;
           element.style.top = `${originalY + (event.clientY - originalMouseY)}px`;
           element.style.left = `${originalX + (event.clientX - originalMouseX)}px`;
-        } else if (resizer.classList.contains('top')) {
+        } else if (resizer.classList.contains("top")) {
           element.style.height = `${originalHeight - (event.clientY - originalMouseY)}px`;
           element.style.top = `${originalY + (event.clientY - originalMouseY)}px`;
-        } else if (resizer.classList.contains('bottom')) {
+        } else if (resizer.classList.contains("bottom")) {
           element.style.height = `${originalHeight + (event.clientY - originalMouseY)}px`;
-        } else if (resizer.classList.contains('left')) {
+        } else if (resizer.classList.contains("left")) {
           element.style.width = `${originalWidth - (event.clientX - originalMouseX)}px`;
           element.style.left = `${originalX + (event.clientX - originalMouseX)}px`;
-        } else if (resizer.classList.contains('right')) {
+        } else if (resizer.classList.contains("right")) {
           element.style.width = `${originalWidth + (event.clientX - originalMouseX)}px`;
         }
       }
 
       function stopResize(event: MouseEvent) {
-        document.removeEventListener('mousemove', resize);
-        document.removeEventListener('mouseup', stopResize);
+        document.removeEventListener("mousemove", resize);
+        document.removeEventListener("mouseup", stopResize);
         options.onResizeEnd?.(event, { width: element.offsetWidth, height: element.offsetHeight });
       }
     });

@@ -1,6 +1,6 @@
-import { Object3D, Scene } from 'three';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Object3D, Scene } from "three";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export interface LoadGLTFModelOptions {
   scale?: number;
@@ -16,8 +16,8 @@ export class ThreeModelHelper {
     { scale = 1, receiveShadow = true, castShadow = true }: LoadGLTFModelOptions = {},
   ): Promise<Object3D> {
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('/scripts/three/draco/gltf/');
-    dracoLoader.setDecoderConfig({ type: 'js' });
+    dracoLoader.setDecoderPath("/scripts/three/draco/gltf/");
+    dracoLoader.setDecoderConfig({ type: "js" });
     await dracoLoader.preload();
 
     const gltfLoader = new GLTFLoader();

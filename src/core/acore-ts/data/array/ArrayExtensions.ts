@@ -11,7 +11,11 @@ export class ArrayExtensions {
    * @param order The order of the sort.
    * @returns The sorted new array reference.
    */
-  static sortBy<T>(array: T[], selector: (x: T) => number | boolean | string, order: SortOrder = SortOrder.Ascending): T[] {
+  static sortBy<T>(
+    array: T[],
+    selector: (x: T) => number | boolean | string,
+    order: SortOrder = SortOrder.Ascending,
+  ): T[] {
     return [...array].sort((a, b) => {
       if (selector(a) < selector(b)) return order === SortOrder.Ascending ? -1 : 1;
       if (selector(a) > selector(b)) return order === SortOrder.Ascending ? 1 : -1;

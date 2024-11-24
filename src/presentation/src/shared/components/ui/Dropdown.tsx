@@ -70,19 +70,19 @@ interface MenuItemProps {
   item: DropdownItem;
 }
 
-function MenuItem({ item }: MenuItemProps) {
+function MenuItem(props: MenuItemProps) {
   const className =
     "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer";
-  if (item.href)
+  if (props.item.href)
     return (
-      <Link href={item.href} onClick={item.onClick} class={className} variant="link">
-        {item.text}
+      <Link href={props.item.href} onClick={props.item.onClick} class={className} variant="link">
+        {props.item.text}
       </Link>
     );
   else
     return (
-      <Button onClick={item.onClick} className={className} variant="link">
-        {item.text}
+      <Button onClick={props.item.onClick} className={className} variant="link">
+        {props.item.text}
       </Button>
     );
 }

@@ -18,15 +18,15 @@ interface Props {
   onDragStart?: (e: DragEvent) => void;
 }
 
-export default function Link({ href, children, variant = "primary", class: className, onClick, onDragStart }: Props) {
+export default function Link(props: Props) {
   return (
     <a
-      href={href}
-      class={mergeCls(linkVariantClassNames[variant], className)}
-      onClick={onClick}
-      onDragStart={onDragStart}
+      href={props.href}
+      onClick={props.onClick}
+      onDragStart={props.onDragStart}
+      class={mergeCls(linkVariantClassNames[props.variant ?? "primary"], props.class)}
     >
-      {children}
+      {props.children}
     </a>
   );
 }

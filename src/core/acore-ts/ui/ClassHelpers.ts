@@ -15,5 +15,5 @@ export function mergeCls(...args: ClassValue[]): string {
       }
     }
   }
-  return twMerge(...classes);  
+  return twMerge(...classes);
 }

@@ -2,15 +2,20 @@
 import Clock from "./Clock.astro";
 import TaskbarView from "./TaskbarView";
 import Menu from "./Menu";
+import ChangeLocale from "./ChangeLocale";
 ---
 
 <header class="z-1 relative flex w-full items-center justify-between border-b px-10 py-3">
   <div class="flex w-full items-center justify-start">
-    <Menu client:idle transition:persist />
+    <Menu client:only="solid-js" transition:persist />
 
     <span class="ms-5" transition:persist>
       <TaskbarView client:idle />
     </span>
   </div>
-  <Clock />
+
+  <div class="flex gap-2">
+    <ChangeLocale client:only="solid-js" transition:persist />
+    <Clock />
+  </div>
 </header>

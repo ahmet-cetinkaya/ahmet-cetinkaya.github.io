@@ -8,6 +8,7 @@ export default function WindowManager() {
   const windowService = createMemo(() => Container.instance.windowsService);
   const appsService = createMemo(() => Container.instance.appsService);
   const [windows, setWindows] = createSignal<WindowModel[]>([]);
+  const i18n = Container.instance.i18n;
 
   onMount(() => {
     windowService().subscribe((windows) => {
@@ -16,13 +17,19 @@ export default function WindowManager() {
 
     let appPath = window.location.pathname;
     if (appPath === "/") return;
-    if (appPath.startsWith("/")) appPath = appPath.slice(1);
+    if (appPath.startsWith("/")) {
+      appPath = appPath.slice(1);
+    }
+    if (i18n.locales.some((lang) => appPath.startsWith(`${lang}/`))) {
+      appPath = appPath.split("/").slice(1).join("/");
+    }
+
+    console.debug("🚀 ~ onMount ~ appPath:", appPath);
 
     if (appPath) openApp(appPath);
   });
 
   async function openApp(appPath: string) {
-    console.debug("🚀 ~ openApp ~ appPath:", appPath);
     const app = await appsService().get((app) => app.path === appPath);
     console.log(app);
     if (!app) return;

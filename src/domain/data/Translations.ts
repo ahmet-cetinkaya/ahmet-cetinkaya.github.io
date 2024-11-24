@@ -18,3 +18,4 @@ export const Translations = {
 } as const;
 
 export type TranslationKey = keyof typeof Translations;
+export const languages = ["en", "tr"];

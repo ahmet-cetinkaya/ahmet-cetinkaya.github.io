@@ -4,15 +4,19 @@ import CommonMeta from "../components/CommonMeta.astro";
 import Favicons from "../components/Favicons.astro";
 import Metadata, { type Props as MetadataProps } from "../components/Metadata.astro";
 import SiteVerification from "../components/SiteVerification.astro";
+import { Container } from "~/presentation/Container";
+import { languages } from "~/domain/data/Translations";
 
 export interface Props {
   metaData: MetadataProps;
 }
+
+const i18n = Container.instance.i18n;
+const language = i18n.getLocaleFromUrl(Astro.url, languages[0]);
 ---
 
 <!doctype html>
-<html class="2xl:text-[20px]">
-  <!-- lang={language} dir={textDirection} -->
+<html lang={language} dir="ltr" class="2xl:text-[20px]">
   <head>
     <CommonMeta />
     <Favicons />

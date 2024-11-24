@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, onCleanup, onMount, type JSX } from "solid-js";
+import { createSignal, For, onCleanup, onMount, type JSX } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
 import { EventFunctions } from "~/core/acore-ts/dom/events/EventFunctions";
 import { Categories } from "~/domain/data/Categories";
@@ -6,13 +6,15 @@ import type { App } from "~/domain/models/App";
 import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Link from "~/presentation/src/shared/components/ui/Link";
+import useI18n from "~/presentation/src/shared/utils/i18n-translate";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
 
 export default function Desktop() {
-  const appsService = createMemo(() => Container.instance.appsService);
-  const windowsService = createMemo(() => Container.instance.windowsService);
+  const appsService = Container.instance.appsService;
+  const windowsService = Container.instance.windowsService;
+  const translate = useI18n();
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
@@ -36,7 +38,7 @@ export default function Desktop() {
 
     let x = 0;
     let y = 0;
-    const apps: App[] = (await appsService().getAll((a) => a.categoryId === Categories.apps)).slice(
+    const apps: App[] = (await appsService.getAll((a) => a.categoryId === Categories.apps)).slice(
       0,
       dimension1 * dimension2,
     );
@@ -103,7 +105,7 @@ export default function Desktop() {
     if (!shortcut) return;
 
     const window = new Window(CryptoExtensions.generateNanoId(), shortcut.id, shortcut.name);
-    windowsService().add(window);
+    windowsService.add(window);
   }
 
   return (
@@ -120,7 +122,7 @@ export default function Desktop() {
                 >
                   {col ? (
                     <DesktopShortcut
-                      label={col.name}
+                      label={translate(col.name)}
                       icon={col.icon}
                       href={col.path}
                       onClick={() => onShortcutClick(col)}
@@ -147,18 +149,18 @@ interface DesktopShortcutProps {
   onDragStart?: () => void;
 }
 
-function DesktopShortcut({ label, href, icon, onClick, onDragStart }: DesktopShortcutProps) {
+function DesktopShortcut(props: DesktopShortcutProps) {
   return (
     <Link
-      href={href}
+      href={props.href}
       draggable={true}
-      onClick={onClick}
-      onDragStart={onDragStart}
+      onClick={props.onClick}
+      onDragStart={props.onDragStart}
       class="flex h-full w-full flex-col items-center justify-center"
     >
       <figure>
-        <picture>{icon}</picture>
-        <figcaption class="w-full truncate text-wrap text-center">{label}</figcaption>
+        <picture>{props.icon}</picture>
+        <figcaption class="w-full truncate text-wrap text-center">{props.label}</figcaption>
       </figure>
     </Link>
   );

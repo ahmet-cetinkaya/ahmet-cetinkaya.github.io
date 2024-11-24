@@ -13,7 +13,7 @@ interface Props {
   menuItems: DropdownItem[];
   children: JSX.Element;
 }
-export default function Dropdown({ children: toggleButtonChildren, menuItems }: Props) {
+export default function Dropdown(props: Props) {
   const id = createMemo(() => CryptoExtensions.generateNanoId());
   const [isOpen, setIsOpen] = createSignal(false);
 
@@ -38,13 +38,13 @@ export default function Dropdown({ children: toggleButtonChildren, menuItems }: 
   return (
     <div id={id()} class="ac-dropdown relative inline-block text-left">
       <Button type="button" onClick={onToggle}>
-        {toggleButtonChildren}
+        {props.children}
       </Button>
 
       {isOpen() && (
         <div class="absolute left-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
           <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            {menuItems.map((item) => {
+            {props.menuItems.map((item) => {
               if (item.items)
                 return (
                   <>

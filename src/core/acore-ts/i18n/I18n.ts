@@ -1,10 +1,18 @@
-import type { I18nBase } from "./abstraction/I18nBase";
+import { Store } from "../store/Store";
+import type { II18n } from "./abstraction/II18n";
 
-export class I18n implements I18nBase {
-  protected translations: Record<string, Record<string, string>> = {};
+export class I18n implements II18n {
+  translations: Record<string, Record<string, string>> = {};
+  get locales(): string[] {
+    const firstValue = Object.keys(this.translations)[0];
+    if (!firstValue) return [];
+    return Object.keys(this.translations[Object.keys(this.translations)[0]]);
+  }
+  currentLocale = new Store<string>("");
 
   getLocaleFromUrl(url: URL, defaultLocale: string): string {
-    const [, locale] = url.pathname.split("/");
+    let [, locale] = url.pathname.split("/");
+    if (!this.locales.includes(locale)) locale = this.locales[0];
 
     return locale || defaultLocale;
   }
@@ -25,12 +33,8 @@ export class I18n implements I18nBase {
     return locale;
   }
 
-  registerTranslations(language: string, translations: Record<string, string>): void {
-    this.translations[language] = translations;
-  }
-
   translate(locale: string, key: string): string {
-    const translation: string = this.translations[locale]?.[key];
+    const translation: string = this.translations[key]?.[locale];
     if (!translation) throw new Error(`Translation not found for key: ${key} in locale: ${locale}`);
 
     return translation;

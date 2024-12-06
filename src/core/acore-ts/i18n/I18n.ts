@@ -1,5 +1,5 @@
 import { Store } from "../store/Store";
-import type { II18n } from "./abstraction/II18n";
+import type II18n from "./abstraction/II18n";
 
 export class I18n implements II18n {
   translations: Record<string, Record<string, string>> = {};

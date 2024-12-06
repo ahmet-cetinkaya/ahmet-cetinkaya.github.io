@@ -6,8 +6,7 @@ type Props = {
   options?: MarkdownOptions;
 };
 
-const defaultMarkdownOptions: Props = {
-  content: undefined!,
+const defaultMarkdownOptions = {
   options: {
     header1: { class: "text-4xl font-bold" },
     header2: { class: "text-3xl font-bold" },
@@ -29,11 +28,11 @@ const defaultMarkdownOptions: Props = {
     tableCell: { class: "p-2" },
     codeBlock: { class: "bg-gray-100 p-2 rounded-md" },
     inlineCode: { class: "bg-gray-100 p-1 rounded-md" },
-  }
+  } as MarkdownOptions,
 };
 
 export default function MarkdownParagraph(props: Props) {
-  props.options = { ...defaultMarkdownOptions, ...props.options };
+  if (!props.options) props.options = defaultMarkdownOptions.options;
 
   return <article innerHTML={MarkdownParser.parse(props.content, props.options)} class={props.class} />;
 }

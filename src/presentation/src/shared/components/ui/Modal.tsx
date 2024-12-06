@@ -4,9 +4,11 @@ import { DragHelper } from "~/core/acore-ts/ui/DragHelper";
 import { Position } from "~/core/acore-ts/ui/models/Position";
 import type { Size } from "~/core/acore-ts/ui/models/Size";
 import { ResizeHelper } from "~/core/acore-ts/ui/ResizeHelper";
+import useI18n from "../../utils/i18nTranslate";
+import type { TranslationKeys } from "~/domain/data/Translations";
 
 interface Props {
-  title?: string;
+  title?: TranslationKeys;
   class?: string;
   style?: JSX.CSSProperties;
   children: JSX.Element;
@@ -26,10 +28,12 @@ interface Props {
 
 const defaultProps = {
   maximizable: true,
-}
+};
 
 export default function Modal(props: Props) {
-  props = { ...defaultProps, ...props };
+  if (props.maximizable === undefined) props.maximizable = defaultProps.maximizable;
+
+  const translate = useI18n();
 
   const [isModalOpen, setIsModalOpen] = createSignal(true);
   const [isMaximized, setMaximized] = createSignal(false);
@@ -84,7 +88,7 @@ export default function Modal(props: Props) {
         onModalElementMount(element);
       }}
       class={mergeCls(
-        "fixed min-h-52 min-w-144 transform overflow-auto overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md",
+        "fixed min-h-52 min-w-144 transform overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md",
         props.class,
       )}
       style={{
@@ -105,7 +109,7 @@ export default function Modal(props: Props) {
       onClick={onClick}
     >
       <header class="flex justify-between gap-2 p-2">
-        <h1>{props.title}</h1>
+        <h1>{translate(props.title!)}</h1>
 
         <div class="ac-header-buttons flex cursor-pointer gap-2">
           {props.customHeaderButtons}
@@ -116,7 +120,7 @@ export default function Modal(props: Props) {
         </div>
       </header>
 
-      <main class="size-full overflow-hidden p-2">{props.children}</main>
+      <main class="size-full overflow-hidden p-2 pb-16">{props.children}</main>
     </div>
   );
 }

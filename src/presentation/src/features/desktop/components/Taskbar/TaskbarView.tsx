@@ -43,8 +43,9 @@ export default function TaskbarView() {
                 "bg-slate-200 hover:bg-slate-300": windowsService().isActivated(window),
               })}
               onClick={() => onClickTaskView(window)}
-              label={translate(window.title)}
-            />
+            >
+              {translate(window.title)}
+            </Button>
           )}
         </For>
       </div>

@@ -5,8 +5,7 @@ import { TranslationKeys } from "./Translations";
 
 export enum Apps {
   welcome = 1,
-  about = 2,
-  contact = 3,
+  email,
 }
 
 export const AppsData = [
@@ -19,7 +18,7 @@ export const AppsData = [
     new Date("2024-05-11 15:53:45"),
   ),
   new App(
-    Apps.contact,
+    Apps.email,
     Categories.apps,
     TranslationKeys.common_contact,
     Icons.envelope,

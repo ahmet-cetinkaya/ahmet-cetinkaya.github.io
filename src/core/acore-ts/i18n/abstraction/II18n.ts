@@ -1,6 +1,6 @@
 import type { Store } from "../../store/Store";
 
-export interface II18n {
+export default interface II18n {
   translations: Record<string, Record<string, string>>;
   get locales(): string[];
   currentLocale: Store<string>;

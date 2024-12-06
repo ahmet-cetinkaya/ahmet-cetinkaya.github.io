@@ -19,9 +19,8 @@ type ButtonVariant = keyof typeof buttonVariantClassNames;
 type ButtonSize = keyof typeof buttonSizeClassNames;
 
 interface Props {
+  children: JSX.Element;
   type?: ButtonType;
-  label?: string;
-  children?: JSX.Element;
   variant?: ButtonVariant;
   class?: string;
   size?: ButtonSize;
@@ -29,22 +28,29 @@ interface Props {
   onClick?: (e: MouseEvent) => void;
 }
 
+const defaultProps: Props = {
+  children: <></>,
+  type: "button",
+  variant: "primary",
+  size: "medium",
+};
+
 export default function Button(props: Props) {
+  if (!props.children) props.children = defaultProps.children;
+  if (!props.variant) props.variant = defaultProps.variant;
+  if (!props.size) props.size = defaultProps.size;
+  if (!props.type) props.type = defaultProps.type;
+
   return (
     <button
       type={props.type}
-      class={mergeCls(
-        buttonVariantClassNames[props.variant ?? "primary"],
-        buttonSizeClassNames[props.size ?? "medium"],
-        props.class,
-        {
-          "cursor-not-allowed opacity-50": Boolean(props.disabled),
-        },
-      )}
+      class={mergeCls(buttonVariantClassNames[props.variant!], buttonSizeClassNames[props.size!], props.class, {
+        "cursor-not-allowed opacity-50": Boolean(props.disabled),
+      })}
       onClick={props.onClick}
       disabled={props.disabled}
     >
-      {props.label || props.children}
+      {props.children}
     </button>
   );
 }

@@ -21,7 +21,7 @@ export default function Completed() {
   });
 
   async function getContactApp() {
-    const app = await appsService.get((x) => x.id === Apps.contact);
+    const app = await appsService.get((x) => x.id === Apps.email);
     if (!app) throw new Error("Contact app not found");
     setContactApp(app);
   }

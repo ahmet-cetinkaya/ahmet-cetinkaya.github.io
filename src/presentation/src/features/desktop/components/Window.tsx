@@ -6,7 +6,6 @@ import type { Size } from "~/core/acore-ts/ui/models/Size";
 import { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 interface Props {
   window: WindowModel;
@@ -19,7 +18,6 @@ export default function Window(props: Props) {
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
   const [path, setPath] = createSignal<string>("");
-  const translate = useI18n();
 
   onMount(() => {
     getAppPath();
@@ -80,7 +78,7 @@ export default function Window(props: Props) {
 
   return (
     <Modal
-      title={translate(props.window.title)}
+      title={props.window.title}
       style={{
         "z-index": overrideLayer() ?? props.window.layer,
       }}

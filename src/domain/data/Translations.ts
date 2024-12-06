@@ -22,6 +22,16 @@ export enum TranslationKeys {
   apps_welcome_if_you_want_to_contact_me = "apps_welcome_if_you_want_to_contact_me",
   apps_welcome_present = "apps_welcome_present",
   apps_welcome_welcome = "apps_welcome_welcome",
+
+  apps_email_folders = "apps_email_folders",
+  apps_email_enter_url = "apps_email_enter_url",
+  apps_email_inbox = "apps_email_inbox",
+  apps_email_sent = "apps_email_sent",
+  apps_email_drafts = "apps_email_drafts",
+  apps_email_compose = "apps_email_compose",
+  apps_email_to = "apps_email_to",
+  apps_email_subject = "apps_email_subject",
+  apps_email_trash = "apps_email_trash",
   //#endregion
 
   //#region Certifications
@@ -53,6 +63,7 @@ export enum TranslationKeys {
   common_email = "common_email",
   common_next = "common_next",
   common_prev = "common_prev",
+  common_send = "common_send",
   common_show_more = "common_show_more",
   common_system = "common_system",
   //#endregion
@@ -178,6 +189,43 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
   [TranslationKeys.apps_welcome_welcome]: {
     en: "Welcome",
     tr: "Hoş Geldin",
+  },
+
+  [TranslationKeys.apps_email_folders]: {
+    en: "Folders",
+    tr: "Klasörler",
+  },
+  [TranslationKeys.apps_email_enter_url]: {
+    en: "Enter URL",
+    tr: "URL Girin",
+  },
+  [TranslationKeys.apps_email_inbox]: {
+    en: "Inbox",
+    tr: "Gelen Kutusu",
+  },
+  [TranslationKeys.apps_email_sent]: {
+    en: "Sent",
+    tr: "Gönderilen",
+  },
+  [TranslationKeys.apps_email_drafts]: {
+    en: "Drafts",
+    tr: "Taslaklar",
+  },
+  [TranslationKeys.apps_email_compose]: {
+    en: "Compose",
+    tr: "Yeni E-posta",
+  },
+  [TranslationKeys.apps_email_to]: {
+    en: "To",
+    tr: "Kime",
+  },
+  [TranslationKeys.apps_email_subject]: {
+    en: "Subject",
+    tr: "Konu",
+  },
+  [TranslationKeys.apps_email_trash]: {
+    en: "Trash",
+    tr: "Çöp Kutusu",
   },
   //#endregion
 
@@ -558,6 +606,10 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
   [TranslationKeys.common_prev]: {
     en: "Previous",
     tr: "Geri",
+  },
+  [TranslationKeys.common_send]: {
+    en: "Send",
+    tr: "Gönder",
   },
   [TranslationKeys.common_show_more]: {
     en: "Show More",

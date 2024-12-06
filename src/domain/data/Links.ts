@@ -48,7 +48,13 @@ export const LinksData = [
     Icons.mastodon,
     new Date("2024-05-16 20:10:19"),
   ),
-  new Link(Links.x, TranslationKeys.links_x, "https://twitter.com/ahmetctnky_dev", Icons.x, new Date("2024-05-16 20:10:19")),
+  new Link(
+    Links.x,
+    TranslationKeys.links_x,
+    "https://twitter.com/ahmetctnky_dev",
+    Icons.x,
+    new Date("2024-05-16 20:10:19"),
+  ),
   new Link(
     Links.instagram,
     TranslationKeys.links_instagram,

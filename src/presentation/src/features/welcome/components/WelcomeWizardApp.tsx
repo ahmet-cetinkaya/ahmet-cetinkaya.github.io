@@ -1,4 +1,4 @@
-import { createSignal, Index } from "solid-js";
+import { createSignal, Index, Show } from "solid-js";
 import type { IWindowsService } from "~/application/features/desktop/services/abstraction/IWindowsService";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { Apps } from "~/domain/data/Apps";
@@ -78,10 +78,11 @@ export default function WelcomeWizardApp() {
   }
 
   function onNextPart() {
-    if (currentPart() >= PARTS.length) {
+    if (currentPart() >= PARTS.length - 1) {
       closeApp();
       return;
     }
+
     if (currentPart() === Parts.AboutMe && !isAboutConfirmed()) {
       setIsWarnedForConfirm(true);
       return;
@@ -97,8 +98,14 @@ export default function WelcomeWizardApp() {
     setCurrentPart(currentPart() - 1);
   }
 
-  function isNextPartAvailable() {
-    if (currentPart() === Parts.AboutMe && isWarnedForConfirm() && !isAboutConfirmed()) return false;
+  function isNextPartAvailable(index?: number) {
+    if (index !== undefined) {
+      if (index < Parts.AboutMe) return true;
+      if (index === Parts.AboutMe && isWarnedForConfirm() && !isAboutConfirmed()) return false;
+      if (index > Parts.AboutMe && !isAboutConfirmed()) return false;
+    } else {
+      if (currentPart() === Parts.AboutMe && isWarnedForConfirm() && !isAboutConfirmed()) return false;
+    }
     return true;
   }
 
@@ -111,39 +118,33 @@ export default function WelcomeWizardApp() {
               <li>
                 <Button
                   onClick={() => onPartClicked(index)}
-                  label={translate(part())}
                   variant="text"
                   class={mergeCls({
                     "font-bold": currentPart() === index,
                   })}
-                />
+                  disabled={!isNextPartAvailable(index)}
+                >
+                  {translate(part())}
+                </Button>
               </li>
             )}
           </Index>
         </ul>
       </header>
       <div class="flex size-full flex-col overflow-hidden">
-        <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
+        <Show when={currentPart() < PARTS.length}>
+          <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
+        </Show>
 
-        <footer class="my-2 mb-10 me-2 flex flex-row-reverse justify-start gap-2">
-          <Button
-            label={
-              currentPart() < PARTS.length - 1
-                ? translate(TranslationKeys.common_next)
-                : translate(TranslationKeys.apps_welcome_finish)
-            }
-            onClick={onNextPart}
-            disabled={!isNextPartAvailable()}
-            class={"w-16"}
-            size="small"
-          />
-          <Button
-            label={translate(TranslationKeys.common_prev)}
-            onClick={onPrevPart}
-            class="w-16"
-            disabled={currentPart() === 0}
-            size="small"
-          />
+        <footer class="mb-2 me-2 flex flex-row-reverse justify-start gap-2">
+          <Button onClick={onNextPart} class="w-16" size="small">
+            {currentPart() < PARTS.length - 1
+              ? translate(TranslationKeys.common_next)
+              : translate(TranslationKeys.apps_welcome_finish)}
+          </Button>
+          <Button onClick={onPrevPart} class="w-16" disabled={currentPart() === 0} size="small">
+            {translate(TranslationKeys.common_prev)}
+          </Button>
         </footer>
       </div>
     </div>

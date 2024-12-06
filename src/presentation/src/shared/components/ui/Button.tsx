@@ -44,13 +44,21 @@ export default function Button(props: Props) {
   return (
     <button
       type={props.type}
-      class={mergeCls(buttonVariantClassNames[props.variant!], buttonSizeClassNames[props.size!], props.class, {
-        "cursor-not-allowed opacity-50": Boolean(props.disabled),
-      })}
+      class={mergeCls(
+        buttonVariantClassNames[props.variant!],
+        buttonSizeClassNames[props.size!],
+        props.class,
+        {
+          "cursor-not-allowed opacity-50": Boolean(props.disabled),
+        },
+        "overflow-hidden",
+      )}
       onClick={props.onClick}
       disabled={props.disabled}
     >
-      {props.children}
+      <span onClick={(event) => event.stopPropagation()} class={mergeCls("pointer-events-none", props.class)}>
+        {props.children}
+      </span>
     </button>
   );
 }

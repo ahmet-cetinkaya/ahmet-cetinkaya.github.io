@@ -110,22 +110,22 @@ export default function Background() {
   return (
     <>
       <Show when={experienceActivities()} fallback={<_LoadingArea />}>
-        <_Title label={translate(TranslationKeys.apps_welcome_experiences)} />
+        <Title label={translate(TranslationKeys.apps_welcome_experiences)} />
         <Timeline activities={experienceActivities()!} />
       </Show>
 
       <Show when={educationActivities()} fallback={<_LoadingArea />}>
-        <_Title label={translate(TranslationKeys.apps_welcome_educations)} />
+        <Title label={translate(TranslationKeys.apps_welcome_educations)} />
         <Timeline activities={educationActivities()!} />
       </Show>
 
       <Show when={certificationActivities()} fallback={<_LoadingArea />}>
-        <_Title label={translate(TranslationKeys.apps_welcome_certifications)} />
+        <Title label={translate(TranslationKeys.apps_welcome_certifications)} />
         <Timeline activities={certificationActivities()!} />
       </Show>
 
       <Show when={linkedInLink()}>
-        <Link class="fixed right-14 top-14 w-28 rounded-3xl" href={linkedInLink()!.url}>
+        <Link class="fixed right-14 top-14 w-28 rounded-3xl" href={linkedInLink()!.url} target="_blank">
           <Icon icon={Icons.linkedin} class="size-4" />
           <span class="ms-2">{translate(TranslationKeys.links_linkedin)}</span>
         </Link>
@@ -133,7 +133,7 @@ export default function Background() {
     </>
   );
 
-  function _Title(props: { label: string }) {
+  function Title(props: { label: string }) {
     return <h2 class="mb-3 text-2xl font-bold">{props.label}</h2>;
   }
 

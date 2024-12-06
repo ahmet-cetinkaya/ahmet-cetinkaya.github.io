@@ -3,8 +3,11 @@ import { navigate } from "astro:transitions/client";
 import { createSignal, onMount } from "solid-js";
 import { Position } from "~/core/acore-ts/ui/models/Position";
 import type { Size } from "~/core/acore-ts/ui/models/Size";
+import { Icons } from "~/domain/data/Icons";
 import { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
+import Icon from "~/presentation/src/shared/components/Icon";
+import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
 
 interface Props {
@@ -83,9 +86,9 @@ export default function Window(props: Props) {
         "z-index": overrideLayer() ?? props.window.layer,
       }}
       customHeaderButtons={
-        <button type="button" onClick={onMinimize}>
-          Minimize
-        </button>
+        <Button onClick={onMinimize} variant="text" size="small">
+          <Icon icon={Icons.minimize} class="size-4" />
+        </Button>
       }
       position={props.window.position}
       size={props.window.size}

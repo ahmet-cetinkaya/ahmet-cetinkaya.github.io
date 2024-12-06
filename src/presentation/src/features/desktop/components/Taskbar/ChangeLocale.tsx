@@ -46,7 +46,7 @@ export default function ChangeLocale() {
   return (
     <Show when={currentLanguage()}>
       <Button ref={initLocale} onClick={onChanged} variant="text">
-        {currentLanguage()}
+        {currentLanguage()!.toUpperCase()}
       </Button>
     </Show>
   );

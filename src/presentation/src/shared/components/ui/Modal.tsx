@@ -6,6 +6,9 @@ import type { Size } from "~/core/acore-ts/ui/models/Size";
 import { ResizeHelper } from "~/core/acore-ts/ui/ResizeHelper";
 import useI18n from "../../utils/i18nTranslate";
 import type { TranslationKeys } from "~/domain/data/Translations";
+import Button from "./Button";
+import Icon from "../Icon";
+import { Icons } from "~/domain/data/Icons";
 
 interface Props {
   title?: TranslationKeys;
@@ -111,12 +114,16 @@ export default function Modal(props: Props) {
       <header class="flex justify-between gap-2 p-2">
         <h1>{translate(props.title!)}</h1>
 
-        <div class="ac-header-buttons flex cursor-pointer gap-2">
+        <div class="ac-header-buttons flex justify-between items-center cursor-pointer gap-1">
           {props.customHeaderButtons}
           <Show when={props.maximizable}>
-            <button onClick={toggleMaximize}>Maximize</button>
+            <Button onClick={toggleMaximize} variant="text"  size="small">
+              <Icon icon={Icons.maximize} class="size-4" />
+            </Button>
           </Show>
-          <button onClick={toggleModal}>Close</button>
+          <Button onClick={toggleModal} variant="text"  size="small">
+            <Icon icon={Icons.close} class="size-4" />
+          </Button>
         </div>
       </header>
 

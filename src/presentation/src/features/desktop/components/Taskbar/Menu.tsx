@@ -1,10 +1,12 @@
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
+import { Icons } from "~/domain/data/Icons";
 import type { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
+import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
-import useI18n from "~/presentation/src/shared/utils/i18n-translate";
+import openAppContent from "~/presentation/src/shared/utils/openAppContent";
 
 export default function Menu() {
   const windowsService = Container.instance.windowsService;
@@ -13,7 +15,6 @@ export default function Menu() {
   const i18n = Container.instance.i18n;
 
   const [menuItems, setMenuItems] = createSignal<DropdownItem[]>([]);
-  const translate = useI18n();
 
   onMount(() => {
     prepareMenuItems();
@@ -30,7 +31,7 @@ export default function Menu() {
 
     for (const category of categories) {
       const categoryMenuHeader: DropdownItem = {
-        text: translate(category.name),
+        text: category.name,
         items: [],
       };
 
@@ -39,13 +40,14 @@ export default function Menu() {
         ...apps.map(
           (app) =>
             ({
-              text: translate(app.name),
+              text: app.name,
               href: app.path,
               onClick: () => {
                 windowsService.add({
                   id: CryptoExtensions.generateNanoId(),
                   appId: app.id,
                   title: app.name,
+                  content: openAppContent(app.id),
                 } as Window);
               },
             }) as DropdownItem,
@@ -61,7 +63,7 @@ export default function Menu() {
   return (
     <Show when={menuItems().length > 0}>
       <Dropdown menuItems={menuItems()}>
-        A{/* <img src={AhmetCetinkayaLogo.src} class="h-5 w-5" alt="Menu" /> */}
+        <Icon icon={Icons.ahmetcetinkaya} class="size-4" />
       </Dropdown>
     </Show>
   );

@@ -1,4 +1,5 @@
 import { createSignal, onMount } from "solid-js";
+import type { TranslationKey } from "~/domain/data/Translations";
 import { Container } from "~/presentation/Container";
 
 export default function useI18n(url: URL | null = null) {
@@ -19,5 +20,5 @@ export default function useI18n(url: URL | null = null) {
     });
   }
 
-  return (key: string) => i18n.translate(locale(), key);
+  return (key: TranslationKey) => i18n.translate(locale(), key);
 }

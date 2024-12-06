@@ -35,18 +35,20 @@ export class ResizeHelper {
     let originalMouseY = 0;
 
     resizersElements.forEach((resizer) => {
-      resizer.addEventListener("mousedown", (event: MouseEvent) => {
+      resizer.addEventListener("mousedown", (event: Event) => {
         event.preventDefault();
+        const mouseEvent = event as MouseEvent;
+
         originalWidth = element.offsetWidth;
         originalHeight = element.offsetHeight;
         originalX = element.getBoundingClientRect().left;
         originalY = element.getBoundingClientRect().top;
-        originalMouseX = event.clientX;
-        originalMouseY = event.clientY;
+        originalMouseX = mouseEvent.clientX;
+        originalMouseY = mouseEvent.clientY;
 
         document.addEventListener("mousemove", resize);
         document.addEventListener("mouseup", stopResize);
-        options.onResizeStart?.(event, { width: originalWidth, height: originalHeight });
+        options.onResizeStart?.(mouseEvent, { width: originalWidth, height: originalHeight });
       });
 
       function resize(event: MouseEvent) {

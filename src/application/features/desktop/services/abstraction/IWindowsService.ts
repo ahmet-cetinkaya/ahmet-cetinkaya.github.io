@@ -11,5 +11,5 @@ export interface IWindowsService
   active(window: Window): Promise<void>;
   minimize(window: Window): Promise<void>;
   isActivated(window: Window): boolean;
-  getActivedWindow(): Window | null;
+  getActivatedWindow(): Window | null;
 }

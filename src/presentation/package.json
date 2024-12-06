@@ -19,9 +19,11 @@
     "astro-seo": "^0.8.4",
     "solid-js": "^1.9.3",
     "tailwindcss": "^3.4.15",
+    "three": "^0.170.0",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
+    "@types/three": "^0.170.0",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-tailwindcss": "^0.6.9"

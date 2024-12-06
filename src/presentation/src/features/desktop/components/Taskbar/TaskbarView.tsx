@@ -4,11 +4,15 @@ import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Button from "~/presentation/src/shared/components/ui/Button";
+import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function TaskbarView() {
-  const [windows, setWindows] = createSignal<Window[]>([]);
   const windowsService = createMemo(() => Container.instance.windowsService);
   const appsService = createMemo(() => Container.instance.appsService);
+
+  const translate = useI18n();
+
+  const [windows, setWindows] = createSignal<Window[]>([]);
 
   windowsService().subscribe(onWindowsChange);
 
@@ -20,7 +24,7 @@ export default function TaskbarView() {
     setWindows(windows);
   }
 
-  async function onClickTaskview(window: Window) {
+  async function onClickTaskView(window: Window) {
     if (windowsService().isActivated(window)) windowsService().minimize(window);
     else {
       windowsService().active(window);
@@ -35,11 +39,11 @@ export default function TaskbarView() {
         <For each={windows()}>
           {(window) => (
             <Button
-              className={mergeCls({
+              class={mergeCls("h-8 text-xs", {
                 "bg-slate-200 hover:bg-slate-300": windowsService().isActivated(window),
               })}
-              onClick={() => onClickTaskview(window)}
-              label={window.title}
+              onClick={() => onClickTaskView(window)}
+              label={translate(window.title)}
             />
           )}
         </For>

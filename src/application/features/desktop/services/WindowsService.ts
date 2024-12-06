@@ -108,11 +108,11 @@ export class WindowsService implements IWindowsService {
     return window?.layer === activeWindowLayer;
   }
 
-  getActivedWindow(): Window | null {
-    const activedWindow = ArrayExtensions.maxBy(this._windowsStore.get(), (w) => w.layer!);
-    if (!activedWindow) return null;
+  getActivatedWindow(): Window | null {
+    const activatedWindow = ArrayExtensions.maxBy(this._windowsStore.get(), (w) => w.layer!);
+    if (!activatedWindow) return null;
 
-    return activedWindow;
+    return activatedWindow;
   }
   //#endregion
 }

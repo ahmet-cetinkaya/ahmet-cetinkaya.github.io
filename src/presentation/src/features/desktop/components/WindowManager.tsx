@@ -1,7 +1,8 @@
-import { createMemo, createSignal, For, onMount, Show } from "solid-js";
+import { createMemo, createSignal, For, onMount, Show, type JSX } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
 import type { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
+import openAppContent from "~/presentation/src/shared/utils/openAppContent";
 import Window from "./Window";
 
 export default function WindowManager() {
@@ -16,7 +17,6 @@ export default function WindowManager() {
     });
 
     let appPath = window.location.pathname;
-    if (appPath === "/") return;
     if (appPath.startsWith("/")) {
       appPath = appPath.slice(1);
     }
@@ -24,14 +24,11 @@ export default function WindowManager() {
       appPath = appPath.split("/").slice(1).join("/");
     }
 
-    console.debug("🚀 ~ onMount ~ appPath:", appPath);
-
-    if (appPath) openApp(appPath);
+    openApp(appPath);
   });
 
   async function openApp(appPath: string) {
     const app = await appsService().get((app) => app.path === appPath);
-    console.log(app);
     if (!app) return;
 
     const openedAppWindow = await windowService().get((window) => window.appId === app.id);
@@ -44,6 +41,7 @@ export default function WindowManager() {
       id: CryptoExtensions.generateNanoId(),
       title: app.name,
       appId: app.id,
+      content: openAppContent(app.id),
     } as WindowModel);
   }
 
@@ -51,7 +49,7 @@ export default function WindowManager() {
     <For each={windows()}>
       {(window) => (
         <Show when={!window.isMinimized}>
-          <Window window={window}>{window.content}</Window>
+          <Window window={window}>{window.content as JSX.Element}</Window>
         </Show>
       )}
     </For>

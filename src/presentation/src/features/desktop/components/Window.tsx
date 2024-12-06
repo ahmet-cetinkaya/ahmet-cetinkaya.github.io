@@ -6,7 +6,7 @@ import type { Size } from "~/core/acore-ts/ui/models/Size";
 import { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
-import useI18n from "~/presentation/src/shared/utils/i18n-translate";
+import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 interface Props {
   window: WindowModel;
@@ -36,8 +36,8 @@ export default function Window(props: Props) {
     windowService.minimize(props.window);
   }
 
-  function onClick() {
-    windowService.active(props.window);
+  async function onClick() {
+    await windowService.active(props.window);
     navigate(path());
   }
 
@@ -46,7 +46,7 @@ export default function Window(props: Props) {
   }
 
   function onDragStart() {
-    const activatedWindow = windowService.getActivedWindow();
+    const activatedWindow = windowService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
     navigate(path());
@@ -62,7 +62,7 @@ export default function Window(props: Props) {
   }
 
   function onResizeStart() {
-    const activatedWindow = windowService.getActivedWindow();
+    const activatedWindow = windowService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
     navigate(path());
@@ -91,6 +91,7 @@ export default function Window(props: Props) {
       }
       position={props.window.position}
       size={props.window.size}
+      maximizeOffset={{ top: 64, left: 0 }}
       onClick={onClick}
       onClose={onClose}
       onDragStart={onDragStart}

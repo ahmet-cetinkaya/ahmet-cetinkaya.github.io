@@ -1,9 +1,9 @@
-import { createSignal, type JSX } from "solid-js";
+import { createSignal, Show, type JSX } from "solid-js";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { DragHelper } from "~/core/acore-ts/ui/DragHelper";
-import { ResizeHelper } from "~/core/acore-ts/ui/ResizeHelper";
 import { Position } from "~/core/acore-ts/ui/models/Position";
 import type { Size } from "~/core/acore-ts/ui/models/Size";
+import { ResizeHelper } from "~/core/acore-ts/ui/ResizeHelper";
 
 interface Props {
   title?: string;
@@ -13,6 +13,8 @@ interface Props {
   customHeaderButtons?: JSX.Element;
   position?: Position;
   size?: Size;
+  maximizable?: boolean;
+  maximizeOffset?: { top: number; left: number };
   onClick?: () => void;
   onClose?: () => void;
   onDragStart?: (event: MouseEvent, position: Position) => void;
@@ -22,7 +24,13 @@ interface Props {
   onResizeEnd?: (event: Event, size: Size, position: Position) => void;
 }
 
+const defaultProps = {
+  maximizable: true,
+}
+
 export default function Modal(props: Props) {
+  props = { ...defaultProps, ...props };
+
   const [isModalOpen, setIsModalOpen] = createSignal(true);
   const [isMaximized, setMaximized] = createSignal(false);
 
@@ -48,6 +56,7 @@ export default function Modal(props: Props) {
   }
 
   function toggleMaximize() {
+    if (!props.maximizable) return;
     setMaximized((prev) => !prev);
   }
 
@@ -75,15 +84,23 @@ export default function Modal(props: Props) {
         onModalElementMount(element);
       }}
       class={mergeCls(
-        "fixed left-1/3 top-1/3 z-50 min-h-52 min-w-96 transform overflow-auto rounded-lg border border-gray-300 bg-white shadow-md",
+        "fixed min-h-52 min-w-144 transform overflow-auto overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md",
         props.class,
       )}
       style={{
         ...props.style,
-        top: isMaximized() ? "0px" : props.position?.top ? props.position.top + "px" : undefined,
-        left: isMaximized() ? "0px" : props.position?.left ? props.position.left + "px" : undefined,
-        width: isMaximized() ? "100vw" : props.size?.width ? props.size.width + "px" : undefined,
-        height: isMaximized() ? "100vh" : props.size?.height ? props.size.height + "px" : undefined,
+        top: isMaximized()
+          ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
+          : props.position?.top
+            ? props.position.top + "px"
+            : "15%", // According to 50vh default height
+        left: isMaximized()
+          ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
+          : props.position?.left
+            ? props.position.left + "px"
+            : "15%", // According to 50vw default width
+        width: isMaximized() ? "100vw" : props.size?.width ? props.size.width + "px" : "70vw",
+        height: isMaximized() ? "100vh" : props.size?.height ? props.size.height + "px" : "70vh",
       }}
       onClick={onClick}
     >
@@ -92,12 +109,14 @@ export default function Modal(props: Props) {
 
         <div class="ac-header-buttons flex cursor-pointer gap-2">
           {props.customHeaderButtons}
-          <button onClick={toggleMaximize}>Maximize</button>
+          <Show when={props.maximizable}>
+            <button onClick={toggleMaximize}>Maximize</button>
+          </Show>
           <button onClick={toggleModal}>Close</button>
         </div>
       </header>
 
-      <main class="p-2">{props.children}</main>
+      <main class="size-full overflow-hidden p-2">{props.children}</main>
     </div>
   );
 }

@@ -1,12 +1,13 @@
-import { createSignal, For, onCleanup, onMount, type JSX } from "solid-js";
+import { createSignal, For, onCleanup, onMount } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
 import { EventFunctions } from "~/core/acore-ts/dom/events/EventFunctions";
 import { Categories } from "~/domain/data/Categories";
 import type { App } from "~/domain/models/App";
 import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
-import Link from "~/presentation/src/shared/components/ui/Link";
-import useI18n from "~/presentation/src/shared/utils/i18n-translate";
+import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
+import Model from "~/presentation/src/shared/components/threeDimensionalModels/Model";
+import openAppContent from "~/presentation/src/shared/utils/openAppContent";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -14,7 +15,6 @@ type DesktopShortcutMatrix = DesktopShortcut[][];
 export default function Desktop() {
   const appsService = Container.instance.appsService;
   const windowsService = Container.instance.windowsService;
-  const translate = useI18n();
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
@@ -104,7 +104,14 @@ export default function Desktop() {
   function onShortcutClick(shortcut: DesktopShortcut) {
     if (!shortcut) return;
 
-    const window = new Window(CryptoExtensions.generateNanoId(), shortcut.id, shortcut.name);
+    const window = new Window(
+      CryptoExtensions.generateNanoId(),
+      shortcut.id,
+      shortcut.name,
+      0,
+      false,
+      openAppContent(shortcut.id),
+    );
     windowsService.add(window);
   }
 
@@ -121,9 +128,9 @@ export default function Desktop() {
                   class="m-3 h-32 w-32"
                 >
                   {col ? (
-                    <DesktopShortcut
-                      label={translate(col.name)}
-                      icon={col.icon}
+                    <AppShortcut
+                      label={col.name}
+                      icon={<Model model={col.icon} />}
                       href={col.path}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}
@@ -141,31 +148,6 @@ export default function Desktop() {
   );
 }
 
-interface DesktopShortcutProps {
-  label: string;
-  href: string;
-  icon: JSX.Element;
-  onClick?: () => void;
-  onDragStart?: () => void;
-}
-
-function DesktopShortcut(props: DesktopShortcutProps) {
-  return (
-    <Link
-      href={props.href}
-      draggable={true}
-      onClick={props.onClick}
-      onDragStart={props.onDragStart}
-      class="flex h-full w-full flex-col items-center justify-center"
-    >
-      <figure>
-        <picture>{props.icon}</picture>
-        <figcaption class="w-full truncate text-wrap text-center">{props.label}</figcaption>
-      </figure>
-    </Link>
-  );
-}
-
 function DesktopEmptyGrid() {
-  return <div class="h-full w-full" />;
+  return <div class="size-full" />;
 }

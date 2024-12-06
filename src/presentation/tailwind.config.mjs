@@ -2,7 +2,12 @@
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        128: "32rem",
+        144: "36rem",
+      },
+    },
   },
   plugins: [],
 };

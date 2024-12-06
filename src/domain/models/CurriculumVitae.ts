@@ -1,6 +1,6 @@
 import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
 import type { TranslationKey } from "../data/Translations";
-import type { Organization, OrganizationId } from "./Organization";
+import type { OrganizationId } from "./Organization";
 
 export type CurriculumVitaeId = number;
 
@@ -11,11 +11,9 @@ export class CurriculumVitae extends Entity<CurriculumVitaeId> {
     public role: TranslationKey,
     public startDate: Date,
     public endDate: Date,
-    public description: TranslationKey,
-    public body: TranslationKey,
     createdDate: Date,
+    public descriptionMarkdown?: TranslationKey,
     updatedDate?: Date,
-    public organization?: Organization,
   ) {
     super(id, createdDate, updatedDate);
   }

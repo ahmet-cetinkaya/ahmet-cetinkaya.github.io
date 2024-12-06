@@ -10,11 +10,11 @@ import ChangeLocale from "./ChangeLocale";
     <Menu client:only="solid-js" transition:persist />
 
     <span class="ms-5" transition:persist>
-      <TaskbarView client:idle />
+      <TaskbarView client:only="solid-js" />
     </span>
   </div>
 
-  <div class="flex gap-2">
+  <div class="flex items-center justify-center gap-2">
     <ChangeLocale client:only="solid-js" transition:persist />
     <Clock />
   </div>

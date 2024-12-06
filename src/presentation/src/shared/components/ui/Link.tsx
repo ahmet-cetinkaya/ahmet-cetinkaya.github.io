@@ -16,6 +16,8 @@ interface Props {
   class?: string;
   onClick?: (e: MouseEvent) => void;
   onDragStart?: (e: DragEvent) => void;
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  rel?: "noopener noreferrer";
 }
 
 export default function Link(props: Props) {
@@ -24,7 +26,14 @@ export default function Link(props: Props) {
       href={props.href}
       onClick={props.onClick}
       onDragStart={props.onDragStart}
-      class={mergeCls(linkVariantClassNames[props.variant ?? "primary"], props.class)}
+      class={mergeCls(
+        "flex items-center justify-center",
+        linkVariantClassNames[props.variant ?? "primary"],
+        props.class,
+      )}
+      target={props.target}
+      rel={props.rel}
+      aria-label={props.children?.toString()}
     >
       {props.children}
     </a>

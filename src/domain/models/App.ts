@@ -1,6 +1,6 @@
 import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
 import type { Apps } from "../data/Apps";
-import type { IconId } from "../data/Icons";
+import type { Icons } from "../data/Icons";
 import type { TranslationKey } from "../data/Translations";
 import type { CategoryId } from "./Category";
 
@@ -11,7 +11,7 @@ export class App extends Entity<AppId> {
     id: AppId,
     public categoryId: CategoryId,
     public name: TranslationKey,
-    public icon: IconId,
+    public icon: Icons,
     public path: string,
     createdDate: Date,
     public process?: () => void,

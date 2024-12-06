@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "type": "module",
   "scripts": {
-    "format": "prettier --config prettier.config.mjs --write . && (cd src/presentation && prettier --config prettier.config.mjs --write .)",
+    "format": "prettier --write . && (cd src/presentation && bun format)",
     "install-all": "bun install && (cd src/presentation && bun install)",
     "lint": "eslint .",
     "start": "cd src/presentation && bun start"

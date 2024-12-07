@@ -8,7 +8,7 @@ export interface Props extends LayoutProps {}
 ---
 
 <Layout metaData={Astro.props.metaData}>
-  <div class="flex h-screen flex-col">
+  <div class="flex h-screen w-screen flex-col overflow-hidden">
     <Taskbar />
 
     <main class="flex-grow">

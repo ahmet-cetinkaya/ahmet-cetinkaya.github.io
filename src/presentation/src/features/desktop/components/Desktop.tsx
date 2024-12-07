@@ -8,6 +8,7 @@ import { Container } from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Model from "~/presentation/src/shared/components/threeDimensionalModels/Model";
 import openAppContent from "~/presentation/src/shared/utils/openAppContent";
+import Wallpaper from "./Wallpaper";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -116,7 +117,9 @@ export default function Desktop() {
   }
 
   return (
-    <div ref={containerRef} class="flex h-full flex-row">
+    <div ref={containerRef} class="flex size-full flex-row">
+      <Wallpaper class="absolute left-0 top-0 -z-50" />
+
       <For each={matrix()}>
         {(row, x) => (
           <div class="flex flex-col">

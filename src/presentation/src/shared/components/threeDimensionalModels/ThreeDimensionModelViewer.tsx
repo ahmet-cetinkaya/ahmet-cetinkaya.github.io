@@ -148,7 +148,7 @@ export default function ThreeDimensionModelViewer(props: Props) {
   return (
     <div ref={(element) => onContainerElementMount(element)} class={props.class ?? "size-full"}>
       <Show when={isLoading()}>
-        <span class="flex h-full items-center justify-center">
+        <span class="flex size-full items-center justify-center">
           <Icon icon={Icons.spinner} isSpin />
         </span>
       </Show>

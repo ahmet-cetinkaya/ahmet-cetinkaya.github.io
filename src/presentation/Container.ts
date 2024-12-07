@@ -7,7 +7,7 @@ import type { IEducationsService } from "~/application/features/educations/servi
 import type { ILinksService } from "~/application/features/links/abstraction/ILinksService";
 import type { IOrganizationsService } from "~/application/features/organizations/services/abstraction/IOrganizationsService";
 import type { ITechnologiesService } from "~/application/features/technologies/services/abstraction/ITechnologiesService";
-import type { II18n } from "~/core/acore-ts/i18n/abstraction/II18n";
+import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 import { I18n } from "~/core/acore-ts/i18n/I18n";
 import { Translations } from "~/domain/data/Translations";
 import { ApplicationContainer, type IApplicationContainer } from "./../application/ApplicationContainer";

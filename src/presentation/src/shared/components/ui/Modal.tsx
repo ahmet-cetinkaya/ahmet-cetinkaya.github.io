@@ -114,14 +114,14 @@ export default function Modal(props: Props) {
       <header class="flex justify-between gap-2 p-2">
         <h1>{translate(props.title!)}</h1>
 
-        <div class="ac-header-buttons flex justify-between items-center cursor-pointer gap-1">
+        <div class="ac-header-buttons flex cursor-pointer items-center justify-between gap-1">
           {props.customHeaderButtons}
           <Show when={props.maximizable}>
-            <Button onClick={toggleMaximize} variant="text"  size="small">
+            <Button onClick={toggleMaximize} variant="text" size="small">
               <Icon icon={Icons.maximize} class="size-4" />
             </Button>
           </Show>
-          <Button onClick={toggleModal} variant="text"  size="small">
+          <Button onClick={toggleModal} variant="text" size="small">
             <Icon icon={Icons.close} class="size-4" />
           </Button>
         </div>

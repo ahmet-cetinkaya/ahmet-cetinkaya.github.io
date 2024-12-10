@@ -10,6 +10,8 @@ import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
 export type Props = {
+  class?: string;
+  toolbarClass?: string;
   inputClass?: string;
   onInput?: (html: string) => void;
 };
@@ -40,8 +42,8 @@ export default function HtmlEditor(props: Props) {
   }
 
   return (
-    <section>
-      <header class="mb-2 flex">
+    <section class={mergeCls(props.class)}>
+      <header class={mergeCls("mb-2 flex border-b border-surface-300 p-2", props.toolbarClass)}>
         <ToolbarButton icon={Icons.bold} onClick={() => editorInstance!.formatText("b")} />
         <ToolbarButton icon={Icons.underline} onClick={() => editorInstance!.formatText("u")} />
         <ToolbarButton icon={Icons.italic} onClick={() => editorInstance!.formatText("i")} />
@@ -52,7 +54,12 @@ export default function HtmlEditor(props: Props) {
         <ToolbarButton icon={Icons.link} onClick={() => editorInstance!.formatText("a")} />
         <ToolbarButton icon={Icons.formatClear} onClick={() => editorInstance!.clearFormat()} />
       </header>
-      <div class={mergeCls("mt-2 h-48 w-full overflow-y-auto p-4", props.inputClass)}>
+      <div
+        class={mergeCls(
+          "mt-2 h-64 w-full overflow-y-auto border-black bg-surface-400 p-4 shadow-primary",
+          props.inputClass,
+        )}
+      >
         <article ref={onEditorMount} contentEditable class="size-full p-1 outline-none" />
       </div>
     </section>

@@ -4,7 +4,7 @@ import Taskbar from "../../features/desktop/components/Taskbar/Taskbar.astro";
 import WindowManager from "../../features/desktop/components/WindowManager";
 import Layout, { type Props as LayoutProps } from "./Layout.astro";
 
-export interface Props extends LayoutProps {}
+export type Props = LayoutProps;
 ---
 
 <Layout metaData={Astro.props.metaData}>

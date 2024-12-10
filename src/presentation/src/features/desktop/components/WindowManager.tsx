@@ -1,9 +1,11 @@
-import { createMemo, createSignal, For, onMount, Show, type JSX } from "solid-js";
+import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
 import type { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import openAppContent from "~/presentation/src/shared/utils/openAppContent";
 import Window from "./Window";
+import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
+import { navigate } from "astro:transitions/client";
 
 export default function WindowManager() {
   const windowService = createMemo(() => Container.instance.windowsService);
@@ -11,25 +13,25 @@ export default function WindowManager() {
   const [windows, setWindows] = createSignal<WindowModel[]>([]);
   const i18n = Container.instance.i18n;
 
-  onMount(() => {
+  onMount(async () => {
+    await openInitialApp();
+    checkMobileScreen();
+  });
+
+  async function openInitialApp() {
     windowService().subscribe((windows) => {
       setWindows(windows);
     });
 
     let appPath = window.location.pathname;
-    if (appPath.startsWith("/")) {
-      appPath = appPath.slice(1);
-    }
-    if (i18n.locales.some((lang) => appPath.startsWith(`${lang}/`))) {
-      appPath = appPath.split("/").slice(1).join("/");
-    }
+    if (appPath.startsWith("/")) appPath = appPath.slice(1);
+    if (i18n.locales.some((lang) => appPath.startsWith(`${lang}/`))) appPath = appPath.split("/").slice(1).join("/");
 
-    openApp(appPath);
-  });
-
-  async function openApp(appPath: string) {
     const app = await appsService().get((app) => app.path === appPath);
-    if (!app) return;
+    if (!app) {
+      navigate("/");
+      return;
+    }
 
     const openedAppWindow = await windowService().get((window) => window.appId === app.id);
     if (openedAppWindow) {
@@ -42,7 +44,26 @@ export default function WindowManager() {
       title: app.name,
       appId: app.id,
       content: openAppContent(app.id),
+      isMaximized: ScreenHelper.isMobile(),
     } as WindowModel);
+  }
+
+  let checkMobileScreenTimeout: Timer | null = null;
+  function checkMobileScreen() {
+    const handleResize = () => {
+      if (checkMobileScreenTimeout) return;
+
+      checkMobileScreenTimeout = setTimeout(async () => {
+        const windows = await windowService().getAll();
+        for (const window of windows) window.isMaximized = ScreenHelper.isMobile();
+        windowService().bulkUpdate(windows);
+
+        checkMobileScreenTimeout = null;
+      }, 1500);
+    };
+
+    window.addEventListener("resize", handleResize);
+    onCleanup(() => window.removeEventListener("resize", handleResize));
   }
 
   return (

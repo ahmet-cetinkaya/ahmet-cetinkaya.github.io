@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { TranslationKeys } from "~/domain/data/Translations";
 import MarkdownParagraph from "~/presentation/src/shared/components/MarkdownParagraph";
+import Title from "~/presentation/src/shared/components/ui/Title";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 type Props = {
@@ -28,18 +29,21 @@ export default function About(props: Props) {
   }
 
   return (
-    <div ref={onContainerMount} class="size-full px-10">
+    <div ref={onContainerMount} class="size-full">
+      <Title level={1}>{translate(TranslationKeys.apps_welcome_about_me)}</Title>
+
       <div
-        class="overflow-y-auto rounded-lg border border-gray-300 bg-white p-4 shadow-md"
+        class="shadow-md max-h-128 overflow-y-auto rounded-lg border border-gray-300 bg-surface-400 p-4"
         style={{ height: `${containerHeight()}px` }}
       >
         <MarkdownParagraph content={translate(TranslationKeys.apps_welcome_about_me_markdown)} />
       </div>
+
       <div class="mt-4 flex items-center">
-        <input id="confirm" type="checkbox" value={isConfirmed().toString()} onChange={onConfirm} />
+        <input id="confirm" type="checkbox" checked={isConfirmed()} onChange={onConfirm} />
         <label
           for="confirm"
-          class={mergeCls("ms-2 text-sm text-gray-700", {
+          class={mergeCls("text-md ms-2 text-gray-200", {
             "text-red-600": props.isWarnedForConfirm && !isConfirmed(),
           })}
         >

@@ -9,17 +9,22 @@ import type { TranslationKeys } from "~/domain/data/Translations";
 import Button from "./Button";
 import Icon from "../Icon";
 import { Icons } from "~/domain/data/Icons";
+import Title from "./Title";
+import type { Offset } from "~/core/acore-ts/ui/models/Offset";
 
 interface Props {
   title?: TranslationKeys;
   class?: string;
+  headerClass?: string;
   style?: JSX.CSSProperties;
   children: JSX.Element;
   customHeaderButtons?: JSX.Element;
   position?: Position;
   size?: Size;
+  isMaximized?: boolean;
   maximizable?: boolean;
-  maximizeOffset?: { top: number; left: number };
+  maximizeOffset?: Offset;
+  dragOffset?: Offset;
   onClick?: () => void;
   onClose?: () => void;
   onDragStart?: (event: MouseEvent, position: Position) => void;
@@ -27,24 +32,22 @@ interface Props {
   onResize?: (event: Event, size: Size) => void;
   onResizeStart?: (event: Event, size: Size, position: Position) => void;
   onResizeEnd?: (event: Event, size: Size, position: Position) => void;
+  onToggleMaximize?: (isMaximized: boolean) => void;
 }
 
-const defaultProps = {
-  maximizable: true,
-};
-
 export default function Modal(props: Props) {
-  if (props.maximizable === undefined) props.maximizable = defaultProps.maximizable;
+  if (props.maximizable === undefined) props.maximizable = true;
 
   const translate = useI18n();
 
   const [isModalOpen, setIsModalOpen] = createSignal(true);
-  const [isMaximized, setMaximized] = createSignal(false);
+  const [isMaximized, setIsMaximized] = createSignal(props.isMaximized ?? false);
 
   function onModalElementMount(element: HTMLElement) {
     DragHelper.makeDraggableElement(element, {
       onDragStart,
       onDragEnd,
+      offset: props.dragOffset,
     });
 
     ResizeHelper.makeResizableElement(element, {
@@ -64,7 +67,10 @@ export default function Modal(props: Props) {
 
   function toggleMaximize() {
     if (!props.maximizable) return;
-    setMaximized((prev) => !prev);
+
+    const nextIsMaximizedValue: boolean = !isMaximized();
+    setIsMaximized(nextIsMaximizedValue);
+    props.onToggleMaximize?.(nextIsMaximizedValue);
   }
 
   function onClick(event: MouseEvent) {
@@ -91,7 +97,7 @@ export default function Modal(props: Props) {
         onModalElementMount(element);
       }}
       class={mergeCls(
-        "fixed min-h-52 min-w-144 transform overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md",
+        "shadow-md bg-whitez fixed min-h-52 min-w-60 transform overflow-hidden rounded-lg border border-gray-300",
         props.class,
       )}
       style={{
@@ -106,13 +112,23 @@ export default function Modal(props: Props) {
           : props.position?.left
             ? props.position.left + "px"
             : "15%", // According to 50vw default width
-        width: isMaximized() ? "100vw" : props.size?.width ? props.size.width + "px" : "70vw",
-        height: isMaximized() ? "100vh" : props.size?.height ? props.size.height + "px" : "70vh",
+        right: isMaximized() ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
+        bottom: isMaximized() ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
+        width: isMaximized()
+          ? "calc(100vw - " + (props.maximizeOffset?.left ?? 0) + "px - " + (props.maximizeOffset?.right ?? 0) + "px)"
+          : props.size?.width
+            ? props.size.width + "px"
+            : "70vw",
+        height: isMaximized()
+          ? "calc(100vh - " + (props.maximizeOffset?.top ?? 0) + "px - " + (props.maximizeOffset?.bottom ?? 0) + "px)"
+          : props.size?.height
+            ? props.size.height + "px"
+            : "70vh",
       }}
       onClick={onClick}
     >
-      <header class="flex justify-between gap-2 p-2">
-        <h1>{translate(props.title!)}</h1>
+      <header class={mergeCls("flex items-center justify-between gap-2 p-2", props.headerClass)}>
+        <Title class="m-0 text-xl">{translate(props.title!)}</Title>
 
         <div class="ac-header-buttons flex cursor-pointer items-center justify-between gap-1">
           {props.customHeaderButtons}

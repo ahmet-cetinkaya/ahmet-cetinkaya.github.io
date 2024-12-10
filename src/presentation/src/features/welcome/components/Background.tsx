@@ -13,6 +13,7 @@ import Icon from "~/presentation/src/shared/components/Icon";
 import LoadingArea from "~/presentation/src/shared/components/LoadingArea";
 import Timeline, { type Activity } from "~/presentation/src/shared/components/Timeline";
 import Link from "~/presentation/src/shared/components/ui/Link";
+import Title from "~/presentation/src/shared/components/ui/Title";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function Background() {
@@ -109,23 +110,25 @@ export default function Background() {
 
   return (
     <>
-      <Show when={experienceActivities()} fallback={<_LoadingArea />}>
-        <Title label={translate(TranslationKeys.apps_welcome_experiences)} />
+      <Title level={1}>{translate(TranslationKeys.apps_welcome_background)}</Title>
+
+      <Show when={experienceActivities()} fallback={<Loading />}>
+        <Title level={3}>{translate(TranslationKeys.apps_welcome_experiences)}</Title>
         <Timeline activities={experienceActivities()!} />
       </Show>
 
-      <Show when={educationActivities()} fallback={<_LoadingArea />}>
-        <Title label={translate(TranslationKeys.apps_welcome_educations)} />
+      <Show when={educationActivities()} fallback={<Loading />}>
+        <Title level={3}>{translate(TranslationKeys.apps_welcome_educations)}</Title>
         <Timeline activities={educationActivities()!} />
       </Show>
 
-      <Show when={certificationActivities()} fallback={<_LoadingArea />}>
-        <Title label={translate(TranslationKeys.apps_welcome_certifications)} />
+      <Show when={certificationActivities()} fallback={<Loading />}>
+        <Title level={3}>{translate(TranslationKeys.apps_welcome_certifications)}</Title>
         <Timeline activities={certificationActivities()!} />
       </Show>
 
       <Show when={linkedInLink()}>
-        <Link class="fixed right-14 top-14 w-28 rounded-3xl" href={linkedInLink()!.url} target="_blank">
+        <Link class="fixed right-14 top-14 w-28" href={linkedInLink()!.url} target="_blank">
           <Icon icon={Icons.linkedin} class="size-4" />
           <span class="ms-2">{translate(TranslationKeys.links_linkedin)}</span>
         </Link>
@@ -133,11 +136,7 @@ export default function Background() {
     </>
   );
 
-  function Title(props: { label: string }) {
-    return <h2 class="mb-3 text-2xl font-bold">{props.label}</h2>;
-  }
-
-  function _LoadingArea() {
+  function Loading() {
     return <LoadingArea class="h-12" />;
   }
 }

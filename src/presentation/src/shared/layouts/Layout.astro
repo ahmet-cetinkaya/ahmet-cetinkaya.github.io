@@ -6,10 +6,11 @@ import Metadata, { type Props as MetadataProps } from "../components/Metadata.as
 import SiteVerification from "../components/SiteVerification.astro";
 import { Container } from "~/presentation/Container";
 import { locales } from "~/domain/data/Translations";
+import "@fontsource/oxanium";
 
-export interface Props {
+export type Props = {
   metaData: MetadataProps;
-}
+};
 
 const i18n = Container.instance.i18n;
 const language = i18n.getLocaleFromUrl(Astro.url, locales[0]);

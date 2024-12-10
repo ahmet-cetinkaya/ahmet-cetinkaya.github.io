@@ -10,13 +10,13 @@ import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
 
-interface Props {
+type Props = {
   window: WindowModel;
   children: JSX.Element;
-}
+};
 
 export default function Window(props: Props) {
-  const windowService = Container.instance.windowsService;
+  const windowsService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
@@ -34,20 +34,20 @@ export default function Window(props: Props) {
   }
 
   function onMinimize() {
-    windowService.minimize(props.window);
+    windowsService.minimize(props.window);
   }
 
   async function onClick() {
-    await windowService.active(props.window);
+    await windowsService.active(props.window);
     navigate(path());
   }
 
   function onClose() {
-    windowService.remove((w) => w.id === props.window.id);
+    windowsService.remove((w) => w.id === props.window.id);
   }
 
   function onDragStart() {
-    const activatedWindow = windowService.getActivatedWindow();
+    const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
     navigate(path());
@@ -59,11 +59,11 @@ export default function Window(props: Props) {
       props.window.layer = overrideLayer()!;
       setOverrideLayer(null);
     }
-    windowService.update(props.window);
+    windowsService.update(props.window);
   }
 
   function onResizeStart() {
-    const activatedWindow = windowService.getActivatedWindow();
+    const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
     navigate(path());
@@ -76,15 +76,17 @@ export default function Window(props: Props) {
       props.window.layer = overrideLayer()!;
       setOverrideLayer(null);
     }
-    windowService.update(props.window);
+    windowsService.update(props.window);
+  }
+
+  function onToggleMaximize(isMaximized: boolean) {
+    props.window.isMaximized = isMaximized;
+    windowsService.update(props.window);
   }
 
   return (
     <Modal
       title={props.window.title}
-      style={{
-        "z-index": overrideLayer() ?? props.window.layer,
-      }}
       customHeaderButtons={
         <Button onClick={onMinimize} variant="text" size="small">
           <Icon icon={Icons.minimize} class="size-4" />
@@ -92,13 +94,21 @@ export default function Window(props: Props) {
       }
       position={props.window.position}
       size={props.window.size}
-      maximizeOffset={{ top: 64, left: 0 }}
+      isMaximized={props.window.isMaximized}
+      maximizeOffset={{ top: 92, left: 10, right: 10, bottom: 16 }}
+      dragOffset={{ top: 92 }}
       onClick={onClick}
       onClose={onClose}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onResizeStart={onResizeStart}
       onResizeEnd={onResizeEnd}
+      onToggleMaximize={onToggleMaximize}
+      class="border-black bg-surface-500 text-white shadow-secondary"
+      headerClass="bg-surface-400"
+      style={{
+        "z-index": overrideLayer() ?? props.window.layer,
+      }}
     >
       {props.children}
     </Modal>

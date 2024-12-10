@@ -3,9 +3,9 @@ import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
 export const buttonVariantClassNames = {
   primary:
-    "inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 transition-colors ease-linear",
+    "select-none inline-flex w-full justify-center rounded-lg border border-black bg-surface-400 shadow-primary px-4 py-2 text-sm font-medium text-gray-200 shadow-sm hover:bg-surface-300 focus:shadow-none transition-all ease-linear duration-200 focus:outline-none hov",
   link: "text-blue-500 hover:text-blue-700 focus:outline-none",
-  text: "text-gray-700 hover:text-gray-900 focus:outline-none",
+  text: "text-gray-200 hover:text-gray-400 focus:outline-none",
 };
 
 const buttonSizeClassNames = {
@@ -18,7 +18,7 @@ type ButtonType = "button" | "submit" | "reset";
 type ButtonVariant = keyof typeof buttonVariantClassNames;
 type ButtonSize = keyof typeof buttonSizeClassNames;
 
-interface Props {
+type Props = {
   children: JSX.Element;
   type?: ButtonType;
   variant?: ButtonVariant;
@@ -26,7 +26,9 @@ interface Props {
   size?: ButtonSize;
   disabled?: boolean;
   onClick?: (e: MouseEvent) => void;
-}
+  onMouseEnter?: (e: MouseEvent) => void;
+  onMouseLeave?: (e: MouseEvent) => void;
+};
 
 const defaultProps: Props = {
   children: <></>,
@@ -53,10 +55,12 @@ export default function Button(props: Props) {
         },
         "overflow-hidden",
       )}
-      onClick={props.onClick}
       disabled={props.disabled}
+      onClick={props.onClick}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
     >
-      <span onClick={(event) => event.stopPropagation()} class={mergeCls("pointer-events-none", props.class)}>
+      <span onClick={(event) => event.stopPropagation()} class={"pointer-events-none"}>
         {props.children}
       </span>
     </button>

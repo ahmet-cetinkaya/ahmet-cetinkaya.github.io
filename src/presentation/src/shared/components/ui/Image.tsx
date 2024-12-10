@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 
-interface Props {
+type Props = {
   src: string;
   alt: string;
   width?: number | string;
@@ -9,7 +9,7 @@ interface Props {
   srcset?: string;
   loading?: "lazy" | "eager";
   decoding?: "auto" | "async" | "sync";
-}
+};
 
 export default function Image(props: Props) {
   const [image, setImage] = createSignal<{

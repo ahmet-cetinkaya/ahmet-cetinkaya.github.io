@@ -5,15 +5,18 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { Icons } from "~/domain/data/Icons";
 import Icon from "../Icon";
+import EasingHelper from "~/core/acore-ts/ui/animation/EasingHelper";
+import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
-interface Props {
+type Props = {
   modelPath: string;
   modelScale: number;
   configureScene?: (scene: Scene) => void;
+  configureModel?: (model: GLTF) => void;
   configureCamera?: (camera: OrthographicCamera) => void;
   configureControls?: (controls: OrbitControls) => void;
   class?: string;
-}
+};
 
 export default function ThreeDimensionModelViewer(props: Props) {
   let containerRef: HTMLDivElement;
@@ -33,6 +36,7 @@ export default function ThreeDimensionModelViewer(props: Props) {
       initThree();
       loadModel();
       animate();
+      requestAnimationFrame(() => onWindowResized());
     });
   }
 
@@ -52,8 +56,8 @@ export default function ThreeDimensionModelViewer(props: Props) {
 
     // Renderer
     renderer = new WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.outputColorSpace = SRGBColorSpace;
 
     // Scene
@@ -87,7 +91,7 @@ export default function ThreeDimensionModelViewer(props: Props) {
       controls.dampingFactor = 0.25;
       controls.enableZoom = true;
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 1;
+      controls.autoRotateSpeed = 2;
       controls.maxPolarAngle = Math.PI / 2;
       controls.minZoom = 0.4;
       controls.maxZoom = 5;
@@ -107,8 +111,11 @@ export default function ThreeDimensionModelViewer(props: Props) {
     loader?.load(
       props.modelPath,
       (gltf: GLTF) => {
-        gltf.scene.position.y = 0;
-        gltf.scene.position.x = 0;
+        if (props.configureModel) props.configureModel(gltf);
+        else {
+          gltf.scene.position.y = 0;
+          gltf.scene.position.x = 0;
+        }
         gltf.scene.receiveShadow = true;
         gltf.scene.castShadow = true;
         gltf.scene.scale.set(props.modelScale, props.modelScale, props.modelScale);
@@ -137,19 +144,41 @@ export default function ThreeDimensionModelViewer(props: Props) {
     renderer.setSize(width, height);
   }
 
+  let frame: number | undefined = 0;
+  let initialCameraPosition: Vector3 | undefined;
   function animate() {
-    if (!isLoading() && controls && scene && renderer) {
-      controls.update();
-      renderer.render(scene, camera as Camera);
-    }
     requestAnimationFrame(animate);
+
+    if (isLoading()) return;
+    if (!controls || !scene || !renderer || !camera) return;
+
+    if (frame !== undefined && frame <= 100) {
+      frame = frame! <= 100 ? frame + 1 : frame;
+      const rotateSpeed = -EasingHelper.easeOutCirc(frame / 120) * Math.PI * 6;
+      const target = new Vector3(-0.5, -1, 0);
+      if (!initialCameraPosition) initialCameraPosition = camera.position.clone();
+
+      camera.position.y = 10;
+      camera.position.x =
+        initialCameraPosition.x * Math.cos(rotateSpeed) + initialCameraPosition.z * Math.sin(rotateSpeed);
+      camera.position.z =
+        initialCameraPosition.z * Math.cos(rotateSpeed) - initialCameraPosition.x * Math.sin(rotateSpeed);
+      camera.lookAt(target);
+    } else {
+      if (frame) frame = undefined;
+      if (initialCameraPosition) initialCameraPosition = undefined;
+
+      controls.update();
+    }
+
+    renderer.render(scene, camera as Camera);
   }
 
   return (
-    <div ref={(element) => onContainerElementMount(element)} class={props.class ?? "size-full"}>
+    <div ref={(element) => onContainerElementMount(element)} class={mergeCls("size-full", props.class)}>
       <Show when={isLoading()}>
         <span class="flex size-full items-center justify-center">
-          <Icon icon={Icons.spinner} isSpin />
+          <Icon icon={Icons.spinner} isSpin class="size-10" />
         </span>
       </Show>
 

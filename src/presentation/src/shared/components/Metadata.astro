@@ -1,7 +1,7 @@
 ---
 import { SEO } from "astro-seo";
 
-export interface Props {
+export type Props = {
   title?: string;
   ignoreTitleTemplate?: boolean;
   canonical?: string;
@@ -34,7 +34,7 @@ export interface Props {
     link?: { rel: string; href: string }[];
     meta?: { name: string; content: string }[];
   };
-}
+};
 ---
 
 <SEO

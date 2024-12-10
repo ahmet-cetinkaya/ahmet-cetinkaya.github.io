@@ -46,7 +46,7 @@ export default function LessViewContent(props: Props) {
         {props.children}
 
         <Show when={!expanded() && isContentOverflowing()}>
-          <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-white to-transparent" />
+          <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-full bg-gradient-to-t from-surface-500 to-transparent" />
         </Show>
       </div>
 

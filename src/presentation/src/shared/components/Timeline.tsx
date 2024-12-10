@@ -29,7 +29,7 @@ export default function Timeline(props: Props) {
         {(activity) => (
           <section class="relative mb-8 flex gap-4">
             <div class="size-12">
-              <div class="flex size-12 items-center justify-center overflow-hidden rounded-full border-2 border-gray-200 bg-white">
+              <div class="flex size-12 items-center justify-center overflow-hidden rounded-full border-2 border-gray-200">
                 <Icon icon={activity().logo} class="size-12" />
               </div>
             </div>
@@ -37,17 +37,17 @@ export default function Timeline(props: Props) {
               <header>
                 <h3 class="text-lg font-semibold">{translate(activity().title)}</h3>
                 <Show when={activity().subtitle}>
-                  <h4 class="text-gray-600">{translate(activity().subtitle!)}</h4>
+                  <h4 class="text-gray-400">{translate(activity().subtitle!)}</h4>
                 </Show>
 
-                <time class="text-sm text-gray-500">{activity().startDate.toDateString()}</time>
+                <time class="text-sm text-gray-300">{activity().startDate.toDateString()}</time>
                 <Show
                   when={activity().endDate}
                   fallback={
-                    <time class="text-sm text-gray-500"> - {translate(TranslationKeys.apps_welcome_present)}</time>
+                    <time class="text-sm text-gray-300"> - {translate(TranslationKeys.apps_welcome_present)}</time>
                   }
                 >
-                  <time class="text-sm text-gray-500"> - {activity().endDate!.toDateString()}</time>
+                  <time class="text-sm text-gray-300"> - {activity().endDate!.toDateString()}</time>
                 </Show>
               </header>
 

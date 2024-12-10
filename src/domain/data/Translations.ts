@@ -6,8 +6,6 @@ export enum Locales {
 //#region Enums
 export enum TranslationKeys {
   //#region Apps
-  apps_welcome_hello = "apps_welcome_hello",
-  apps_welcome_technologies = "apps_welcome_technologies",
   apps_welcome_about_me = "apps_welcome_about_me",
   apps_welcome_about_me_confirm = "apps_welcome_about_me_confirm",
   apps_welcome_about_me_markdown = "apps_welcome_about_me_markdown",
@@ -19,8 +17,12 @@ export enum TranslationKeys {
   apps_welcome_educations = "apps_welcome_educations",
   apps_welcome_experiences = "apps_welcome_experiences",
   apps_welcome_finish = "apps_welcome_finish",
+  apps_welcome_hello = "apps_welcome_hello",
   apps_welcome_if_you_want_to_contact_me = "apps_welcome_if_you_want_to_contact_me",
   apps_welcome_present = "apps_welcome_present",
+  apps_welcome_technologies = "apps_welcome_technologies",
+  apps_welcome_technologiesIUse = "apps_welcome_technologiesIUse",
+  apps_welcome_setup = "apps_welcome_setup",
   apps_welcome_welcome = "apps_welcome_welcome",
 
   apps_email_folders = "apps_email_folders",
@@ -117,6 +119,10 @@ export const Translations: Record<TranslationKeys, Record<Locales, string>> = {
   [TranslationKeys.apps_welcome_technologies]: {
     en: "Technologies",
     tr: "Teknolojiler",
+  },
+  [TranslationKeys.apps_welcome_technologiesIUse]: {
+    en: "Technologies I Use",
+    tr: "Kullandığım Teknolojiler",
   },
   [TranslationKeys.apps_welcome_about_me]: {
     en: "About Me",
@@ -226,6 +232,10 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
   [TranslationKeys.apps_email_trash]: {
     en: "Trash",
     tr: "Çöp Kutusu",
+  },
+  [TranslationKeys.apps_welcome_setup]: {
+    en: "Setup",
+    tr: "Kurulum",
   },
   //#endregion
 

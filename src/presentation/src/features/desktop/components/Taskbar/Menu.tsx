@@ -1,12 +1,13 @@
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
 import { Icons } from "~/domain/data/Icons";
-import type { Window } from "~/domain/models/Window";
+import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
 import openAppContent from "~/presentation/src/shared/utils/openAppContent";
+import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Menu() {
   const windowsService = Container.instance.windowsService;
@@ -41,14 +42,19 @@ export default function Menu() {
           (app) =>
             ({
               text: app.name,
+              icon: app.icon,
               href: app.path,
               onClick: () => {
-                windowsService.add({
-                  id: CryptoExtensions.generateNanoId(),
-                  appId: app.id,
-                  title: app.name,
-                  content: openAppContent(app.id),
-                } as Window);
+                const window = new Window(
+                  CryptoExtensions.generateNanoId(),
+                  app.id,
+                  app.name,
+                  undefined,
+                  false,
+                  ScreenHelper.isMobile(),
+                  openAppContent(app.id),
+                );
+                windowsService.add(window);
               },
             }) as DropdownItem,
         ),

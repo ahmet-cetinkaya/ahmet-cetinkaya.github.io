@@ -9,6 +9,7 @@ import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Model from "~/presentation/src/shared/components/threeDimensionalModels/Model";
 import openAppContent from "~/presentation/src/shared/utils/openAppContent";
 import Wallpaper from "./Wallpaper";
+import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -25,10 +26,7 @@ export default function Desktop() {
   onMount(() => {
     generateMatrix();
     window.addEventListener("resize", generateMatrix);
-  });
-
-  onCleanup(() => {
-    window.removeEventListener("resize", generateMatrix);
+    onCleanup(() => window.removeEventListener("resize", generateMatrix));
   });
 
   async function generateMatrix() {
@@ -111,6 +109,7 @@ export default function Desktop() {
       shortcut.name,
       0,
       false,
+      ScreenHelper.isMobile(),
       openAppContent(shortcut.id),
     );
     windowsService.add(window);
@@ -128,7 +127,7 @@ export default function Desktop() {
                 <div
                   onDragOver={EventFunctions.preventDefault}
                   onDrop={() => onShortcutDrop(x(), y())}
-                  class="m-3 h-32 w-32"
+                  class="m-3 h-32 w-32 select-none"
                 >
                   {col ? (
                     <AppShortcut

@@ -8,7 +8,7 @@ const linkVariantClassNames = {
 };
 
 type LinkVariant = keyof typeof linkVariantClassNames;
-interface Props {
+type Props = {
   href: string;
   children: JSX.Element;
   draggable?: boolean;
@@ -18,7 +18,7 @@ interface Props {
   onDragStart?: (e: DragEvent) => void;
   target?: "_blank" | "_self" | "_parent" | "_top";
   rel?: "noopener noreferrer";
-}
+};
 
 export default function Link(props: Props) {
   return (

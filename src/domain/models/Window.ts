@@ -13,6 +13,7 @@ export class Window<TContent = unknown> extends Entity<WindowId> {
     public title: TranslationKey,
     public layer: number = 0,
     public isMinimized: boolean = false,
+    public isMaximized: boolean = false,
     public content: TContent | undefined = undefined,
     public position: Position | undefined = undefined,
     public size: Size | undefined = undefined,

@@ -1,9 +1,11 @@
+import type { Offset } from "./models/Offset";
 import { Position } from "./models/Position";
 
 export class DragHelper {
   static makeDraggableElement(
     element: HTMLElement,
     options: {
+      offset?: Offset;
       onDragStart?: (event: MouseEvent, position: Position) => void;
       onDragEnd?: (event: MouseEvent, position: Position) => void;
     } = {},
@@ -34,6 +36,7 @@ export class DragHelper {
 
     function elementDrag(event: MouseEvent) {
       event.preventDefault();
+
       pos1 = pos3 - event.clientX;
       pos2 = pos4 - event.clientY;
       pos3 = event.clientX;
@@ -48,10 +51,15 @@ export class DragHelper {
       const elementWidth = element.offsetWidth;
       const elementHeight = element.offsetHeight;
 
-      if (newTop >= 0 && newTop + elementHeight <= screenHeight) {
+      const offsetTop = options.offset?.top ?? 0;
+      const offsetLeft = options.offset?.left ?? 0;
+      const offsetRight = options.offset?.right ?? 0;
+      const offsetBottom = options.offset?.bottom ?? 0;
+
+      if (newTop >= offsetTop && newTop + elementHeight <= screenHeight - offsetBottom) {
         element.style.top = `${newTop}px`;
       }
-      if (newLeft >= 0 && newLeft + elementWidth <= screenWidth) {
+      if (newLeft >= offsetLeft && newLeft + elementWidth <= screenWidth - offsetRight) {
         element.style.left = `${newLeft}px`;
       }
 

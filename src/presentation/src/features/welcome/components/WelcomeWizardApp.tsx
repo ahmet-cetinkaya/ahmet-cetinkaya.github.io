@@ -11,14 +11,18 @@ import Background from "./Background";
 import Completed from "./Completed";
 import Hello from "./Hello";
 import Technologies from "./Technologies";
+import Title from "~/presentation/src/shared/components/ui/Title";
+import { Icons } from "~/domain/data/Icons";
+import Icon from "~/presentation/src/shared/components/Icon";
 
-const PARTS: TranslationKey[] = [
-  TranslationKeys.apps_welcome_hello,
-  TranslationKeys.apps_welcome_about_me,
-  TranslationKeys.apps_welcome_technologies,
-  TranslationKeys.apps_welcome_background,
-  TranslationKeys.apps_welcome_completed,
+const PARTS: { label: TranslationKey; icon: Icons }[] = [
+  { label: TranslationKeys.apps_welcome_hello, icon: Icons.handWave },
+  { label: TranslationKeys.apps_welcome_about_me, icon: Icons.userSmile },
+  { label: TranslationKeys.apps_welcome_technologies, icon: Icons.code },
+  { label: TranslationKeys.apps_welcome_background, icon: Icons.article },
+  { label: TranslationKeys.apps_welcome_completed, icon: Icons.check },
 ];
+
 enum Parts {
   Hello,
   AboutMe,
@@ -111,33 +115,17 @@ export default function WelcomeWizardApp() {
 
   return (
     <div class="flex h-full flex-row gap-4">
-      <header class="basis-1/4">
-        <ul>
-          <Index each={PARTS}>
-            {(part, index) => (
-              <li>
-                <Button
-                  onClick={() => onPartClicked(index)}
-                  variant="text"
-                  class={mergeCls({
-                    "font-bold": currentPart() === index,
-                  })}
-                  disabled={!isNextPartAvailable(index)}
-                >
-                  {translate(part())}
-                </Button>
-              </li>
-            )}
-          </Index>
-        </ul>
+      <header class="hidden basis-48 border-r border-surface-300 p-4 md:block">
+        <Title class="text-xl">{translate(TranslationKeys.apps_welcome_setup)}</Title>
+        <NavMenu />
       </header>
       <div class="flex size-full flex-col overflow-hidden">
         <Show when={currentPart() < PARTS.length}>
-          <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
+          <main class="flex-grow overflow-auto px-10 py-4">{getPartContent(currentPart())}</main>
         </Show>
 
         <footer class="mb-2 me-2 flex flex-row-reverse justify-start gap-2">
-          <Button onClick={onNextPart} class="w-16" size="small">
+          <Button onClick={onNextPart} class="w-16" size="small" disabled={isWarnedForConfirm() && !isAboutConfirmed()}>
             {currentPart() < PARTS.length - 1
               ? translate(TranslationKeys.common_next)
               : translate(TranslationKeys.apps_welcome_finish)}
@@ -149,4 +137,45 @@ export default function WelcomeWizardApp() {
       </div>
     </div>
   );
+
+  function NavMenu() {
+    const [navItemHovered, setIsNavItemHovered] = createSignal<string | null>(null);
+
+    function toggleNavItemHover(part: string | null = null) {
+      setIsNavItemHovered(part);
+    }
+
+    return (
+      <ul>
+        <Index each={PARTS}>
+          {(part, index) => (
+            <li>
+              <Button
+                variant="text"
+                class={mergeCls(
+                  "duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500",
+                  {
+                    "bg-surface-400 font-bold": currentPart() === index,
+                  },
+                )}
+                disabled={!isNextPartAvailable(index)}
+                onClick={() => onPartClicked(index)}
+                onMouseEnter={() => toggleNavItemHover(part().label)}
+                onMouseLeave={() => toggleNavItemHover()}
+              >
+                <span class="flex items-center gap-2">
+                  <Icon
+                    icon={part().icon}
+                    class="size-3"
+                    fillColor={navItemHovered() === part().label ? "black" : "white"}
+                  />
+                  {translate(part().label)}
+                </span>
+              </Button>
+            </li>
+          )}
+        </Index>
+      </ul>
+    );
+  }
 }

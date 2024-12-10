@@ -32,11 +32,16 @@ export default function Wallpaper(props: Props) {
   }
 
   function handleMouseMove(event: MouseEvent) {
-    if (animationFrameId || document.body.clientWidth <= 992) return;
+    if (document.body.clientWidth <= 992) {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      return;
+    }
 
     animationFrameId = requestAnimationFrame(() => {
       setStyle({ backgroundPosition: AnimationHelper.moveBackgroundPositionOnMouseMove(event, 20) });
-      animationFrameId = null;
+      onCleanup(() => {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      });
     });
   }
 

@@ -1,23 +1,27 @@
 import { navigate } from "astro:transitions/client";
 import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
+import { ArrayExtensions } from "~/core/acore-ts/data/array/ArrayExtensions";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { Icons } from "~/domain/data/Icons";
 import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
+import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
+import Dropdown, { type DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function TaskbarView() {
-  const windowsService = createMemo(() => Container.instance.windowsService);
-  const appsService = createMemo(() => Container.instance.appsService);
+  const windowsService = Container.instance.windowsService;
+  const appsService = Container.instance.appsService;
 
   const translate = useI18n();
 
   const [windows, setWindows] = createSignal<Window[]>([]);
 
-  windowsService().subscribe(onWindowsChange);
+  windowsService.subscribe(onWindowsChange);
 
   onCleanup(() => {
-    windowsService().unsubscribe(onWindowsChange);
+    windowsService.unsubscribe(onWindowsChange);
   });
 
   function onWindowsChange(windows: Window[]) {
@@ -25,30 +29,63 @@ export default function TaskbarView() {
   }
 
   async function onClickTaskView(window: Window) {
-    if (windowsService().isActivated(window)) windowsService().minimize(window);
+    if (windowsService.isActivated(window)) windowsService.minimize(window);
     else {
-      windowsService().active(window);
-      const app = await appsService().get((a) => a.id === window.appId);
+      windowsService.active(window);
+      const app = await appsService.get((a) => a.id === window.appId);
       if (app) navigate(app.path);
     }
   }
 
   return (
     <Show when={windows().length > 0}>
-      <div class="flex gap-2">
-        <For each={windows()}>
-          {(window) => (
-            <Button
-              class={mergeCls("h-8 text-xs", {
-                "bg-slate-200 hover:bg-slate-300": windowsService().isActivated(window),
-              })}
-              onClick={() => onClickTaskView(window)}
-            >
-              {translate(window.title)}
-            </Button>
-          )}
-        </For>
-      </div>
+      <span class="hidden select-none items-center gap-2 sm:flex">
+        <For each={windows()}>{(window) => <TaskViewButton window={window} />}</For>
+      </span>
+
+      <span class="flex select-none items-center gap-2 sm:hidden">
+        <MiniTaskView />
+      </span>
     </Show>
   );
+
+  function MiniTaskView() {
+    const topWindow = createMemo(() =>
+      windows().some((w) => w.layer) ? ArrayExtensions.maxBy(windows(), (x) => x.layer)! : windows()[0],
+    );
+    const otherWindows = createMemo(() => windows().filter((w) => w.id !== topWindow().id));
+
+    return (
+      <>
+        <TaskViewButton window={topWindow()} />
+        <Show when={otherWindows().length > 0}>
+          <Dropdown
+            menuItems={otherWindows().map(
+              (window) =>
+                ({
+                  text: window.title,
+                  onClick: () => onClickTaskView(window),
+                }) as DropdownItem,
+            )}
+            buttonClass="h-8 text-xs w-8"
+          >
+            <Icon icon={Icons.downArrow} class="size-4" />
+          </Dropdown>
+        </Show>
+      </>
+    );
+  }
+
+  function TaskViewButton(props: { window: Window }) {
+    return (
+      <Button
+        class={mergeCls("h-8 w-16 text-xs", {
+          "bg-surface-300 hover:bg-surface-200": windowsService.isActivated(props.window),
+        })}
+        onClick={() => onClickTaskView(props.window)}
+      >
+        {translate(props.window.title)}
+      </Button>
+    );
+  }
 }

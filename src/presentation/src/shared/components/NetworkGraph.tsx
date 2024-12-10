@@ -24,10 +24,10 @@ type State = {
 };
 
 const layoutSettings = {
-  repulsionForce: 10,
+  repulsionForce: 50,
   attractionForce: 0.1,
   distanceThreshold: 100,
-  minAttractionDistance: 100,
+  minAttractionDistance: 150,
   springForce: 0.005,
   initialAnimationSpeed: 25,
   minAnimationSpeed: 5,
@@ -279,7 +279,9 @@ export default function NetworkGraph(props: Props) {
 
         canvasContext!.beginPath();
         canvasContext!.moveTo(sourceNode.x, sourceNode.y);
-        canvasContext!.strokeStyle = "gray";
+        if (state().nodeDragging?.id === node.id || state().nodeDragging?.id === edgeTargetNodeId)
+          canvasContext!.strokeStyle = "yellow";
+        else canvasContext!.strokeStyle = "gray";
         canvasContext!.lineWidth = 1;
         canvasContext!.lineTo(targetNode.x, targetNode.y);
         canvasContext!.stroke();

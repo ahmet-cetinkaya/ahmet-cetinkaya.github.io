@@ -1,11 +1,13 @@
 import { navigate } from "astro:transitions/client";
 import { createSignal, onMount, Show } from "solid-js";
-import { Locales, locales } from "~/domain/data/Translations";
+import { Locales, locales, TranslationKeys } from "~/domain/data/Translations";
 import { Container } from "~/presentation/Container";
 import Button from "~/presentation/src/shared/components/ui/Button";
+import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function ChangeLocale() {
   const i18n = Container.instance.i18n;
+  const translate = useI18n();
 
   const [currentLanguage, setCurrentLocale] = createSignal<string | undefined>();
 
@@ -45,7 +47,12 @@ export default function ChangeLocale() {
 
   return (
     <Show when={currentLanguage()}>
-      <Button ref={initLocale} onClick={onChanged} variant="text">
+      <Button
+        ref={initLocale}
+        onClick={onChanged}
+        variant="text"
+        ariaLabel={`${translate(TranslationKeys.desktop_change_locale)}: ${currentLanguage()}`}
+      >
         {currentLanguage()!.toUpperCase()}
       </Button>
     </Show>

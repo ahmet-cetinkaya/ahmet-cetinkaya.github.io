@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import { ArrayExtensions } from "~/core/acore-ts/data/array/ArrayExtensions";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { Icons } from "~/domain/data/Icons";
+import { TranslationKeys } from "~/domain/data/Translations";
 import { Window } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
@@ -68,6 +69,7 @@ export default function TaskbarView() {
                 }) as DropdownItem,
             )}
             buttonClass="h-8 text-xs w-8"
+            ariaLabel={translate(TranslationKeys.desktop_taskbar_other_windows_menu)}
           >
             <Icon icon={Icons.downArrow} class="size-4" />
           </Dropdown>
@@ -79,10 +81,12 @@ export default function TaskbarView() {
   function TaskViewButton(props: { window: Window }) {
     return (
       <Button
+        onClick={() => onClickTaskView(props.window)}
         class={mergeCls("h-8 w-16 text-xs", {
           "bg-surface-300 hover:bg-surface-200": windowsService.isActivated(props.window),
         })}
-        onClick={() => onClickTaskView(props.window)}
+        variant="primary"
+        ariaLabel={translate(props.window.title)}
       >
         {translate(props.window.title)}
       </Button>

@@ -19,6 +19,7 @@ type Props = {
   menuItems: DropdownItem[];
   children: JSX.Element;
   buttonClass?: string;
+  ariaLabel: string;
 };
 
 export default function Dropdown(props: Props) {
@@ -52,7 +53,7 @@ export default function Dropdown(props: Props) {
   return (
     <div id={id()} class="ac-dropdown relative inline-block text-left">
       <div class="flex size-full items-center justify-center">
-        <Button type="button" onClick={onToggleDropdown} class={props.buttonClass}>
+        <Button type="button" onClick={onToggleDropdown} class={props.buttonClass} ariaLabel={props.ariaLabel} variant="primary">
           {props.children}
         </Button>
       </div>
@@ -98,13 +99,19 @@ export default function Dropdown(props: Props) {
 
     if (props.item.href)
       return (
-        <Link href={props.item.href} onClick={onClick} class={classes} variant="link">
+        <Link
+          href={props.item.href}
+          onClick={onClick}
+          class={classes}
+          variant="link"
+          ariaLabel={translate(props.item.text)}
+        >
           {renderMenuItem(props.item)}
         </Link>
       );
     else
       return (
-        <Button onClick={onClick} class={classes} variant="link">
+        <Button onClick={onClick} class={classes} variant="link" ariaLabel={translate(props.item.text)}>
           {renderMenuItem(props.item)}
         </Button>
       );

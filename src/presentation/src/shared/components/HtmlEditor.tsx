@@ -44,15 +44,51 @@ export default function HtmlEditor(props: Props) {
   return (
     <section class={mergeCls(props.class)}>
       <header class={mergeCls("mb-2 flex border-b border-surface-300 p-2", props.toolbarClass)}>
-        <ToolbarButton icon={Icons.bold} onClick={() => editorInstance!.formatText("b")} />
-        <ToolbarButton icon={Icons.underline} onClick={() => editorInstance!.formatText("u")} />
-        <ToolbarButton icon={Icons.italic} onClick={() => editorInstance!.formatText("i")} />
-        <ToolbarButton icon={Icons.heading1} onClick={() => editorInstance!.formatText("h1")} />
-        <ToolbarButton icon={Icons.heading2} onClick={() => editorInstance!.formatText("h2")} />
-        <ToolbarButton icon={Icons.unorderedList} onClick={() => editorInstance!.formatText("ul")} />
-        <ToolbarButton icon={Icons.orderedList} onClick={() => editorInstance!.formatText("ol")} />
-        <ToolbarButton icon={Icons.link} onClick={() => editorInstance!.formatText("a")} />
-        <ToolbarButton icon={Icons.formatClear} onClick={() => editorInstance!.clearFormat()} />
+        <ToolbarButton
+          icon={Icons.bold}
+          onClick={() => editorInstance!.formatText("b")}
+          ariaLabel={translate(TranslationKeys.common_bold)}
+        />
+        <ToolbarButton
+          icon={Icons.underline}
+          onClick={() => editorInstance!.formatText("u")}
+          ariaLabel={translate(TranslationKeys.common_underline)}
+        />
+        <ToolbarButton
+          icon={Icons.italic}
+          onClick={() => editorInstance!.formatText("i")}
+          ariaLabel={translate(TranslationKeys.common_italic)}
+        />
+        <ToolbarButton
+          icon={Icons.heading1}
+          onClick={() => editorInstance!.formatText("h1")}
+          ariaLabel={translate(TranslationKeys.common_header1)}
+        />
+        <ToolbarButton
+          icon={Icons.heading2}
+          onClick={() => editorInstance!.formatText("h2")}
+          ariaLabel={translate(TranslationKeys.common_header2)}
+        />
+        <ToolbarButton
+          icon={Icons.unorderedList}
+          onClick={() => editorInstance!.formatText("ul")}
+          ariaLabel={translate(TranslationKeys.common_unordered_list)}
+        />
+        <ToolbarButton
+          icon={Icons.orderedList}
+          onClick={() => editorInstance!.formatText("ol")}
+          ariaLabel={TranslationKeys.common_ordered_list}
+        />
+        <ToolbarButton
+          icon={Icons.link}
+          onClick={() => editorInstance!.formatText("a")}
+          ariaLabel={TranslationKeys.common_hyperlink}
+        />
+        <ToolbarButton
+          icon={Icons.formatClear}
+          onClick={() => editorInstance!.clearFormat()}
+          ariaLabel={TranslationKeys.common_clear_format}
+        />
       </header>
       <div
         class={mergeCls(
@@ -64,12 +100,12 @@ export default function HtmlEditor(props: Props) {
       </div>
     </section>
   );
-}
 
-function ToolbarButton(props: { icon: Icons; onClick: () => void }) {
-  return (
-    <Button variant="text" onClick={props.onClick} size="small">
-      <Icon icon={props.icon} class="size-4" />
-    </Button>
-  );
+  function ToolbarButton(props: { icon: Icons; ariaLabel: string; onClick: () => void }) {
+    return (
+      <Button variant="text" onClick={props.onClick} size="small" ariaLabel={props.ariaLabel}>
+        <Icon icon={props.icon} class="size-4" />
+      </Button>
+    );
+  }
 }

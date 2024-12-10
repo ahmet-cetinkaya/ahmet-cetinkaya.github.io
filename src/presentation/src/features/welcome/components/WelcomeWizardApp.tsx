@@ -125,12 +125,28 @@ export default function WelcomeWizardApp() {
         </Show>
 
         <footer class="mb-2 me-2 flex flex-row-reverse justify-start gap-2">
-          <Button onClick={onNextPart} class="w-16" size="small" disabled={isWarnedForConfirm() && !isAboutConfirmed()}>
+          <Button
+            onClick={onNextPart}
+            class="w-16"
+            size="small"
+            disabled={isWarnedForConfirm() && !isAboutConfirmed()}
+            ariaLabel={
+              currentPart() < PARTS.length - 1
+                ? translate(TranslationKeys.common_next)
+                : translate(TranslationKeys.apps_welcome_finish)
+            }
+          >
             {currentPart() < PARTS.length - 1
               ? translate(TranslationKeys.common_next)
               : translate(TranslationKeys.apps_welcome_finish)}
           </Button>
-          <Button onClick={onPrevPart} class="w-16" disabled={currentPart() === 0} size="small">
+          <Button
+            onClick={onPrevPart}
+            class="w-16"
+            disabled={currentPart() === 0}
+            size="small"
+            ariaLabel={translate(TranslationKeys.common_prev)}
+          >
             {translate(TranslationKeys.common_prev)}
           </Button>
         </footer>
@@ -162,6 +178,7 @@ export default function WelcomeWizardApp() {
                 onClick={() => onPartClicked(index)}
                 onMouseEnter={() => toggleNavItemHover(part().label)}
                 onMouseLeave={() => toggleNavItemHover()}
+                ariaLabel={translate(part().label)}
               >
                 <span class="flex items-center gap-2">
                   <Icon

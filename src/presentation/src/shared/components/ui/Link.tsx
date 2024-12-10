@@ -11,6 +11,7 @@ type LinkVariant = keyof typeof linkVariantClassNames;
 type Props = {
   href: string;
   children: JSX.Element;
+  ariaLabel: string;
   draggable?: boolean;
   variant?: LinkVariant;
   class?: string;
@@ -33,7 +34,7 @@ export default function Link(props: Props) {
       )}
       target={props.target}
       rel={props.rel}
-      aria-label={props.children?.toString()}
+      aria-label={props.ariaLabel}
     >
       {props.children}
     </a>

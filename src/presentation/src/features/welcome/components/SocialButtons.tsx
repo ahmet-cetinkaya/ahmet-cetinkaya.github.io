@@ -1,8 +1,9 @@
 import { createSignal, Index, onMount } from "solid-js";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
-import type { Link } from "~/domain/models/Link";
+import type { Link as LinkModel } from "~/domain/models/Link";
 import { Container } from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
+import Link from "~/presentation/src/shared/components/ui/Link";
 
 type Props = {
   class?: string;
@@ -10,7 +11,7 @@ type Props = {
 
 export default function SocialButtons(props: Props) {
   const linksService = Container.instance.linksService;
-  const [socialLinks, setSocialLinks] = createSignal<Link[]>([]);
+  const [socialLinks, setSocialLinks] = createSignal<LinkModel[]>([]);
 
   onMount(() => {
     getSocialLinks();
@@ -25,9 +26,9 @@ export default function SocialButtons(props: Props) {
     <div class={mergeCls("flex gap-4", props.class)}>
       <Index each={socialLinks()}>
         {(socialLink) => (
-          <a href={socialLink().url} target="_blank" rel="noopener noreferrer">
+          <Link href={socialLink().url} target="_blank" rel="noopener noreferrer" ariaLabel={socialLink().name} variant="text">
             <Icon icon={socialLink().icon} class="size-6" fillColor="white" />
-          </a>
+          </Link>
         )}
       </Index>
     </div>

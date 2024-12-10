@@ -58,7 +58,7 @@ export default function EmailApp() {
         <EmailForm />
 
         <div class="flex justify-end pe-4">
-          <Button type="button" onClick={onEmailSend} class="w-28">
+          <Button type="button" onClick={onEmailSend} class="w-28" ariaLabel={translate(TranslationKeys.common_send)}>
             <div class="flex items-center justify-center gap-2">
               <Icon icon={Icons.send} class="size-4" />
               {translate(TranslationKeys.common_send)}
@@ -97,6 +97,7 @@ export default function EmailApp() {
               <Button
                 variant="text"
                 class="duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500"
+                ariaLabel={translate(folder().label)}
               >
                 <span class="flex items-center gap-2">
                   <Icon icon={folder().icon} class="size-3" />

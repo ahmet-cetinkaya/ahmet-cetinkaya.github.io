@@ -1,7 +1,7 @@
 import AnimationHelper from "~/core/acore-ts/ui/animation/AnimationHelper";
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, onCleanup, onMount, Show } from "solid-js";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
-import DesktopImages from "../assets/images";
+import DesktopImages from "../constants/Images";
 import ImageScaleVariants from "~/presentation/src/shared/models/ImageScaleVariants";
 
 type Props = {
@@ -63,22 +63,24 @@ export default function Wallpaper(props: Props) {
   }
 
   return (
-    <div class={mergeCls("relative size-full overflow-hidden", props.class)}>
-      <span
-        class="absolute -z-50 size-full bg-cover bg-right-top bg-repeat"
-        style={{
-          "background-image": `url('${getBackgroundImage(2)}')`,
-          "background-position": style().backgroundPosition,
-        }}
-      />
-      <div class="mt-96">
+    <Show when={selectedImageVariant() !== undefined}>
+      <div class={mergeCls("relative size-full overflow-hidden", props.class)}>
         <span
-          class="absolute -z-40 size-full bg-cover bg-bottom bg-no-repeat"
+          class="absolute -z-50 size-full bg-cover bg-right-top bg-repeat"
           style={{
-            "background-image": `url('${getBackgroundImage(1)}')`,
+            "background-image": `url('${getBackgroundImage(2)}')`,
+            "background-position": style().backgroundPosition,
           }}
         />
+        <div class="mt-96">
+          <span
+            class="absolute -z-40 size-full bg-cover bg-bottom bg-no-repeat"
+            style={{
+              "background-image": `url('${getBackgroundImage(1)}')`,
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </Show>
   );
 }

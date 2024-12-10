@@ -51,7 +51,12 @@ export default function LessViewContent(props: Props) {
       </div>
 
       <Show when={!expanded() && isContentOverflowing()}>
-        <Button onClick={() => setExpanded(true)} class="mt-2" variant="text">
+        <Button
+          onClick={() => setExpanded(true)}
+          class="mt-2"
+          variant="text"
+          ariaLabel={translate(TranslationKeys.common_show_more)}
+        >
           {translate(TranslationKeys.common_show_more)}
         </Button>
       </Show>

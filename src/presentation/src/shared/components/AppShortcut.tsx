@@ -24,6 +24,7 @@ export default function AppShortcut(props: Props) {
       onDragStart={props.onDragStart}
       class={mergeCls("flex size-full flex-col items-center justify-center hover:text-gray-400", props.class)}
       variant="text"
+      ariaLabel={translate(props.label)}
     >
       <figure class="size-full max-h-20">
         <picture class="size-full">{props.icon}</picture>

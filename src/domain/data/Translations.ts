@@ -61,13 +61,25 @@ export enum TranslationKeys {
 
   //#region Common
   common_apps = "common_apps",
+  common_bold = "common_bold",
+  common_clear_format = "common_clear_format",
+  common_close = "common_close",
   common_contact = "common_contact",
   common_email = "common_email",
+  common_header1 = "common_header1",
+  common_header2 = "common_header2",
+  common_hyperlink = "common_hyperlink",
+  common_italic = "common_italic",
+  common_maximize = "common_maximize",
+  common_menu = "common_menu",
   common_next = "common_next",
+  common_ordered_list = "common_ordered_list",
   common_prev = "common_prev",
   common_send = "common_send",
   common_show_more = "common_show_more",
   common_system = "common_system",
+  common_underline = "common_underline",
+  common_unordered_list = "common_unordered_list",
   //#endregion
 
   //#region Curriculum Vitae
@@ -78,6 +90,12 @@ export enum TranslationKeys {
   curriculum_vitae_intern = "curriculum_vitae_intern",
   curriculum_vitae_software_developer = "curriculum_vitae_software_developer",
   curriculum_vitae_software_developer_and_instructor = "curriculum_vitae_software_developer_and_instructor",
+  //#endregion
+
+  //#region Desktop
+  desktop_minimize = "desktop_minimize",
+  desktop_change_locale = "desktop_change_locale",
+  desktop_taskbar_other_windows_menu = "desktop_taskbar_other_windows_menu",
   //#endregion
 
   //#region Educations
@@ -238,7 +256,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "Kurulum",
   },
   //#endregion
-
   //#region Certifications
   [TranslationKeys.certificates_1_description_markdown]: {
     en: `- **Web Development**: Modern techniques, principles
@@ -595,7 +612,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "AWS Bulut Uygulayıcı Temelleri",
   },
   //#endregion
-
   //#region Common
   [TranslationKeys.common_apps]: {
     en: "Apps",
@@ -629,8 +645,55 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     en: "System",
     tr: "Sistem",
   },
+  [TranslationKeys.common_bold]: {
+    en: "Bold",
+    tr: "Kalın",
+  },
+  [TranslationKeys.common_clear_format]: {
+    en: "Clear format",
+    tr: "Formatı temizle",
+  },
+  [TranslationKeys.common_close]: {
+    en: "Close",
+    tr: "Kapat",
+  },
+  [TranslationKeys.common_header1]: {
+    en: "Header 1",
+    tr: "Başlık 1",
+  },
+  [TranslationKeys.common_header2]: {
+    en: "Header 2",
+    tr: "Başlık 2",
+  },
+  [TranslationKeys.common_hyperlink]: {
+    en: "Hyperlink",
+    tr: "Bağlantı",
+  },
+  [TranslationKeys.common_italic]: {
+    en: "Italic",
+    tr: "İtalik",
+  },
+  [TranslationKeys.common_maximize]: {
+    en: "Maximize",
+    tr: "Maksimize",
+  },
+  [TranslationKeys.common_menu]: {
+    en: "Menu",
+    tr: "Menü",
+  },
+  [TranslationKeys.common_ordered_list]: {
+    en: "Ordered List",
+    tr: "Sıralı Liste",
+  },
+  [TranslationKeys.common_underline]: {
+    en: "Underline",
+    tr: "Altı Çizili",
+  },
+  [TranslationKeys.common_unordered_list]: {
+    en: "Unordered List",
+    tr: "Sırasız Liste",
+  },
   //#endregion
-
   //#region Curriculum Vitae
   [TranslationKeys.curriculum_vitae_1_description_markdown]: {
     en: `- Various software projects analysis and development`,
@@ -675,7 +738,20 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "Yazılım Geliştirici ve Eğitmen",
   },
   //#endregion
-
+  //#region Desktop
+  [TranslationKeys.desktop_minimize]: {
+    en: "Minimize",
+    tr: "Küçült",
+  },
+  [TranslationKeys.desktop_change_locale]: {
+    en: "Change Locale",
+    tr: "Dili Değiştir",
+  },
+  [TranslationKeys.desktop_taskbar_other_windows_menu]: {
+    en: "Other windows menu",
+    tr: "Diğer pencereler menüsü",
+  },
+  //#endregion
   //#region Educations
   [TranslationKeys.educations_1_department]: {
     en: "STEM (Science, Technology, Engineering, Mathematics)",
@@ -696,7 +772,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Çeşitli birçok proje...`,
   },
   //#endregion
-
   //#region Links
   [TranslationKeys.links_github]: {
     en: "Github",
@@ -723,7 +798,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "X",
   },
   //#endregion
-
   //#region Organizations
   [TranslationKeys.organizations_ahmet_cetinkaya]: {
     en: "Ahmet Çetinkaya (Freelance)",
@@ -761,7 +835,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     en: "Udemy",
     tr: "Udemy",
   },
-  //#endregion
 };
 //#endregion
 

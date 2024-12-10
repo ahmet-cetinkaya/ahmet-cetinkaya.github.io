@@ -20,6 +20,7 @@ type ButtonSize = keyof typeof buttonSizeClassNames;
 
 type Props = {
   children: JSX.Element;
+  ariaLabel: string;
   type?: ButtonType;
   variant?: ButtonVariant;
   class?: string;
@@ -30,18 +31,10 @@ type Props = {
   onMouseLeave?: (e: MouseEvent) => void;
 };
 
-const defaultProps: Props = {
-  children: <></>,
-  type: "button",
-  variant: "primary",
-  size: "medium",
-};
-
 export default function Button(props: Props) {
-  if (!props.children) props.children = defaultProps.children;
-  if (!props.variant) props.variant = defaultProps.variant;
-  if (!props.size) props.size = defaultProps.size;
-  if (!props.type) props.type = defaultProps.type;
+  if (!props.variant) props.variant = "text";
+  if (!props.size) props.size = "medium";
+  if (!props.type) props.type = "button";
 
   return (
     <button
@@ -59,6 +52,7 @@ export default function Button(props: Props) {
       onClick={props.onClick}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
+      aria-label={props.ariaLabel}
     >
       <span onClick={(event) => event.stopPropagation()} class={"pointer-events-none"}>
         {props.children}

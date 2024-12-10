@@ -4,11 +4,13 @@ import { createSignal, onMount } from "solid-js";
 import { Position } from "~/core/acore-ts/ui/models/Position";
 import type { Size } from "~/core/acore-ts/ui/models/Size";
 import { Icons } from "~/domain/data/Icons";
+import { TranslationKeys } from "~/domain/data/Translations";
 import { Window as WindowModel } from "~/domain/models/Window";
 import { Container } from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
+import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 
 type Props = {
   window: WindowModel;
@@ -18,6 +20,7 @@ type Props = {
 export default function Window(props: Props) {
   const windowsService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
+  const translate = useI18n();
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
   const [path, setPath] = createSignal<string>("");
@@ -88,7 +91,12 @@ export default function Window(props: Props) {
     <Modal
       title={props.window.title}
       customHeaderButtons={
-        <Button onClick={onMinimize} variant="text" size="small">
+        <Button
+          onClick={onMinimize}
+          variant="text"
+          size="small"
+          ariaLabel={translate(TranslationKeys.desktop_minimize)}
+        >
           <Icon icon={Icons.minimize} class="size-4" />
         </Button>
       }

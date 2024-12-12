@@ -1,9 +1,9 @@
 import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
-import type { Icons } from "../data/Icons";
+import type Icons from "../data/Icons";
 
 export type TechnologyId = number;
 
-export class Technology extends Entity<TechnologyId> {
+export default class Technology extends Entity<TechnologyId> {
   constructor(
     id: TechnologyId,
     public name: string,

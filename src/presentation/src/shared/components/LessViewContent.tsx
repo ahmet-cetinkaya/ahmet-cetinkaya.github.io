@@ -1,4 +1,4 @@
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, createMemo, createEffect, onCleanup } from "solid-js";
 import type { JSX } from "solid-js/jsx-runtime";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import useI18n from "../utils/i18nTranslate";
@@ -19,14 +19,24 @@ export default function LessViewContent(props: Props) {
   const [expanded, setExpanded] = createSignal(false);
   const [contentHeight, setContentHeight] = createSignal(0);
 
-  function onContentMount(el: HTMLDivElement) {
-    requestAnimationFrame(() => setContentHeight(el.scrollHeight));
-  }
-
-  function isContentOverflowing() {
+  const isContentOverflowing = createMemo(() => {
     const limit = props.heightLimit || DEFAULT_HEIGHT_LIMIT;
     return contentHeight() > limit;
+  });
+  const maxHeightStyle = createMemo(() => ({
+    "max-height": expanded() ? "none" : props.heightLimit ? `${props.heightLimit}px` : `${DEFAULT_HEIGHT_LIMIT}px`,
+  }));
+
+  function onContentMount(el: HTMLDivElement) {
+    const updateHeight = () => setContentHeight(el.scrollHeight);
+    requestAnimationFrame(updateHeight);
+    window.addEventListener("resize", updateHeight);
+    onCleanup(() => window.removeEventListener("resize", updateHeight));
   }
+
+  createEffect(() => {
+    if (expanded()) setContentHeight(contentHeight());
+  });
 
   return (
     <div class={mergeCls("relative", props.containerClass)}>
@@ -35,13 +45,7 @@ export default function LessViewContent(props: Props) {
         class={mergeCls("relative overflow-hidden transition-all duration-500 ease-in-out", {
           "max-h-full": expanded(),
         })}
-        style={{
-          "max-height": expanded()
-            ? "none"
-            : props.heightLimit
-              ? `${props.heightLimit}px`
-              : `${DEFAULT_HEIGHT_LIMIT}px`,
-        }}
+        style={maxHeightStyle()}
       >
         {props.children}
 

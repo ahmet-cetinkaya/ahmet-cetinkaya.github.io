@@ -1,5 +1,5 @@
-import { Organization } from "../models/Organization";
-import { Icons } from "./Icons";
+import Organization from "../models/Organization";
+import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";
 
 export enum Organizations {
@@ -12,7 +12,7 @@ export enum Organizations {
   amazonWebService,
 }
 
-export const OrganizationsData = [
+const OrganizationsData = [
   {
     id: Organizations.antalyaKaratayAnatolianHighSchool,
     name: TranslationKeys.organizations_antalya_karatay_anatolian_high_school,
@@ -70,3 +70,4 @@ export const OrganizationsData = [
     createdDate: new Date("2024-12-03"),
   },
 ] as Organization[];
+export default OrganizationsData;

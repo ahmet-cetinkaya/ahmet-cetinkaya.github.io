@@ -1,8 +1,8 @@
-import type { CurriculumVitae } from "../models/CurriculumVitae";
+import type CurriculumVitae from "../models/CurriculumVitae";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 
-export const CurriculumVitaeData = [
+const CurriculumVitaeData = [
   {
     id: 1,
     organizationId: Organizations.ahmetcetinkaya,
@@ -30,3 +30,4 @@ export const CurriculumVitaeData = [
     descriptionMarkdown: TranslationKeys.curriculum_vitae_3_description_markdown,
   },
 ] as CurriculumVitae[];
+export default CurriculumVitaeData;

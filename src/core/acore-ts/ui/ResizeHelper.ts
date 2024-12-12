@@ -1,6 +1,6 @@
-import type { Size } from "./models/Size";
+import type Size from "./models/Size";
 
-export class ResizeHelper {
+export default class ResizeHelper {
   static makeResizableElement(
     element: HTMLElement,
     options: {

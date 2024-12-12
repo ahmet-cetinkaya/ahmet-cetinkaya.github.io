@@ -1,7 +1,7 @@
 import type { Offset } from "./models/Offset";
-import { Position } from "./models/Position";
+import Position from "./models/Position";
 
-export class DragHelper {
+export default class DragHelper {
   static makeDraggableElement(
     element: HTMLElement,
     options: {

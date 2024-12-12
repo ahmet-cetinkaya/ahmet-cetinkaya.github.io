@@ -1,64 +1,37 @@
-import { createEffect, createSignal } from "solid-js";
+import type { JSX } from "solid-js/jsx-runtime";
 
 type Props = {
   src: string;
   alt: string;
+  srcset?: string;
+  sizes?: string;
   width?: number | string;
   height?: number | string;
-  sizes?: string;
-  srcset?: string;
   loading?: "lazy" | "eager";
   decoding?: "auto" | "async" | "sync";
+  isExternal?: boolean;
+  class?: string;
+  style?: JSX.CSSProperties;
 };
 
 export default function Image(props: Props) {
-  const [image, setImage] = createSignal<{
-    src: string;
-    attributes: {
-      sizes?: string;
-      srcset?: string;
-      loading: "lazy" | "eager";
-      decoding: "auto" | "async" | "sync";
-      alt: string;
-    };
-  } | null>(null);
-
-  createEffect(() => {
-    if (!props.alt) {
-      throw new Error("Alt attribute is required");
-    }
-
-    const width = typeof props.width === "string" ? parseInt(props.width) : props.width;
-    const height = typeof props.height === "string" ? parseInt(props.height) : props.height;
-    const loading = props.loading && ["lazy", "eager"].includes(props.loading) ? props.loading : "lazy";
-    const decoding = props.decoding && ["auto", "async", "sync"].includes(props.decoding) ? props.decoding : "async";
-
-    setImage({
-      src: props.src,
-      width,
-      height,
-      attributes: {
-        sizes: props.sizes,
-        srcset: props.srcset,
-        loading,
-        decoding,
-        alt: props.alt,
-      },
-    });
-  });
+  if (!props.loading) props.loading = "lazy";
+  if (!props.decoding) props.decoding = "async";
 
   return (
-    <>
-      {image() && (
-        <img
-          src={image()!.src}
-          height={props.height}
-          width={props.width}
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-          {...image()!.attributes}
-        />
-      )}
-    </>
+    <img
+      src={props.src}
+      srcset={props.srcset}
+      height={props.height}
+      width={props.width}
+      class={props.class}
+      sizes={props.sizes}
+      loading={props.loading}
+      decoding={props.decoding}
+      alt={props.alt}
+      crossorigin={props.isExternal ? "anonymous" : undefined}
+      referrerpolicy={props.isExternal ? "no-referrer" : undefined}
+      style={props.style}
+    />
   );
 }

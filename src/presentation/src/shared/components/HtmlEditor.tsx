@@ -1,25 +1,38 @@
-import { onCleanup } from "solid-js";
+import { onCleanup, createMemo, createEffect, Index } from "solid-js";
 import Button from "./ui/Button";
 import Icon from "./Icon";
-import { Icons } from "~/domain/data/Icons";
-import HtmlEditorManager from "~/core/acore-ts/ui/HtmlEditorManager";
+import Icons from "~/domain/data/Icons";
+import HtmlEditorManager, { type FormatType } from "~/core/acore-ts/ui/HtmlEditorManager";
 import useI18n from "../utils/i18nTranslate";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
 export type Props = {
   class?: string;
-  toolbarClass?: string;
   inputClass?: string;
   onInput?: (html: string) => void;
+  toolbarClass?: string;
 };
 
 export default function HtmlEditor(props: Props) {
   const i18n: II18n = Container.instance.i18n;
-  let editorInstance: HtmlEditorManager | undefined;
   const translate = useI18n();
+
+  let editorInstance: HtmlEditorManager | undefined;
+
+  const toolbarButtons = createMemo(() => [
+    { icon: Icons.bold, format: "b", label: TranslationKeys.common_bold },
+    { icon: Icons.underline, format: "u", label: TranslationKeys.common_underline },
+    { icon: Icons.italic, format: "i", label: TranslationKeys.common_italic },
+    { icon: Icons.heading1, format: "h1", label: TranslationKeys.common_header1 },
+    { icon: Icons.heading2, format: "h2", label: TranslationKeys.common_header2 },
+    { icon: Icons.unorderedList, format: "ul", label: TranslationKeys.common_unordered_list },
+    { icon: Icons.orderedList, format: "ol", label: TranslationKeys.common_ordered_list },
+    { icon: Icons.link, format: "a", label: TranslationKeys.common_hyperlink },
+    { icon: Icons.formatClear, format: "", label: TranslationKeys.common_clear_format, clear: true },
+  ]);
 
   function onEditorMount(editorElement: HTMLElement) {
     editorInstance = new HtmlEditorManager(editorElement, onEditorChange);
@@ -31,6 +44,10 @@ export default function HtmlEditor(props: Props) {
       i18n.currentLocale.unsubscribe(changeEditorUrlPromptText);
     });
   }
+
+  createEffect(() => {
+    changeEditorUrlPromptText();
+  });
 
   function changeEditorUrlPromptText() {
     if (!editorInstance) return;
@@ -44,51 +61,19 @@ export default function HtmlEditor(props: Props) {
   return (
     <section class={mergeCls(props.class)}>
       <header class={mergeCls("mb-2 flex border-b border-surface-300 p-2", props.toolbarClass)}>
-        <ToolbarButton
-          icon={Icons.bold}
-          onClick={() => editorInstance!.formatText("b")}
-          ariaLabel={translate(TranslationKeys.common_bold)}
-        />
-        <ToolbarButton
-          icon={Icons.underline}
-          onClick={() => editorInstance!.formatText("u")}
-          ariaLabel={translate(TranslationKeys.common_underline)}
-        />
-        <ToolbarButton
-          icon={Icons.italic}
-          onClick={() => editorInstance!.formatText("i")}
-          ariaLabel={translate(TranslationKeys.common_italic)}
-        />
-        <ToolbarButton
-          icon={Icons.heading1}
-          onClick={() => editorInstance!.formatText("h1")}
-          ariaLabel={translate(TranslationKeys.common_header1)}
-        />
-        <ToolbarButton
-          icon={Icons.heading2}
-          onClick={() => editorInstance!.formatText("h2")}
-          ariaLabel={translate(TranslationKeys.common_header2)}
-        />
-        <ToolbarButton
-          icon={Icons.unorderedList}
-          onClick={() => editorInstance!.formatText("ul")}
-          ariaLabel={translate(TranslationKeys.common_unordered_list)}
-        />
-        <ToolbarButton
-          icon={Icons.orderedList}
-          onClick={() => editorInstance!.formatText("ol")}
-          ariaLabel={TranslationKeys.common_ordered_list}
-        />
-        <ToolbarButton
-          icon={Icons.link}
-          onClick={() => editorInstance!.formatText("a")}
-          ariaLabel={TranslationKeys.common_hyperlink}
-        />
-        <ToolbarButton
-          icon={Icons.formatClear}
-          onClick={() => editorInstance!.clearFormat()}
-          ariaLabel={TranslationKeys.common_clear_format}
-        />
+        <Index each={toolbarButtons()}>
+          {(button) => (
+            <ToolbarButton
+              icon={button().icon}
+              onClick={() =>
+                button().clear
+                  ? editorInstance!.clearFormat()
+                  : editorInstance!.formatText(button().format as FormatType)
+              }
+              ariaLabel={translate(button().label)}
+            />
+          )}
+        </Index>
       </header>
       <div
         class={mergeCls(

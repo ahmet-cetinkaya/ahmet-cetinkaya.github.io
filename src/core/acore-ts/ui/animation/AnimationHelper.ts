@@ -1,12 +1,17 @@
+import Position from "../models/Position";
+
 export default class AnimationHelper {
-  static moveBackgroundPositionOnMouseMove(e: MouseEvent, movementStrength: number = 23): string {
+  static movePositionOnMouseMove(e: MouseEvent, movementStrength: number = 23): Position {
     const heightRatio = movementStrength / document.body.offsetHeight;
     const widthRatio = movementStrength / document.body.offsetWidth;
     const pageX = e.pageX - document.body.offsetWidth / 2;
     const pageY = e.pageY - document.body.offsetHeight / 2;
     const newValueX = widthRatio * pageX * -1;
     const newValueY = heightRatio * pageY * -1;
-    return `calc( 50% + ${newValueX}px ) calc( 50% + ${newValueY}px )`;
+    return {
+      top: newValueY,
+      left: newValueX,
+    } as Position;
   }
 
   static tiltElementOnMouseMove(e: MouseEvent, tiltStrength: number = 10): string {

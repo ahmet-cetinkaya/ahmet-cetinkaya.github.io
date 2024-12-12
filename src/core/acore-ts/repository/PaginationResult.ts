@@ -1,4 +1,4 @@
-export class PaginationResult<T> {
+export default class PaginationResult<T> {
   constructor(
     public readonly pageIndex: number,
     public readonly pageSize: number,

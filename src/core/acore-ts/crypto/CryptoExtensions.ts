@@ -1,4 +1,4 @@
-export class CryptoExtensions {
+export default class CryptoExtensions {
   public static generateNanoId(length: number = 8): string {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let id = "";

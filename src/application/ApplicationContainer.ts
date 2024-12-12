@@ -1,20 +1,20 @@
-import type { IAppsService } from "./features/app/services/abstraction/IAppsService";
-import { AppsService } from "./features/app/services/AppsService";
-import type { ICategoriesService } from "./features/categories/services/abstraction/ICategoriesService";
-import { CategoriesService } from "./features/categories/services/CategoriesService";
-import type { ICertificationsService } from "./features/certifications/services/abstraction/ICertificationsService";
+import type IAppsService from "./features/app/services/abstraction/IAppsService";
+import AppsService from "./features/app/services/AppsService";
+import type ICategoriesService from "./features/categories/services/abstraction/ICategoriesService";
+import CategoriesService from "./features/categories/services/CategoriesService";
+import type ICertificationsService from "./features/certifications/services/abstraction/ICertificationsService";
 import CertificationsService from "./features/certifications/services/CertificationsService";
-import type { ICurriculumVitaeService } from "./features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
+import type ICurriculumVitaeService from "./features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
 import CurriculumVitaeService from "./features/curriculumVitae/services/CurriculumVitaeService";
-import type { IWindowsService } from "./features/desktop/services/abstraction/IWindowsService";
-import { WindowsService } from "./features/desktop/services/WindowsService";
-import type { IEducationsService } from "./features/educations/services/abstraction/IEducationsService";
+import type IWindowsService from "./features/desktop/services/abstraction/IWindowsService";
+import WindowsService from "./features/desktop/services/WindowsService";
+import type IEducationsService from "./features/educations/services/abstraction/IEducationsService";
 import EducationsService from "./features/educations/services/EducationsService";
-import type { ILinksService } from "./features/links/abstraction/ILinksService";
-import { LinksService } from "./features/links/LinksService";
-import type { IOrganizationsService } from "./features/organizations/services/abstraction/IOrganizationsService";
+import type ILinksService from "./features/links/abstraction/ILinksService";
+import LinksService from "./features/links/LinksService";
+import type IOrganizationsService from "./features/organizations/services/abstraction/IOrganizationsService";
 import OrganizationsService from "./features/organizations/services/OrganizationsService";
-import type { ITechnologiesService } from "./features/technologies/services/abstraction/ITechnologiesService";
+import type ITechnologiesService from "./features/technologies/services/abstraction/ITechnologiesService";
 import TechnologiesService from "./features/technologies/services/TechnologiesService";
 
 export interface IApplicationContainer {
@@ -29,7 +29,7 @@ export interface IApplicationContainer {
   windowsService: IWindowsService;
 }
 
-export class ApplicationContainer implements IApplicationContainer {
+export default class ApplicationContainer implements IApplicationContainer {
   private _appsService: IAppsService | undefined = undefined;
   private _categoriesService: ICategoriesService | undefined = undefined;
   private _certificationsService: ICertificationsService | undefined = undefined;

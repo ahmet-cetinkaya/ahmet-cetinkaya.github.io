@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, onCleanup, onMount, createMemo, createEffect } from "solid-js";
 
 export type Node = {
   id: string;
@@ -49,10 +49,13 @@ export default function NetworkGraph(props: Props) {
     scale: 1,
   });
 
+  const memoizedNodes = createMemo(() => state().nodes);
+
   let containerElement: HTMLDivElement | undefined;
   let canvasElement: HTMLCanvasElement | undefined;
   let canvasContext: CanvasRenderingContext2D | null = null;
   let animationSpeed = layoutSettings.initialAnimationSpeed;
+  let animationFrameId: number | null = null;
 
   onMount(() => {
     initializeCanvas();
@@ -62,7 +65,12 @@ export default function NetworkGraph(props: Props) {
 
     onCleanup(() => {
       window.removeEventListener("resize", resizeCanvas);
+      if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
     });
+  });
+
+  createEffect(() => {
+    if (canvasElement) drawGraph();
   });
 
   function onCanvasMount(el: HTMLCanvasElement) {
@@ -82,10 +90,16 @@ export default function NetworkGraph(props: Props) {
   }
 
   function initializeCanvas() {
-    requestAnimationFrame(() => {
-      resizeCanvas();
-      requestAnimationFrame(drawGraph);
-    });
+    resizeCanvas();
+    startAnimationLoop();
+  }
+
+  function startAnimationLoop() {
+    const animate = () => {
+      drawGraph();
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    animationFrameId = requestAnimationFrame(animate);
   }
 
   function beginAnimationSpeedThrottling() {
@@ -135,7 +149,7 @@ export default function NetworkGraph(props: Props) {
         const testY = centerY + radius * Math.sin(testAngle);
 
         // Euclidean distance between nodes
-        if (!state().nodes.some((n) => Math.hypot(n.x! - testX, n.y! - testY) < 50)) {
+        if (!memoizedNodes().some((n) => Math.hypot(n.x! - testX, n.y! - testY) < 50)) {
           x = testX;
           y = testY;
           foundEmptySpot = true;
@@ -145,7 +159,7 @@ export default function NetworkGraph(props: Props) {
 
       // If no completely empty spot is found, use the existing logic to find a spot with some distance
       if (!foundEmptySpot) {
-        while (state().nodes.some((n) => Math.hypot(n.x! - x, n.y! - y) < 50)) {
+        while (memoizedNodes().some((n) => Math.hypot(n.x! - x, n.y! - y) < 50)) {
           radius += 10;
           x = centerX + radius * Math.cos(angle);
           y = centerY + radius * Math.sin(angle);
@@ -156,21 +170,21 @@ export default function NetworkGraph(props: Props) {
       node.y = y;
       positionedNodes.add(node.id);
 
-      const connectedNodes = state().nodes.filter((n) => n.edges && n.edges.includes(node.id));
+      const connectedNodes = memoizedNodes().filter((n) => n.edges && n.edges.includes(node.id));
       connectedNodes.forEach((connectedNode, connectedIndex) =>
         orderNodes(connectedNode, connectedNodes.length, connectedIndex, radius),
       );
     };
 
-    const nodesWithoutEdges = state().nodes.filter((n) => !n.edges || n.edges.length === 0);
+    const nodesWithoutEdges = memoizedNodes().filter((n) => !n.edges || n.edges.length === 0);
     nodesWithoutEdges.forEach((node, index) => orderNodes(node, nodesWithoutEdges.length, index, 200));
   }
 
   function applyRepulsionForces() {
     const { repulsionForce, distanceThreshold, visualizationOpacityFactor } = layoutSettings;
 
-    state().nodes.forEach((nodeA, indexA) => {
-      state().nodes.forEach((nodeB, indexB) => {
+    memoizedNodes().forEach((nodeA, indexA) => {
+      memoizedNodes().forEach((nodeB, indexB) => {
         if (indexA === indexB) return;
         if (nodeA.x === undefined || nodeA.y === undefined || nodeB.x === undefined || nodeB.y === undefined) return;
 
@@ -198,10 +212,10 @@ export default function NetworkGraph(props: Props) {
   function applyAttractionForces() {
     const { attractionForce, minAttractionDistance } = layoutSettings;
 
-    state().nodes.forEach((node) => {
+    memoizedNodes().forEach((node) => {
       if (!node.edges) return;
       node.edges.forEach((edgeTargetNodeId) => {
-        const targetNode = state().nodes.find((n) => n.id === edgeTargetNodeId);
+        const targetNode = memoizedNodes().find((n) => n.id === edgeTargetNodeId);
         if (
           !targetNode ||
           targetNode.x === undefined ||
@@ -231,7 +245,7 @@ export default function NetworkGraph(props: Props) {
   function applySpringForces() {
     const { springForce } = layoutSettings;
 
-    state().nodes.forEach((node) => {
+    memoizedNodes().forEach((node) => {
       if (node.targetX === undefined || node.targetY === undefined) return;
       if (node.x === undefined || node.y === undefined) return;
 
@@ -256,18 +270,16 @@ export default function NetworkGraph(props: Props) {
     drawNodes();
 
     canvasContext.restore();
-
-    requestAnimationFrame(drawGraph);
   }
 
   function drawEdges() {
-    state().nodes.forEach((node) => {
+    memoizedNodes().forEach((node) => {
       if (!node.edges) return;
       if (!canvasContext) return;
 
       node.edges.forEach((edgeTargetNodeId) => {
-        const sourceNode = state().nodes.find((n) => n.id === node.id);
-        const targetNode = state().nodes.find((n) => n.id === edgeTargetNodeId);
+        const sourceNode = memoizedNodes().find((n) => n.id === node.id);
+        const targetNode = memoizedNodes().find((n) => n.id === edgeTargetNodeId);
         if (!sourceNode || !targetNode) return;
         if (
           sourceNode.x === undefined ||
@@ -290,7 +302,7 @@ export default function NetworkGraph(props: Props) {
   }
 
   function drawNodes() {
-    state().nodes.forEach((node) => {
+    memoizedNodes().forEach((node) => {
       if (!canvasContext) return;
       if (node.x === undefined || node.y === undefined) return;
       if (props.renderNode) return props.renderNode(node, canvasContext!);
@@ -344,7 +356,9 @@ export default function NetworkGraph(props: Props) {
 
     setState((prevState) => ({
       ...prevState,
-      nodes: state().nodes.map((node) => (node.id === state().nodeDragging!.id ? { ...node, x: newX, y: newY } : node)),
+      nodes: memoizedNodes().map((node) =>
+        node.id === state().nodeDragging!.id ? { ...node, x: newX, y: newY } : node,
+      ),
       nodeDragging: { ...state().nodeDragging!, x: newX, y: newY },
     }));
     drawGraph();
@@ -356,7 +370,7 @@ export default function NetworkGraph(props: Props) {
 
     setState((prevState) => ({
       ...prevState,
-      nodes: state().nodes.map((node) => ({
+      nodes: memoizedNodes().map((node) => ({
         ...node,
         x: node.x! + distanceX / scale,
         y: node.y! + distanceY / scale,
@@ -394,7 +408,7 @@ export default function NetworkGraph(props: Props) {
           const rect = canvasElement!.getBoundingClientRect();
           const x = (event.clientX - rect.left) / scale;
           const y = (event.clientY - rect.top) / scale;
-          const node = state().nodes.find((node) => Math.hypot(node.x! - x, node.y! - y) < layoutSettings.nodeRadius);
+          const node = memoizedNodes().find((node) => Math.hypot(node.x! - x, node.y! - y) < layoutSettings.nodeRadius);
           onMouseDown(event, node);
         }}
       />

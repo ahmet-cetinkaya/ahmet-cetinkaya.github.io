@@ -1,5 +1,5 @@
-import { Link } from "../models/Link";
-import { Icons } from "./Icons";
+import Link from "../models/Link";
+import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";
 
 export enum Links {
@@ -12,7 +12,7 @@ export enum Links {
   instagram = 7,
 }
 
-export const LinksData = [
+const LinksData = [
   new Link(
     Links.github,
     TranslationKeys.links_github,
@@ -63,3 +63,4 @@ export const LinksData = [
     new Date("2024-05-16 20:10:19"),
   ),
 ];
+export default LinksData;

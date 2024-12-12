@@ -8,7 +8,7 @@ export interface LoadGLTFModelOptions {
   castShadow?: boolean;
 }
 
-export class ThreeModelHelper {
+export default class ThreeModelHelper {
   static async loadGLTFModel(
     scene: Scene,
     glbPath: string,

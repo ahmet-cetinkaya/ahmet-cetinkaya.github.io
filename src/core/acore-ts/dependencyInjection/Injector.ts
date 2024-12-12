@@ -1,4 +1,4 @@
-export class Injector {
+export default class Injector {
   private static _instance: Injector = new Injector();
 
   constructor(initialContainer?: WeakMap<any, any>) {

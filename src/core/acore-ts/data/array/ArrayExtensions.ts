@@ -3,7 +3,7 @@ export enum SortOrder {
   Descending,
 }
 
-export class ArrayExtensions {
+export default class ArrayExtensions {
   /**
    * Sorts the array by the given key.
    * @param array The array to sort.

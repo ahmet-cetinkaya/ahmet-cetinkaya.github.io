@@ -1,6 +1,6 @@
 ---
 import { Time } from "~/core/acore-ts/time/constants/Time";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 
 export type Props = {
   id?: string;
@@ -10,50 +10,50 @@ const i18n = Container.instance.i18n;
 const locale = i18n.getLocaleFromUrl(Astro.url, "en");
 ---
 
-<div class="flex select-none gap-2 text-nowrap text-white">
-  <span id="clock">
-    <span>00</span>:<span>00</span>
+<div class="flex select-none items-center gap-2 text-nowrap text-white">
+  <span id="clock"> 09:05 </span>
+  <span id="date" class="hidden sm:block">
+    10 Kasım 193<span class="text-xl">∞</span>
   </span>
-  <span id="date" class="hidden sm:block"></span>
 </div>
 
 <script define:vars={{ Time, locale }}>
-  function init() {
+  function onMount() {
     const clockContainer = document.querySelector("#clock");
     const timeSections = clockContainer.querySelectorAll("span");
     const dateContainer = document.querySelector("#date");
 
-    updateClock();
-    updateDate();
+    const now = new Date();
+    updateClock(now);
+    updateDate(now);
     scheduleNextUpdate();
 
-    function updateClock() {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-
-      const [hourSection, minuteSection] = timeSections;
-      hourSection.textContent = String(hours).padStart(2, "0");
-      minuteSection.textContent = String(minutes).padStart(2, "0");
+    function updateClock(now) {
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      clockContainer.textContent = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
     }
 
-    function updateDate() {
-      const now = new Date();
-      const options = { year: "numeric", month: "long", day: "2-digit", weekday: "long" };
-      dateContainer.textContent = now.toLocaleString(locale, options);
+    function updateDate(now) {
+      dateContainer.textContent = now.toLocaleString(locale, {
+        year: "numeric",
+        month: "long",
+        day: "2-digit",
+        weekday: "long",
+      });
     }
 
-    function scheduleNextUpdate() {
-      const timeRemainingToNextMinute = (Time.SecondsInMinute - new Date().getSeconds()) * Time.MillisInSecond;
+    function scheduleNextUpdate(nextTimeout) {
+      if (!nextTimeout) nextTimeout = (Time.SecondsInMinute - now.getSeconds()) * Time.MillisInSecond;
       setTimeout(() => {
-        updateClock();
-        if (timeSections[0].textContent === "00") updateDate();
+        const now = new Date();
+        updateClock(now);
+        if (now.getHours() === 0) updateDate(now);
 
-        setInterval(updateClock, Time.MillisInMinute);
-      }, timeRemainingToNextMinute);
+        scheduleNextUpdate(Time.MillisInMinute);
+      }, nextTimeout);
     }
   }
 
-  init();
-  document.addEventListener("astro:after-swap", init);
+  document.addEventListener("astro:after-swap", onMount);
 </script>

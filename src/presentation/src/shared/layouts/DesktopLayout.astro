@@ -1,6 +1,7 @@
 ---
 import Desktop from "../../features/desktop/components/Desktop";
 import Taskbar from "../../features/desktop/components/Taskbar/Taskbar.astro";
+import Wallpaper from "../../features/desktop/components/Wallpaper/Wallpaper";
 import WindowManager from "../../features/desktop/components/WindowManager";
 import Layout, { type Props as LayoutProps } from "./Layout.astro";
 
@@ -13,6 +14,7 @@ export type Props = LayoutProps;
 
     <main class="flex-grow">
       <span transition:persist>
+        <Wallpaper class="absolute top-0 -z-50 size-full" client:only="solid-js" transition:persist />
         <Desktop client:only="solid-js" transition:persist />
         <WindowManager client:only="solid-js" transition:persist />
       </span>

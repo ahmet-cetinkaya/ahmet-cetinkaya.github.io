@@ -1,12 +1,12 @@
 import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
-import type { Position } from "~/core/acore-ts/ui/models/Position";
-import type { Size } from "~/core/acore-ts/ui/models/Size";
+import type Position from "~/core/acore-ts/ui/models/Position";
+import type Size from "~/core/acore-ts/ui/models/Size";
 import type { TranslationKey } from "../data/Translations";
 import type { AppId } from "./App";
 
 export type WindowId = string;
 
-export class Window<TContent = unknown> extends Entity<WindowId> {
+export default class Window<TContent = unknown> extends Entity<WindowId> {
   constructor(
     id: WindowId,
     public appId: AppId,

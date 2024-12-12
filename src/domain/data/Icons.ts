@@ -1,4 +1,4 @@
-export enum Icons {
+enum Icons {
   ahmetcetinkaya = "Ahmet Çetinkaya Icon",
   ahmetcetinkayaFilled = "Ahmet Çetinkaya Filled Alternative Icon",
   amazonWebServices = "Amazon Web Services Icon",
@@ -65,3 +65,4 @@ export enum Icons {
   drafts = "Drafts Icon",
   downArrow = "downArrow",
 }
+export default Icons;

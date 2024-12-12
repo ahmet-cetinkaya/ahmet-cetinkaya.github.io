@@ -1,46 +1,38 @@
-import type { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
-import { LinksData } from "~/domain/data/Links";
-import type { Link } from "~/domain/models/Link";
-import type { ILinksService } from "./abstraction/ILinksService";
+import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
+import LinksData from "~/domain/data/Links";
+import type Link from "~/domain/models/Link";
+import type ILinksService from "./abstraction/ILinksService";
 
-export class LinksService implements ILinksService {
-  private _data = LinksData;
+export default class LinksService implements ILinksService {
+  private data?: Link[];
 
-  getAll(predicate?: ((x: Link) => boolean) | undefined): Promise<Link[]> {
-    let query = this._data;
-    if (predicate) {
-      query = query.filter(predicate);
-    }
-
-    return Promise.resolve(query);
+  private async ensureDataLoaded(): Promise<void> {
+    if (!this.data) this.data = LinksData;
   }
 
-  getList(
+  async getAll(predicate?: (x: Link) => boolean): Promise<Link[]> {
+    await this.ensureDataLoaded();
+    return predicate ? this.data!.filter(predicate) : this.data!;
+  }
+
+  async getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Link) => boolean) | undefined,
+    predicate?: (x: Link) => boolean,
   ): Promise<PaginationResult<Link>> {
-    let query = this._data;
-    if (predicate) {
-      query = query.filter(predicate);
-    }
+    await this.ensureDataLoaded();
 
-    const total = query.length;
-    query = query.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
-
-    return Promise.resolve({
-      items: query,
-      pageIndex,
-      pageSize,
-      totalItems: total,
-      totalPages: Math.ceil(total / pageSize),
-      hasNextPage: pageIndex * pageSize < total,
-      hasPreviousPage: pageIndex > 1,
-    });
+    const query = predicate ? this.data!.filter(predicate) : this.data!;
+    const totalItems = query.length;
+    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+    return new PaginationResult<Link>(pageIndex, pageSize, items, totalItems);
   }
 
-  get(predicate: (x: Link) => boolean): Promise<Link | null> {
-    const result = this._data.find(predicate);
-    return Promise.resolve(result ?? null);
+  async get(predicate: (x: Link) => boolean): Promise<Link> {
+    await this.ensureDataLoaded();
+
+    const item = this.data!.find(predicate);
+    if (!item) throw new Error("Item not found");
+    return item;
   }
 }

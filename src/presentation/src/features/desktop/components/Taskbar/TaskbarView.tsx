@@ -1,11 +1,11 @@
 import { navigate } from "astro:transitions/client";
-import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
-import { ArrayExtensions } from "~/core/acore-ts/data/array/ArrayExtensions";
+import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Window } from "~/domain/models/Window";
-import { Container } from "~/presentation/Container";
+import Window from "~/domain/models/Window";
+import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Dropdown, { type DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
@@ -14,15 +14,16 @@ import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 export default function TaskbarView() {
   const windowsService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
-
   const translate = useI18n();
 
   const [windows, setWindows] = createSignal<Window[]>([]);
 
-  windowsService.subscribe(onWindowsChange);
+  onMount(() => {
+    windowsService.subscribe(onWindowsChange);
 
-  onCleanup(() => {
-    windowsService.unsubscribe(onWindowsChange);
+    onCleanup(() => {
+      windowsService.unsubscribe(onWindowsChange);
+    });
   });
 
   function onWindowsChange(windows: Window[]) {

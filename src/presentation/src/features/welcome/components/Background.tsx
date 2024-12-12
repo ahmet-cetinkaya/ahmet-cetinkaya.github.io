@@ -1,14 +1,13 @@
-import { createSignal, onMount, Show } from "solid-js";
-import type { ICertificationsService } from "~/application/features/certifications/services/abstraction/ICertificationsService";
-import type { ICurriculumVitaeService } from "~/application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
-import type { IEducationsService } from "~/application/features/educations/services/abstraction/IEducationsService";
-import type { ILinksService } from "~/application/features/links/abstraction/ILinksService";
-import type { IOrganizationsService } from "~/application/features/organizations/services/abstraction/IOrganizationsService";
-import { Icons } from "~/domain/data/Icons";
+import { createResource, Show } from "solid-js";
+import type ICertificationsService from "~/application/features/certifications/services/abstraction/ICertificationsService";
+import type ICurriculumVitaeService from "~/application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
+import type IEducationsService from "~/application/features/educations/services/abstraction/IEducationsService";
+import type ILinksService from "~/application/features/links/abstraction/ILinksService";
+import type IOrganizationsService from "~/application/features/organizations/services/abstraction/IOrganizationsService";
+import Icons from "~/domain/data/Icons";
 import { Links } from "~/domain/data/Links";
 import { TranslationKeys } from "~/domain/data/Translations";
-import type { Link as LinkModel } from "~/domain/models/Link";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import LoadingArea from "~/presentation/src/shared/components/LoadingArea";
 import Timeline, { type Activity } from "~/presentation/src/shared/components/Timeline";
@@ -25,28 +24,21 @@ export default function Background() {
 
   const translate = useI18n();
 
-  const [experienceActivities, setExperienceActivities] = createSignal<Activity[] | undefined>(undefined);
-  const [educationActivities, setEducationActivities] = createSignal<Activity[] | undefined>(undefined);
-  const [certificationActivities, setCertificationActivities] = createSignal<Activity[] | undefined>(undefined);
-  const [linkedInLink, setLinkedInLink] = createSignal<LinkModel | undefined>(undefined);
-
-  onMount(() => {
-    getLinkedInLink();
-    getCurriculumVitaeActivities();
-    getEducationActivities();
-    getCertificationActivities();
-  });
+  const [linkedInLink] = createResource(getLinkedInLink);
+  const [experienceActivities] = createResource(getCurriculumVitaeActivities);
+  const [educationActivities] = createResource(getEducationActivities);
+  const [certificationActivities] = createResource(getCertificationActivities);
 
   async function getLinkedInLink() {
     const linkedInLink = await linksService.get((x) => x.id === Links.linkedin);
     if (!linkedInLink) throw new Error("LinkedIn link not found");
-    setLinkedInLink(linkedInLink);
+    return linkedInLink;
   }
 
   async function getCurriculumVitaeActivities() {
     const curriculumVitae = await curriculumVitaeService.getAll();
 
-    const experienceActivities = await Promise.all(
+    return await Promise.all(
       curriculumVitae.map(async (cv) => {
         const organization = await getOrganization(cv.organizationId);
         return {
@@ -60,13 +52,12 @@ export default function Background() {
         } as Activity;
       }),
     );
-    setExperienceActivities(experienceActivities);
   }
 
   async function getCertificationActivities() {
     const certifications = await certificationsService.getAll();
 
-    const certificationActivities = await Promise.all(
+    return await Promise.all(
       certifications.map(async (certification) => {
         const organization = await getOrganization(certification.organizationId);
         return {
@@ -79,13 +70,12 @@ export default function Background() {
         } as Activity;
       }),
     );
-    setCertificationActivities(certificationActivities);
   }
 
   async function getEducationActivities() {
     const educations = await educationsService.getAll();
 
-    const educationActivities = await Promise.all(
+    return await Promise.all(
       educations.map(async (education) => {
         const organization = await getOrganization(education.organizationId);
         return {
@@ -99,7 +89,6 @@ export default function Background() {
         } as Activity;
       }),
     );
-    setEducationActivities(educationActivities);
   }
 
   async function getOrganization(organizationId: number) {

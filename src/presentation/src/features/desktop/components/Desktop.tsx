@@ -1,39 +1,60 @@
-import { createSignal, For, onCleanup, onMount } from "solid-js";
-import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
-import { EventFunctions } from "~/core/acore-ts/dom/events/EventFunctions";
+import { createSignal, For, onCleanup, onMount, createMemo, type Accessor } from "solid-js";
+import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import { Categories } from "~/domain/data/Categories";
-import type { App } from "~/domain/models/App";
-import { Window } from "~/domain/models/Window";
-import { Container } from "~/presentation/Container";
+import type App from "~/domain/models/App";
+import Window from "~/domain/models/Window";
+import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
-import Model from "~/presentation/src/shared/components/threeDimensionalModels/Model";
-import openAppContent from "~/presentation/src/shared/utils/openAppContent";
-import Wallpaper from "./Wallpaper";
-import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
+import Model from "~/presentation/src/shared/components/threeDimensionalModels/ThreeDimensionModel";
+import AppContent from "~/presentation/src/features/desktop/components/AppContent";
+import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
+import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";
+import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
 
 export default function Desktop() {
-  const appsService = Container.instance.appsService;
-  const windowsService = Container.instance.windowsService;
+  const appsService: IAppsService = Container.instance.appsService;
+  const windowsService: IWindowsService = Container.instance.windowsService;
+
+  let containerRef: HTMLDivElement | undefined;
+  let matrixDimensions: Accessor<{ dimension1: number; dimension2: number }> | undefined;
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
 
-  let containerRef: HTMLDivElement | undefined;
-
   onMount(() => {
-    generateMatrix();
     window.addEventListener("resize", generateMatrix);
-    onCleanup(() => window.removeEventListener("resize", generateMatrix));
   });
 
+  onCleanup(() => {
+    window.removeEventListener("resize", generateMatrix);
+  });
+
+  function onContainerMount(element: HTMLDivElement) {
+    containerRef = element;
+
+    requestAnimationFrame(() => {
+      matrixDimensions = createMemo(getMatrixDimensions);
+      generateMatrix();
+    });
+  }
+
+  function getMatrixDimensions() {
+    if (!containerRef) return { dimension1: 1, dimension2: 1 };
+
+    const matrixSize = 128;
+    const dimension1 = Math.max(Math.floor(containerRef.clientWidth / matrixSize) - 1, 1);
+    const dimension2 = Math.max(Math.floor(containerRef.clientHeight / matrixSize) - 1, 1);
+    return { dimension1, dimension2 };
+  }
+
   async function generateMatrix() {
-    const { dimension1, dimension2 } = getMatrixDimensions();
-    const newMatrix = Array(dimension1)
-      .fill(null)
-      .map(() => Array(dimension2).fill(null));
+    if (!matrixDimensions) return;
+
+    const { dimension1, dimension2 } = matrixDimensions();
+    const newMatrix: DesktopShortcutMatrix = Array.from({ length: dimension1 }, () => Array(dimension2).fill(null));
 
     let x = 0;
     let y = 0;
@@ -54,20 +75,10 @@ export default function Desktop() {
     setMatrix(newMatrix);
   }
 
-  function getMatrixDimensions() {
-    if (!containerRef) return { dimension1: 1, dimension2: 1 };
-
-    const matrixSize = 128;
-    const dimension1 = Math.max(Math.floor(containerRef.clientWidth / matrixSize) - 1, 1);
-    const dimension2 = Math.max(Math.floor(containerRef.clientHeight / matrixSize) - 1, 1);
-    return { dimension1, dimension2 };
-  }
-
   function findShortcutPosition(shortcut: DesktopShortcut) {
     for (let x = 0; x < matrix().length; x++)
       for (let y = 0; y < matrix()[x].length; y++)
         if (matrix()[x][y] && matrix()[x][y]!.id === shortcut?.id) return [x, y];
-
     return null;
   }
 
@@ -76,10 +87,13 @@ export default function Desktop() {
   }
 
   function onShortcutDrop(targetX: number, targetY: number) {
+    if (!draggedShortcut()) return;
+    if (!matrixDimensions) return;
+
     const updatedMatrix = matrix().map((row) => [...row]);
     const [draggedX, draggedY] = findShortcutPosition(draggedShortcut()!)!;
 
-    const { dimension1, dimension2 } = getMatrixDimensions();
+    const { dimension1, dimension2 } = matrixDimensions();
 
     const validTargetX = targetX >= 0 && targetX < dimension1;
     const validTargetY = targetY >= 0 && targetY < dimension2;
@@ -110,29 +124,27 @@ export default function Desktop() {
       0,
       false,
       ScreenHelper.isMobile(),
-      openAppContent(shortcut.id),
+      <AppContent appId={shortcut.id} />,
     );
     windowsService.add(window);
   }
 
   return (
-    <div ref={containerRef} class="flex size-full flex-row">
-      <Wallpaper class="absolute left-0 top-0 -z-50" />
-
+    <div ref={onContainerMount} class="flex size-full flex-row">
       <For each={matrix()}>
         {(row, x) => (
           <div class="flex flex-col">
             <For each={row}>
               {(col, y) => (
                 <div
-                  onDragOver={EventFunctions.preventDefault}
+                  onDragOver={(e) => e.preventDefault()}
                   onDrop={() => onShortcutDrop(x(), y())}
                   class="m-3 h-32 w-32 select-none"
                 >
                   {col ? (
                     <AppShortcut
                       label={col.name}
-                      icon={<Model model={col.icon} />}
+                      icon={<Model model={col.icon}></Model>}
                       href={col.path}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}
@@ -148,8 +160,8 @@ export default function Desktop() {
       </For>
     </div>
   );
-}
 
-function DesktopEmptyGrid() {
-  return <div class="size-full" />;
+  function DesktopEmptyGrid() {
+    return <div class="size-full" />;
+  }
 }

@@ -1,12 +1,12 @@
 import type { JSX } from "astro/jsx-runtime";
 import { navigate } from "astro:transitions/client";
-import { createSignal, onMount } from "solid-js";
-import { Position } from "~/core/acore-ts/ui/models/Position";
-import type { Size } from "~/core/acore-ts/ui/models/Size";
-import { Icons } from "~/domain/data/Icons";
+import { createResource, createSignal } from "solid-js";
+import Position from "~/core/acore-ts/ui/models/Position";
+import type Size from "~/core/acore-ts/ui/models/Size";
+import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Window as WindowModel } from "~/domain/models/Window";
-import { Container } from "~/presentation/Container";
+import WindowModel from "~/domain/models/Window";
+import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
@@ -23,17 +23,13 @@ export default function Window(props: Props) {
   const translate = useI18n();
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
-  const [path, setPath] = createSignal<string>("");
-
-  onMount(() => {
-    getAppPath();
-  });
+  const [path] = createResource<string>(getAppPath);
 
   async function getAppPath() {
     const app = await appsService.get((a) => a.id == props.window.appId);
     if (!app) throw new Error(`App (${props.window.appId}) not found`);
 
-    setPath(app.path);
+    return app.path;
   }
 
   function onMinimize() {
@@ -41,8 +37,10 @@ export default function Window(props: Props) {
   }
 
   async function onClick() {
+    if (!path()) return;
+
     await windowsService.active(props.window);
-    navigate(path());
+    navigate(path()!);
   }
 
   function onClose() {
@@ -50,10 +48,12 @@ export default function Window(props: Props) {
   }
 
   function onDragStart() {
+    if (!path()) return;
+
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigate(path());
+    navigate(path()!);
   }
 
   function onDragEnd(_: MouseEvent, position: Position) {
@@ -66,10 +66,12 @@ export default function Window(props: Props) {
   }
 
   function onResizeStart() {
+    if (!path()) return;
+
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigate(path());
+    navigate(path()!);
   }
 
   function onResizeEnd(_: Event, size: Size, position: Position) {
@@ -103,8 +105,8 @@ export default function Window(props: Props) {
       position={props.window.position}
       size={props.window.size}
       isMaximized={props.window.isMaximized}
-      maximizeOffset={{ top: 92, left: 10, right: 10, bottom: 16 }}
-      dragOffset={{ top: 92 }}
+      maximizeOffset={{ top: 72, left: 10, right: 10, bottom: 16 }}
+      dragOffset={{ top: 72 }}
       onClick={onClick}
       onClose={onClose}
       onDragStart={onDragStart}

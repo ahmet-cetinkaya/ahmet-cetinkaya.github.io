@@ -1,36 +1,31 @@
-import type { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
-import { EducationData } from "~/domain/data/Educations";
-import type { Education } from "~/domain/models/Education";
-import type { IEducationsService } from "./abstraction/IEducationsService";
+import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
+import EducationsData from "~/domain/data/Educations";
+import type Education from "~/domain/models/Education";
+import type IEducationsService from "./abstraction/IEducationsService";
 
 export default class EducationsService implements IEducationsService {
-  private _data = EducationData;
+  private data?: Education[];
 
-  getAll(predicate?: ((x: Education) => boolean) | undefined): Promise<Education[]> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
-
-    return Promise.resolve(query);
+  private async ensureDataLoaded(): Promise<void> {
+    if (!this.data) this.data = EducationsData;
   }
 
-  getList(
+  async getAll(predicate?: (x: Education) => boolean): Promise<Education[]> {
+    await this.ensureDataLoaded();
+
+    return predicate ? this.data!.filter(predicate) : this.data!;
+  }
+
+  async getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Education) => boolean) | undefined,
+    predicate?: (x: Education) => boolean,
   ): Promise<PaginationResult<Education>> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
+    await this.ensureDataLoaded();
 
-    const result = query.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
-
-    return Promise.resolve({
-      items: result,
-      pageIndex,
-      pageSize,
-      totalItems: query.length,
-      totalPages: Math.ceil(query.length / pageSize),
-      hasNextPage: pageIndex < Math.ceil(query.length / pageSize),
-      hasPreviousPage: pageIndex > 1,
-    });
+    const query = predicate ? this.data!.filter(predicate) : this.data!;
+    const totalItems = query.length;
+    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+    return new PaginationResult<Education>(pageIndex, pageSize, items, totalItems);
   }
 }

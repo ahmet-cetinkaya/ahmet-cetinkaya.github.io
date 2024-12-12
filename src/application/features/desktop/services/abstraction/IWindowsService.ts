@@ -6,9 +6,9 @@ import type {
   IRemovable,
   IUpdatable,
 } from "~/core/acore-ts/repository/abstraction/IRepository";
-import type { Window } from "~/domain/models/Window";
+import type Window from "~/domain/models/Window";
 
-export interface IWindowsService
+export default interface IWindowsService
   extends IAddable<Window>,
     IGettable<Window>,
     IListable<Window>,

@@ -3,8 +3,16 @@ export enum Locales {
   tr = "tr",
 }
 
-//#region Enums
 export enum TranslationKeys {
+  apps_email_compose = "apps_email_compose",
+  apps_email_drafts = "apps_email_drafts",
+  apps_email_enter_url = "apps_email_enter_url",
+  apps_email_folders = "apps_email_folders",
+  apps_email_inbox = "apps_email_inbox",
+  apps_email_sent = "apps_email_sent",
+  apps_email_subject = "apps_email_subject",
+  apps_email_to = "apps_email_to",
+  apps_email_trash = "apps_email_trash",
   //#region Apps
   apps_welcome_about_me = "apps_welcome_about_me",
   apps_welcome_about_me_confirm = "apps_welcome_about_me_confirm",
@@ -20,22 +28,11 @@ export enum TranslationKeys {
   apps_welcome_hello = "apps_welcome_hello",
   apps_welcome_if_you_want_to_contact_me = "apps_welcome_if_you_want_to_contact_me",
   apps_welcome_present = "apps_welcome_present",
+  apps_welcome_setup = "apps_welcome_setup",
   apps_welcome_technologies = "apps_welcome_technologies",
   apps_welcome_technologiesIUse = "apps_welcome_technologiesIUse",
-  apps_welcome_setup = "apps_welcome_setup",
   apps_welcome_welcome = "apps_welcome_welcome",
-
-  apps_email_folders = "apps_email_folders",
-  apps_email_enter_url = "apps_email_enter_url",
-  apps_email_inbox = "apps_email_inbox",
-  apps_email_sent = "apps_email_sent",
-  apps_email_drafts = "apps_email_drafts",
-  apps_email_compose = "apps_email_compose",
-  apps_email_to = "apps_email_to",
-  apps_email_subject = "apps_email_subject",
-  apps_email_trash = "apps_email_trash",
   //#endregion
-
   //#region Certifications
   certificates_1_description_markdown = "certificates_1_description_markdown",
   certificates_1_name = "certificates_1_name",
@@ -58,14 +55,15 @@ export enum TranslationKeys {
   certificates_10_description_markdown = "certificates_10_description_markdown",
   certificates_10_name = "certificates_10_name",
   //#endregion
-
   //#region Common
   common_apps = "common_apps",
   common_bold = "common_bold",
   common_clear_format = "common_clear_format",
   common_close = "common_close",
+  common_computer = "common_computer",
   common_contact = "common_contact",
   common_email = "common_email",
+  common_envelope = "common_envelope",
   common_header1 = "common_header1",
   common_header2 = "common_header2",
   common_hyperlink = "common_hyperlink",
@@ -81,7 +79,6 @@ export enum TranslationKeys {
   common_underline = "common_underline",
   common_unordered_list = "common_unordered_list",
   //#endregion
-
   //#region Curriculum Vitae
   curriculum_vitae_1_description_markdown = "curriculum_vitae_1_description_markdown",
   curriculum_vitae_2_description_markdown = "curriculum_vitae_2_description_markdown",
@@ -90,20 +87,17 @@ export enum TranslationKeys {
   curriculum_vitae_intern = "curriculum_vitae_intern",
   curriculum_vitae_software_developer = "curriculum_vitae_software_developer",
   curriculum_vitae_software_developer_and_instructor = "curriculum_vitae_software_developer_and_instructor",
+  desktop_change_locale = "desktop_change_locale",
   //#endregion
-
   //#region Desktop
   desktop_minimize = "desktop_minimize",
-  desktop_change_locale = "desktop_change_locale",
   desktop_taskbar_other_windows_menu = "desktop_taskbar_other_windows_menu",
   //#endregion
-
   //#region Educations
   educations_1_department = "educations_1_department",
   educations_2_department = "educations_2_department",
   educations_2_description_markdown = "educations_2_description_markdown",
   //#endregion
-
   //#region Links
   links_github = "links_github",
   links_instagram = "links_instagram",
@@ -112,7 +106,6 @@ export enum TranslationKeys {
   links_mastodon = "links_mastodon",
   links_x = "links_x",
   //#endregion
-
   //#region Organizations
   organizations_ahmet_cetinkaya = "organizations_ahmet_cetinkaya",
   organizations_amazon_web_service = "organizations_amazon_web_service",
@@ -123,12 +116,9 @@ export enum TranslationKeys {
   organizations_mehmet_akif_ersoy_university = "organizations_mehmet_akif_ersoy_university",
   organizations_mng_kargo = "organizations_mng_kargo",
   organizations_udemy = "organizations_udemy",
-  //#endregion
 }
-//#endregion
 
-//#region Data
-export const Translations: Record<TranslationKeys, Record<Locales, string>> = {
+const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   //#region Apps
   [TranslationKeys.apps_welcome_hello]: {
     en: "Hello",
@@ -214,7 +204,6 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     en: "Welcome",
     tr: "Hoş Geldin",
   },
-
   [TranslationKeys.apps_email_folders]: {
     en: "Folders",
     tr: "Klasörler",
@@ -693,6 +682,14 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     en: "Unordered List",
     tr: "Sırasız Liste",
   },
+  [TranslationKeys.common_computer]: {
+    en: "Computer",
+    tr: "Bilgisayar",
+  },
+  [TranslationKeys.common_envelope]: {
+    en: "Envelope",
+    tr: "Zarf",
+  },
   //#endregion
   //#region Curriculum Vitae
   [TranslationKeys.curriculum_vitae_1_description_markdown]: {
@@ -836,7 +833,7 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "Udemy",
   },
 };
-//#endregion
+export default TranslationsData;
 
-export type TranslationKey = keyof typeof Translations;
+export type TranslationKey = keyof typeof TranslationsData;
 export const locales = Object.keys(Locales) as Locales[];

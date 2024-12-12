@@ -1,36 +1,30 @@
-import type { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
-import { TechnologiesData } from "~/domain/data/Technologies";
-import type { Technology } from "~/domain/models/Technology";
-import type { ITechnologiesService } from "./abstraction/ITechnologiesService";
+import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
+import TechnologiesData from "~/domain/data/Technologies";
+import type Technology from "~/domain/models/Technology";
+import type ITechnologiesService from "./abstraction/ITechnologiesService";
 
 export default class TechnologiesService implements ITechnologiesService {
-  private _data = TechnologiesData;
+  private data?: Technology[];
 
-  getAll(predicate?: ((x: Technology) => boolean) | undefined): Promise<Technology[]> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
-
-    return Promise.resolve(query);
+  private async ensureDataLoaded(): Promise<void> {
+    if (!this.data) this.data = TechnologiesData;
   }
 
-  getList(
+  async getAll(predicate?: (x: Technology) => boolean): Promise<Technology[]> {
+    await this.ensureDataLoaded();
+    return predicate ? this.data!.filter(predicate) : this.data!;
+  }
+
+  async getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Technology) => boolean) | undefined,
+    predicate?: (x: Technology) => boolean,
   ): Promise<PaginationResult<Technology>> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
+    await this.ensureDataLoaded();
 
-    const result = query.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
-
-    return Promise.resolve({
-      items: result,
-      pageIndex,
-      pageSize,
-      totalItems: query.length,
-      totalPages: Math.ceil(query.length / pageSize),
-      hasNextPage: pageIndex < Math.ceil(query.length / pageSize),
-      hasPreviousPage: pageIndex > 1,
-    });
+    const query = predicate ? this.data!.filter(predicate) : this.data!;
+    const totalItems = query.length;
+    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+    return new PaginationResult<Technology>(pageIndex, pageSize, items, totalItems);
   }
 }

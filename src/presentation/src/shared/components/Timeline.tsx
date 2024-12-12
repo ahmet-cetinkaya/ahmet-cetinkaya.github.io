@@ -1,10 +1,11 @@
 import { Index, Show } from "solid-js";
-import type { Icons } from "~/domain/data/Icons";
+import type Icons from "~/domain/data/Icons";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import useI18n from "../utils/i18nTranslate";
 import Icon from "./Icon";
 import LessViewContent from "./LessViewContent";
 import MarkdownParagraph from "./MarkdownParagraph";
+import Title from "./ui/Title";
 
 export type Activity = {
   id: number;
@@ -35,9 +36,13 @@ export default function Timeline(props: Props) {
             </div>
             <div>
               <header>
-                <h3 class="text-lg font-semibold">{translate(activity().title)}</h3>
+                <Title level={3} class="mb-0 text-lg font-semibold">
+                  {translate(activity().title)}
+                </Title>
                 <Show when={activity().subtitle}>
-                  <h4 class="text-gray-400">{translate(activity().subtitle!)}</h4>
+                  <Title level={4} class="text-md text-gray-400">
+                    {translate(activity().subtitle!)}
+                  </Title>
                 </Show>
 
                 <time class="text-sm text-gray-300">{activity().startDate.toDateString()}</time>

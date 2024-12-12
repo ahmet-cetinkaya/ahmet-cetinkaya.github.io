@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import type { TranslationKey } from "~/domain/data/Translations";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 
 export default function useI18n(url: URL | null = null) {
   const i18n = Container.instance.i18n;
@@ -11,14 +11,8 @@ export default function useI18n(url: URL | null = null) {
   const [locale, setLocale] = createSignal(currentLocale);
 
   onMount(() => {
-    subscribeToLangChange();
+    i18n.currentLocale.subscribe((locale) => setLocale(locale));
   });
-
-  function subscribeToLangChange() {
-    i18n.currentLocale.subscribe((locale) => {
-      setLocale(locale);
-    });
-  }
 
   return (key: TranslationKey) => i18n.translate(locale(), key);
 }

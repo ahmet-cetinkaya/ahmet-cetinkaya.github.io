@@ -1,7 +1,7 @@
-import { Store } from "../store/Store";
+import Store from "../store/Store";
 import type II18n from "./abstraction/II18n";
 
-export class I18n implements II18n {
+export default class I18n implements II18n {
   translations: Record<string, Record<string, string>> = {};
   get locales(): string[] {
     const firstValue = Object.keys(this.translations)[0];

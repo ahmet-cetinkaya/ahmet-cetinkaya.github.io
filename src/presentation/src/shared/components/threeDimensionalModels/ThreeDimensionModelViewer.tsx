@@ -1,10 +1,8 @@
-import { createSignal, onCleanup, Show } from "solid-js";
+import { createSignal, onCleanup, Show, type JSX } from "solid-js";
 import { AmbientLight, Camera, OrthographicCamera, Scene, SRGBColorSpace, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { Icons } from "~/domain/data/Icons";
-import Icon from "../Icon";
 import EasingHelper from "~/core/acore-ts/ui/animation/EasingHelper";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
@@ -16,38 +14,40 @@ type Props = {
   configureCamera?: (camera: OrthographicCamera) => void;
   configureControls?: (controls: OrbitControls) => void;
   class?: string;
+  loadingElement?: JSX.Element;
 };
 
 export default function ThreeDimensionModelViewer(props: Props) {
   let containerRef: HTMLDivElement;
-  const [isLoading, setIsLoading] = createSignal(true);
   let renderer: WebGLRenderer | undefined;
   let camera: OrthographicCamera | undefined;
   let scene: Scene | undefined;
   let controls: OrbitControls | undefined;
   let loader: GLTFLoader | undefined;
+
+  const [isLoading, setIsLoading] = createSignal(true);
   const [renderElement, setRenderElement] = createSignal<HTMLCanvasElement>();
 
   function onContainerElementMount(element: HTMLDivElement) {
     containerRef = element;
 
     window.addEventListener("resize", onWindowResized);
+    onCleanup(() => window.removeEventListener("resize", onWindowResized));
+
     requestAnimationFrame(() => {
       initThree();
       loadModel();
-      animate();
-      requestAnimationFrame(() => onWindowResized());
+      onWindowResized();
     });
   }
 
   onCleanup(() => {
-    window.removeEventListener("resize", onWindowResized);
-    if (controls) {
-      controls.dispose();
-    }
-    if (renderer && containerRef) {
-      containerRef.removeChild(renderer.domElement);
-    }
+    if (controls) controls.dispose();
+    if (renderer && containerRef) containerRef.removeChild(renderer.domElement);
+    if (renderer) renderer.dispose();
+    if (loader) loader = undefined;
+    if (scene) scene = undefined;
+    if (camera) camera = undefined;
   });
 
   function initThree() {
@@ -121,6 +121,7 @@ export default function ThreeDimensionModelViewer(props: Props) {
         gltf.scene.scale.set(props.modelScale, props.modelScale, props.modelScale);
         scene?.add(gltf.scene);
         setIsLoading(false);
+        animate();
       },
       undefined,
       (error: unknown) => {
@@ -147,8 +148,6 @@ export default function ThreeDimensionModelViewer(props: Props) {
   let frame: number | undefined = 0;
   let initialCameraPosition: Vector3 | undefined;
   function animate() {
-    requestAnimationFrame(animate);
-
     if (isLoading()) return;
     if (!controls || !scene || !renderer || !camera) return;
 
@@ -172,14 +171,15 @@ export default function ThreeDimensionModelViewer(props: Props) {
     }
 
     renderer.render(scene, camera as Camera);
+    requestAnimationFrame(animate);
   }
 
   return (
     <div ref={(element) => onContainerElementMount(element)} class={mergeCls("size-full", props.class)}>
       <Show when={isLoading()}>
-        <span class="flex size-full items-center justify-center">
-          <Icon icon={Icons.spinner} isSpin class="size-10" />
-        </span>
+        {props.loadingElement || (
+          <span class="flex size-full items-center justify-center text-xs text-gray-500">Loading...</span>
+        )}
       </Show>
 
       <Show when={renderElement()}>{renderElement()}</Show>

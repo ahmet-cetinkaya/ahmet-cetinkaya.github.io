@@ -1,6 +1,6 @@
 import { onCleanup, onMount } from "solid-js";
 import Icon from "./Icon";
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
 type Props = {

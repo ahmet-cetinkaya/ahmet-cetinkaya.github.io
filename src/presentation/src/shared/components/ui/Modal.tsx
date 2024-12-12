@@ -1,39 +1,39 @@
 import { createSignal, Show, type JSX } from "solid-js";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
-import { DragHelper } from "~/core/acore-ts/ui/DragHelper";
-import { Position } from "~/core/acore-ts/ui/models/Position";
-import type { Size } from "~/core/acore-ts/ui/models/Size";
-import { ResizeHelper } from "~/core/acore-ts/ui/ResizeHelper";
+import DragHelper from "~/core/acore-ts/ui/DragHelper";
+import Position from "~/core/acore-ts/ui/models/Position";
+import type Size from "~/core/acore-ts/ui/models/Size";
+import ResizeHelper from "~/core/acore-ts/ui/ResizeHelper";
 import useI18n from "../../utils/i18nTranslate";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Button from "./Button";
 import Icon from "../Icon";
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 import Title from "./Title";
 import type { Offset } from "~/core/acore-ts/ui/models/Offset";
 
-interface Props {
-  title?: TranslationKeys;
-  class?: string;
-  headerClass?: string;
-  style?: JSX.CSSProperties;
+type Props = {
   children: JSX.Element;
+  class?: string;
   customHeaderButtons?: JSX.Element;
-  position?: Position;
-  size?: Size;
+  dragOffset?: Offset;
+  headerClass?: string;
   isMaximized?: boolean;
   maximizable?: boolean;
   maximizeOffset?: Offset;
-  dragOffset?: Offset;
   onClick?: () => void;
   onClose?: () => void;
-  onDragStart?: (event: MouseEvent, position: Position) => void;
   onDragEnd?: (event: MouseEvent, position: Position) => void;
+  onDragStart?: (event: MouseEvent, position: Position) => void;
   onResize?: (event: Event, size: Size) => void;
-  onResizeStart?: (event: Event, size: Size, position: Position) => void;
   onResizeEnd?: (event: Event, size: Size, position: Position) => void;
+  onResizeStart?: (event: Event, size: Size, position: Position) => void;
   onToggleMaximize?: (isMaximized: boolean) => void;
-}
+  position?: Position;
+  size?: Size;
+  style?: JSX.CSSProperties;
+  title?: TranslationKeys;
+};
 
 export default function Modal(props: Props) {
   if (props.maximizable === undefined) props.maximizable = true;
@@ -43,7 +43,7 @@ export default function Modal(props: Props) {
   const [isModalOpen, setIsModalOpen] = createSignal(true);
   const [isMaximized, setIsMaximized] = createSignal(props.isMaximized ?? false);
 
-  function onModalElementMount(element: HTMLElement) {
+  function onContainerMount(element: HTMLElement) {
     DragHelper.makeDraggableElement(element, {
       onDragStart,
       onDragEnd,
@@ -93,39 +93,41 @@ export default function Modal(props: Props) {
 
   return (
     <div
-      ref={(element) => {
-        onModalElementMount(element);
-      }}
+      ref={onContainerMount}
+      onClick={onClick}
       class={mergeCls(
         "shadow-md bg-whitez fixed min-h-52 min-w-60 transform overflow-hidden rounded-lg border border-gray-300",
         props.class,
       )}
       style={{
         ...props.style,
-        top: isMaximized()
-          ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
-          : props.position?.top
-            ? props.position.top + "px"
-            : "15%", // According to 50vh default height
-        left: isMaximized()
-          ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
-          : props.position?.left
-            ? props.position.left + "px"
-            : "15%", // According to 50vw default width
-        right: isMaximized() ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
-        bottom: isMaximized() ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
-        width: isMaximized()
-          ? "calc(100vw - " + (props.maximizeOffset?.left ?? 0) + "px - " + (props.maximizeOffset?.right ?? 0) + "px)"
-          : props.size?.width
-            ? props.size.width + "px"
-            : "70vw",
-        height: isMaximized()
-          ? "calc(100vh - " + (props.maximizeOffset?.top ?? 0) + "px - " + (props.maximizeOffset?.bottom ?? 0) + "px)"
-          : props.size?.height
-            ? props.size.height + "px"
-            : "70vh",
+        top:
+          (isMaximized() ?? props.maximizable)
+            ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
+            : props.position?.top
+              ? props.position.top + "px"
+              : "15%",
+        left:
+          (isMaximized() ?? props.maximizable)
+            ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
+            : props.position?.left
+              ? props.position.left + "px"
+              : "15%",
+        right: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
+        bottom: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
+        width:
+          (isMaximized() ?? props.maximizable)
+            ? "calc(100vw - " + (props.maximizeOffset?.left ?? 0) + "px - " + (props.maximizeOffset?.right ?? 0) + "px)"
+            : props.size?.width
+              ? props.size.width + "px"
+              : "70vw",
+        height:
+          (isMaximized() ?? props.maximizable)
+            ? "calc(100vh - " + (props.maximizeOffset?.top ?? 0) + "px - " + (props.maximizeOffset?.bottom ?? 0) + "px)"
+            : props.size?.height
+              ? props.size.height + "px"
+              : "70vh",
       }}
-      onClick={onClick}
     >
       <header class={mergeCls("flex items-center justify-between gap-2 p-2", props.headerClass)}>
         <Title class="m-0 text-xl">{translate(props.title!)}</Title>

@@ -4,9 +4,10 @@ import CommonMeta from "../components/CommonMeta.astro";
 import Favicons from "../components/Favicons.astro";
 import Metadata, { type Props as MetadataProps } from "../components/Metadata.astro";
 import SiteVerification from "../components/SiteVerification.astro";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 import { locales } from "~/domain/data/Translations";
 import "@fontsource/oxanium";
+import Preload from "../components/Preload.astro";
 
 export type Props = {
   metaData: MetadataProps;
@@ -17,7 +18,7 @@ const language = i18n.getLocaleFromUrl(Astro.url, locales[0]);
 ---
 
 <!doctype html>
-<html lang={language} dir="ltr" class="2xl:text-[20px]">
+<html lang={language} dir="ltr">
   <head>
     <CommonMeta />
     <Favicons />
@@ -25,10 +26,11 @@ const language = i18n.getLocaleFromUrl(Astro.url, locales[0]);
     <Metadata {...Astro.props.metaData} />
     <SiteVerification />
 
+    <Preload />
     <ViewTransitions fallback="swap" />
   </head>
 
-  <body class="text-default bg-page tracking-tight antialiased">
+  <body class="tracking-tight antialiased">
     <slot />
 
     <style is:global>

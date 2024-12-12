@@ -2,7 +2,7 @@ import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
 
 export type AreaId = number;
 
-export class Area extends Entity<AreaId> {
+export default class Area extends Entity<AreaId> {
   constructor(
     public id: number,
     public name: string,

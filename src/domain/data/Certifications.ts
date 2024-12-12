@@ -1,8 +1,8 @@
-import type { Certification } from "../models/Certification";
+import type Certification from "../models/Certification";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 
-export const CertificationData = [
+const CertificationsData = [
   {
     id: 1,
     name: TranslationKeys.certificates_1_name,
@@ -94,3 +94,4 @@ export const CertificationData = [
     createdDate: new Date("2024-12-03"),
   },
 ] as Certification[];
+export default CertificationsData;

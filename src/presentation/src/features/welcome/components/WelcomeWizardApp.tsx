@@ -1,9 +1,9 @@
 import { createSignal, Index, Show } from "solid-js";
-import type { IWindowsService } from "~/application/features/desktop/services/abstraction/IWindowsService";
+import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { Apps } from "~/domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 import About from "./About";
@@ -12,7 +12,7 @@ import Completed from "./Completed";
 import Hello from "./Hello";
 import Technologies from "./Technologies";
 import Title from "~/presentation/src/shared/components/ui/Title";
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 import Icon from "~/presentation/src/shared/components/Icon";
 
 const PARTS: { label: TranslationKey; icon: Icons }[] = [
@@ -37,16 +37,14 @@ export default function WelcomeWizardApp() {
   const translate = useI18n();
 
   const [currentPart, setCurrentPart] = createSignal(0);
-
-  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(false);
   const [isWarnedForConfirm, setIsWarnedForConfirm] = createSignal(false);
+  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(false);
 
   function onPartClicked(index: number) {
     if (index >= PARTS.length) {
       closeApp();
       return;
     }
-
     setCurrentPart(index);
   }
 
@@ -57,7 +55,7 @@ export default function WelcomeWizardApp() {
       case Parts.AboutMe:
         return (
           <About
-            initialConfirmValue={isAboutConfirmed()}
+            isConfirmedValue={isAboutConfirmed()}
             isWarnedForConfirm={isWarnedForConfirm()}
             onConfirm={onAboutConfirm}
           />
@@ -124,10 +122,11 @@ export default function WelcomeWizardApp() {
           <main class="flex-grow overflow-auto px-10 py-4">{getPartContent(currentPart())}</main>
         </Show>
 
-        <footer class="mb-2 me-2 flex flex-row-reverse justify-start gap-2">
+        <footer class="mb-2 me-4 flex flex-row-reverse justify-start gap-2">
           <Button
             onClick={onNextPart}
             class="w-16"
+            variant="primary"
             size="small"
             disabled={isWarnedForConfirm() && !isAboutConfirmed()}
             ariaLabel={
@@ -143,6 +142,7 @@ export default function WelcomeWizardApp() {
           <Button
             onClick={onPrevPart}
             class="w-16"
+            variant="primary"
             disabled={currentPart() === 0}
             size="small"
             ariaLabel={translate(TranslationKeys.common_prev)}

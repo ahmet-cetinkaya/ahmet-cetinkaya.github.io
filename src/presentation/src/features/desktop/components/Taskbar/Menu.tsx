@@ -1,15 +1,15 @@
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
-import { Icons } from "~/domain/data/Icons";
+import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
+import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Window } from "~/domain/models/Window";
-import { Container } from "~/presentation/Container";
+import Window from "~/domain/models/Window";
+import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
-import openAppContent from "~/presentation/src/shared/utils/openAppContent";
-import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
+import AppContent from "~/presentation/src/features/desktop/components/AppContent";
+import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Menu() {
   const windowsService = Container.instance.windowsService;
@@ -55,7 +55,7 @@ export default function Menu() {
                   undefined,
                   false,
                   ScreenHelper.isMobile(),
-                  openAppContent(app.id),
+                  <AppContent appId={app.id} />,
                 );
                 windowsService.add(window);
               },

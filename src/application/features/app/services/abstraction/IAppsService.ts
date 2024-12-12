@@ -1,4 +1,4 @@
 import type { IGettable, IListable } from "~/core/acore-ts/repository/abstraction/IRepository";
-import type { App } from "~/domain/models/App";
+import type App from "~/domain/models/App";
 
-export interface IAppsService extends IListable<App>, IGettable<App> {}
+export default interface IAppsService extends IListable<App>, IGettable<App> {}

@@ -1,10 +1,10 @@
-import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from "solid-js";
-import { CryptoExtensions } from "~/core/acore-ts/crypto/CryptoExtensions";
-import type { Window as WindowModel } from "~/domain/models/Window";
-import { Container } from "~/presentation/Container";
-import openAppContent from "~/presentation/src/shared/utils/openAppContent";
+import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX, createEffect } from "solid-js";
+import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
+import WindowModel from "~/domain/models/Window";
+import Container from "~/presentation/Container";
+import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import Window from "./Window";
-import { ScreenHelper } from "~/presentation/src/shared/utils/ScreenHelper";
+import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 import { navigate } from "astro:transitions/client";
 
 export default function WindowManager() {
@@ -15,6 +15,10 @@ export default function WindowManager() {
 
   onMount(async () => {
     await openInitialApp();
+    checkMobileScreen();
+  });
+
+  createEffect(() => {
     checkMobileScreen();
   });
 
@@ -43,15 +47,15 @@ export default function WindowManager() {
       id: CryptoExtensions.generateNanoId(),
       title: app.name,
       appId: app.id,
-      content: openAppContent(app.id),
+      content: <AppContent appId={app.id} />,
       isMaximized: ScreenHelper.isMobile(),
     } as WindowModel);
   }
 
-  let checkMobileScreenTimeout: Timer | null = null;
+  let checkMobileScreenTimeout: NodeJS.Timeout | null = null;
   function checkMobileScreen() {
     const handleResize = () => {
-      if (checkMobileScreenTimeout) return;
+      if (checkMobileScreenTimeout) clearTimeout(checkMobileScreenTimeout);
 
       checkMobileScreenTimeout = setTimeout(async () => {
         const windows = await windowService().getAll();
@@ -59,7 +63,7 @@ export default function WindowManager() {
         windowService().bulkUpdate(windows);
 
         checkMobileScreenTimeout = null;
-      }, 1500);
+      }, 300);
     };
 
     window.addEventListener("resize", handleResize);

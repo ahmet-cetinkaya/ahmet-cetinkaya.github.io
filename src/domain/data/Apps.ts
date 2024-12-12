@@ -1,6 +1,6 @@
-import { App } from "~/domain/models/App";
+import App from "~/domain/models/App";
 import { Categories } from "./Categories";
-import { Icons } from "./Icons";
+import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";
 
 export enum Apps {
@@ -8,7 +8,7 @@ export enum Apps {
   email,
 }
 
-export const AppsData = [
+const AppsData = [
   new App(
     Apps.welcome,
     Categories.apps,
@@ -26,3 +26,4 @@ export const AppsData = [
     new Date("2024-05-11 15:55:45"),
   ),
 ];
+export default AppsData;

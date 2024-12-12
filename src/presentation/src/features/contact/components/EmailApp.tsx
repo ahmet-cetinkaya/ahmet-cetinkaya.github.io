@@ -1,9 +1,9 @@
-import { createSignal, Index, onMount, Show } from "solid-js";
-import type { ILinksService } from "~/application/features/links/abstraction/ILinksService";
-import { Icons } from "~/domain/data/Icons";
+import { createSignal, Index, Show, createMemo, createResource } from "solid-js";
+import type ILinksService from "~/application/features/links/abstraction/ILinksService";
+import Icons from "~/domain/data/Icons";
 import { Links } from "~/domain/data/Links";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Container } from "~/presentation/Container";
+import Container from "~/presentation/Container";
 import HtmlEditor from "~/presentation/src/shared/components/HtmlEditor";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
@@ -15,18 +15,14 @@ export default function EmailApp() {
   const linksService: ILinksService = Container.instance.linksService;
   const translate = useI18n();
 
-  const [emailLinkUrl, setEmail] = createSignal<string | undefined>();
+  const [emailLinkUrl] = createResource(getEmailLink);
   const [subject, setSubject] = createSignal("");
   const [body, setBody] = createSignal("");
-
-  onMount(() => {
-    getEmailLink();
-  });
 
   async function getEmailLink() {
     const email = await linksService.get((link) => link.id === Links.email);
     if (!email) throw new Error("Email link not found");
-    setEmail(email.url);
+    return email.url;
   }
 
   function redirectToMailClient() {
@@ -51,14 +47,20 @@ export default function EmailApp() {
       </div>
 
       <div class="size-full px-10">
-        <h2 class="mb-4 flex items-center justify-between px-4 pt-4 text-2xl font-bold">
+        <Title level={2} class="mb-4 flex items-center justify-between px-4 pt-4 text-2xl font-bold">
           {translate(TranslationKeys.apps_email_compose)}
-        </h2>
+        </Title>
 
         <EmailForm />
 
         <div class="flex justify-end pe-4">
-          <Button type="button" onClick={onEmailSend} class="w-28" ariaLabel={translate(TranslationKeys.common_send)}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={onEmailSend}
+            class="w-28"
+            ariaLabel={translate(TranslationKeys.common_send)}
+          >
             <div class="flex items-center justify-center gap-2">
               <Icon icon={Icons.send} class="size-4" />
               {translate(TranslationKeys.common_send)}
@@ -70,7 +72,7 @@ export default function EmailApp() {
   );
 
   function EmailFolders() {
-    const folders: { label: TranslationKeys; icon: Icons }[] = [
+    const folders = createMemo(() => [
       {
         label: TranslationKeys.apps_email_inbox,
         icon: Icons.inbox,
@@ -87,10 +89,10 @@ export default function EmailApp() {
         label: TranslationKeys.apps_email_trash,
         icon: Icons.trash,
       },
-    ];
+    ]);
 
     return (
-      <Index each={folders}>
+      <Index each={folders()}>
         {(folder) => (
           <ul>
             <li>

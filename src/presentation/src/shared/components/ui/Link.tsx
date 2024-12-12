@@ -9,16 +9,16 @@ const linkVariantClassNames = {
 
 type LinkVariant = keyof typeof linkVariantClassNames;
 type Props = {
-  href: string;
-  children: JSX.Element;
   ariaLabel: string;
-  draggable?: boolean;
-  variant?: LinkVariant;
+  children: JSX.Element;
   class?: string;
+  draggable?: boolean;
+  href: string;
   onClick?: (e: MouseEvent) => void;
   onDragStart?: (e: DragEvent) => void;
-  target?: "_blank" | "_self" | "_parent" | "_top";
   rel?: "noopener noreferrer";
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  variant?: LinkVariant;
 };
 
 export default function Link(props: Props) {

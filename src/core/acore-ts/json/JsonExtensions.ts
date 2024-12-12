@@ -1,4 +1,4 @@
-export class JsonExtensions {
+export default class JsonExtensions {
   public static stringify(value: unknown): string {
     return JSON.stringify(value, (key, value) => {
       if (value instanceof Date) return value.toISOString();

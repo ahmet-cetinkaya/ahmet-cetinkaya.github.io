@@ -1,4 +1,4 @@
-import type { Store } from "../../store/Store";
+import type Store from "../../store/Store";
 
 export default interface II18n {
   translations: Record<string, Record<string, string>>;

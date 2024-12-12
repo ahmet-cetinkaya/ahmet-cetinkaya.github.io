@@ -5,12 +5,12 @@ import useI18n from "../utils/i18nTranslate";
 import Link from "./ui/Link";
 
 type Props = {
-  label: TranslationKey;
+  class?: string;
   href: string;
   icon: JSX.Element;
+  label: TranslationKey;
   onClick?: () => void;
   onDragStart?: () => void;
-  class?: string;
 };
 
 export default function AppShortcut(props: Props) {

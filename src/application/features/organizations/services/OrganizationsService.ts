@@ -1,41 +1,38 @@
-import type { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
-import { OrganizationsData } from "~/domain/data/Organizations";
-import type { Organization } from "~/domain/models/Organization";
-import type { IOrganizationsService } from "./abstraction/IOrganizationsService";
+import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
+import OrganizationsData from "~/domain/data/Organizations";
+import type Organization from "~/domain/models/Organization";
+import type IOrganizationsService from "./abstraction/IOrganizationsService";
 
 export default class OrganizationsService implements IOrganizationsService {
-  private _data = OrganizationsData;
+  private data?: Organization[];
 
-  getAll(predicate?: ((x: Organization) => boolean) | undefined): Promise<Organization[]> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
-
-    return Promise.resolve(query);
+  private async ensureDataLoaded(): Promise<void> {
+    if (!this.data) this.data = OrganizationsData;
   }
 
-  getList(
+  async getAll(predicate?: (x: Organization) => boolean): Promise<Organization[]> {
+    await this.ensureDataLoaded();
+    return predicate ? this.data!.filter(predicate) : this.data!;
+  }
+
+  async getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Organization) => boolean) | undefined,
+    predicate?: (x: Organization) => boolean,
   ): Promise<PaginationResult<Organization>> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
+    await this.ensureDataLoaded();
 
-    const result = query.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
-
-    return Promise.resolve({
-      items: result,
-      pageIndex,
-      pageSize,
-      totalItems: query.length,
-      totalPages: Math.ceil(query.length / pageSize),
-      hasNextPage: pageIndex < Math.ceil(query.length / pageSize),
-      hasPreviousPage: pageIndex > 1,
-    });
+    const query = predicate ? this.data!.filter(predicate) : this.data!;
+    const totalItems = query.length;
+    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+    return new PaginationResult<Organization>(pageIndex, pageSize, items, totalItems);
   }
 
-  get(predicate: (x: Organization) => boolean): Promise<Organization | null> {
-    const result = this._data.filter(predicate);
-    return Promise.resolve(result.length > 0 ? result[0] : null);
+  async get(predicate: (x: Organization) => boolean): Promise<Organization> {
+    await this.ensureDataLoaded();
+
+    const item = this.data!.find(predicate);
+    if (!item) throw new Error("Item not found");
+    return item;
   }
 }

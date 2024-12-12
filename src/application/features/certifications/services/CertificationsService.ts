@@ -1,36 +1,30 @@
-import type { PaginationResult } from "~/core/acore-ts/repository/PaginationResult";
-import { CertificationData } from "~/domain/data/Certifications";
-import type { Certification } from "~/domain/models/Certification";
-import type { ICertificationsService } from "./abstraction/ICertificationsService";
+import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
+import CertificationsData from "~/domain/data/Certifications";
+import type Certification from "~/domain/models/Certification";
+import type ICertificationsService from "./abstraction/ICertificationsService";
 
 export default class CertificationsService implements ICertificationsService {
-  private _data = CertificationData;
+  private data?: Certification[];
 
-  getAll(predicate?: ((x: Certification) => boolean) | undefined): Promise<Certification[]> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
-
-    return Promise.resolve(query);
+  private async ensureDataLoaded(): Promise<void> {
+    if (!this.data) this.data = CertificationsData;
   }
 
-  getList(
+  async getAll(predicate?: (x: Certification) => boolean): Promise<Certification[]> {
+    await this.ensureDataLoaded();
+    return predicate ? this.data!.filter(predicate) : this.data!;
+  }
+
+  async getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Certification) => boolean) | undefined,
+    predicate?: (x: Certification) => boolean,
   ): Promise<PaginationResult<Certification>> {
-    let query = this._data;
-    if (predicate) query = query.filter(predicate);
+    await this.ensureDataLoaded();
 
-    const result = query.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
-
-    return Promise.resolve({
-      items: result,
-      pageIndex,
-      pageSize,
-      totalItems: query.length,
-      totalPages: Math.ceil(query.length / pageSize),
-      hasNextPage: pageIndex < Math.ceil(query.length / pageSize),
-      hasPreviousPage: pageIndex > 1,
-    });
+    const query = predicate ? this.data!.filter(predicate) : this.data!;
+    const totalItems = query.length;
+    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+    return new PaginationResult<Certification>(pageIndex, pageSize, items, totalItems);
   }
 }

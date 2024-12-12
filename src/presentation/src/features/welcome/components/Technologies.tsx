@@ -1,9 +1,9 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createResource, Show, createMemo } from "solid-js";
 import type { ITechnologiesService } from "~/application/features/technologies/services/abstraction/ITechnologiesService";
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
-import { Technology } from "~/domain/models/Technology";
-import { Container } from "~/presentation/Container";
+import Technology from "~/domain/models/Technology";
+import Container from "~/presentation/Container";
 import NetworkGraph, { type Node } from "~/presentation/src/shared/components/NetworkGraph";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
@@ -16,15 +16,11 @@ export default function Technologies() {
   const translate = useI18n();
   let technologies: Technology[] | undefined;
 
-  const [networkGraphData, setNetworkGraphData] = createSignal<Node[]>();
+  const [networkGraphData] = createResource(getTechNetworkGraphData);
+  const memoizedNetworkGraphData = createMemo(() => networkGraphData());
 
-  onMount(() => {
-    getData();
-  });
-
-  async function getData() {
+  async function getTechNetworkGraphData() {
     technologies = await technologiesService.getAll();
-
     const nodes: Node[] = technologies.map(
       (technology) =>
         ({
@@ -33,7 +29,7 @@ export default function Technologies() {
           edges: technology.linkedTechnologyIds?.map((t) => t.toString()) ?? [],
         }) as Node,
     );
-    setNetworkGraphData(nodes);
+    return nodes;
   }
 
   //#region Draw Node
@@ -88,8 +84,8 @@ export default function Technologies() {
     <div class="size-full overflow-hidden">
       <Title>{translate(TranslationKeys.apps_welcome_technologiesIUse)}</Title>
 
-      <Show when={networkGraphData()}>
-        <NetworkGraph nodes={networkGraphData()!} renderNode={drawNode} />
+      <Show when={memoizedNetworkGraphData()}>
+        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode} />
       </Show>
     </div>
   );

@@ -4,7 +4,7 @@ import type { OrganizationId } from "./Organization";
 
 export type CurriculumVitaeId = number;
 
-export class CurriculumVitae extends Entity<CurriculumVitaeId> {
+export default class CurriculumVitae extends Entity<CurriculumVitaeId> {
   constructor(
     id: CurriculumVitaeId,
     public organizationId: OrganizationId,

@@ -1,5 +1,5 @@
-import { Technology } from "../models/Technology";
-import { Icons } from "./Icons";
+import Technology from "../models/Technology";
+import Icons from "./Icons";
 
 export enum Technologies {
   csharp,
@@ -30,7 +30,7 @@ export enum Technologies {
   azureDevOps,
 }
 
-export const TechnologiesData: Technology[] = [
+const TechnologiesData: Technology[] = [
   new Technology(Technologies.csharp, "C#", Icons.csharp, null, new Date("2024-12-01")),
   new Technology(Technologies.dotNetCore, ".NET Core", Icons.dotNetCore, [Technologies.csharp], new Date("2024-12-01")),
 
@@ -96,3 +96,4 @@ export const TechnologiesData: Technology[] = [
 
   new Technology(Technologies.azureDevOps, "Azure DevOps", Icons.azureDevOps, null, new Date("2024-12-01")),
 ];
+export default TechnologiesData;

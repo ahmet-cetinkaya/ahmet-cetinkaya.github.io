@@ -1,4 +1,4 @@
-import { Icons } from "~/domain/data/Icons";
+import Icons from "~/domain/data/Icons";
 
 const IconSvgs: Record<Icons, string> = {
   [Icons.ahmetcetinkaya]: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1010 1010"><defs><clipPath id="a" clipPathUnits="userSpaceOnUse"><path d="M-597 23H403V-977H-597Z"/></clipPath></defs><path fill="#f5d03f" d="M0 0h187c4 0 7-3 7-7v-943c0-4-3-7-7-7H21c-4 0-8 3-8 7v560c0 7-10 10-13 3l-119-238c-3-6 2-12 8-10l382 136c5 2 9-2 9-7v-170c0-3-1-6-4-7l-743-268c-6-2-12 4-9 10L-6-4c1 2 3 4 6 4" clip-path="url(#a)" transform="matrix(1 0 0 -1 636 0)"/></svg>`,

@@ -42,11 +42,11 @@ export default function Button(props: Props) {
       class={mergeCls(
         buttonVariantClassNames[props.variant!],
         buttonSizeClassNames[props.size!],
-        props.class,
+        "select-none overflow-hidden",
         {
           "cursor-not-allowed opacity-50": Boolean(props.disabled),
         },
-        "overflow-hidden",
+        props.class,
       )}
       disabled={props.disabled}
       onClick={props.onClick}

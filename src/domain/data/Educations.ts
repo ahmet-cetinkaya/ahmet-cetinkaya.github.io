@@ -1,8 +1,8 @@
-import { Education } from "../models/Education";
+import Education from "../models/Education";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 
-export const EducationData = [
+const EducationData = [
   {
     id: 1,
     organizationId: Organizations.antalyaKaratayAnatolianHighSchool,
@@ -21,3 +21,4 @@ export const EducationData = [
     descriptionMarkdown: TranslationKeys.educations_2_description_markdown,
   },
 ] as Education[];
+export default EducationData;

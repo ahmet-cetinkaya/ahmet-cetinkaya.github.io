@@ -1,0 +1,36 @@
+---
+import DesktopImages from "~/presentation/src/features/desktop/constants/Images";
+
+const images = [
+  DesktopImages.ahmet_cetinkaya_code_space_wallpaper_part_1_large,
+  DesktopImages.ahmet_cetinkaya_code_space_wallpaper_part_2_large,
+];
+
+function getImageVariant(image: string, size: number) {
+  const extensionDotIndex = image.lastIndexOf(".");
+  const extension = image.slice(extensionDotIndex);
+  const imageWithoutExtension = image.slice(0, extensionDotIndex);
+  return `${imageWithoutExtension}-${size}${extension}`;
+}
+---
+
+{
+  images.map((image) => (
+    <link
+      rel="preload"
+      href={image}
+      as="image"
+      type="image/webp"
+      imagesrcset={`
+                ${getImageVariant(image, 720)} 720w,
+                ${getImageVariant(image, 1080)} 1080w,
+                ${image} 2000w
+            `}
+      imagesizes={`
+                (max-width: 720px) 720px,
+                (max-width: 1080px) 1080px,
+                2000px
+            `}
+    />
+  ))
+}

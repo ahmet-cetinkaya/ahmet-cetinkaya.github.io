@@ -1,6 +1,6 @@
 import type { IStore } from "./abstraction/IStore";
 
-export class Store<TValue> implements IStore<TValue> {
+export default class Store<TValue> implements IStore<TValue> {
   protected _listeners: ((value: TValue) => void)[] = [];
 
   constructor(protected _value: TValue) {}

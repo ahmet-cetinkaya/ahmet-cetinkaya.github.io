@@ -1,4 +1,4 @@
-import { Object3D, Scene } from "three";
+import { Mesh, Object3D, Scene } from "three";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
@@ -34,8 +34,8 @@ export default class ThreeModelHelper {
     object.scale.set(scale, scale, scale);
     scene.add(object);
 
-    object.traverse((child: any) => {
-      if (child.isMesh) {
+    object.traverse((child) => {
+      if ((child as Mesh).isMesh) {
         child.receiveShadow = receiveShadow;
         child.castShadow = castShadow;
       }

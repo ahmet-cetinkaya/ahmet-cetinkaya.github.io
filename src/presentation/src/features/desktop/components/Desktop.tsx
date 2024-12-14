@@ -5,7 +5,7 @@ import type App from "~/domain/models/App";
 import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
-import Model from "~/presentation/src/shared/components/threeDimensionalModels/ThreeDimensionModel";
+import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
 import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";

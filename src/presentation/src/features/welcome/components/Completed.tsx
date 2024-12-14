@@ -9,7 +9,7 @@ import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Icon from "~/presentation/src/shared/components/Icon";
-import Model from "~/presentation/src/shared/components/threeDimensionalModels/ThreeDimensionModel";
+import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "~/presentation/src/features/desktop/components/AppContent";

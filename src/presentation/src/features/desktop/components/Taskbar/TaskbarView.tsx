@@ -9,7 +9,7 @@ import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Dropdown, { type DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function TaskbarView() {
   const windowsService = Container.instance.windowsService;
@@ -83,7 +83,7 @@ export default function TaskbarView() {
     return (
       <Button
         onClick={() => onClickTaskView(props.window)}
-        class={mergeCls("h-8 w-16 text-xs", {
+        class={mergeCls("h-8 w-fit min-w-16 text-xs", {
           "bg-surface-300 hover:bg-surface-200": windowsService.isActivated(props.window),
         })}
         variant="primary"

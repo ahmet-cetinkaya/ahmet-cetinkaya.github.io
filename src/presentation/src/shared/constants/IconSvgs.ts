@@ -66,5 +66,7 @@ const IconSvgs: Record<Icons, string> = {
   [Icons.inbox]: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M4 3.8A1 1 0 0 1 5 3h14c.5 0 .9.3 1 .8l2 9V20c0 .6-.4 1-1 1H3a1 1 0 0 1-1-1v-7.2l2-9ZM5.8 5l-1.6 7H9a3 3 0 1 0 6 0h4.8l-1.6-7H5.8Zm10.8 9a5 5 0 0 1-9.2 0H4v5h16v-5h-3.4Z"/></svg>`,
   [Icons.drafts]: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2c.6 0 1 .4 1 1v3.8l-2 2V4H5v16h14v-2.8l2-2V21c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1V3c0-.6.4-1 1-1h16Zm1.8 6.8 1.4 1.4-7.8 7.8H14v-1.4l7.8-7.8ZM13 12v2H8v-2h5Zm3-4v2H8V8h8Z"/></svg>`,
   [Icons.downArrow]: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="m12 13.2 5-5 1.4 1.4L12 16 5.6 9.6l1.5-1.4 4.9 5Z"/></svg>`,
+  [Icons.restart]: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M18.54 19.57a10 10 0 1 1 1.65-1.83L17 12h3a8 8 0 1 0-2.46 5.77l1 1.8Z"/></svg>`,
+  [Icons.shutDown]: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="m6.26 3.8 1.15 1.65a8 8 0 1 0 9.18 0l1.15-1.64A9.99 9.99 0 0 1 12 22 10 10 0 0 1 6.26 3.8ZM11 12V2h2v10h-2Z"/></svg>`,
 };
 export default IconSvgs;

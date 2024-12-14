@@ -13,7 +13,7 @@ import LoadingArea from "~/presentation/src/shared/components/LoadingArea";
 import Timeline, { type Activity } from "~/presentation/src/shared/components/Timeline";
 import Link from "~/presentation/src/shared/components/ui/Link";
 import Title from "~/presentation/src/shared/components/ui/Title";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 
 export default function Background() {
   const curriculumVitaeService: ICurriculumVitaeService = Container.instance.curriculumVitaeService;

@@ -4,7 +4,7 @@ import DragHelper from "~/core/acore-ts/ui/DragHelper";
 import Position from "~/core/acore-ts/ui/models/Position";
 import type Size from "~/core/acore-ts/ui/models/Size";
 import ResizeHelper from "~/core/acore-ts/ui/ResizeHelper";
-import useI18n from "../../utils/i18nTranslate";
+import { useI18n } from "../../utils/i18nTranslate";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Button from "./Button";
 import Icon from "../Icon";

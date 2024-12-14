@@ -1,0 +1,80 @@
+---
+import { TranslationKeys } from "~/domain/data/Translations";
+import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
+import SplashLayout from "../shared/layouts/SplashLayout.astro";
+import Icon from "../shared/components/Icon";
+import Icons from "~/domain/data/Icons";
+
+const translate = useI18nStatic(Astro.url);
+---
+
+<SplashLayout
+  metaData={{
+    title: translate(TranslationKeys.system_shutting_down),
+  }}
+>
+  <span id="overlay" class="flex size-full flex-col items-center justify-center">
+    <Icon icon={Icons.spinner} isSpin class="mb-4 text-8xl" />
+    <h1 class="mb-4 text-4xl font-bold">{translate(TranslationKeys.system_shutting_down)}</h1>
+    <p class="text-lg">{translate(TranslationKeys.system_shutting_down_desc)}</p>
+    <pre id="log" class="mt-4 text-left text-green-500"></pre>
+  </span>
+
+  <pre id="logs" class="mt-4 hidden text-left"></pre>
+</SplashLayout>
+
+<script>
+  const logMessages = [
+    "Stopped target Graphical Interface.",
+    "Stopped target Multi-User System.",
+    "Stopped target Login Prompts.",
+    "Stopped target Timers.",
+    "Stopped target Sockets.",
+    "Stopped target Basic System.",
+    "Stopped target Paths.",
+    "Stopped target Slices.",
+    "Stopped target Local File Systems.",
+    "Reached target Shutdown.",
+    "Stopped Network Manager.",
+    "Stopped D-Bus System Message Bus.",
+    "Stopped Permit User Sessions.",
+    "Stopped Authorization Manager.",
+    "Stopped Accounts Service.",
+    "Stopped Disk Manager.",
+    "Stopped User Login Management.",
+    "Stopped Virtual Machine and Container Registration Service.",
+    "Stopped System Logging Service.",
+    "Stopped Daily Cleanup of Temporary Directories.",
+    "Saving user data...",
+    "Closing database connections...",
+    "Clearing session data...",
+    "Stopping background jobs...",
+    "Logging out users...",
+    "Finalizing shutdown procedures...",
+  ];
+
+  const overlayElement = document.getElementById("overlay")!;
+  const logElement = document.getElementById("logs")!;
+
+  setTimeout(() => {
+    overlayElement.classList.add("hidden");
+    logElement.classList.remove("hidden");
+
+    const spanElement = document.createElement("span");
+    spanElement.className = "text-green-500";
+    spanElement.innerText = "OK";
+
+    let logIndex = 0;
+    const logsInterval = setInterval(() => {
+      if (logIndex < logMessages.length) {
+        logElement.innerHTML += "[ ";
+        logElement.appendChild(spanElement);
+        logElement.innerHTML += " ] " + logMessages[logIndex] + "\n";
+        ++logIndex;
+      } else {
+        clearInterval(logsInterval);
+        window.location.href = "about:blank";
+      }
+    }, 50);
+  }, 1500);
+</script>

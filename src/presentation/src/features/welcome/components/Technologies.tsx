@@ -7,7 +7,7 @@ import Container from "~/presentation/Container";
 import NetworkGraph, { type Node } from "~/presentation/src/shared/components/NetworkGraph";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 
 const SVG_BLOB_TYPE = "image/svg+xml;charset=utf-8";
 

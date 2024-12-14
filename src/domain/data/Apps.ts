@@ -12,7 +12,7 @@ const AppsData = [
   new App(
     Apps.welcome,
     Categories.apps,
-    TranslationKeys.apps_welcome_hello,
+    TranslationKeys.apps_welcome_wizard,
     Icons.computer,
     "",
     new Date("2024-05-11 15:53:45"),

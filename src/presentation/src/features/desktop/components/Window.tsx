@@ -10,7 +10,7 @@ import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 
 type Props = {
   window: WindowModel;

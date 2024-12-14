@@ -3,7 +3,7 @@ import { AmbientLight, PointLight, type Scene } from "three";
 import ThreeDimensionModelViewer from "./ThreeDimensionModelViewer";
 import type { GLTF } from "three/examples/jsm/Addons.js";
 import Image from "../ui/Image";
-import useI18n from "../../utils/i18nTranslate";
+import { useI18n } from "../../utils/i18nTranslate";
 import { TranslationKeys } from "~/domain/data/Translations";
 import ComputerModelPreview from "./assets/images/retro-computer-model-preview.webp";
 import EnvelopeModelPreview from "./assets/images/envelope-model-preview.webp";

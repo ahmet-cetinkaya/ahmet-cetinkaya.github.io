@@ -22,10 +22,11 @@ export default function Icon(props: Props) {
     <svg
       onClick={props.onClick}
       innerHTML={props.fillColor ? getFilledSvg() : iconSvg()}
-      class={mergeCls(props.class, {
+      class={mergeCls("select-none", props.class, {
         "animate-spin": props.isSpin ?? false,
       })}
       style={{ fill: props.fillColor }}
+      aria-label={props.icon}
     />
   );
 }

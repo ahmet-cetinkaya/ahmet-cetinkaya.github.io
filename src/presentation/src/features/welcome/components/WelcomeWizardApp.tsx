@@ -5,7 +5,7 @@ import { Apps } from "~/domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
 import Button from "~/presentation/src/shared/components/ui/Button";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import About from "./About";
 import Background from "./Background";
 import Completed from "./Completed";
@@ -114,7 +114,7 @@ export default function WelcomeWizardApp() {
   return (
     <div class="flex h-full flex-row gap-4">
       <header class="hidden basis-48 border-r border-surface-300 p-4 md:block">
-        <Title class="text-xl">{translate(TranslationKeys.apps_welcome_setup)}</Title>
+        <Title class="text-xl">{translate(TranslationKeys.common_steps)}</Title>
         <NavMenu />
       </header>
       <div class="flex size-full flex-col overflow-hidden">

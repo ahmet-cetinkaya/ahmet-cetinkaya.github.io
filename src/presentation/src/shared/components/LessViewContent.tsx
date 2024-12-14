@@ -1,7 +1,7 @@
 import { createSignal, Show, createMemo, createEffect, onCleanup } from "solid-js";
 import type { JSX } from "solid-js/jsx-runtime";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
-import useI18n from "../utils/i18nTranslate";
+import { useI18n } from "../utils/i18nTranslate";
 import Button from "./ui/Button";
 import { TranslationKeys } from "~/domain/data/Translations";
 

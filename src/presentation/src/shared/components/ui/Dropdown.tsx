@@ -1,7 +1,7 @@
 import { createMemo, createSignal, Index, createEffect, Show, type JSX } from "solid-js";
 import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import type { TranslationKey } from "~/domain/data/Translations";
-import useI18n from "../../utils/i18nTranslate";
+import { useI18n } from "../../utils/i18nTranslate";
 import Button from "./Button";
 import Link from "./Link";
 import Icon from "../Icon";

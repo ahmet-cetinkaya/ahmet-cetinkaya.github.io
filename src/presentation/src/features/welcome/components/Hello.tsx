@@ -1,4 +1,4 @@
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import SocialButtons from "./SocialButtons";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Title from "~/presentation/src/shared/components/ui/Title";

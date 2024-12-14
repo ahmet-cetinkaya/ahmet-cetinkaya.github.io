@@ -63,6 +63,8 @@ enum Icons {
   trash = "Trash Icon",
   inbox = "Inbox Icon",
   drafts = "Drafts Icon",
-  downArrow = "downArrow",
+  downArrow = "Down Arrow Icon",
+  restart = "Restart Icon",
+  shutDown = "Shut Down Icon",
 }
 export default Icons;

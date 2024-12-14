@@ -3,7 +3,7 @@ import Button from "./ui/Button";
 import Icon from "./Icon";
 import Icons from "~/domain/data/Icons";
 import HtmlEditorManager, { type FormatType } from "~/core/acore-ts/ui/HtmlEditorManager";
-import useI18n from "../utils/i18nTranslate";
+import { useI18n } from "../utils/i18nTranslate";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
 import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";

@@ -2,7 +2,7 @@ import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { TranslationKeys } from "~/domain/data/Translations";
 import MarkdownParagraph from "~/presentation/src/shared/components/MarkdownParagraph";
 import Title from "~/presentation/src/shared/components/ui/Title";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 
 type Props = {
   isConfirmedValue: boolean;

@@ -7,7 +7,7 @@ import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
-import useI18n from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
@@ -30,9 +30,9 @@ export default function Menu() {
   });
 
   async function prepareMenuItems() {
-    const categories = await categoriesService.getAll();
     const items: DropdownItem[] = [];
 
+    const categories = await categoriesService.getAll();
     for (const category of categories) {
       const categoryMenuHeader: DropdownItem = {
         text: category.name,
@@ -65,6 +65,23 @@ export default function Menu() {
 
       if (categoryMenuHeader.items!.length > 0) items.push(categoryMenuHeader);
     }
+
+    const systemMenuHeader: DropdownItem = {
+      text: TranslationKeys.common_system,
+      items: [
+        {
+          text: TranslationKeys.system_restart,
+          icon: Icons.restart,
+          href: "/restart",
+        },
+        {
+          text: TranslationKeys.system_shut_down,
+          icon: Icons.shutDown,
+          href: "/shut-down",
+        },
+      ],
+    };
+    items.push(systemMenuHeader);
 
     setMenuItems(items);
   }

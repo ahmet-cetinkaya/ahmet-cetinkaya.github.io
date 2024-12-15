@@ -38,15 +38,15 @@ export default function HtmlEditor(props: Props) {
     editorInstance = new HtmlEditorManager(editorElement, onEditorChange);
     editorInstance.attachEventListeners();
     i18n.currentLocale.subscribe(changeEditorUrlPromptText);
-
-    onCleanup(() => {
-      if (editorInstance) editorInstance.detachEventListeners();
-      i18n.currentLocale.unsubscribe(changeEditorUrlPromptText);
-    });
   }
 
   createEffect(() => {
     changeEditorUrlPromptText();
+  });
+
+  onCleanup(() => {
+    if (editorInstance) editorInstance.detachEventListeners();
+    i18n.currentLocale.unsubscribe(changeEditorUrlPromptText);
   });
 
   function changeEditorUrlPromptText() {

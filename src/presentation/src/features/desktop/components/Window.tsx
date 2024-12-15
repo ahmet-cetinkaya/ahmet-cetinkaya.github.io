@@ -1,4 +1,3 @@
-import type { JSX } from "astro/jsx-runtime";
 import { navigate } from "astro:transitions/client";
 import { createResource, createSignal } from "solid-js";
 import Position from "~/core/acore-ts/ui/models/Position";
@@ -11,10 +10,10 @@ import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import AppContent from "./AppContent";
 
 type Props = {
   window: WindowModel;
-  children: JSX.Element;
 };
 
 export default function Window(props: Props) {
@@ -120,7 +119,7 @@ export default function Window(props: Props) {
         "z-index": overrideLayer() ?? props.window.layer,
       }}
     >
-      {props.children}
+      <AppContent appId={props.window.appId} />
     </Modal>
   );
 }

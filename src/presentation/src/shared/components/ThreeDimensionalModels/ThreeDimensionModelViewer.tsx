@@ -32,7 +32,6 @@ export default function ThreeDimensionModelViewer(props: Props) {
     containerRef = element;
 
     window.addEventListener("resize", onWindowResized);
-    onCleanup(() => window.removeEventListener("resize", onWindowResized));
 
     requestAnimationFrame(() => {
       initThree();
@@ -48,6 +47,7 @@ export default function ThreeDimensionModelViewer(props: Props) {
     if (loader) loader = undefined;
     if (scene) scene = undefined;
     if (camera) camera = undefined;
+    window.removeEventListener("resize", onWindowResized);
   });
 
   function initThree() {

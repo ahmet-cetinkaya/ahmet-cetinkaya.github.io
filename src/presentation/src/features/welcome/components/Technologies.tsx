@@ -1,5 +1,5 @@
 import { createResource, Show, createMemo } from "solid-js";
-import type { ITechnologiesService } from "~/application/features/technologies/services/abstraction/ITechnologiesService";
+import type ITechnologiesService from "~/application/features/technologies/services/abstraction/ITechnologiesService";
 import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Technology from "~/domain/models/Technology";
@@ -21,7 +21,7 @@ export default function Technologies() {
 
   async function getTechNetworkGraphData() {
     technologies = await technologiesService.getAll();
-    const nodes: Node[] = technologies.map(
+    const nodes: Node[] = technologies!.map(
       (technology) =>
         ({
           id: technology.id.toString(),

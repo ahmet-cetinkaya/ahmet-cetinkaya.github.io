@@ -20,10 +20,10 @@ export default function TaskbarView() {
 
   onMount(() => {
     windowsService.subscribe(onWindowsChange);
+  });
 
-    onCleanup(() => {
-      windowsService.unsubscribe(onWindowsChange);
-    });
+  onCleanup(() => {
+    windowsService.unsubscribe(onWindowsChange);
   });
 
   function onWindowsChange(windows: Window[]) {

@@ -6,7 +6,7 @@ import type { AppId } from "./App";
 
 export type WindowId = string;
 
-export default class Window<TContent = unknown> extends Entity<WindowId> {
+export default class Window extends Entity<WindowId> {
   constructor(
     id: WindowId,
     public appId: AppId,
@@ -14,7 +14,6 @@ export default class Window<TContent = unknown> extends Entity<WindowId> {
     public layer: number = 0,
     public isMinimized: boolean = false,
     public isMaximized: boolean = false,
-    public content: TContent | undefined = undefined,
     public position: Position | undefined = undefined,
     public size: Size | undefined = undefined,
     createdDate: Date = new Date(),

@@ -92,65 +92,80 @@ export default function Modal(props: Props) {
   }
 
   return (
-    <div
-      ref={onContainerMount}
-      onClick={onClick}
-      class={mergeCls(
-        "shadow-md bg-whitez fixed min-h-52 min-w-60 transform overflow-hidden rounded-lg border border-gray-300",
-        props.class,
-      )}
-      style={{
-        ...props.style,
-        top:
-          (isMaximized() ?? props.maximizable)
-            ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
-            : props.position?.top
-              ? props.position.top + "px"
-              : "15%",
-        left:
-          (isMaximized() ?? props.maximizable)
-            ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
-            : props.position?.left
-              ? props.position.left + "px"
-              : "15%",
-        right: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
-        bottom: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
-        width:
-          (isMaximized() ?? props.maximizable)
-            ? "calc(100vw - " + (props.maximizeOffset?.left ?? 0) + "px - " + (props.maximizeOffset?.right ?? 0) + "px)"
-            : props.size?.width
-              ? props.size.width + "px"
-              : "70vw",
-        height:
-          (isMaximized() ?? props.maximizable)
-            ? "calc(100vh - " + (props.maximizeOffset?.top ?? 0) + "px - " + (props.maximizeOffset?.bottom ?? 0) + "px)"
-            : props.size?.height
-              ? props.size.height + "px"
-              : "70vh",
-      }}
-    >
-      <header class={mergeCls("flex items-center justify-between gap-2 p-2", props.headerClass)}>
-        <Title class="m-0 text-xl">{translate(props.title!)}</Title>
+    <Show when={isModalOpen()}>
+      <div
+        ref={onContainerMount}
+        onClick={onClick}
+        class={mergeCls(
+          "shadow-md bg-whitez fixed min-h-52 min-w-60 transform overflow-hidden rounded-lg border border-gray-300",
+          props.class,
+        )}
+        style={{
+          ...props.style,
+          top:
+            (isMaximized() ?? props.maximizable)
+              ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
+              : props.position?.top
+                ? props.position.top + "px"
+                : "15%",
+          left:
+            (isMaximized() ?? props.maximizable)
+              ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
+              : props.position?.left
+                ? props.position.left + "px"
+                : "15%",
+          right: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
+          bottom: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
+          width:
+            (isMaximized() ?? props.maximizable)
+              ? "calc(100vw - " +
+                (props.maximizeOffset?.left ?? 0) +
+                "px - " +
+                (props.maximizeOffset?.right ?? 0) +
+                "px)"
+              : props.size?.width
+                ? props.size.width + "px"
+                : "70vw",
+          height:
+            (isMaximized() ?? props.maximizable)
+              ? "calc(100vh - " +
+                (props.maximizeOffset?.top ?? 0) +
+                "px - " +
+                (props.maximizeOffset?.bottom ?? 0) +
+                "px)"
+              : props.size?.height
+                ? props.size.height + "px"
+                : "70vh",
+        }}
+      >
+        <header class={mergeCls("flex items-center justify-between gap-2 p-2", props.headerClass)}>
+          <Title class="m-0 text-xl">{translate(props.title!)}</Title>
 
-        <div class="ac-header-buttons flex cursor-pointer items-center justify-between gap-1">
-          {props.customHeaderButtons}
-          <Show when={props.maximizable}>
+          <div class="ac-header-buttons flex cursor-pointer items-center justify-between gap-1">
+            {props.customHeaderButtons}
+            <Show when={props.maximizable}>
+              <Button
+                onClick={toggleMaximize}
+                variant="text"
+                size="small"
+                ariaLabel={translate(TranslationKeys.common_maximize)}
+              >
+                <Icon icon={Icons.maximize} class="size-4" />
+              </Button>
+            </Show>
             <Button
-              onClick={toggleMaximize}
+              onClick={toggleModal}
               variant="text"
               size="small"
-              ariaLabel={translate(TranslationKeys.common_maximize)}
+              ariaLabel={translate(TranslationKeys.common_close)}
             >
-              <Icon icon={Icons.maximize} class="size-4" />
+              <Icon icon={Icons.close} class="size-4" />
             </Button>
-          </Show>
-          <Button onClick={toggleModal} variant="text" size="small" ariaLabel={translate(TranslationKeys.common_close)}>
-            <Icon icon={Icons.close} class="size-4" />
-          </Button>
-        </div>
-      </header>
+          </div>
+        </header>
 
-      <main class="size-full overflow-hidden p-2 pb-16">{props.children}</main>
-    </div>
+        <main class="size-full overflow-hidden p-2 pb-16">{props.children}</main>
+      </div>
+    </Show>
   );
 }

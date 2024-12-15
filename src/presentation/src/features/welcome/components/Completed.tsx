@@ -12,7 +12,6 @@ import Icon from "~/presentation/src/shared/components/Icon";
 import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Completed() {
@@ -38,7 +37,6 @@ export default function Completed() {
       0,
       false,
       ScreenHelper.isMobile(),
-      <AppContent appId={contactApp()!.id} />,
     );
     windowsService.add(window);
   }

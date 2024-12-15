@@ -27,16 +27,26 @@ export default function LessViewContent(props: Props) {
     "max-height": expanded() ? "none" : props.heightLimit ? `${props.heightLimit}px` : `${DEFAULT_HEIGHT_LIMIT}px`,
   }));
 
+  let contentElement: HTMLDivElement | undefined;
+
   function onContentMount(el: HTMLDivElement) {
-    const updateHeight = () => setContentHeight(el.scrollHeight);
-    requestAnimationFrame(updateHeight);
-    window.addEventListener("resize", updateHeight);
-    onCleanup(() => window.removeEventListener("resize", updateHeight));
+    contentElement = el;
+
+    requestAnimationFrame(onWindowResize);
+    window.addEventListener("resize", onWindowResize);
   }
 
   createEffect(() => {
     if (expanded()) setContentHeight(contentHeight());
   });
+
+  onCleanup(() => {
+    window.removeEventListener("resize", onWindowResize);
+  });
+
+  function onWindowResize() {
+    if (contentElement) setContentHeight(contentElement.scrollHeight);
+  }
 
   return (
     <div class={mergeCls("relative", props.containerClass)}>

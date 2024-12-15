@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount, createMemo, type Accessor } from "solid-js";
+import { createSignal, For, onCleanup, onMount } from "solid-js";
 import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import { Categories } from "~/domain/data/Categories";
 import type App from "~/domain/models/App";
@@ -6,7 +6,6 @@ import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
-import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";
 import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
@@ -19,7 +18,7 @@ export default function Desktop() {
   const windowsService: IWindowsService = Container.instance.windowsService;
 
   let containerRef: HTMLDivElement | undefined;
-  let matrixDimensions: Accessor<{ dimension1: number; dimension2: number }> | undefined;
+  let matrixDimensions: { dimension1: number; dimension2: number } | undefined;
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
@@ -36,7 +35,7 @@ export default function Desktop() {
     containerRef = element;
 
     requestAnimationFrame(() => {
-      matrixDimensions = createMemo(getMatrixDimensions);
+      matrixDimensions = getMatrixDimensions();
       generateMatrix();
     });
   }
@@ -53,7 +52,7 @@ export default function Desktop() {
   async function generateMatrix() {
     if (!matrixDimensions) return;
 
-    const { dimension1, dimension2 } = matrixDimensions();
+    const { dimension1, dimension2 } = matrixDimensions;
     const newMatrix: DesktopShortcutMatrix = Array.from({ length: dimension1 }, () => Array(dimension2).fill(null));
 
     let x = 0;
@@ -93,7 +92,7 @@ export default function Desktop() {
     const updatedMatrix = matrix().map((row) => [...row]);
     const [draggedX, draggedY] = findShortcutPosition(draggedShortcut()!)!;
 
-    const { dimension1, dimension2 } = matrixDimensions();
+    const { dimension1, dimension2 } = matrixDimensions;
 
     const validTargetX = targetX >= 0 && targetX < dimension1;
     const validTargetY = targetY >= 0 && targetY < dimension2;
@@ -124,7 +123,6 @@ export default function Desktop() {
       0,
       false,
       ScreenHelper.isMobile(),
-      <AppContent appId={shortcut.id} />,
     );
     windowsService.add(window);
   }

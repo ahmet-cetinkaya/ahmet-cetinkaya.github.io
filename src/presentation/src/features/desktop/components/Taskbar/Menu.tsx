@@ -8,7 +8,6 @@ import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import AppContent from "~/presentation/src/features/desktop/components/AppContent";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Menu() {
@@ -55,7 +54,6 @@ export default function Menu() {
                   undefined,
                   false,
                   ScreenHelper.isMobile(),
-                  <AppContent appId={app.id} />,
                 );
                 windowsService.add(window);
               },

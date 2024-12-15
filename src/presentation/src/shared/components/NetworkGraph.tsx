@@ -62,15 +62,21 @@ export default function NetworkGraph(props: Props) {
     beginAnimationSpeedThrottling();
     window.addEventListener("resize", resizeCanvas);
     observeContainerResize();
-
-    onCleanup(() => {
-      window.removeEventListener("resize", resizeCanvas);
-      if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
-    });
   });
 
   createEffect(() => {
     if (canvasElement) drawGraph();
+  });
+
+  onCleanup(() => {
+    window.removeEventListener("resize", resizeCanvas);
+    if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+
+    canvasElement!.removeEventListener("mousemove", onMouseMove);
+    window.removeEventListener("mouseup", onMouseUp);
+    canvasElement!.removeEventListener("wheel", onWheel);
+
+    if (resizeObserver) resizeObserver.disconnect();
   });
 
   function onCanvasMount(el: HTMLCanvasElement) {
@@ -81,12 +87,6 @@ export default function NetworkGraph(props: Props) {
     canvasElement.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
     canvasElement.addEventListener("wheel", onWheel);
-
-    onCleanup(() => {
-      canvasElement!.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
-      canvasElement!.removeEventListener("wheel", onWheel);
-    });
   }
 
   function initializeCanvas() {
@@ -110,10 +110,10 @@ export default function NetworkGraph(props: Props) {
     }, layoutSettings.animationSpeedDecreaseInterval);
   }
 
+  let resizeObserver: ResizeObserver | undefined;
   function observeContainerResize() {
-    const resizeObserver = new ResizeObserver(() => resizeCanvas());
+    resizeObserver = new ResizeObserver(() => resizeCanvas());
     if (containerElement) resizeObserver.observe(containerElement);
-    onCleanup(() => resizeObserver.disconnect());
   }
 
   function applyForces() {

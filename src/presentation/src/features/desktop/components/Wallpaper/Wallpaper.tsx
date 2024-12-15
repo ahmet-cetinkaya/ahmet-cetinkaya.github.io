@@ -20,7 +20,12 @@ export default function Wallpaper(props: Props) {
 
   onMount(() => {
     document.addEventListener("mousemove", handleMouseMove);
-    onCleanup(() => document.removeEventListener("mousemove", handleMouseMove));
+  });
+
+  onCleanup(() => {
+    document.removeEventListener("mousemove", handleMouseMove);
+
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
   });
 
   function handleMouseMove(event: MouseEvent) {
@@ -31,9 +36,6 @@ export default function Wallpaper(props: Props) {
 
     animationFrameId = requestAnimationFrame(() => {
       setBackgroundPosition(AnimationHelper.movePositionOnMouseMove(event, 20));
-    });
-    onCleanup(() => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
     });
   }
 

@@ -3,6 +3,7 @@
   "type": "module",
   "module": "index.ts",
   "dependencies": {
+    "js-dos": "^8.3.10",
     "tailwind-merge": "^2.5.4",
     "three": "^0.171.0"
   },

@@ -58,6 +58,7 @@ export enum TranslationKeys {
   common_contact = "common_contact",
   common_email = "common_email",
   common_envelope = "common_envelope",
+  common_games = "common_games",
   common_header1 = "common_header1",
   common_header2 = "common_header2",
   common_hyperlink = "common_hyperlink",
@@ -86,6 +87,7 @@ export enum TranslationKeys {
   educations_1_department = "educations_1_department",
   educations_2_department = "educations_2_department",
   educations_2_description_markdown = "educations_2_description_markdown",
+  games_doom = "games_doom",
   links_github = "links_github",
   links_instagram = "links_instagram",
   links_itchio = "links_itchio",
@@ -111,51 +113,51 @@ export enum TranslationKeys {
   system_shutting_down_desc = "system_shutting_down_desc",
 }
 const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
-  "apps_email_compose": {
+  apps_email_compose: {
     en: "Compose",
     tr: "Yeni E-posta"
   },
-  "apps_email_drafts": {
+  apps_email_drafts: {
     en: "Drafts",
     tr: "Taslaklar"
   },
-  "apps_email_enter_url": {
+  apps_email_enter_url: {
     en: "Enter URL",
     tr: "URL Girin"
   },
-  "apps_email_folders": {
+  apps_email_folders: {
     en: "Folders",
     tr: "Klasörler"
   },
-  "apps_email_inbox": {
+  apps_email_inbox: {
     en: "Inbox",
     tr: "Gelen Kutusu"
   },
-  "apps_email_sent": {
+  apps_email_sent: {
     en: "Sent",
     tr: "Gönderilen"
   },
-  "apps_email_subject": {
+  apps_email_subject: {
     en: "Subject",
     tr: "Konu"
   },
-  "apps_email_to": {
+  apps_email_to: {
     en: "To",
     tr: "Kime"
   },
-  "apps_email_trash": {
+  apps_email_trash: {
     en: "Trash",
     tr: "Çöp Kutusu"
   },
-  "apps_welcome_about_me": {
+  apps_welcome_about_me: {
     en: "About Me",
     tr: "Hakkımda"
   },
-  "apps_welcome_about_me_confirm": {
+  apps_welcome_about_me_confirm: {
     en: "I have read and got to know you, nice to meet you.",
     tr: "Okudum ve sizi tanıdım, tanıştığımıza memnun oldum."
   },
-  "apps_welcome_about_me_markdown": {
+  apps_welcome_about_me_markdown: {
     en: `Hello, I’m **Ahmet Çetinkaya**. I was born and raised in [**Istanbul**](https://www.openstreetmap.org/node/1882099475#map=7/39.398/30.811) in 1999. My interest in technology started at a young age. I got my first computer when I was 6 years old, and since then, I’ve had a life deeply connected with computers. In my early years, I started creating mods for my favorite games using various technical programs, which were my first steps into the world of software.
 
 After completing my primary education in Istanbul, I moved to [**Antalya**](https://www.openstreetmap.org/node/428039517#map=7/37.823/30.927) and continued my secondary education at **Antalya Karatay Anatolian High School**. During high school, alongside my focus on science subjects, I developed an interest in **web programming**. I created and managed several websites and also wrote **technology** news. This experience helped me gain expertise in both software and digital media.
@@ -175,67 +177,67 @@ My approach to technology is driven by a constant **desire to learn**, inspiring
 
 Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiyor ve her gün yeni şeyler keşfetmek için bana ilham veriyor. Bu yolculukta öğrendiklerimi paylaşmak, daha fazla insana dokunmak ve **yazılım dünyasına katkı sağlamak** en büyük hedefim. [**Özgür yazılım (GNU)** felsefesi](https://www.gnu.org/philosophy/philosophy.tr.html)ni desteklemek ve bu alanda projeler üretmek, dijital alanda da bilinçli bir tüketici olmak yazılım dünyasına katkı sağlamak için benim adıma oldukça önemli. Yazılım geliştirme sürecimde, aynı zamanda çeşitli **yazılım felsefeleri, prensipleri** ve **kalite kriterlerini** benimseyip uygulamaya özen gösteriyorum. Bu, çalışmalarımın temel taşlarını oluşturuyor. Yazılım dünyasında başarılı olmanın, sadece teknolojik bilgiyle değil, aynı zamanda iyi bir yazılım pratiği ve kalite bilinciyle mümkün olduğuna inanıyorum.`
   },
-  "apps_welcome_about_me_short_text": {
+  apps_welcome_about_me_short_text: {
     en: "Hi, I'm a software developer and a computer engineer. I'm interested in web technologies, software development, and computer science.",
     tr: "Merhaba, bir yazılım geliştirici ve bilgisayar mühendisiyim. Web teknolojileri, yazılım geliştirme ve bilgisayar bilimleriyle ilgileniyorum."
   },
-  "apps_welcome_background": {
+  apps_welcome_background: {
     en: "Background",
     tr: "Geçmiş"
   },
-  "apps_welcome_certifications": {
+  apps_welcome_certifications: {
     en: "Certifications",
     tr: "Sertifikalar"
   },
-  "apps_welcome_completed": {
+  apps_welcome_completed: {
     en: "Completed",
     tr: "Tamamlandı"
   },
-  "apps_welcome_completed_text": {
+  apps_welcome_completed_text: {
     en: "You have completed the welcome wizard.",
     tr: "Tanışma sihirbazını tamamladınız."
   },
-  "apps_welcome_educations": {
+  apps_welcome_educations: {
     en: "Educations",
     tr: "Eğitimler"
   },
-  "apps_welcome_experiences": {
+  apps_welcome_experiences: {
     en: "Experiences",
     tr: "Deneyimler"
   },
-  "apps_welcome_finish": {
+  apps_welcome_finish: {
     en: "Finish",
     tr: "Bitir"
   },
-  "apps_welcome_hello": {
+  apps_welcome_hello: {
     en: "Hello",
     tr: "Merhaba"
   },
-  "apps_welcome_if_you_want_to_contact_me": {
+  apps_welcome_if_you_want_to_contact_me: {
     en: "If you want to contact me, you can send an e-mail to:",
     tr: "Benimle iletişime geçmek isterseniz, e-posta gönderebilirsiniz:"
   },
-  "apps_welcome_present": {
+  apps_welcome_present: {
     en: "Present",
     tr: "Halen"
   },
-  "apps_welcome_technologies": {
+  apps_welcome_technologies: {
     en: "Technologies",
     tr: "Teknolojiler"
   },
-  "apps_welcome_technologiesIUse": {
+  apps_welcome_technologiesIUse: {
     en: "Technologies I Use",
     tr: "Kullandığım Teknolojiler"
   },
-  "apps_welcome_welcome": {
+  apps_welcome_welcome: {
     en: "Welcome",
     tr: "Hoş Geldin"
   },
-  "apps_welcome_wizard": {
+  apps_welcome_wizard: {
     en: "Welcome Wizard",
     tr: "Karşılama Sihirbazı"
   },
-  "certificates_1_description_markdown": {
+  certificates_1_description_markdown: {
     en: `- **Web Development**: Modern techniques, principles
 - **Frontend Technologies**: HTML5, CSS3, Flexbox, Bootstrap
 - **JavaScript & TypeScript**: ES6+, React, Vue, Angular
@@ -259,11 +261,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **MongoDB**: Veritabanı modelleme
 - **JWT & Authentication**: JSON Web Token, kimlik doğrulama`
   },
-  "certificates_1_name": {
+  certificates_1_name: {
     en: "Modern Web Development Course | Scratch to Advanced",
     tr: "Modern Web Geliştirme Kursu | Sıfırdan Sektörün Yükseklerine"
   },
-  "certificates_2_description_markdown": {
+  certificates_2_description_markdown: {
     en: `- **ReactJS Architecture**
 - **React Router V4**
 - **HTTP Requests**
@@ -277,11 +279,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Formlar**
 - **CRUD Uygulaması**`
   },
-  "certificates_2_name": {
+  certificates_2_name: {
     en: "React and Context API From Scratch",
     tr: "Sıfırdan React ve Context Api"
   },
-  "certificates_3_description_markdown": {
+  certificates_3_description_markdown: {
     en: `- Unity Updates and Versions
 - Scene and Game Screen Management
 - Hierarchy, Project, and Inspector Panel
@@ -315,11 +317,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Yapay Zeka ve Mobil Entegrasyon
 - Projeler: Top Kontrolü, Kamera Kontrolü, Engeller, Random Döndürme, Kurşun Ateş Etme, Asteroid ve Patlama Efektleri, Score Sistemi, Oyun Sonu, Ana Menü ve Level Geçişi, Kayıt Sistemi, Google AdMob ile Reklam, Düşman Oluşturma, Can Kazanma, Altın Toplama, Mobil Joystick ve Zıplama, Level Dizaynı, Build Etme (Google Play Store).`
   },
-  "certificates_3_name": {
+  certificates_3_name: {
     en: "Unity C# | 2D & 3D Game Development From Scratch",
     tr: "Unity C# | Sıfırdan 2D & 3D Oyun Geliştirme Eğitimi"
   },
-  "certificates_4_description_markdown": {
+  certificates_4_description_markdown: {
     en: `- Python programming fundamentals, real-life application
 - C# programming: variables, conditionals, loops, arrays
 - Algorithm design and problem-solving techniques
@@ -341,11 +343,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Web frontend geliştirme: HTML5, CSS3, duyarlı tasarım, Bootstrap framework
 - Angular framework: bileşenler, servisler, yönlendirme, veri bağlama, formlar, direktifler, RxJS`
   },
-  "certificates_4_name": {
+  certificates_4_name: {
     en: "Software Developer Training Camp - C# and Angular",
     tr: "Yazılım Geliştirici Yetiştirme Kampı - C# ve Angular"
   },
-  "certificates_5_description_markdown": {
+  certificates_5_description_markdown: {
     en: `- Data Integrity and Design Errors
 - Design Evaluations
 - Relationships and Data Loss
@@ -371,11 +373,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Denormalizasyon
 - Kurumsal Mimarilerde Tasarım Değerlendirmesi`
   },
-  "certificates_5_name": {
+  certificates_5_name: {
     en: "SQL Server Database Design for Enterprise Architectures",
     tr: "Kurumsal Mimariler İçin Sql Server Veri Tabanı Tasarımı "
   },
-  "certificates_6_description_markdown": {
+  certificates_6_description_markdown: {
     en: `- Real-life programming introduction
 - Java Basics
 - Java Variables, conditionals, loops, arrays
@@ -407,11 +409,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - React/Redux
 - React Security`
   },
-  "certificates_6_name": {
+  certificates_6_name: {
     en: "Software Developer Training Camp - JAVA and React",
     tr: "Yazılım Geliştirici Yetiştirme Kampı - JAVA ve React"
   },
-  "certificates_7_description_markdown": {
+  certificates_7_description_markdown: {
     en: `- JavaScript Basics
 - JavaScript OOP with JavaScript Internals
 - Promises & Async Programming
@@ -421,11 +423,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Promiseler ve Asenkron Programlama
 - Reflect API, Proxy API`
   },
-  "certificates_7_name": {
+  certificates_7_name: {
     en: "Software Developer Training Camp - JavaScript",
     tr: "Yazılım Geliştirici Yetiştirme Kampı - JavaScript"
   },
-  "certificates_8_description_markdown": {
+  certificates_8_description_markdown: {
     en: `- **Data Types and Working with Variables**
 - Working with Data Types (int, long, short, byte, bool, char, double, decimal, enum)
 - Working with **var** and Type Safety
@@ -525,11 +527,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Attribute, Reflection ve Dependency Injection
 - Delegeler, Func, Action ve Events`
   },
-  "certificates_8_name": {
+  certificates_8_name: {
     en: "45+ Hour C# Course From Scratch to Advanced",
     tr: "Sıfırdan İleri Seviyeye 45+ Saat C# Kursu"
   },
-  "certificates_9_description_markdown": {
+  certificates_9_description_markdown: {
     en: `- **C# Programming Fundamentals**: Variables, data types, control structures (if-else, switch), loops (for, while), arrays
 - **Algorithm Design and Problem-Solving Techniques**: Developing efficient algorithms, complexity analysis, problem-solving strategies
 - **Object-Oriented Programming (OOP)**: Classes, objects, inheritance, polymorphism, encapsulation, abstraction, interfaces in C#
@@ -563,11 +565,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Test Odaklı Geliştirme (TDD)**: Birim testleri yazma, testler ile geliştirme, hata ayıklama, mock nesneleri kullanımı
 - **Yazılım Tasarım Desenleri**: Singleton, Factory, Strategy, Observer, Command, Repository, Dependency Injection desenleri`
   },
-  "certificates_9_name": {
+  certificates_9_name: {
     en: ".NET Core and Angular Bootcamp",
     tr: ".NET Core ve Angular Bootcamp"
   },
-  "certificates_10_description_markdown": {
+  certificates_10_description_markdown: {
     en: `- AWS Cloud Global Infrastructure (Regions, Availability Zones, Edge Locations)
 - Benefits of AWS Cloud (Scalability, High Availability, Performance, Security, Cost-Effectiveness, Global Reach)
 - Core AWS Services: Compute (EC2, Lambda, Lightsail), Network (VPC, Route 53, Direct Connect), Databases (RDS, DynamoDB, Redshift), Storage (S3, EBS, Glacier)
@@ -585,113 +587,117 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - AWS Cloud Göç Araçları (AWS Migration Hub, DMS, SMS)
 - Finansal Faydalar ve Maliyet Yönetimi (Kullandıkça Öde, Rezervli Durumlar, EC2 Spot Instance'ları, AWS Fiyatlandırma Hesaplayıcısı, AWS Bütçeleri, AWS Organizasyonları)`
   },
-  "certificates_10_name": {
+  certificates_10_name: {
     en: "AWS Cloud Practitioner Essentials",
     tr: "AWS Bulut Uygulayıcı Temelleri"
   },
-  "common_apps": {
+  common_apps: {
     en: "Apps",
     tr: "Uygulamalar"
   },
-  "common_bold": {
+  common_bold: {
     en: "Bold",
     tr: "Kalın"
   },
-  "common_clear_format": {
+  common_clear_format: {
     en: "Clear format",
     tr: "Formatı temizle"
   },
-  "common_close": {
+  common_close: {
     en: "Close",
     tr: "Kapat"
   },
-  "common_computer": {
+  common_computer: {
     en: "Computer",
     tr: "Bilgisayar"
   },
-  "common_contact": {
+  common_contact: {
     en: "Contact",
     tr: "İletişim"
   },
-  "common_email": {
+  common_email: {
     en: "E-mail",
     tr: "E-posta"
   },
-  "common_envelope": {
+  common_envelope: {
     en: "Envelope",
     tr: "Zarf"
   },
-  "common_header1": {
+  common_games: {
+    en: "Games",
+    tr: "Oyunlar"
+  },
+  common_header1: {
     en: "Header 1",
     tr: "Başlık 1"
   },
-  "common_header2": {
+  common_header2: {
     en: "Header 2",
     tr: "Başlık 2"
   },
-  "common_hyperlink": {
+  common_hyperlink: {
     en: "Hyperlink",
     tr: "Bağlantı"
   },
-  "common_italic": {
+  common_italic: {
     en: "Italic",
     tr: "İtalik"
   },
-  "common_maximize": {
+  common_maximize: {
     en: "Maximize",
     tr: "Maksimize"
   },
-  "common_menu": {
+  common_menu: {
     en: "Menu",
     tr: "Menü"
   },
-  "common_next": {
+  common_next: {
     en: "Next",
     tr: "İleri"
   },
-  "common_ordered_list": {
+  common_ordered_list: {
     en: "Ordered List",
     tr: "Sıralı Liste"
   },
-  "common_prev": {
+  common_prev: {
     en: "Previous",
     tr: "Geri"
   },
-  "common_send": {
+  common_send: {
     en: "Send",
     tr: "Gönder"
   },
-  "common_show_more": {
+  common_show_more: {
     en: "Show More",
     tr: "Daha Fazla Göster"
   },
-  "common_steps": {
+  common_steps: {
     en: "Steps",
     tr: "Adımlar"
   },
-  "common_system": {
+  common_system: {
     en: "System",
     tr: "Sistem"
   },
-  "common_underline": {
+  common_underline: {
     en: "Underline",
     tr: "Altı Çizili"
   },
-  "common_unordered_list": {
+  common_unordered_list: {
     en: "Unordered List",
     tr: "Sırasız Liste"
   },
-  "curriculum_vitae_1_description_markdown": {
+  curriculum_vitae_1_description_markdown: {
     en: `- Various software projects analysis and development`,
     tr: `- Çeşitli yazılım projeleri analizi ve geliştirme`
   },
-  "curriculum_vitae_2_description_markdown": {
+  curriculum_vitae_2_description_markdown: {
     en: `- Instructor in ETIYA Academy In-House Training Program
 - Software Development on the DevArchitecture Framework`,
     tr: `- ETIYA Akademi Şirket İçi Eğitim Programında Eğitmenlik
 - DevArchitecture Framework Üzerinde Yazılım Geliştirme`
   },
-  "curriculum_vitae_3_description_markdown": {
+  curriculum_vitae_3_description_markdown: {
     en: `- Software Development and Consulting for State Hydraulic Works (DSI)
 - Software Development and Consulting for BOSCH
 - Instructor in ESBAŞ In-house Training Program
@@ -707,43 +713,43 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - ETİYA-TÜBİSAD Eğitim Programında Eğitmenlik
 - BOSCH Eğitim Programında Eğitmenlik`
   },
-  "curriculum_vitae_computer_engineering": {
+  curriculum_vitae_computer_engineering: {
     en: "Computer Engineering",
     tr: "Bilgisayar Mühendisliği"
   },
-  "curriculum_vitae_intern": {
+  curriculum_vitae_intern: {
     en: "Intern",
     tr: "Stajyer"
   },
-  "curriculum_vitae_software_developer": {
+  curriculum_vitae_software_developer: {
     en: "Software Developer",
     tr: "Yazılım Geliştirici"
   },
-  "curriculum_vitae_software_developer_and_instructor": {
+  curriculum_vitae_software_developer_and_instructor: {
     en: "Software Developer and Instructor",
     tr: "Yazılım Geliştirici ve Eğitmen"
   },
-  "desktop_change_locale": {
+  desktop_change_locale: {
     en: "Change Locale",
     tr: "Dili Değiştir"
   },
-  "desktop_minimize": {
+  desktop_minimize: {
     en: "Minimize",
     tr: "Küçült"
   },
-  "desktop_taskbar_other_windows_menu": {
+  desktop_taskbar_other_windows_menu: {
     en: "Other windows menu",
     tr: "Diğer pencereler menüsü"
   },
-  "educations_1_department": {
+  educations_1_department: {
     en: "STEM (Science, Technology, Engineering, Mathematics)",
     tr: "Sayısal"
   },
-  "educations_2_department": {
+  educations_2_department: {
     en: "Faculty of Architecture and Engineering - Computer Engineering",
     tr: "Mimarlık ve Mühendislik Fakültesi - Bilgisayar Mühendisliği"
   },
-  "educations_2_description_markdown": {
+  educations_2_description_markdown: {
     en: `- Bachelor's thesis titled "Software Framework Implementing Microservice Architecture"
 - Drone simulation for TÜBİTAK competition
 - Development of hospital software for Mehmet Akif Ersoy University Faculty of Veterinary Medicine, Pathology Department, for use on web and mobile
@@ -753,95 +759,99 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Mehmet Akif Ersoy Veterinerlik Fakültesi Patoloji Bölümü için web ve mobil'de kullanılmak üzere hastane yazılımı geliştirme
 - Çeşitli birçok proje...`
   },
-  "links_github": {
+  games_doom: {
+    en: "Doom",
+    tr: "Doom"
+  },
+  links_github: {
     en: "Github",
     tr: "Github"
   },
-  "links_instagram": {
+  links_instagram: {
     en: "Instagram",
     tr: "Instagram"
   },
-  "links_itchio": {
+  links_itchio: {
     en: "Itch.io",
     tr: "Itch.io"
   },
-  "links_linkedin": {
+  links_linkedin: {
     en: "LinkedIn",
     tr: "LinkedIn"
   },
-  "links_mastodon": {
+  links_mastodon: {
     en: "Mastodon",
     tr: "Mastodon"
   },
-  "links_x": {
+  links_x: {
     en: "X",
     tr: "X"
   },
-  "organizations_ahmet_cetinkaya": {
+  organizations_ahmet_cetinkaya: {
     en: "Ahmet Çetinkaya (Freelance)",
     tr: "Ahmet Çetinkaya (Serbest Çalışan)"
   },
-  "organizations_amazon_web_service": {
+  organizations_amazon_web_service: {
     en: "Amazon Web Services",
     tr: "Amazon Web Servisleri"
   },
-  "organizations_amazon_web_services": {
+  organizations_amazon_web_services: {
     en: "Amazon Web Services",
     tr: "Amazon Web Servisleri"
   },
-  "organizations_antalya_karatay_anatolian_high_school": {
+  organizations_antalya_karatay_anatolian_high_school: {
     en: "Antalya Karatay Anatolian High School",
     tr: "Antalya Karatay Anadolu Lisesi"
   },
-  "organizations_kodlamaio": {
+  organizations_kodlamaio: {
     en: "Kodlama.io",
     tr: "Kodlama.io"
   },
-  "organizations_meb": {
+  organizations_meb: {
     en: "Ministry of National Education",
     tr: "Milli Eğitim Bakanlığı"
   },
-  "organizations_mehmet_akif_ersoy_university": {
+  organizations_mehmet_akif_ersoy_university: {
     en: "Mehmet Akif Ersoy University",
     tr: "Mehmet Akif Ersoy Üniversitesi"
   },
-  "organizations_mng_kargo": {
+  organizations_mng_kargo: {
     en: "MNG Kargo",
     tr: "MNG Kargo"
   },
-  "organizations_udemy": {
+  organizations_udemy: {
     en: "Udemy",
     tr: "Udemy"
   },
-  "system_boot": {
+  system_boot: {
     en: "Boot",
     tr: "Başlat"
   },
-  "system_booting": {
+  system_booting: {
     en: "Booting...",
     tr: "Başlatılıyor..."
   },
-  "system_restart": {
+  system_restart: {
     en: "Restart",
     tr: "Yeniden Başlat"
   },
-  "system_restarting": {
+  system_restarting: {
     en: "Restarting...",
     tr: "Yeniden Başlatılıyor..."
   },
-  "system_restarting_desc": {
+  system_restarting_desc: {
     en: "Please wait while your system is restarting.",
     tr: "Sisteminiz yeniden başlatılırken lütfen bekleyin."
   },
-  "system_shut_down": {
+  system_shut_down: {
     en: "Shut Down",
     tr: "Kapat"
   },
-  "system_shutting_down": {
+  system_shutting_down: {
     en: "Shutting Down...",
     tr: "Kapatılıyor..."
   },
-  "system_shutting_down_desc": {
+  system_shutting_down_desc: {
     en: "Please wait while your system is shutting down.",
     tr: "Sisteminiz kapatılırken lütfen bekleyin."
   }

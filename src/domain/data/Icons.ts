@@ -66,5 +66,6 @@ enum Icons {
   downArrow = "Down Arrow Icon",
   restart = "Restart Icon",
   shutDown = "Shut Down Icon",
+  doom = "Doom Game icon",
 }
 export default Icons;

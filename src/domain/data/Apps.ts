@@ -6,6 +6,7 @@ import { TranslationKeys } from "./Translations";
 export enum Apps {
   welcome = 1,
   email,
+  doom,
 }
 
 const AppsData = [
@@ -25,5 +26,7 @@ const AppsData = [
     "contact",
     new Date("2024-05-11 15:55:45"),
   ),
+
+  new App(Apps.doom, Categories.games, TranslationKeys.games_doom, Icons.doom, "doom", new Date("2024-05-11 15:55:45")),
 ];
 export default AppsData;

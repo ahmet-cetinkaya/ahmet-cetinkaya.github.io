@@ -23,16 +23,17 @@ export default class WindowsService implements IWindowsService {
     this._windowsStore.unsubscribe(listener);
   }
 
-  getAll(predicate?: ((x: Window<unknown>) => boolean) | undefined): Promise<Window<unknown>[]> {
+  getAll(predicate?: ((x: Window) => boolean) | undefined): Promise<Window[]> {
     let query = this._windowsStore.get();
     if (predicate) query = query.filter(predicate);
     return Promise.resolve(query);
   }
+
   getList(
     pageIndex: number,
     pageSize: number,
-    predicate?: ((x: Window<unknown>) => boolean) | undefined,
-  ): Promise<PaginationResult<Window<unknown>>> {
+    predicate?: ((x: Window) => boolean) | undefined,
+  ): Promise<PaginationResult<Window>> {
     let query = this._windowsStore.get();
     if (predicate) query = query.filter(predicate);
 
@@ -63,6 +64,8 @@ export default class WindowsService implements IWindowsService {
     window.layer = Math.max(ArrayExtensions.max(windows, (w) => w.layer!) + 1, 1);
     window.createdDate = new Date();
     this._windowsStore.set([...windows.map((w) => ({ ...w })), window]);
+    // windows.push(window);
+    // this._windowsStore.set(windows);
 
     return Promise.resolve();
   }

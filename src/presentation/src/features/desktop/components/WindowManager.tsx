@@ -1,8 +1,9 @@
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { createSignal, onCleanup, onMount } from "solid-js";
 import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import WindowModel from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
+import Key from "~/core/acore-solidjs/ui/components/Key";
 import Window from "./Window";
 
 export default function WindowManager() {
@@ -68,12 +69,8 @@ export default function WindowManager() {
   }
 
   return (
-    <For each={windows()}>
-      {(window) => (
-        <Show when={!window.isMinimized}>
-          <Window window={window} />
-        </Show>
-      )}
-    </For>
+    <Key each={windows()} by={(item) => item.id}>
+      {(item) => <Window window={item()} />}
+    </Key>
   );
 }

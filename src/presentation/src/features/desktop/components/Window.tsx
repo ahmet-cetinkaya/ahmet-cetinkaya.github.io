@@ -11,6 +11,7 @@ import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/shared/components/ui/Modal";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "./AppContent";
+import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
 type Props = {
   window: WindowModel;
@@ -113,7 +114,9 @@ export default function Window(props: Props) {
       onResizeStart={onResizeStart}
       onResizeEnd={onResizeEnd}
       onToggleMaximize={onToggleMaximize}
-      class="border-black bg-surface-500 text-white shadow-secondary"
+      class={mergeCls("border-black bg-surface-500 text-white shadow-secondary", {
+        hidden: props.window.isMinimized,
+      })}
       headerClass="bg-surface-400"
       style={{
         "z-index": overrideLayer() ?? props.window.layer,

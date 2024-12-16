@@ -36,7 +36,7 @@ type Props = {
 };
 
 export default function Modal(props: Props) {
-  if (props.maximizable === undefined) props.maximizable = true;
+  const maximizable = props.maximizable ?? true;
 
   const translate = useI18n();
 
@@ -66,7 +66,7 @@ export default function Modal(props: Props) {
   }
 
   function toggleMaximize() {
-    if (!props.maximizable) return;
+    if (!maximizable) return;
 
     const nextIsMaximizedValue: boolean = !isMaximized();
     setIsMaximized(nextIsMaximizedValue);
@@ -103,21 +103,21 @@ export default function Modal(props: Props) {
         style={{
           ...props.style,
           top:
-            (isMaximized() ?? props.maximizable)
+            (isMaximized() ?? maximizable)
               ? `${0 + (props.maximizeOffset?.top ?? 0)}px`
               : props.position?.top
                 ? props.position.top + "px"
                 : "15%",
           left:
-            (isMaximized() ?? props.maximizable)
+            (isMaximized() ?? maximizable)
               ? `${0 + (props.maximizeOffset?.left ?? 0)}px`
               : props.position?.left
                 ? props.position.left + "px"
                 : "15%",
-          right: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
-          bottom: (isMaximized() ?? props.maximizable) ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
+          right: (isMaximized() ?? maximizable) ? `${0 + (props.maximizeOffset?.right ?? 0)}px` : undefined,
+          bottom: (isMaximized() ?? maximizable) ? `${0 + (props.maximizeOffset?.bottom ?? 0)}px` : undefined,
           width:
-            (isMaximized() ?? props.maximizable)
+            (isMaximized() ?? maximizable)
               ? "calc(100vw - " +
                 (props.maximizeOffset?.left ?? 0) +
                 "px - " +
@@ -127,7 +127,7 @@ export default function Modal(props: Props) {
                 ? props.size.width + "px"
                 : "70vw",
           height:
-            (isMaximized() ?? props.maximizable)
+            (isMaximized() ?? maximizable)
               ? "calc(100vh - " +
                 (props.maximizeOffset?.top ?? 0) +
                 "px - " +
@@ -143,7 +143,7 @@ export default function Modal(props: Props) {
 
           <div class="ac-header-buttons flex cursor-pointer items-center justify-between gap-1">
             {props.customHeaderButtons}
-            <Show when={props.maximizable}>
+            <Show when={maximizable}>
               <Button
                 onClick={toggleMaximize}
                 variant="text"

@@ -5,6 +5,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "allowJs": true,
 
     // Bundler mode
@@ -21,12 +23,6 @@
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
-    // Paths
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "noPropertyAccessFromIndexSignature": false
   }
 }

@@ -105,6 +105,9 @@ export enum TranslationKeys {
   organizations_udemy = "organizations_udemy",
   system_boot = "system_boot",
   system_booting = "system_booting",
+  system_booting_desc = "system_booting_desc",
+  system_not_found = "system_not_found",
+  system_not_found_desc = "system_not_found_desc",
   system_restart = "system_restart",
   system_restarting = "system_restarting",
   system_restarting_desc = "system_restarting_desc",
@@ -830,6 +833,18 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
   system_booting: {
     en: "Booting...",
     tr: "Başlatılıyor..."
+  },
+  system_booting_desc: {
+    en: "Booting the system...",
+    tr: "Sistem başlatılıyor..."
+  },
+  system_not_found: {
+    en: "Not Found",
+    tr: "Bulunamadı"
+  },
+  system_not_found_desc: {
+    en: "The requested resource could not be found.",
+    tr: "İstenen kaynak bulunamadı."
   },
   system_restart: {
     en: "Restart",

@@ -15,7 +15,7 @@ const sizeClasses = {
   5: "text-lg",
   6: "text-base",
 };
-const classes = "font-bold mb-3";
+const classes = "mb-3 font-bold";
 
 export default function Title(props: Props) {
   if (props.level === undefined) props.level = 1;

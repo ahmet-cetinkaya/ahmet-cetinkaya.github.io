@@ -183,7 +183,7 @@ export default function WelcomeWizardApp() {
                 <span class="flex items-center gap-2">
                   <Icon
                     icon={part().icon}
-                    class="size-3"
+                    class="size-4"
                     fillColor={navItemHovered() === part().label ? "black" : "white"}
                   />
                   {translate(part().label)}

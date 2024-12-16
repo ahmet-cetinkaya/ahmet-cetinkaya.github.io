@@ -11,20 +11,27 @@ const translate = useI18nStatic(Astro.url);
 <SplashLayout
   metaData={{
     title: translate(TranslationKeys.system_shutting_down),
+    description: translate(TranslationKeys.system_shutting_down_desc),
   }}
 >
-  <span id="overlay" class="flex size-full flex-col items-center justify-center">
-    <Icon icon={Icons.spinner} isSpin class="mb-4 text-8xl" />
-    <h1 class="mb-4 text-4xl font-bold">{translate(TranslationKeys.system_shutting_down)}</h1>
-    <p class="text-lg">{translate(TranslationKeys.system_shutting_down_desc)}</p>
-    <pre id="log" class="mt-4 text-left text-green-500"></pre>
-  </span>
-
-  <pre id="logs" class="mt-4 hidden text-left"></pre>
+  <div class="font-mono flex size-full items-center justify-center text-white">
+    <span class="h-2/3 w-2/3">
+      <h1 class="-ms-20 text-8xl font-bold"><Icon icon={Icons.spinner} isSpin /></h1>
+      <h2 class="text-6xl font-bold">{translate(TranslationKeys.system_shutting_down)}</h2>
+      <p class="text-lg">{translate(TranslationKeys.system_shutting_down_desc)}</p>
+      <pre id="logs" class="mt-6 whitespace-pre-wrap"></pre>
+    </span>
+  </div>
 </SplashLayout>
 
 <script>
-  const logMessages = [
+  const TYPING_DELAY = 50;
+  const INITIAL_DELAY = 500;
+  const NAVIGATION_DELAY = 1000;
+
+  const logsElement = document.getElementById("logs")!;
+
+  const shutdownMessages = [
     "Stopped target Graphical Interface.",
     "Stopped target Multi-User System.",
     "Stopped target Login Prompts.",
@@ -37,14 +44,6 @@ const translate = useI18nStatic(Astro.url);
     "Reached target Shutdown.",
     "Stopped Network Manager.",
     "Stopped D-Bus System Message Bus.",
-    "Stopped Permit User Sessions.",
-    "Stopped Authorization Manager.",
-    "Stopped Accounts Service.",
-    "Stopped Disk Manager.",
-    "Stopped User Login Management.",
-    "Stopped Virtual Machine and Container Registration Service.",
-    "Stopped System Logging Service.",
-    "Stopped Daily Cleanup of Temporary Directories.",
     "Saving user data...",
     "Closing database connections...",
     "Clearing session data...",
@@ -53,28 +52,22 @@ const translate = useI18nStatic(Astro.url);
     "Finalizing shutdown procedures...",
   ];
 
-  const overlayElement = document.getElementById("overlay")!;
-  const logElement = document.getElementById("logs")!;
+  setTimeout(() => displayMessages(), INITIAL_DELAY);
 
-  setTimeout(() => {
-    overlayElement.classList.add("hidden");
-    logElement.classList.remove("hidden");
-
-    const spanElement = document.createElement("span");
-    spanElement.className = "text-green-500";
-    spanElement.innerText = "OK";
-
-    let logIndex = 0;
-    const logsInterval = setInterval(() => {
-      if (logIndex < logMessages.length) {
-        logElement.innerHTML += "[ ";
-        logElement.appendChild(spanElement);
-        logElement.innerHTML += " ] " + logMessages[logIndex] + "\n";
-        ++logIndex;
-      } else {
-        clearInterval(logsInterval);
-        window.location.href = "about:blank";
+  function displayMessages(index = 0) {
+    if (index < shutdownMessages.length) {
+      for (let line of shutdownMessages[index].split("\n")) {
+        logsElement.insertAdjacentHTML("beforeend", createMessageLine(line));
       }
-    }, 50);
-  }, 1500);
+      setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
+    } else {
+      setTimeout(() => {
+        window.location.href = "about:blank";
+      }, NAVIGATION_DELAY);
+    }
+  }
+
+  function createMessageLine(message: string) {
+    return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
+  }
 </script>

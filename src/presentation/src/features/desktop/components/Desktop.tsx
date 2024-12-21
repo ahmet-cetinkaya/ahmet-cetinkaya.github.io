@@ -8,7 +8,6 @@ import type IAppsService from "~/application/features/apps/services/abstraction/
 import appCommands from "~/presentation/src/shared/constants/AppCommands";
 import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
 import File from "~/domain/models/File";
-import Directory from "~/domain/models/Directory";
 import Extensions from "~/application/features/system/constants/Extensions";
 
 type DesktopShortcut = App | null;
@@ -27,11 +26,11 @@ export default function Desktop() {
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
 
   onMount(() => {
-    window.addEventListener("resize", generateMatrix);
+    window.addEventListener("resize", onResize);
   });
 
   onCleanup(() => {
-    window.removeEventListener("resize", generateMatrix);
+    window.removeEventListener("resize", () => onResize);
   });
 
   function onContainerMount(element: HTMLDivElement) {
@@ -46,41 +45,45 @@ export default function Desktop() {
   function getMatrixDimensions() {
     if (!containerRef) return { dimension1: 1, dimension2: 1 };
 
-    const matrixSize = 128;
-    const dimension1 = Math.max(Math.floor(containerRef.clientWidth / matrixSize) - 1, 1);
-    const dimension2 = Math.max(Math.floor(containerRef.clientHeight / matrixSize) - 1, 1);
-    return { dimension1, dimension2 };
+    const matrixSize = 128 + 24; // 128px for the shortcut size, 24px for the gap
+    const dimension1 = Math.max(Math.floor(containerRef.clientWidth / matrixSize), 1);
+    const dimension2 = Math.max(Math.floor(containerRef.clientHeight / matrixSize), 1);
+
+    // Ensure the dimensions do not exceed the container size
+    const maxDimension1 = Math.floor(window.innerWidth / matrixSize);
+    const maxDimension2 = Math.floor(window.innerHeight / matrixSize);
+
+    return {
+      dimension1: Math.min(dimension1, maxDimension1),
+      dimension2: Math.min(dimension2, maxDimension2),
+    };
   }
 
   async function generateMatrix() {
     if (!matrixDimensions) return;
 
-    const { dimension1, dimension2 } = matrixDimensions;
+    const { dimension1, dimension2 } = matrixDimensions!;
     const newMatrix: DesktopShortcutMatrix = Array.from({ length: dimension1 }, () => Array(dimension2).fill(null));
 
-    let x = 0;
-    let y = 0;
+    const desktopShortcuts = (await fileSystemService.getAll(
+      (e) => e instanceof File && e.extension === Extensions.desktop,
+    )) as File[];
 
-    const desktopShortcuts = (await fileSystemService.getAll((e) => {
-      if (e instanceof Directory) return false;
-      return e.extension === Extensions.desktop;
-    })) as File[];
-
-    const desktopAppShortcuts: string[] = desktopShortcuts.map((shortcut) => {
+    const desktopAppShortcuts = desktopShortcuts.map((shortcut) => {
       const match = shortcut.content.match(EXEC_REGEX);
       if (!match) throw new Error(`Invalid desktop file: ${shortcut.id}`);
-      const exec = match[1];
-      return exec;
+      return match[1];
     });
 
-    const desktopApps: App[] = (await appsService.getAll((a) => desktopAppShortcuts.includes(a.id)))
+    const desktopApps = (await appsService.getAll((a) => desktopAppShortcuts.includes(a.id)))
       .sort((a, b) => desktopAppShortcuts.indexOf(a.id) - desktopAppShortcuts.indexOf(b.id))
       .slice(0, dimension1 * dimension2);
 
+    let x = 0,
+      y = 0;
     desktopApps.forEach((shortcut) => {
       newMatrix[x][y] = shortcut;
-      ++y;
-      if (y >= dimension2) {
+      if (++y >= dimension2) {
         y = 0;
         ++x;
       }
@@ -140,17 +143,26 @@ export default function Desktop() {
     appCommand().execute(...appCommandArgs);
   }
 
+  let resizeDebounceTimeout: Timer | null = null;
+  function onResize() {
+    if (resizeDebounceTimeout) clearTimeout(resizeDebounceTimeout);
+    resizeDebounceTimeout = setTimeout(() => {
+      matrixDimensions = getMatrixDimensions();
+      generateMatrix();
+    }, 1000);
+  }
+
   return (
-    <div ref={onContainerMount} class="flex size-full flex-row">
+    <div ref={onContainerMount} class="flex size-full flex-row gap-6">
       <For each={matrix()}>
         {(row, x) => (
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-6">
             <For each={row}>
               {(col, y) => (
                 <div
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => onShortcutDrop(x(), y())}
-                  class="m-3 h-32 w-32 select-none"
+                  class="h-32 w-32 select-none"
                 >
                   {col ? (
                     <AppShortcut
@@ -171,8 +183,8 @@ export default function Desktop() {
       </For>
     </div>
   );
+}
 
-  function DesktopEmptyGrid() {
-    return <div class="size-full select-none" />;
-  }
+function DesktopEmptyGrid() {
+  return <div class="size-full select-none" />;
 }

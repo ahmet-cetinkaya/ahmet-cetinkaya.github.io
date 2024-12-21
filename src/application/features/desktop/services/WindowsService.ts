@@ -11,6 +11,7 @@ export default class WindowsService implements IWindowsService {
   //#region Get
   get(predicate: (w: Window) => boolean): Promise<Window | null> {
     const window = this._windowsStore.get().find(predicate);
+
     return Promise.resolve(window ?? null);
   }
 

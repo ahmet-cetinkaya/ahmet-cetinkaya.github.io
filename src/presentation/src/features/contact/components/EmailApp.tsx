@@ -102,7 +102,7 @@ export default function EmailApp() {
                 ariaLabel={translate(folder().label)}
               >
                 <span class="flex items-center gap-2">
-                  <Icon icon={folder().icon} class="size-3" />
+                  <Icon icon={folder().icon} class="size-4" />
                   {translate(folder().label)}
                 </span>
               </Button>

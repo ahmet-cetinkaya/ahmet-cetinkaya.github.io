@@ -1,0 +1,78 @@
+---
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
+import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
+import SplashLayout from "../../shared/layouts/SplashLayout.astro";
+import Icon from "../../shared/components/Icon";
+import Icons from "~/domain/data/Icons";
+import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
+import Container from "~/presentation/Container";
+
+const i18n: II18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
+---
+
+<SplashLayout
+  metaData={{
+    title: translate(TranslationKeys.system_booting),
+    description: translate(TranslationKeys.system_booting_desc),
+  }}
+>
+  <div class="font-mono flex size-full items-center justify-center text-white">
+    <span class="h-2/3 w-2/3">
+      <h1 class="-ms-20 text-8xl font-bold"><Icon icon={Icons.spinner} isSpin /></h1>
+      <h2 class="text-6xl font-bold">{translate(TranslationKeys.system_booting)}</h2>
+      <pre id="logs" class="mt-6 whitespace-pre-wrap"></pre>
+    </span>
+  </div>
+</SplashLayout>
+
+<script is:inline define:vars={{ currentLocale, Locales }}>
+  const TYPING_DELAY = 50;
+  const INITIAL_DELAY = 500;
+  const NAVIGATION_DELAY = 1000;
+
+  const logsElement = document.getElementById("logs");
+
+  const bootMessages = [
+    "Starting target Basic System.",
+    `Starting target Paths.
+Starting target Slices.
+Starting target Local File Systems.
+Reached target Initialization.`,
+    "Starting Network Manager.",
+    "Starting D-Bus System Message Bus.",
+    "Starting Permit User Sessions.",
+    "Starting Authorization Manager.",
+    "Starting Accounts Service.",
+    "Starting Disk Manager.",
+    "Starting User Login Management.",
+    "Starting Virtual Machine and Container Registration Service.",
+    "Starting System Logging Service.",
+    "Starting Daily Cleanup of Temporary Directories.",
+    `Loading user data...
+Opening database connections...
+Initializing session data...
+Starting background jobs...`,
+    "Logging in users...",
+    "Finalizing boot procedures...",
+  ];
+
+  setTimeout(() => displayMessages(), INITIAL_DELAY);
+
+  function displayMessages(index = 0) {
+    if (index < bootMessages.length) {
+      for (let line of bootMessages[index].split("\n"))
+        logsElement.insertAdjacentHTML("beforeend", createMessageLine(line));
+
+      setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
+    } else {
+      const pathLocalePrefix = currentLocale === Locales.en ? "" : `/${currentLocale}`;
+      setTimeout(() => (window.location.href = `${pathLocalePrefix}/`), NAVIGATION_DELAY);
+    }
+  }
+
+  function createMessageLine(message) {
+    return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
+  }
+</script>

@@ -1,21 +1,24 @@
 import { createSignal, For, onCleanup, onMount } from "solid-js";
-import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
-import { Categories } from "~/domain/data/Categories";
 import type App from "~/domain/models/App";
-import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
-import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";
-import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
+import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
+import appCommands from "~/presentation/src/shared/constants/AppCommands";
+import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
+import File from "~/domain/models/File";
+import Directory from "~/domain/models/Directory";
+import Extensions from "~/application/features/system/constants/Extensions";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
 
+const EXEC_REGEX = /Exec=(.+)/;
+
 export default function Desktop() {
   const appsService: IAppsService = Container.instance.appsService;
-  const windowsService: IWindowsService = Container.instance.windowsService;
+  const fileSystemService: IFileSystemService = Container.instance.fileSystemService;
 
   let containerRef: HTMLDivElement | undefined;
   let matrixDimensions: { dimension1: number; dimension2: number } | undefined;
@@ -57,12 +60,24 @@ export default function Desktop() {
 
     let x = 0;
     let y = 0;
-    const apps: App[] = (await appsService.getAll((a) => a.categoryId === Categories.apps)).slice(
-      0,
-      dimension1 * dimension2,
-    );
 
-    apps.forEach((shortcut) => {
+    const desktopShortcuts = (await fileSystemService.getAll((e) => {
+      if (e instanceof Directory) return false;
+      return e.extension === Extensions.desktop;
+    })) as File[];
+
+    const desktopAppShortcuts: string[] = desktopShortcuts.map((shortcut) => {
+      const match = shortcut.content.match(EXEC_REGEX);
+      if (!match) throw new Error(`Invalid desktop file: ${shortcut.id}`);
+      const exec = match[1];
+      return exec;
+    });
+
+    const desktopApps: App[] = (await appsService.getAll((a) => desktopAppShortcuts.includes(a.id)))
+      .sort((a, b) => desktopAppShortcuts.indexOf(a.id) - desktopAppShortcuts.indexOf(b.id))
+      .slice(0, dimension1 * dimension2);
+
+    desktopApps.forEach((shortcut) => {
       newMatrix[x][y] = shortcut;
       ++y;
       if (y >= dimension2) {
@@ -116,15 +131,13 @@ export default function Desktop() {
   function onShortcutClick(shortcut: DesktopShortcut) {
     if (!shortcut) return;
 
-    const window = new Window(
-      CryptoExtensions.generateNanoId(),
-      shortcut.id,
-      shortcut.name,
-      0,
-      false,
-      ScreenHelper.isMobile(),
-    );
-    windowsService.add(window);
+    const appCommand = appCommands[shortcut.id];
+    if (!appCommand) throw new Error(`No command found for app with id: ${shortcut.id}`);
+
+    const appCommandArgs = [];
+    if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");
+
+    appCommand().execute(...appCommandArgs);
   }
 
   return (
@@ -160,6 +173,6 @@ export default function Desktop() {
   );
 
   function DesktopEmptyGrid() {
-    return <div class="size-full" />;
+    return <div class="size-full select-none" />;
   }
 }

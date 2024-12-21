@@ -24,11 +24,9 @@ export default class AppsService implements IAppsService {
     return new PaginationResult<App>(pageIndex, pageSize, items, totalItems);
   }
 
-  async get(predicate: (x: App) => boolean): Promise<App> {
+  async get(predicate: (x: App) => boolean): Promise<App | null> {
     await this.ensureDataLoaded();
 
-    const item = this.data!.find(predicate);
-    if (!item) throw new Error("Item not found");
-    return item;
+    return this.data!.find(predicate) ?? null;
   }
 }

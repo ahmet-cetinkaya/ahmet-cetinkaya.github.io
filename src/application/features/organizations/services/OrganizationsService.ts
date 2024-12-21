@@ -28,11 +28,9 @@ export default class OrganizationsService implements IOrganizationsService {
     return new PaginationResult<Organization>(pageIndex, pageSize, items, totalItems);
   }
 
-  async get(predicate: (x: Organization) => boolean): Promise<Organization> {
+  async get(predicate: (x: Organization) => boolean): Promise<Organization | null> {
     await this.ensureDataLoaded();
 
-    const item = this.data!.find(predicate);
-    if (!item) throw new Error("Item not found");
-    return item;
+    return this.data!.find(predicate) ?? null;
   }
 }

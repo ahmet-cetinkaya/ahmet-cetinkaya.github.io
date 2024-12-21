@@ -28,11 +28,9 @@ export default class LinksService implements ILinksService {
     return new PaginationResult<Link>(pageIndex, pageSize, items, totalItems);
   }
 
-  async get(predicate: (x: Link) => boolean): Promise<Link> {
+  async get(predicate: (x: Link) => boolean): Promise<Link | null> {
     await this.ensureDataLoaded();
 
-    const item = this.data!.find(predicate);
-    if (!item) throw new Error("Item not found");
-    return item;
+    return this.data!.find(predicate) ?? null;
   }
 }

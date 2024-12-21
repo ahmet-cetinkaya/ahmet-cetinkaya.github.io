@@ -1,4 +1,4 @@
-import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";
+import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
 import type ICategoriesService from "~/application/features/categories/services/abstraction/ICategoriesService";
 import type ICertificationsService from "~/application/features/certifications/services/abstraction/ICertificationsService";
 import type ICurriculumVitaeService from "~/application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
@@ -11,17 +11,21 @@ import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 import I18n from "~/core/acore-ts/i18n/I18n";
 import TranslationsData from "~/domain/data/Translations";
 import ApplicationContainer, { type IApplicationContainer } from "./../application/ApplicationContainer";
+import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
 
 export interface IContainer extends IApplicationContainer {
   i18n: II18n;
 }
 
 export default class Container implements IContainer {
+  private static _instance: IContainer | undefined = undefined;
+
   private _applicationContainer: ApplicationContainer = new ApplicationContainer();
   private _i18n: II18n | undefined = undefined;
 
   static get instance(): IContainer {
-    return _container;
+    if (!Container._instance) Container._instance = new Container();
+    return Container._instance;
   }
 
   get appsService(): IAppsService {
@@ -42,6 +46,10 @@ export default class Container implements IContainer {
 
   get educationsService(): IEducationsService {
     return this._applicationContainer.educationsService;
+  }
+
+  get fileSystemService(): IFileSystemService {
+    return this._applicationContainer.fileSystemService;
   }
 
   get linksService(): ILinksService {
@@ -68,5 +76,3 @@ export default class Container implements IContainer {
     return this._i18n!;
   }
 }
-
-const _container = new Container();

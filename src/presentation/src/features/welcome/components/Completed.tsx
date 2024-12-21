@@ -1,5 +1,5 @@
 import { createResource, Show } from "solid-js";
-import type IAppsService from "~/application/features/app/services/abstraction/IAppsService";
+import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
 import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
 import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import { Apps } from "~/domain/data/Apps";

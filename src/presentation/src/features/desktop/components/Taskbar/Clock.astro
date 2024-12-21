@@ -1,5 +1,5 @@
 ---
-import { Time } from "~/core/acore-ts/time/constants/Time";
+import Times from "~/core/acore-ts/data/date/constants/Times";
 import Container from "~/presentation/Container";
 
 export type Props = {
@@ -10,17 +10,18 @@ const i18n = Container.instance.i18n;
 const locale = i18n.getLocaleFromUrl(Astro.url, "en");
 ---
 
-<div class="flex select-none items-center gap-2 text-nowrap text-white">
-  <span id="clock"> 09:05 </span>
+<div class="flex select-none items-center justify-end gap-6 text-nowrap text-white">
+  <span id="clock"> 09:05:00 </span>
   <span id="date" class="hidden sm:block">
     10 Kasım 193<span class="text-xl">∞</span>
   </span>
 </div>
 
-<script define:vars={{ Time, locale }}>
+<script define:vars={{ Times, locale }}>
+  document.addEventListener("astro:after-swap", onMount);
+
   function onMount() {
     const clockContainer = document.querySelector("#clock");
-    const timeSections = clockContainer.querySelectorAll("span");
     const dateContainer = document.querySelector("#date");
 
     const now = new Date();
@@ -31,7 +32,7 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
     function updateClock(now) {
       const hour = now.getHours();
       const minute = now.getMinutes();
-      clockContainer.textContent = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+      clockContainer.textContent = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
     }
 
     function updateDate(now) {
@@ -44,16 +45,14 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
     }
 
     function scheduleNextUpdate(nextTimeout) {
-      if (!nextTimeout) nextTimeout = (Time.SecondsInMinute - now.getSeconds()) * Time.MillisInSecond;
+      if (!nextTimeout) nextTimeout = Times.MILLIS_IN_SECOND - now.getMilliseconds();
       setTimeout(() => {
         const now = new Date();
         updateClock(now);
         if (now.getHours() === 0) updateDate(now);
 
-        scheduleNextUpdate(Time.MillisInMinute);
+        scheduleNextUpdate(Times.MILLIS_IN_SECOND);
       }, nextTimeout);
     }
   }
-
-  document.addEventListener("astro:after-swap", onMount);
 </script>

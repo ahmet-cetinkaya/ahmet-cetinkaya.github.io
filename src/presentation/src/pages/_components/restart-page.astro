@@ -1,11 +1,15 @@
 ---
-import { TranslationKeys } from "~/domain/data/Translations";
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SplashLayout from "../shared/layouts/SplashLayout.astro";
-import Icon from "../shared/components/Icon";
+import SplashLayout from "../../shared/layouts/SplashLayout.astro";
+import Icon from "../../shared/components/Icon";
 import Icons from "~/domain/data/Icons";
+import Container from "~/presentation/Container";
+import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 
+const i18n: II18n = Container.instance.i18n;
 const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
 ---
 
 <SplashLayout
@@ -26,14 +30,14 @@ const translate = useI18nStatic(Astro.url);
   <div id="blackScreen" class="absolute left-0 top-0 hidden h-screen w-screen bg-black"></div>
 </SplashLayout>
 
-<script>
+<script define:vars={{ currentLocale, Locales }}>
   const TYPING_DELAY = 50;
   const INITIAL_DELAY = 500;
   const SCREEN_TRANSITION_DELAY = 2000;
   const NAVIGATION_DELAY = 1000;
 
-  const logsElement = document.getElementById("logs")!;
-  const blackScreenElement = document.getElementById("blackScreen")!;
+  const logsElement = document.getElementById("logs");
+  const blackScreenElement = document.getElementById("blackScreen");
 
   const shutdownMessages = [
     "Stopped target Graphical Interface.",
@@ -75,12 +79,13 @@ Clearing session data...`,
     } else {
       setTimeout(() => {
         blackScreenElement.classList.remove("hidden");
-        setTimeout(() => (window.location.href = "/boot"), SCREEN_TRANSITION_DELAY);
+        const pathLocalePrefix = currentLocale === Locales.en ? "" : `/${currentLocale}`;
+        setTimeout(() => (window.location.href = `${pathLocalePrefix}/boot`), SCREEN_TRANSITION_DELAY);
       }, NAVIGATION_DELAY);
     }
   }
 
-  function createMessageLine(message: string) {
+  function createMessageLine(message) {
     return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
   }
 </script>

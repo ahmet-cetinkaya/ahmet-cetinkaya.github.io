@@ -8,12 +8,12 @@ type Props = {
   class?: string;
 };
 
-const MODEL = "/models/computer/retro_computer_compressed.glb";
+const MODEL = "/models/computer/retro-computer.glb";
 
 export default function Computer3DModel(props: Props) {
   function configureScene(scene: Scene) {
     // Lights
-    const ambientLight = new AmbientLight("#fff", 1.2);
+    const ambientLight = new AmbientLight("#fff", 1.5);
     scene.add(ambientLight);
 
     const pointLight = new PointLight("#965eff", 160);

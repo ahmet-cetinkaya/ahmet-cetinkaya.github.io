@@ -17,7 +17,7 @@ export default class Window extends Entity<WindowId> {
     public position: Position | undefined = undefined,
     public size: Size | undefined = undefined,
     createdDate: Date = new Date(),
-    updatedDate: Date | null | undefined = null,
+    updatedDate?: Date,
   ) {
     super(id, createdDate, updatedDate);
     this.layer = layer;

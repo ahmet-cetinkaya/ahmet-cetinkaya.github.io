@@ -1,17 +1,17 @@
+import { navigate } from "astro:transitions/client";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
+import type { Apps } from "~/domain/data/Apps";
 import Icons from "~/domain/data/Icons";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Window from "~/domain/models/Window";
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
 import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
+import appCommands from "~/presentation/src/shared/constants/AppCommands";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Menu() {
-  const windowsService = Container.instance.windowsService;
   const categoriesService = Container.instance.categoriesService;
   const appsService = Container.instance.appsService;
   const i18n = Container.instance.i18n;
@@ -46,17 +46,7 @@ export default function Menu() {
               text: app.name,
               icon: app.icon,
               href: app.path,
-              onClick: () => {
-                const window = new Window(
-                  CryptoExtensions.generateNanoId(),
-                  app.id,
-                  app.name,
-                  undefined,
-                  false,
-                  ScreenHelper.isMobile(),
-                );
-                windowsService.add(window);
-              },
+              onClick: () => onAppClick(app.id),
             }) as DropdownItem,
         ),
       );
@@ -65,23 +55,46 @@ export default function Menu() {
     }
 
     const systemMenuHeader: DropdownItem = {
-      text: TranslationKeys.common_system,
+      text: TranslationKeys.system_power,
       items: [
         {
           text: TranslationKeys.system_restart,
           icon: Icons.restart,
-          href: "/restart",
+          onClick: () => onPowerOptionClick("restart"),
         },
         {
           text: TranslationKeys.system_shut_down,
           icon: Icons.shutDown,
-          href: "/shut-down",
+          onClick: () => onPowerOptionClick("shutdown"),
         },
       ],
     };
     items.push(systemMenuHeader);
 
     setMenuItems(items);
+  }
+
+  function onAppClick(appId: Apps) {
+    const appCommand = appCommands[appId];
+    if (!appCommand) throw new Error(`No command found for app with id: ${appId}`);
+
+    const appCommandArgs = [];
+    if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");
+
+    appCommand().execute(...appCommandArgs);
+  }
+
+  function onPowerOptionClick(command: string) {
+    const currentLocale = i18n.currentLocale.get();
+    const pathPrefix = currentLocale === Locales.tr ? "/tr" : "";
+    switch (command) {
+      case "restart":
+        navigate(`${pathPrefix}/restart`);
+        break;
+      case "shutdown":
+        navigate(`${pathPrefix}/shutdown`);
+        break;
+    }
   }
 
   return (

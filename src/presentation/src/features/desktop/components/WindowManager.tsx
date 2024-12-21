@@ -15,6 +15,7 @@ export default function WindowManager() {
   onMount(async () => {
     await openInitialApp();
     subscribeToResizeEvents();
+    localStorage.setItem("boot_time", new Date().toISOString());
   });
 
   onCleanup(() => {

@@ -9,7 +9,7 @@ type Props = {
   class?: string;
 };
 
-export default function Model(props: Props) {
+export default function ThreeDimensionalModel(props: Props) {
   switch (props.model) {
     case Icons.computer:
       return <Computer3DModel />;

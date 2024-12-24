@@ -41,6 +41,28 @@ const FilesData: File[] = [
   // Game files
   new File(`${Paths.USER_GAMES}/doom.jsdos`, "[DOS executable]", new Date("2024-12-17 14:16:37"), 2456852),
 
+  // Libs `draco_decoder.js`, `draco_decoder.wasm`, `draco_encoder.js`, and `draco_wasm_wrapper.js`
+  new File(
+    `${Paths.USER_LIBRARIES}/Draco/draco_decoder.js`,
+    "https://raw.githubusercontent.com/google/draco/refs/heads/main/javascript/draco_decoder.js",
+    new Date("2024-12-24 19:48:10"),
+  ),
+  new File(
+    `${Paths.USER_LIBRARIES}/Draco/draco_decoder.wasm`,
+    "https://raw.githubusercontent.com/google/draco/refs/heads/main/javascript/draco_decoder.wasm",
+    new Date("2024-12-24 19:48:10"),
+  ),
+  new File(
+    `${Paths.USER_LIBRARIES}/Draco/draco_encoder.js`,
+    "https://raw.githubusercontent.com/google/draco/refs/heads/main/javascript/draco_encoder.js",
+    new Date("2024-12-24 19:48:10"),
+  ),
+  new File(
+    `${Paths.USER_LIBRARIES}/Draco/draco_wasm_wrapper.js`,
+    "https://raw.githubusercontent.com/google/draco/refs/heads/main/javascript/draco_wasm_wrapper.js",
+    new Date("2024-12-24 19:48:10"),
+  ),
+
   // Desktop shortcuts
   new File(
     `${Paths.USER_DESKTOP}/welcome.desktop`,

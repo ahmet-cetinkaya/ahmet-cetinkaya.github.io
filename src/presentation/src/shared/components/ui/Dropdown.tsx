@@ -90,7 +90,7 @@ export default function Dropdown(props: Props) {
 
   function MenuItem(props: { item: DropdownItem }) {
     const classes =
-      "block px-4 py-2 text-sm text-gray-200 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer rounded";
+      "block px-4 py-2 text-sm text-gray-200 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer rounded transition-colors duration-200 ease-in-out";
 
     function onClick() {
       setIsOpen(false);

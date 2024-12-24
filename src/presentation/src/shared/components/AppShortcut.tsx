@@ -22,7 +22,7 @@ export default function AppShortcut(props: Props) {
       draggable={true}
       onClick={props.onClick}
       onDragStart={props.onDragStart}
-      class={mergeCls("flex size-full flex-col items-center justify-center hover:text-gray-400", props.class)}
+      class={mergeCls("flex size-full flex-col items-center justify-center hover:text-gray-400 transition-colors duration-200 ease-in-out", props.class)}
       variant="text"
       ariaLabel={translate(props.label)}
     >

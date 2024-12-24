@@ -2,7 +2,7 @@ import { createSignal, For, onCleanup, onMount } from "solid-js";
 import type App from "~/domain/models/App";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
-import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
+import ThreeDimensionalModel from "~/presentation/src/shared/components/ThreeDimensionalModel";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
 import appCommands from "~/presentation/src/shared/constants/AppCommands";
@@ -167,7 +167,7 @@ export default function Desktop() {
                   {col ? (
                     <AppShortcut
                       label={col.name}
-                      icon={<Model model={col.icon}></Model>}
+                      icon={<ThreeDimensionalModel model={col.icon}></ThreeDimensionalModel>}
                       href={col.path}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}

@@ -42,9 +42,7 @@ export default function WelcomeWizardApp(props: Props) {
 
   const [currentPart, setCurrentPart] = createSignal(props.part ?? Parts.Hello);
   const [isWarnedForConfirm, setIsWarnedForConfirm] = createSignal(false);
-  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(
-    props.part ? props.part > Parts.AboutMe : false,
-  );
+  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(props.part ? props.part > Parts.AboutMe : false);
 
   function onPartClicked(index: number) {
     if (index >= PARTS.length) {
@@ -175,7 +173,7 @@ export default function WelcomeWizardApp(props: Props) {
               <Button
                 variant="text"
                 class={mergeCls(
-                  "duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500",
+                  "duration-3000 w-full rounded text-left hover:bg-white hover:text-surface-500 transition-colors duration-200 ease-in-out",
                   {
                     "bg-surface-400 font-bold": currentPart() === index,
                   },

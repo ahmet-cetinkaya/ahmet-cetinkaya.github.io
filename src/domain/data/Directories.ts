@@ -3,13 +3,14 @@ import Directory from "../models/Directory";
 const MIN_DATE = new Date(0);
 
 export enum Paths {
-  ROOT = "/",
   HOME = "/home",
-  USER_HOME = "/home/ac",
+  ROOT = "/",
   USER_DESKTOP = "/home/ac/Desktop",
   USER_DOCUMENTS = "/home/ac/Documents",
   USER_DOWNLOADS = "/home/ac/Downloads",
   USER_GAMES = "/home/ac/Games",
+  USER_HOME = "/home/ac",
+  USER_LIBRARIES = "/home/ac/Libraries",
   USER_MUSIC = "/home/ac/Music",
   USER_PICTURES = "/home/ac/Pictures",
   USER_VIDEOS = "/home/ac/Videos",
@@ -33,6 +34,8 @@ const DirectoryData: Directory[] = [
   new Directory(Paths.USER_DOCUMENTS, MIN_DATE),
   new Directory(Paths.USER_DOWNLOADS, MIN_DATE),
   new Directory(Paths.USER_GAMES, MIN_DATE),
+  new Directory(Paths.USER_LIBRARIES, MIN_DATE),
+  new Directory(`${Paths.USER_LIBRARIES}/Draco`, MIN_DATE),
   new Directory(Paths.USER_MUSIC, MIN_DATE),
   new Directory(Paths.USER_PICTURES, MIN_DATE),
   new Directory(Paths.USER_VIDEOS, MIN_DATE),

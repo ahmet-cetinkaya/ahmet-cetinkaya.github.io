@@ -5,10 +5,10 @@ import Icons from "~/domain/data/Icons";
 import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
-import type { DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
-import Dropdown from "~/presentation/src/shared/components/ui/Dropdown";
-import appCommands from "~/presentation/src/shared/constants/AppCommands";
+import type { BaseDropdownItem } from "~/core/acore-solidjs/ui/components/Dropdown";
+import Dropdown from "~/core/acore-solidjs/ui/components/Dropdown";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import appCommands from "~/presentation/src/shared/constants/AppCommands";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 
 export default function Menu() {
@@ -17,7 +17,7 @@ export default function Menu() {
   const i18n = Container.instance.i18n;
   const translate = useI18n();
 
-  const [menuItems, setMenuItems] = createSignal<DropdownItem[]>([]);
+  const [menuItems, setMenuItems] = createSignal<BaseDropdownItem[]>([]);
 
   onMount(() => {
     prepareMenuItems();
@@ -29,12 +29,12 @@ export default function Menu() {
   });
 
   async function prepareMenuItems() {
-    const items: DropdownItem[] = [];
+    const items: BaseDropdownItem[] = [];
 
     const categories = await categoriesService.getAll();
     for (const category of categories) {
-      const categoryMenuHeader: DropdownItem = {
-        text: category.name,
+      const categoryMenuHeader: BaseDropdownItem = {
+        text: translate(category.name),
         items: [],
       };
 
@@ -43,27 +43,27 @@ export default function Menu() {
         ...apps.map(
           (app) =>
             ({
-              text: app.name,
+              text: translate(app.name),
               icon: app.icon,
               href: app.path,
               onClick: () => onAppClick(app.id),
-            }) as DropdownItem,
+            }) as BaseDropdownItem,
         ),
       );
 
       if (categoryMenuHeader.items!.length > 0) items.push(categoryMenuHeader);
     }
 
-    const systemMenuHeader: DropdownItem = {
-      text: TranslationKeys.system_power,
+    const systemMenuHeader: BaseDropdownItem = {
+      text: translate(TranslationKeys.system_power),
       items: [
         {
-          text: TranslationKeys.system_reboot,
+          text: translate(TranslationKeys.system_reboot),
           icon: Icons.reboot,
           onClick: () => onPowerOptionClick("reboot"),
         },
         {
-          text: TranslationKeys.system_shut_down,
+          text: translate(TranslationKeys.system_shut_down),
           icon: Icons.shutDown,
           onClick: () => onPowerOptionClick("shutdown"),
         },
@@ -99,7 +99,13 @@ export default function Menu() {
 
   return (
     <Show when={menuItems().length > 0}>
-      <Dropdown menuItems={menuItems()} ariaLabel={translate(TranslationKeys.common_menu)}>
+      <Dropdown
+        id="menuDropdown"
+        menuItems={menuItems()}
+        ariaLabel={translate(TranslationKeys.common_menu)}
+        renderIcon={(icon) => <Icon icon={icon as Icons} class="size-3" />}
+        buttonClass="shadow-primary bg-surface-400 hover:bg-surface-300 transition-colors duration-200 ease-in-out"
+      >
         <Icon icon={Icons.ahmetcetinkaya} class="size-4" />
       </Dropdown>
     </Show>

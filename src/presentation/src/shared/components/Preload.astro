@@ -1,6 +1,8 @@
 ---
-import RetroComputerModelPreview from "../../shared/components/ThreeDimensionalModels/assets/images/retro-computer-model-preview.webp";
-import EnvelopeModelPreview from "../../shared/components/ThreeDimensionalModels/assets/images/envelope-model-preview.webp";
+import RetroComputerModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/retro-computer-model-preview.webp";
+import EnvelopeModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/envelope-model-preview.webp";
+import TerminalModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/terminal-model-preview.webp";
+import DoomModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/doom-model-preview.webp";
 
 type PreloadImage =
   | {
@@ -10,7 +12,12 @@ type PreloadImage =
     }
   | ImageMetadata;
 
-const images: PreloadImage[] = [RetroComputerModelPreview, EnvelopeModelPreview];
+const images: PreloadImage[] = [
+  RetroComputerModelPreview,
+  EnvelopeModelPreview,
+  TerminalModelPreview,
+  DoomModelPreview,
+];
 
 function roundWidth(width: number) {
   const magnitude = Math.pow(10, Math.floor(Math.log10(width)));

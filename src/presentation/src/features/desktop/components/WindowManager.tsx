@@ -61,7 +61,7 @@ export default function WindowManager() {
 
   return (
     <Key each={windows()} by={(item) => item.id}>
-      {(item) => <Window {...item()} />}
+      {(item) => <Window window={item()} />}
     </Key>
   );
 }

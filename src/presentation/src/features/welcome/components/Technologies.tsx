@@ -4,7 +4,7 @@ import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Technology from "~/domain/models/Technology";
 import Container from "~/presentation/Container";
-import NetworkGraph, { type Node } from "~/presentation/src/shared/components/NetworkGraph";
+import NetworkGraph, { type Node } from "~/core/acore-solidjs/ui/components/NetworkGraph";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";

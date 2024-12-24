@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "bun install && (cd src/presentation && bun install)",
+    "install-all": "bun install && (cd src/presentation && bun install && cd ../..) && (cd src/core/acore-ts/ && bun install && cd ../..) && (cd src/core/acore-solidjs/ && bun install && cd ../..)",
     "lint": "eslint .",
     "start": "cd src/presentation && bun start"
   },

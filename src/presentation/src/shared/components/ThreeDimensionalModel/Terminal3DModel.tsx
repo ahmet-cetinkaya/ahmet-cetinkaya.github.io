@@ -2,8 +2,9 @@ import { Scene, DirectionalLight, SpotLight } from "three";
 import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "~/domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
-import ThreeDimensionModelViewer from "./ThreeDimensionModelViewer";
+import ThreeDimensionModelViewer from "~/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
 import TerminalModelPreview from "./assets/images/terminal-model-preview.webp";
+import { DRACO_DIRECTORY } from "./constants/draco";
 
 type Props = {
   class?: string;
@@ -39,6 +40,7 @@ export default function Terminal3DModel(props: Props) {
 
   return (
     <ThreeDimensionModelViewer
+      decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
       modelScale={3}
       configureScene={configureScene}

@@ -4,12 +4,13 @@ import Icons from "~/domain/data/Icons";
 import { Links } from "~/domain/data/Links";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
-import HtmlEditor from "~/presentation/src/shared/components/HtmlEditor";
+import HtmlEditor from "~/core/acore-solidjs/ui/components/HtmlEditor";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Input from "~/presentation/src/shared/components/ui/Input";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
 
 export default function EmailApp() {
   const linksService: ILinksService = Container.instance.linksService;
@@ -98,7 +99,7 @@ export default function EmailApp() {
             <li>
               <Button
                 variant="text"
-                class="duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500"
+                class="duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500 transition-colors duration-200 ease-in-out"
                 ariaLabel={translate(folder().label)}
               >
                 <span class="flex items-center gap-2">
@@ -134,7 +135,38 @@ export default function EmailApp() {
 
         <HtmlEditor
           onInput={setBody}
-          inputClass="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-200 shadow focus:outline-none"
+          inputClass="w-full h-96 mt-2 px-3 py-2 appearance-none rounded bg-surface-400 border border-black leading-tight text-gray-200 shadow-primary overflow-y-auto focus:shadow-outline focus:outline-none"
+          enterUrlPromptText={translate(TranslationKeys.apps_email_enter_url)}
+          toolbarButtons={{
+            bold: { iconSvg: IconSvgs["Bold Icon"], label: translate(TranslationKeys.common_bold) },
+            italic: { iconSvg: IconSvgs["Italic Icon"], label: translate(TranslationKeys.common_italic) },
+            underline: { iconSvg: IconSvgs["Underline Icon"], label: translate(TranslationKeys.common_underline) },
+            heading1: { iconSvg: IconSvgs["Heading 1 Icon"], label: translate(TranslationKeys.common_header1) },
+            heading2: { iconSvg: IconSvgs["Heading 2 Icon"], label: translate(TranslationKeys.common_header2) },
+            link: { iconSvg: IconSvgs["Link Icon"], label: translate(TranslationKeys.common_hyperlink) },
+            orderedList: {
+              iconSvg: IconSvgs["Ordered List Icon"],
+              label: translate(TranslationKeys.common_ordered_list),
+            },
+            unorderedList: {
+              iconSvg: IconSvgs["Unordered List Icon"],
+              label: translate(TranslationKeys.common_unordered_list),
+            },
+            formatClear: {
+              iconSvg: IconSvgs["Format Clear Icon"],
+              label: translate(TranslationKeys.common_clear_format),
+            },
+          }}
+          customButtonComponent={(props) => (
+            <Button
+              variant="text"
+              onClick={props.onClick}
+              ariaLabel={props.ariaLabel}
+              class="rounded p-1 text-white hover:bg-gray-100 hover:text-surface-500 transition-colors duration-200 ease-in-out"
+            >
+              {props.children}
+            </Button>
+          )}
         />
       </div>
     );

@@ -9,7 +9,7 @@ import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
 import Icon from "~/presentation/src/shared/components/Icon";
-import Model from "~/presentation/src/shared/components/ThreeDimensionalModels/ThreeDimensionModel";
+import ThreeDimensionalModel from "~/presentation/src/shared/components/ThreeDimensionalModel";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
@@ -57,7 +57,7 @@ export default function Completed() {
             label={contactApp()!.name}
             href={contactApp()!.path}
             onClick={onContactClick}
-            icon={<Model model={contactApp()!.icon} />}
+            icon={<ThreeDimensionalModel model={contactApp()!.icon} />}
             class="mt-2 size-32"
           />
         </Show>

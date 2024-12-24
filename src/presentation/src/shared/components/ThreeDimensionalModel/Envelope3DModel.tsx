@@ -2,8 +2,9 @@ import { Scene, AmbientLight, DirectionalLight } from "three";
 import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "~/domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
-import ThreeDimensionModelViewer from "./ThreeDimensionModelViewer";
+import ThreeDimensionModelViewer from "~/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
 import EnvelopeModelPreview from "./assets/images/envelope-model-preview.webp";
+import { DRACO_DIRECTORY } from "./constants/draco";
 
 type Props = {
   class?: string;
@@ -27,8 +28,9 @@ export default function Envelope3DModel(props: Props) {
 
   return (
     <ThreeDimensionModelViewer
+      decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={0.06}
+      modelScale={0.055}
       configureScene={configureScene}
       configureModel={configureModel}
       class={props.class}

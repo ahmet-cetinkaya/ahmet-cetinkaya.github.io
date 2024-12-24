@@ -84,7 +84,7 @@ export default function TaskbarView() {
       <Button
         onClick={() => onClickTaskView(props.window)}
         class={mergeCls("h-8 w-fit min-w-16 text-xs", {
-          "bg-surface-300 hover:bg-surface-200": windowsService.isActivated(props.window),
+          "bg-surface-300 hover:bg-surface-200 transition-colors duration-200 ease-in-out": windowsService.isActivated(props.window),
         })}
         variant="primary"
         ariaLabel={translate(props.window.title)}

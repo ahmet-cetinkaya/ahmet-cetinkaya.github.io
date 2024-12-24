@@ -1,7 +1,7 @@
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import type Icons from "~/domain/data/Icons";
 import IconSvgs from "../constants/IconSvgs";
 import { createMemo } from "solid-js";
+import SvgIcon from "~/core/acore-solidjs/ui/components/SvgIcon";
 
 type Props = {
   icon: Icons;
@@ -14,19 +14,14 @@ type Props = {
 export default function Icon(props: Props) {
   const iconSvg = createMemo(() => IconSvgs[props.icon]);
 
-  const getFilledSvg = createMemo(() => {
-    return iconSvg().replace(/fill=".*?"/g, `fill="${props.fillColor}"`);
-  });
-
   return (
-    <svg
+    <SvgIcon
+      svg={iconSvg()}
+      alt={props.icon}
+      isSpin={props.isSpin}
       onClick={props.onClick}
-      innerHTML={props.fillColor ? getFilledSvg() : iconSvg()}
-      class={mergeCls("select-none", props.class, {
-        "animate-spin": props.isSpin ?? false,
-      })}
-      style={{ fill: props.fillColor }}
-      aria-label={props.icon}
+      class={props.class}
+      fillColor={props.fillColor}
     />
   );
 }

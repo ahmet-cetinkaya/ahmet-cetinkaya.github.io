@@ -3,8 +3,8 @@ import type Icons from "~/domain/data/Icons";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import { useI18n } from "../utils/i18nTranslate";
 import Icon from "./Icon";
-import LessViewContent from "./LessViewContent";
-import MarkdownParagraph from "./MarkdownParagraph";
+import LessViewContent from "~/core/acore-solidjs/ui/components/LessViewContent";
+import MarkdownParagraph from "~/core/acore-solidjs/ui/components/MarkdownParagraph";
 import Title from "./ui/Title";
 
 export type Activity = {
@@ -57,7 +57,7 @@ export default function Timeline(props: Props) {
               </header>
 
               <Show when={activity().descriptionMarkdown}>
-                <LessViewContent>
+                <LessViewContent showMoreLabel={translate(TranslationKeys.common_show_more)}>
                   <MarkdownParagraph content={translate(activity().descriptionMarkdown!)} class="text-sm" />
                 </LessViewContent>
               </Show>

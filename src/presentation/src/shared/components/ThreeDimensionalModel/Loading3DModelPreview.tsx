@@ -1,5 +1,5 @@
 import type { TranslationKeys } from "~/domain/data/Translations";
-import Image from "../ui/Image";
+import Image from "~/core/acore-solidjs/ui/components/Image";
 import { useI18n } from "../../utils/i18nTranslate";
 
 type Props = {

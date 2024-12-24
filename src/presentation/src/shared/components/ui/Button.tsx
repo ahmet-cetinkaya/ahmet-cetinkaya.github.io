@@ -4,8 +4,8 @@ import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 export const buttonVariantClassNames = {
   primary:
     "select-none inline-flex w-full justify-center rounded-lg border border-black bg-surface-400 shadow-primary px-4 py-2 text-sm font-medium text-gray-200 shadow-sm hover:bg-surface-300 focus:shadow-none transition-all ease-linear duration-200 focus:outline-none hov",
-  link: "text-blue-500 hover:text-blue-700 focus:outline-none",
-  text: "text-gray-200 hover:text-gray-400 focus:outline-none",
+  link: "text-blue-500 hover:text-blue-700 transition-colors duration-200 ease-in-out focus:outline-none",
+  text: "text-gray-200 hover:text-gray-400 transition-colors duration-200 ease-in-out focus:outline-none",
 };
 
 const buttonSizeClassNames = {

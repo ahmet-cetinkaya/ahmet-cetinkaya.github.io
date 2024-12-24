@@ -22,13 +22,13 @@ export default class CdCommand implements ICIProgram<string | null> {
 
     const targetPath = PathUtils.normalize(this.currentPath, path);
     if (!(await this.pathExists(targetPath)))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cd_no_such_file_or_directory}}}: ${path}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
     if (targetPath !== "/" && !targetPath.startsWith("/home"))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}`);
 
     const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
     if (!(entry instanceof Directory))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cd_not_a_directory}}}: ${path}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
     this.currentPath = targetPath;
     return { output: "", exitCode: ExitCodes.SUCCESS, data: this.currentPath };
@@ -36,7 +36,10 @@ export default class CdCommand implements ICIProgram<string | null> {
 
   private createHelpOutput(): CommandOutput<string | null> | PromiseLike<CommandOutput<string | null>> {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: ${this.name} <path>`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}:
+  ${this.name} <{{${TranslationKeys.common_path}}}>`,
       exitCode: ExitCodes.SUCCESS,
       data: null,
     };

@@ -21,10 +21,10 @@ export default class WhoamiCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_whoami_help_usage}}}:
-  whoami [OPTION]...
+{{${TranslationKeys.common_usage}}}:
+  whoami [{{${TranslationKeys.common_options}}}]...
 
-{{${TranslationKeys.apps_terminal_whoami_help_options}}}:
+{{${TranslationKeys.common_options}}}:
       --help  {{${TranslationKeys.apps_terminal_whoami_help_option_help}}}`,
       exitCode: ExitCodes.SUCCESS,
     };

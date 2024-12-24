@@ -18,7 +18,14 @@ const FilesData: File[] = [
   ),
 
   // Media files
-  new File("/home/ac/Pictures/code-space/code-space.jpg", "[PNG Image data]", new Date("2024-12-17 14:16:37")),
+  new File(
+    "/home/ac/Pictures/code-space/code-space.jpg",
+    "[PNG Image data]",
+    new Date("2024-12-17 14:16:37"),
+    6653474,
+  ),
+  new File("/home/ac/Pictures/ahmet-cetinkaya-profile.png", "[PNG Image data]", new Date("2024-12-22 15:46:19"), 5063),
+  new File("/home/ac/Pictures/ahmet-cetinkaya-profile-landscape.png", "[PNG Image data]", new Date("2024-12-22 15:46:19"), 6715),
 
   // Desktop shortcuts
   new File(

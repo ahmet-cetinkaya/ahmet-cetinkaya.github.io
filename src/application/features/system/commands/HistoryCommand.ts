@@ -33,10 +33,10 @@ export default class HistoryCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_history_help_usage}}}:
-  history [OPTION]...
+{{${TranslationKeys.common_usage}}}:
+  history [{{${TranslationKeys.common_options}}}]...
 
-{{${TranslationKeys.apps_terminal_history_help_options}}}:
+{{${TranslationKeys.common_options}}}:
       --help  {{${TranslationKeys.apps_terminal_history_help_option_help}}}`,
       exitCode: ExitCodes.SUCCESS,
     };

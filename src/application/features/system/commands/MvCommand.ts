@@ -92,7 +92,7 @@ export default class MvCommand implements ICIProgram {
 
       const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === sourcePath);
       if (!sourceEntry)
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_mv_no_such_file}}}`.replace("%s", source));
+        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}: ${source}`);
 
       if (sourcePath !== "/" && !sourcePath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${source}`);
@@ -107,7 +107,7 @@ export default class MvCommand implements ICIProgram {
           await this.fileSystemService.remove((e) => e.fullPath === destPath);
         }
 
-        const newFile = new File(destPath, sourceEntry.size, sourceEntry.content, sourceEntry.createdDate);
+        const newFile = new File(destPath, sourceEntry.content, sourceEntry.createdDate, sourceEntry.size);
         await this.fileSystemService.add(newFile);
         await this.fileSystemService.remove((e) => e.fullPath === sourcePath);
 
@@ -122,12 +122,12 @@ export default class MvCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_mv_help_usage}}}:
-  mv [OPTION]... [-T] SOURCE DEST
-  mv [OPTION]... SOURCE... DIRECTORY
-  mv [OPTION]... -t DIRECTORY SOURCE...
+{{${TranslationKeys.common_usage}}}:
+  mv [{{${TranslationKeys.common_options}}}]... [-T] SOURCE DEST
+  mv [{{${TranslationKeys.common_options}}}]... SOURCE... DIRECTORY
+  mv [{{${TranslationKeys.common_options}}}]... -t DIRECTORY SOURCE...
 
-{{${TranslationKeys.apps_terminal_mv_help_options}}}:
+{{${TranslationKeys.common_options}}}:
   -f, --force                {{${TranslationKeys.apps_terminal_mv_help_option_force}}}
   -t, --target-directory     {{${TranslationKeys.apps_terminal_mv_help_option_target_directory}}}
   -T, --no-target-directory  {{${TranslationKeys.apps_terminal_mv_help_option_no_target_directory}}}

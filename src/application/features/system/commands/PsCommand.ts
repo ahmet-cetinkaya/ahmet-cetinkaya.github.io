@@ -263,7 +263,7 @@ export default class PsCommand implements ICIProgram {
       output: `${this.name}: {{${this.description}}}
 
 {{${TranslationKeys.common_usage}}}:
-  ps [OPTION]...
+  ps [{{${TranslationKeys.common_options}}}]...
 
 {{${TranslationKeys.common_options}}}:
   --help          {{${TranslationKeys.apps_terminal_ps_help_option_help}}}

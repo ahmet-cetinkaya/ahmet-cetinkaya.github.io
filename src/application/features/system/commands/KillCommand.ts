@@ -74,7 +74,8 @@ export default class KillCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.common_usage}}}: kill [options] <pid> [...]
+{{${TranslationKeys.common_usage}}}: 
+  kill [{{${TranslationKeys.common_options}}}]... <pid>...
 
 {{${TranslationKeys.common_options}}}:
   --help  {{${TranslationKeys.apps_terminal_kill_help_option_help}}}`,

@@ -69,7 +69,7 @@ export default class RmdirCommand implements ICIProgram {
     if (flags.version) return { output: "rmdir version 1.0.0", exitCode: ExitCodes.SUCCESS };
 
     if (directories.length === 0)
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_rmdir_help_usage}}}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
     const messages: string[] = [];
 
@@ -81,9 +81,9 @@ export default class RmdirCommand implements ICIProgram {
 
       const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
 
-      if (!entry) return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_rmdir_dir_not_found}}}: ${path}`);
+      if (!entry) return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
       if (!(entry instanceof Directory))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cd_not_a_directory}}}: ${path}`);
+        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
       const children = await this.fileSystemService.getAll((e) => e.fullPath.startsWith(targetPath + "/"));
       if (children.length > 0 && !flags.ignoreFailOnNonEmpty) {
@@ -123,8 +123,11 @@ export default class RmdirCommand implements ICIProgram {
   private createHelpOutput(): CommandOutput {
     return {
       output: `${this.name}: {{${TranslationKeys.apps_terminal_rmdir_help_description}}}
-{{${TranslationKeys.apps_terminal_rmdir_help_usage}}}
 
+{{${TranslationKeys.common_usage}}}:
+  rmdir [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_path}}}>
+
+{{${TranslationKeys.common_options}}}:
       --ignore-fail-on-non-empty  {{${TranslationKeys.apps_terminal_rmdir_help_option_ignore_non_empty}}}
   -p, --parents                   {{${TranslationKeys.apps_terminal_rmdir_help_option_parents}}};
   -v, --verbose                   {{${TranslationKeys.apps_terminal_rmdir_help_option_verbose}}}

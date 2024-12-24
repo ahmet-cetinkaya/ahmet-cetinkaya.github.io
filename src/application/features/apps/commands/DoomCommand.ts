@@ -15,7 +15,7 @@ export default class DoomCommand implements ICIProgram {
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
 
-    const appWindow = new Window(CryptoExtensions.generateNanoId(), Apps.doom, TranslationKeys.games_doom);
+    const appWindow = new Window(CryptoExtensions.generateNanoId(), Apps.doom, TranslationKeys.apps_doom);
     await this.windowService.add(appWindow);
 
     return {
@@ -26,7 +26,13 @@ export default class DoomCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput | PromiseLike<CommandOutput> {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: ${this.name}`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}: 
+  ${this.name} [{{${TranslationKeys.common_options}}}]
+
+{{${TranslationKeys.common_options}}}:
+  --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}`,
       exitCode: ExitCodes.SUCCESS,
     };
   }

@@ -111,10 +111,10 @@ export default class FindCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_find_help_usage}}}:
-  find [path...] [expression]
+{{${TranslationKeys.common_usage}}}:
+  find [{{${TranslationKeys.common_path}}}...] [{{${TranslationKeys.common_expression}}}]
 
-{{${TranslationKeys.apps_terminal_find_help_options}}}:
+{{${TranslationKeys.common_options}}}:
   -name pattern  {{${TranslationKeys.apps_terminal_find_help_option_name}}}
   -type c        {{${TranslationKeys.apps_terminal_find_help_option_type}}}
       --help     {{${TranslationKeys.apps_terminal_find_help_option_help}}}

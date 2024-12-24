@@ -70,7 +70,7 @@ export default class MkdirCommand implements ICIProgram {
     if (flags.version) return { output: "mkdir version 1.0.0", exitCode: ExitCodes.SUCCESS };
 
     if (directories.length === 0)
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_mkdir_help_usage}}}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
     const messages: string[] = [];
 
@@ -116,8 +116,11 @@ export default class MkdirCommand implements ICIProgram {
   private createHelpOutput(): CommandOutput {
     return {
       output: `${this.name}: {{${TranslationKeys.apps_terminal_mkdir_help_description}}}
-{{${TranslationKeys.apps_terminal_mkdir_help_usage}}}
 
+{{${TranslationKeys.common_usage}}}: 
+  mkdir [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_path}}}>
+
+{{${TranslationKeys.common_options}}}:
   -m, --mode=MODE  {{${TranslationKeys.apps_terminal_mkdir_help_option_mode}}}
   -p, --parents    {{${TranslationKeys.apps_terminal_mkdir_help_option_parents}}}
   -v, --verbose    {{${TranslationKeys.apps_terminal_mkdir_help_option_verbose}}}

@@ -83,7 +83,7 @@ export default class GrepCommand implements ICIProgram {
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${filePath}`);
 
       const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
-      if (!entry) return this.createErrorOutput(`${filePath}: {{${TranslationKeys.apps_terminal_grep_no_such_file}}}`);
+      if (!entry) return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
       if (entry instanceof File) {
         const lines = entry.content.split("\n");
@@ -112,10 +112,10 @@ export default class GrepCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_grep_help_usage}}}:
-  grep [OPTION]... PATTERNS [FILE]...
+{{${TranslationKeys.common_usage}}}:
+  grep [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_pattern}}}> [{{${TranslationKeys.common_file}}}]...
 
-{{${TranslationKeys.apps_terminal_grep_help_options}}}:
+{{${TranslationKeys.common_options}}}:
   -i, --ignore-case  {{${TranslationKeys.apps_terminal_grep_help_option_ignore_case}}}
   -c, --count        {{${TranslationKeys.apps_terminal_grep_help_option_count}}}
   -n, --line-number  {{${TranslationKeys.apps_terminal_grep_help_option_line_number}}}

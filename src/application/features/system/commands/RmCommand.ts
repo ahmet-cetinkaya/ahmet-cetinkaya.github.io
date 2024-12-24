@@ -81,17 +81,15 @@ export default class RmCommand implements ICIProgram {
   private async validatePath(path: string, flags: CommandFlags): Promise<string | null> {
     const targetPath = PathUtils.normalize(this.currentPath, path);
 
-    if (!(await this.pathExists(targetPath))) {
-      return flags.force ? null : `{{${TranslationKeys.apps_terminal_rm_file_not_found}}}: ${path}`;
-    }
+    if (!(await this.pathExists(targetPath)))
+      return flags.force ? null : `{{${TranslationKeys.apps_terminal_common_path_required}}}`;
 
     if (
       (flags.preserveRoot && this.PROTECTED_PATHS.includes(targetPath)) ||
       (!this.ALLOWED_PATH_PREFIXES.some((prefix) => targetPath.startsWith(prefix)) &&
         !this.PROTECTED_PATHS.includes(targetPath))
-    ) {
+    )
       return `{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`;
-    }
 
     return targetPath;
   }
@@ -124,21 +122,18 @@ export default class RmCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput {
     const helpText = `${this.name}: {{${this.description}}}
-{{${TranslationKeys.common_usage}}}: ${this.name} [OPTION]... [FILE]...
 
-{{${TranslationKeys.apps_terminal_rm_help_options}}}
+{{${TranslationKeys.common_usage}}}: 
+  ${this.name} [{{${TranslationKeys.common_options}}}]... [{{${TranslationKeys.common_file}}}]...
+
+{{${TranslationKeys.common_options}}}
   -f, --force           {{${TranslationKeys.apps_terminal_rm_help_option_force}}}
   -r, -R, --recursive   {{${TranslationKeys.apps_terminal_rm_help_option_recursive}}}
   -v, --verbose         {{${TranslationKeys.apps_terminal_rm_help_option_verbose}}}
     --no-preserve-root  {{${TranslationKeys.apps_terminal_rm_help_option_no_preserve_root}}}
     --preserve-root     {{${TranslationKeys.apps_terminal_rm_help_option_preserve_root}}}
   -h, --help            {{${TranslationKeys.apps_terminal_rm_help_option_help}}}
-  --version             {{${TranslationKeys.apps_terminal_rm_help_option_version}}}
-
-{{${TranslationKeys.apps_terminal_rm_help_examples}}}
-  rm file.txt    {{${TranslationKeys.apps_terminal_rm_help_example_file}}}
-  rm -r folder   {{${TranslationKeys.apps_terminal_rm_help_example_folder}}}
-  rm -rf folder  {{${TranslationKeys.apps_terminal_rm_help_example_force}}}`;
+  --version             {{${TranslationKeys.apps_terminal_rm_help_option_version}}}`;
 
     return {
       output: helpText,

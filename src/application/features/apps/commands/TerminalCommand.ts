@@ -15,7 +15,18 @@ export default class TerminalCommand implements ICIProgram {
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
 
-    const appWindow = new Window(CryptoExtensions.generateNanoId(), Apps.terminal, TranslationKeys.apps_terminal);
+    const appWindow = new Window(
+      CryptoExtensions.generateNanoId(),
+      Apps.terminal,
+      TranslationKeys.apps_terminal,
+      0,
+      false,
+      args.includes("--maximized"),
+      undefined,
+      undefined,
+      undefined,
+      args,
+    );
     await this.windowService.add(appWindow);
 
     return {
@@ -26,7 +37,13 @@ export default class TerminalCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput | PromiseLike<CommandOutput> {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: ${this.name}`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}: 
+  ${this.name} [{{${TranslationKeys.common_options}}}]
+
+{{${TranslationKeys.common_options}}}:
+  --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}`,
       exitCode: ExitCodes.SUCCESS,
     };
   }

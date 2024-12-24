@@ -75,7 +75,7 @@ export default class CatCommand implements ICIProgram {
 
       const targetPath = PathUtils.normalize(this.currentPath, path);
       if (!(await this.pathExists(targetPath)))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cat_no_such_file_or_directory}}}: ${path}`);
+        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path}`);
 
       if (targetPath !== "/" && !targetPath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
@@ -128,11 +128,13 @@ export default class CatCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput {
     const helpText = `${this.name}: {{${this.description}}}
-{{${TranslationKeys.common_usage}}}: cat [OPTION]... [FILE]...
+
+{{${TranslationKeys.common_usage}}}: 
+  cat [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_path}}}>
 
 {{${TranslationKeys.apps_terminal_cat_help_stdin_note}}}
 
-{{${TranslationKeys.apps_terminal_cat_help_options}}}
+{{${TranslationKeys.common_options}}}:
   -A, --show-all          {{${TranslationKeys.apps_terminal_cat_help_option_show_all}}}
   -b, --number-nonblank   {{${TranslationKeys.apps_terminal_cat_help_option_number_nonblank}}}
   -e                      {{${TranslationKeys.apps_terminal_cat_help_option_e}}}

@@ -26,7 +26,13 @@ export default class EmailCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput | PromiseLike<CommandOutput> {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: ${this.name}`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}: 
+  ${this.name} [{{${TranslationKeys.common_options}}}]
+
+{{${TranslationKeys.common_options}}}:
+  --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}`,
       exitCode: ExitCodes.SUCCESS,
     };
   }

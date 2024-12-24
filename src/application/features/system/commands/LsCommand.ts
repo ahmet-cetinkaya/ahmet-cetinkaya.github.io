@@ -67,7 +67,7 @@ export default class LsCommand implements ICIProgram {
       const path = files[0] || this.currentPath;
       const targetPath = PathUtils.normalize(this.currentPath, path);
       if (!(await this.pathExists(targetPath)))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cd_no_such_file_or_directory}}}: ${path}`);
+        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
       if (targetPath !== "/" && !targetPath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
 
@@ -104,9 +104,11 @@ export default class LsCommand implements ICIProgram {
   private createHelpOutput(): CommandOutput {
     return {
       output: `${this.name}: {{${this.description}}}
-{{${TranslationKeys.common_usage}}}: ls [path]
 
-{{${TranslationKeys.apps_terminal_ls_help_options}}}
+{{${TranslationKeys.common_usage}}}: 
+  ls [{{${TranslationKeys.common_options}}}]... [{{${TranslationKeys.common_path}}}]
+
+{{${TranslationKeys.common_options}}}:
   -a, --all             {{${TranslationKeys.apps_terminal_ls_help_option_all}}}
   -R, --recursive       {{${TranslationKeys.apps_terminal_ls_help_option_recursive}}}
   -l                    {{${TranslationKeys.apps_terminal_ls_help_option_long_format}}}

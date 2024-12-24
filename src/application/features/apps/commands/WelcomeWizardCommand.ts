@@ -22,6 +22,10 @@ export default class WelcomeWizardCommand implements ICIProgram {
       0,
       false,
       args.includes("--maximized"),
+      undefined,
+      undefined,
+      undefined,
+      args,
     );
     await this.windowService.add(appWindow);
 
@@ -33,7 +37,14 @@ export default class WelcomeWizardCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: ${this.name} [--maximized]`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}: 
+  ${this.name} [{{${TranslationKeys.common_options}}}]
+
+{{${TranslationKeys.common_options}}}:
+  --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}
+  --part: {{${TranslationKeys.apps_terminal_commands_welcome_part}}}`,
       exitCode: ExitCodes.SUCCESS,
     };
   }

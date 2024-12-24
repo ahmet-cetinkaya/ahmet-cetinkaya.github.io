@@ -85,7 +85,7 @@ export default class CurlCommand implements ICIProgram {
         if (outputPath !== "/" && !outputPath.startsWith("/home"))
           return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${flags.output}`);
 
-        const file = new File(outputPath, content.length, content, new Date());
+        const file = new File(outputPath, content, new Date(), content.length);
         await this.fileSystemService.add(file);
         return { output: "", exitCode: ExitCodes.SUCCESS };
       }
@@ -116,10 +116,10 @@ export default class CurlCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_curl_help_usage}}}:
-  curl [options...] <url>
+{{${TranslationKeys.common_usage}}}:
+  curl [{{${TranslationKeys.common_options}}}]... <url>
 
-{{${TranslationKeys.apps_terminal_curl_help_options}}}:
+{{${TranslationKeys.common_options}}}:
   -X, --request <command>  {{${TranslationKeys.apps_terminal_curl_help_option_request}}}
   -H, --header <header>    {{${TranslationKeys.apps_terminal_curl_help_option_header}}}
   -d, --data <data>        {{${TranslationKeys.apps_terminal_curl_help_option_data}}}

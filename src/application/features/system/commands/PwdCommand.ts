@@ -19,7 +19,9 @@ export default class PwdCommand implements ICIProgram {
 
   private createHelpOutput(): CommandOutput | PromiseLike<CommandOutput> {
     return {
-      output: `${this.name}: {{${this.description}}}\n{{${TranslationKeys.common_usage}}}: pwd`,
+      output: `${this.name}: {{${this.description}}}
+
+{{${TranslationKeys.common_usage}}}: pwd`,
       exitCode: ExitCodes.SUCCESS,
     };
   }

@@ -124,7 +124,7 @@ export default class TouchCommand implements ICIProgram {
 
       if (!exists) {
         if (flags.noCreate) continue;
-        const newFile = new File(targetPath, 0, "", targetDate);
+        const newFile = new File(targetPath, "", targetDate, 0);
         await this.fileSystemService.add(newFile);
       } else {
         const file = await this.fileSystemService.get((e) => e.fullPath === targetPath);
@@ -160,9 +160,11 @@ export default class TouchCommand implements ICIProgram {
   private createHelpOutput(): CommandOutput {
     return {
       output: `${this.name}: {{${this.description}}}
-{{${TranslationKeys.common_usage}}}: touch [OPTION]... FILE...
 
-{{${TranslationKeys.apps_terminal_touch_help_options}}}:
+{{${TranslationKeys.common_usage}}}: 
+  touch [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_file}}}>
+
+{{${TranslationKeys.common_options}}}:
   -a                    {{${TranslationKeys.apps_terminal_touch_help_option_access_time}}}
   -c, --no-create       {{${TranslationKeys.apps_terminal_touch_help_option_no_create}}}
   -d, --date=STRING     {{${TranslationKeys.apps_terminal_touch_help_option_date}}}

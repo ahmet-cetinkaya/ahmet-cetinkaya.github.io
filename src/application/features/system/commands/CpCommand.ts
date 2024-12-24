@@ -103,7 +103,7 @@ export default class CpCommand implements ICIProgram {
 
       const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === sourcePath);
       if (!sourceEntry)
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cp_no_such_file}}}: '${source}'`);
+        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}: '${source}'`);
 
       if (sourcePath !== "/" && !sourcePath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${source}`);
@@ -112,7 +112,7 @@ export default class CpCommand implements ICIProgram {
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${destination}`);
 
       if (sourceEntry instanceof File) {
-        const newFile = new File(destPath, sourceEntry.size, sourceEntry.content, new Date());
+        const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size);
         await this.fileSystemService.add(newFile);
         if (flags.verbose) return { output: `'${source}' -> '${destination}'`, exitCode: ExitCodes.SUCCESS };
       }
@@ -129,12 +129,12 @@ export default class CpCommand implements ICIProgram {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.apps_terminal_cp_help_usage}}}:
-  cp [OPTION]... [-T] SOURCE DEST
-  cp [OPTION]... SOURCE... DIRECTORY
-  cp [OPTION]... -t DIRECTORY SOURCE...
+{{${TranslationKeys.common_usage}}}:
+  cp [{{${TranslationKeys.common_options}}}]... [-T] {{${TranslationKeys.common_source}}...} {{${TranslationKeys.common_target_directory}}}
+  cp [{{${TranslationKeys.common_options}}}]... {{${TranslationKeys.common_source}}...} {{${TranslationKeys.common_target_directory}}}
+  cp [{{${TranslationKeys.common_options}}}]... -t {{${TranslationKeys.common_target_directory}}} {{${TranslationKeys.common_source}}...}
 
-{{${TranslationKeys.apps_terminal_cp_help_options}}}:
+{{${TranslationKeys.common_options}}}:
   -R, -r, --recursive        {{${TranslationKeys.apps_terminal_cp_help_option_recursive}}}
   -f, --force                {{${TranslationKeys.apps_terminal_cp_help_option_force}}}
   -t, --target-directory     {{${TranslationKeys.apps_terminal_cp_help_option_target_directory}}}

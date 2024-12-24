@@ -1,0 +1,69 @@
+---
+import { TranslationKeys } from "~/domain/data/Translations";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import { useI18nStatic } from "../../shared/utils/i18nTranslate";
+import Container from "~/presentation/Container";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
+import DoomPageOGImage from "../_assets/images/doom-page-og-image.webp";
+
+const i18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, i18n.locales[0]);
+
+const title = `${translate(TranslationKeys.apps_doom)} | Ahmet Çetinkaya`;
+const description = translate(TranslationKeys.apps_doom_desc);
+
+const technologiesService = Container.instance.technologiesService;
+const extendedDefaultTags = await SeoConstants.getExtendedDefaultTags(technologiesService);
+const tags = ArrayExtensions.distinct([
+  ...extendedDefaultTags,
+  translate(TranslationKeys.apps_doom),
+  "retro",
+  translate(TranslationKeys.common_games),
+]);
+
+const ogImageAlt = translate(TranslationKeys.apps_welcome_about_me_profile_image_alt);
+---
+
+<DesktopLayout
+  metaData={{
+    title,
+    description: description,
+    canonical: Astro.url.pathname,
+    openGraph: {
+      basic: {
+        title,
+        type: "website",
+        image: DoomPageOGImage.src,
+        url: Astro.url.href,
+      },
+      optional: {
+        description: description,
+        locale: currentLocale,
+        siteName: SeoConstants.DEFAULT_TITLE,
+      },
+      image: {
+        alt: ogImageAlt,
+        width: DoomPageOGImage.width,
+        height: DoomPageOGImage.height,
+        type: `image/${DoomPageOGImage.format}`,
+      },
+    },
+    twitter: {
+      ...SeoConstants.DEFAULT_TWITTER,
+      description: description,
+      image: DoomPageOGImage.src,
+      imageAlt: ogImageAlt,
+    },
+    extend: {
+      meta: [
+        SeoConstants.DEFAULT_AUTHOR_META,
+        {
+          name: "keywords",
+          content: tags.join(", "),
+        },
+      ],
+    },
+  }}
+/>

@@ -7,12 +7,15 @@ import Terminal from "../../system/components/Terminal/Terminal";
 
 type Props = {
   appId: AppId;
+  args?: string[];
 };
 
 export default function AppContent(props: Props) {
   switch (props.appId) {
-    case Apps.welcome:
-      return <WelcomeWizardApp />;
+    case Apps.welcome: {
+      const initialPartArg = props.args?.find((arg) => arg.startsWith("--part"))?.split("=")[1] as string | undefined;
+      return <WelcomeWizardApp part={initialPartArg ? Number(initialPartArg) : undefined} />;
+    }
     case Apps.email:
       return <EmailApp />;
     case Apps.doom:

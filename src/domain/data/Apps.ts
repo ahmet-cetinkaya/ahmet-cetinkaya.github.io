@@ -16,7 +16,7 @@ const AppsData = [
     Categories.apps,
     TranslationKeys.apps_welcome_wizard,
     Icons.computer,
-    "",
+    "about-me",
     new Date("2024-05-11 15:53:45"),
   ),
   new App(
@@ -27,7 +27,7 @@ const AppsData = [
     "contact",
     new Date("2024-05-11 15:55:45"),
   ),
-  new App(Apps.doom, Categories.games, TranslationKeys.games_doom, Icons.doom, "doom", new Date("2024-05-11 15:55:45")),
+  new App(Apps.doom, Categories.games, TranslationKeys.apps_doom, Icons.doom, "doom", new Date("2024-05-11 15:55:45")),
   new App(
     Apps.terminal,
     Categories.system,

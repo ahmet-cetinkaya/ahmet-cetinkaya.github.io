@@ -13,9 +13,7 @@ import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "./AppContent";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 
-type Props = {
-  window: WindowModel;
-};
+type Props = WindowModel;
 
 export default function Window(props: Props) {
   const windowsService = Container.instance.windowsService;
@@ -26,25 +24,25 @@ export default function Window(props: Props) {
   const [path] = createResource<string>(getAppPath);
 
   async function getAppPath() {
-    const app = await appsService.get((a) => a.id == props.window.appId);
-    if (!app) throw new Error(`App (${props.window.appId}) not found`);
+    const app = await appsService.get((a) => a.id == props.appId);
+    if (!app) throw new Error(`App (${props.appId}) not found`);
 
     return app.path;
   }
 
   function onMinimize() {
-    windowsService.minimize(props.window);
+    windowsService.minimize(props);
   }
 
   async function onClick() {
     if (!path()) return;
 
-    await windowsService.active(props.window);
+    await windowsService.active(props);
     navigate(path()!);
   }
 
   function onClose() {
-    windowsService.remove((w) => w.id === props.window.id);
+    windowsService.remove((w) => w.id === props.id);
   }
 
   function onDragStart() {
@@ -57,12 +55,12 @@ export default function Window(props: Props) {
   }
 
   function onDragEnd(_: MouseEvent, position: Position) {
-    props.window.position = position;
+    props.position = position;
     if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+      props.layer = overrideLayer()!;
       setOverrideLayer(null);
     }
-    windowsService.update(props.window);
+    windowsService.update(props);
   }
 
   function onResizeStart() {
@@ -75,23 +73,23 @@ export default function Window(props: Props) {
   }
 
   function onResizeEnd(_: Event, size: Size, position: Position) {
-    props.window.size = size;
-    props.window.position = position;
+    props.size = size;
+    props.position = position;
     if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+      props.layer = overrideLayer()!;
       setOverrideLayer(null);
     }
-    windowsService.update(props.window);
+    windowsService.update(props);
   }
 
   function onToggleMaximize(isMaximized: boolean) {
-    props.window.isMaximized = isMaximized;
-    windowsService.update(props.window);
+    props.isMaximized = isMaximized;
+    windowsService.update(props);
   }
 
   return (
     <Modal
-      title={props.window.title}
+      title={props.title}
       customHeaderButtons={
         <Button
           onClick={onMinimize}
@@ -102,9 +100,9 @@ export default function Window(props: Props) {
           <Icon icon={Icons.minimize} class="size-4" />
         </Button>
       }
-      position={props.window.position}
-      size={props.window.size}
-      isMaximized={props.window.isMaximized}
+      position={props.position}
+      size={props.size}
+      isMaximized={props.isMaximized}
       maximizeOffset={{ top: 72, left: 10, right: 10, bottom: 16 }}
       dragOffset={{ top: 72 }}
       onClick={onClick}
@@ -115,14 +113,14 @@ export default function Window(props: Props) {
       onResizeEnd={onResizeEnd}
       onToggleMaximize={onToggleMaximize}
       class={mergeCls("border-black bg-surface-500 text-white shadow-secondary", {
-        hidden: props.window.isMinimized,
+        hidden: props.isMinimized,
       })}
       headerClass="bg-surface-400"
       style={{
-        "z-index": overrideLayer() ?? props.window.layer,
+        "z-index": overrideLayer() ?? props.layer,
       }}
     >
-      <AppContent appId={props.window.appId} />
+      <AppContent appId={props.appId} args={props.args} />
     </Modal>
   );
 }

@@ -52,7 +52,7 @@ enum Icons {
   postgresql = "PostgreSQL Icon",
   react = "React Icon",
   redis = "Redis Icon",
-  restart = "Restart Icon",
+  reboot = "Reboot Icon",
   send = "send",
   shutDown = "Shut Down Icon",
   solid = "Solid JS Icon",

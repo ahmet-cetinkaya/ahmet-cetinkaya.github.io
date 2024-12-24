@@ -23,7 +23,7 @@ const PARTS: { label: TranslationKey; icon: Icons }[] = [
   { label: TranslationKeys.apps_welcome_completed, icon: Icons.check },
 ];
 
-enum Parts {
+export enum Parts {
   Hello,
   AboutMe,
   Technologies,
@@ -31,14 +31,20 @@ enum Parts {
   Completed,
 }
 
-export default function WelcomeWizardApp() {
+type Props = {
+  part?: Parts;
+};
+
+export default function WelcomeWizardApp(props: Props) {
   const windowsService: IWindowsService = Container.instance.windowsService;
 
   const translate = useI18n();
 
-  const [currentPart, setCurrentPart] = createSignal(0);
+  const [currentPart, setCurrentPart] = createSignal(props.part ?? Parts.Hello);
   const [isWarnedForConfirm, setIsWarnedForConfirm] = createSignal(false);
-  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(false);
+  const [isAboutConfirmed, setIsAboutConfirmed] = createSignal(
+    props.part ? props.part > Parts.AboutMe : false,
+  );
 
   function onPartClicked(index: number) {
     if (index >= PARTS.length) {

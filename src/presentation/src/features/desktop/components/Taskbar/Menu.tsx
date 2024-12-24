@@ -58,9 +58,9 @@ export default function Menu() {
       text: TranslationKeys.system_power,
       items: [
         {
-          text: TranslationKeys.system_restart,
-          icon: Icons.restart,
-          onClick: () => onPowerOptionClick("restart"),
+          text: TranslationKeys.system_reboot,
+          icon: Icons.reboot,
+          onClick: () => onPowerOptionClick("reboot"),
         },
         {
           text: TranslationKeys.system_shut_down,
@@ -88,8 +88,8 @@ export default function Menu() {
     const currentLocale = i18n.currentLocale.get();
     const pathPrefix = currentLocale === Locales.tr ? "/tr" : "";
     switch (command) {
-      case "restart":
-        navigate(`${pathPrefix}/restart`);
+      case "reboot":
+        navigate(`${pathPrefix}/reboot`);
         break;
       case "shutdown":
         navigate(`${pathPrefix}/shutdown`);

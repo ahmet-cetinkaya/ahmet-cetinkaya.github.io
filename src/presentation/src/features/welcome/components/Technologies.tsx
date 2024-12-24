@@ -85,6 +85,13 @@ export default function Technologies() {
       <Title>{translate(TranslationKeys.apps_welcome_technologiesIUse)}</Title>
 
       <Show when={memoizedNetworkGraphData()}>
+        <div aria-label="Technology network visualization">
+          <p class="sr-only">
+            Interactive network visualization of technologies I use, including:{" "}
+            {technologies?.map((technology) => technology.name).join(", ")}
+          </p>
+        </div>
+
         <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode} />
       </Show>
     </div>

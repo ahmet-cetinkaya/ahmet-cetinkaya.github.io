@@ -17,6 +17,7 @@ export default class Window extends Entity<WindowId> {
     public position: Position | undefined = undefined,
     public size: Size | undefined = undefined,
     createdDate: Date = new Date(),
+    public args?: string[],
     updatedDate?: Date,
   ) {
     super(id, createdDate, updatedDate);

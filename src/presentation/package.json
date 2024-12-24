@@ -8,7 +8,8 @@
     "dev": "astro dev",
     "format": "prettier --write .",
     "preview": "astro preview",
-    "start": "astro dev"
+    "start": "astro dev",
+    "create-i18n-pages": "rm -rf src/pages/tr && mkdir -p src/pages/tr && find src/pages/ -maxdepth 1 -mindepth 1 ! -name '_*' ! -name 'tr' -exec cp -r {} src/pages/tr/ \\;"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

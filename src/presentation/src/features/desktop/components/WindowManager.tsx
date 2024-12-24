@@ -1,62 +1,53 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
-import WindowModel from "~/domain/models/Window";
 import Container from "~/presentation/Container";
-import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 import Key from "~/core/acore-solidjs/ui/components/Key";
 import Window from "./Window";
+import WindowModel from "~/domain/models/Window";
+import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
+import appCommands from "~/presentation/src/shared/constants/AppCommands";
+import type { Apps } from "~/domain/data/Apps";
+import { parseAppPathFromLocation } from "~/presentation/src/shared/utils/parseAppPathFromLocation";
 
 export default function WindowManager() {
   const windowService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
   const [windows, setWindows] = createSignal<WindowModel[]>([]);
-  const i18n = Container.instance.i18n;
 
   onMount(async () => {
-    await openInitialApp();
-    subscribeToResizeEvents();
     localStorage.setItem("boot_time", new Date().toISOString());
+    await openInitialApp();
+    windowService.subscribe((windows) => setWindows(windows));
+    window.addEventListener("resize", handleResize);
   });
 
   onCleanup(() => {
-    unsubscribeFromResizeEvents();
+    window.removeEventListener("resize", handleResize);
   });
 
   async function openInitialApp() {
-    let appPath = window.location.pathname;
-    if (appPath.startsWith("/")) appPath = appPath.slice(1);
-    if (i18n.locales.some((lang) => appPath.startsWith(`${lang}/`))) appPath = appPath.split("/").slice(1).join("/");
+    const { appPath, args } = parseAppPathFromLocation(window.location.pathname);
 
     const app = await appsService.get((app) => app.path === appPath);
     if (!app) return;
 
-    const openedAppWindow = await windowService.get((window) => window.appId === app.id);
-    if (openedAppWindow) {
-      windowService.active(openedAppWindow);
+    await openWindow(app.id, args);
+  }
+
+  async function openWindow(appId: Apps, args?: string[]) {
+    const existingWindow = await windowService.get((window) => window.appId === appId);
+    if (existingWindow) {
+      windowService.active(existingWindow);
       return;
     }
 
-    await windowService.add({
-      id: CryptoExtensions.generateNanoId(),
-      title: app.name,
-      appId: app.id,
-      isMaximized: ScreenHelper.isMobile(),
-    } as WindowModel);
+    const appCommand = appCommands[appId];
+    if (!appCommand) return;
 
-    windowService.subscribe((windows) => {
-      setWindows(windows);
-    });
+    const command = appCommand();
+    await command.execute(...(args ?? []));
   }
 
   let checkMobileScreenTimeout: NodeJS.Timeout | null = null;
-  function subscribeToResizeEvents() {
-    window.addEventListener("resize", handleResize);
-  }
-
-  function unsubscribeFromResizeEvents() {
-    window.removeEventListener("resize", handleResize);
-  }
-
   function handleResize() {
     if (checkMobileScreenTimeout) clearTimeout(checkMobileScreenTimeout);
 
@@ -64,14 +55,13 @@ export default function WindowManager() {
       const windows = await windowService.getAll();
       for (const window of windows) window.isMaximized = ScreenHelper.isMobile();
       windowService.bulkUpdate(windows);
-
       checkMobileScreenTimeout = null;
-    }, 300);
+    }, 1000);
   }
 
   return (
     <Key each={windows()} by={(item) => item.id}>
-      {(item) => <Window window={item()} />}
+      {(item) => <Window {...item()} />}
     </Key>
   );
 }

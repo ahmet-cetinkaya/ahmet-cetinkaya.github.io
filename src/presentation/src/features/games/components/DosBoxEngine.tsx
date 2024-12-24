@@ -1,6 +1,7 @@
 import { onCleanup } from "solid-js";
 import JSDosWrapper from "~/core/acore-ts/jsdos/JSDosWrapper";
 import { Apps } from "~/domain/data/Apps";
+import { Paths } from "~/domain/data/Directories";
 
 type Props = {
   appId: Apps;
@@ -25,7 +26,7 @@ export default function DosBoxEngine(props: Props) {
   function getAppImagePath() {
     switch (props.appId) {
       case Apps.doom:
-        return "/public/jsdos/doom.jsdos";
+        return `${Paths.USER_GAMES}/doom.jsdos`;
       default:
         throw new Error(`App not found: ${props.appId}`);
     }

@@ -1,0 +1,3 @@
+[submodule "src/core/acore-ts"]
+	path = src/core/acore-ts
+	url = https://github.com/ahmet-cetinkaya/acore-ts.git

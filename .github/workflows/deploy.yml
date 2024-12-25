@@ -32,9 +32,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Ensure localhost is resolvable
-        run: echo "127.0.0.1 localhost" >> /etc/hosts
-
       - name: Install dependencies
         run: bun install-all
 

@@ -56,6 +56,9 @@ export default {
         128: "32rem",
         144: "36rem",
       },
+      screens: {
+        "xs": "475px",
+      },
       colors,
     },
   },

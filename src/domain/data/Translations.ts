@@ -261,6 +261,7 @@ export enum TranslationKeys {
   desktop_change_locale = "desktop_change_locale",
   desktop_minimize = "desktop_minimize",
   desktop_taskbar_other_windows_menu = "desktop_taskbar_other_windows_menu",
+  desktop_taskbar_windows_menu = "desktop_taskbar_windows_menu",
   educations_1_department = "educations_1_department",
   educations_2_department = "educations_2_department",
   educations_2_description_markdown = "educations_2_description_markdown",
@@ -298,667 +299,667 @@ export enum TranslationKeys {
 const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_doom: {
     en: "DOOM",
-    tr: "DOOM",
+    tr: "DOOM"
   },
   apps_doom_desc: {
     en: "Play the classic DOOM game. Experience the groundbreaking first-person shooter that revolutionized gaming.",
-    tr: "Klasik DOOM oyununu oynayın. Oyun dünyasına devrim getiren bu çığır açıcı birinci şahıs nişancı oyununu deneyimleyin.",
+    tr: "Klasik DOOM oyununu oynayın. Oyun dünyasına devrim getiren bu çığır açıcı birinci şahıs nişancı oyununu deneyimleyin."
   },
   apps_email_compose: {
     en: "Compose",
-    tr: "Oluştur",
+    tr: "Oluştur"
   },
   apps_email_drafts: {
     en: "Drafts",
-    tr: "Taslaklar",
+    tr: "Taslaklar"
   },
   apps_email_enter_url: {
     en: "Enter URL",
-    tr: "URL Girin",
+    tr: "URL Girin"
   },
   apps_email_folders: {
     en: "Folders",
-    tr: "Klasörler",
+    tr: "Klasörler"
   },
   apps_email_inbox: {
     en: "Inbox",
-    tr: "Gelen Kutusu",
+    tr: "Gelen Kutusu"
   },
   apps_email_sent: {
     en: "Sent",
-    tr: "Gönderilen",
+    tr: "Gönderilen"
   },
   apps_email_subject: {
     en: "Subject",
-    tr: "Konu",
+    tr: "Konu"
   },
   apps_email_to: {
     en: "To",
-    tr: "Kime",
+    tr: "Kime"
   },
   apps_email_trash: {
     en: "Trash",
-    tr: "Çöp Kutusu",
+    tr: "Çöp Kutusu"
   },
   apps_terminal: {
     en: "Terminal",
-    tr: "Komut İstemi",
+    tr: "Komut İstemi"
   },
   apps_terminal_cat_help_example_file_content: {
     en: "Output f's contents, then standard input, then g's contents.",
-    tr: "f'nin içeriğini, ardından standart girdiyi, ardından g'nin içeriğini çıktıla.",
+    tr: "f'nin içeriğini, ardından standart girdiyi, ardından g'nin içeriğini çıktıla."
   },
   apps_terminal_cat_help_example_stdin: {
     en: "Copy standard input to standard output.",
-    tr: "Standart girdiyi standart çıktıya kopyala.",
+    tr: "Standart girdiyi standart çıktıya kopyala."
   },
   apps_terminal_cat_help_examples: {
     en: "Examples:",
-    tr: "Örnekler:",
+    tr: "Örnekler:"
   },
   apps_terminal_cat_help_option_e: {
     en: "equivalent to -vE",
-    tr: "-vE ile eşdeğer",
+    tr: "-vE ile eşdeğer"
   },
   apps_terminal_cat_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardım mesajını göster ve çık",
+    tr: "bu yardım mesajını göster ve çık"
   },
   apps_terminal_cat_help_option_number: {
     en: "number all output lines",
-    tr: "tüm çıktı satırlarını numaralandır",
+    tr: "tüm çıktı satırlarını numaralandır"
   },
   apps_terminal_cat_help_option_number_nonblank: {
     en: "number nonempty output lines, overrides -n",
-    tr: "boş olmayan çıktı satırlarını numaralandır, -n'yi geçersiz kılar",
+    tr: "boş olmayan çıktı satırlarını numaralandır, -n'yi geçersiz kılar"
   },
   apps_terminal_cat_help_option_show_all: {
     en: "equivalent to -vET",
-    tr: "-vET ile eşdeğer",
+    tr: "-vET ile eşdeğer"
   },
   apps_terminal_cat_help_option_show_ends: {
     en: "display $ at end of each line",
-    tr: "her satırın sonunda $ işaretini göster",
+    tr: "her satırın sonunda $ işaretini göster"
   },
   apps_terminal_cat_help_option_show_nonprinting: {
     en: "use ^ and M- notation, except for LFD and TAB",
-    tr: "LFD ve TAB hariç ^ ve M- notasyonunu kullan",
+    tr: "LFD ve TAB hariç ^ ve M- notasyonunu kullan"
   },
   apps_terminal_cat_help_option_show_tabs: {
     en: "display TAB characters as ^I",
-    tr: "TAB karakterlerini ^I olarak göster",
+    tr: "TAB karakterlerini ^I olarak göster"
   },
   apps_terminal_cat_help_option_squeeze_blank: {
     en: "suppress repeated empty output lines",
-    tr: "tekrarlanan boş çıktı satırlarını bastır",
+    tr: "tekrarlanan boş çıktı satırlarını bastır"
   },
   apps_terminal_cat_help_option_t: {
     en: "equivalent to -vT",
-    tr: "-vT ile eşdeğer",
+    tr: "-vT ile eşdeğer"
   },
   apps_terminal_cat_help_option_version: {
     en: "output version information and exit",
-    tr: "sürüm bilgisini göster ve çık",
+    tr: "sürüm bilgisini göster ve çık"
   },
   apps_terminal_cat_help_stdin_note: {
     en: "With no FILE, or when FILE is -, read standard input.",
-    tr: "Dosya belirtilmezse veya dosya - ise, standart girdiyi oku.",
+    tr: "Dosya belirtilmezse veya dosya - ise, standart girdiyi oku."
   },
   apps_terminal_cat_is_a_directory: {
     en: "is a directory",
-    tr: "bir dizin",
+    tr: "bir dizin"
   },
   apps_terminal_commands_apps_maximized: {
     en: "Open app in maximized mode",
-    tr: "Uygulamayı tam ekran modunda aç",
+    tr: "Uygulamayı tam ekran modunda aç"
   },
   apps_terminal_commands_cat_description: {
     en: "Concatenate FILE(s) to standard output.",
-    tr: "Dosya(ları) birleştirerek standart çıktıya yazdırır.",
+    tr: "Dosya(ları) birleştirerek standart çıktıya yazdırır."
   },
   apps_terminal_commands_cd_description: {
     en: "Change the shell working directory.",
-    tr: "Kabuk çalışma dizinini değiştirir.",
+    tr: "Kabuk çalışma dizinini değiştirir."
   },
   apps_terminal_commands_cp_description: {
     en: "Copy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY.",
-    tr: "KAYNAK'ı HEDEF'e veya birden çok KAYNAK'ı DİZİN'e kopyalar.",
+    tr: "KAYNAK'ı HEDEF'e veya birden çok KAYNAK'ı DİZİN'e kopyalar."
   },
   apps_terminal_commands_curl_description: {
     en: "Transfer data from or to a server",
-    tr: "Sunucudan veya sunucuya veri aktarır",
+    tr: "Sunucudan veya sunucuya veri aktarır"
   },
   apps_terminal_commands_doom_description: {
     en: "Start the DOOM game.",
-    tr: "DOOM oyununu başlatır.",
+    tr: "DOOM oyununu başlatır."
   },
   apps_terminal_commands_doom_started: {
     en: "DOOM started.",
-    tr: "DOOM başlatıldı.",
+    tr: "DOOM başlatıldı."
   },
   apps_terminal_commands_echo_description: {
     en: "Display a line of text.",
-    tr: "Bir metin satırını görüntüler.",
+    tr: "Bir metin satırını görüntüler."
   },
   apps_terminal_commands_email_description: {
     en: "Start the email client.",
-    tr: "E-posta istemcisini başlatır.",
+    tr: "E-posta istemcisini başlatır."
   },
   apps_terminal_commands_email_started: {
     en: "Email client started.",
-    tr: "E-posta istemcisi başlatıldı.",
+    tr: "E-posta istemcisi başlatıldı."
   },
   apps_terminal_commands_fastfetch_description: {
     en: "Fetch system information.",
-    tr: "Sistem bilgilerini getirir.",
+    tr: "Sistem bilgilerini getirir."
   },
   apps_terminal_commands_find_description: {
     en: "Search for files in a directory hierarchy",
-    tr: "Dizin hiyerarşisinde dosya ara",
+    tr: "Dizin hiyerarşisinde dosya ara"
   },
   apps_terminal_commands_grep_description: {
     en: "Print lines that match patterns",
-    tr: "Desenlerle eşleşen satırları yazdır",
+    tr: "Desenlerle eşleşen satırları yazdır"
   },
   apps_terminal_commands_history_description: {
     en: "Print the history of commands",
-    tr: "Komutların geçmişini yazdır",
+    tr: "Komutların geçmişini yazdır"
   },
   apps_terminal_commands_kill_description: {
     en: "terminate a process",
-    tr: "bir süreci sonlandır",
+    tr: "bir süreci sonlandır"
   },
   apps_terminal_commands_ls_description: {
     en: "List directory contents.",
-    tr: "Dizin içeriğini listeler.",
+    tr: "Dizin içeriğini listeler."
   },
   apps_terminal_commands_mkdir_description: {
     en: "Create the directory, if they do not already exist.",
-    tr: "Eğer zaten mevcut değilse dizini oluşturur.",
+    tr: "Eğer zaten mevcut değilse dizini oluşturur."
   },
   apps_terminal_commands_mv_description: {
     en: "Rename SOURCE to DEST, or move SOURCE(s) to DIRECTORY.",
-    tr: "KAYNAK'ı HEDEF olarak yeniden adlandırır veya KAYNAK(lar)ı DİZİN'e taşır.",
+    tr: "KAYNAK'ı HEDEF olarak yeniden adlandırır veya KAYNAK(lar)ı DİZİN'e taşır."
   },
   apps_terminal_commands_ps_description: {
     en: "Report process status.",
-    tr: "İşlem durumunu raporlar.",
+    tr: "İşlem durumunu raporlar."
   },
   apps_terminal_commands_pwd_description: {
     en: "Print the name of the current working directory.",
-    tr: "Geçerli çalışma dizininin adını yazdırır.",
+    tr: "Geçerli çalışma dizininin adını yazdırır."
   },
   apps_terminal_commands_rm_description: {
     en: "Remove files or directories.",
-    tr: "Dosyaları veya dizinleri siler.",
+    tr: "Dosyaları veya dizinleri siler."
   },
   apps_terminal_commands_rmdir_description: {
     en: "Remove directories.",
-    tr: "Dizinleri siler.",
+    tr: "Dizinleri siler."
   },
   apps_terminal_commands_terminal_description: {
     en: "Start the terminal.",
-    tr: "Terminali başlatır.",
+    tr: "Terminali başlatır."
   },
   apps_terminal_commands_terminal_started: {
     en: "Terminal started.",
-    tr: "Komut istemi başlatıldı.",
+    tr: "Komut istemi başlatıldı."
   },
   apps_terminal_commands_touch_description: {
     en: "Create the file, if it does not already exist.",
-    tr: "Dosya mevcut değilse oluşturur.",
+    tr: "Dosya mevcut değilse oluşturur."
   },
   apps_terminal_commands_welcome_description: {
     en: "Start the welcome wizard.",
-    tr: "Karşılama sihirbazını başlatır.",
+    tr: "Karşılama sihirbazını başlatır."
   },
   apps_terminal_commands_welcome_part: {
     en: "Open app with a part",
-    tr: "Uygulamadaki bir kısımla birlikte aç",
+    tr: "Uygulamadaki bir kısımla birlikte aç"
   },
   apps_terminal_commands_welcome_started: {
     en: "Welcome wizard started.",
-    tr: "Karşılama sihirbazı başlatıldı.",
+    tr: "Karşılama sihirbazı başlatıldı."
   },
   apps_terminal_commands_whoami_description: {
     en: "Print effective user name.",
-    tr: "Etkin kullanıcı adını yazdırır.",
+    tr: "Etkin kullanıcı adını yazdırır."
   },
   apps_terminal_common_path_required: {
     en: "No such file or directory.",
-    tr: "Böyle bir dosya veya dizin yok.",
+    tr: "Böyle bir dosya veya dizin yok."
   },
   apps_terminal_cp_help_option_force: {
     en: "overwrite existing files without prompting",
-    tr: "mevcut dosyaları sormadan üzerine yaz",
+    tr: "mevcut dosyaları sormadan üzerine yaz"
   },
   apps_terminal_cp_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_cp_help_option_no_target_directory: {
     en: "Treat DEST as a normal file.",
-    tr: "HEDEF'i normal bir dosya olarak ele alır.",
+    tr: "HEDEF'i normal bir dosya olarak ele alır."
   },
   apps_terminal_cp_help_option_recursive: {
     en: "copy directories recursively",
-    tr: "dizinleri özyinelemeli olarak kopyala",
+    tr: "dizinleri özyinelemeli olarak kopyala"
   },
   apps_terminal_cp_help_option_target_directory: {
     en: "Copy all SOURCE arguments into DIRECTORY.",
-    tr: "Tüm KAYNAK argümanlarını DİZİN'e kopyalar.",
+    tr: "Tüm KAYNAK argümanlarını DİZİN'e kopyalar."
   },
   apps_terminal_cp_help_option_verbose: {
     en: "Explain what is being done.",
-    tr: "Yapılan işlemleri açıklar.",
+    tr: "Yapılan işlemleri açıklar."
   },
   apps_terminal_cp_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_cp_missing_operand: {
     en: "Missing file operand.",
-    tr: "Eksik dosya operandı.",
+    tr: "Eksik dosya operandı."
   },
   apps_terminal_curl_help_option_data: {
     en: "HTTP POST data.",
-    tr: "HTTP POST verisi.",
+    tr: "HTTP POST verisi."
   },
   apps_terminal_curl_help_option_header: {
     en: "Pass custom header(s) to server.",
-    tr: "Sunucuya özel başlık(lar) iletir.",
+    tr: "Sunucuya özel başlık(lar) iletir."
   },
   apps_terminal_curl_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_curl_help_option_output: {
     en: "Write to file instead of stdout.",
-    tr: "Stdout yerine dosyaya yazar.",
+    tr: "Stdout yerine dosyaya yazar."
   },
   apps_terminal_curl_help_option_request: {
     en: "Specify request method to use.",
-    tr: "Kullanılacak istek yöntemini belirtir.",
+    tr: "Kullanılacak istek yöntemini belirtir."
   },
   apps_terminal_curl_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_curl_invalid_url: {
     en: "Invalid URL.",
-    tr: "Geçersiz URL.",
+    tr: "Geçersiz URL."
   },
   apps_terminal_curl_request_error: {
     en: "Failed to make request.",
-    tr: "İstek yapılamadı.",
+    tr: "İstek yapılamadı."
   },
   apps_terminal_fastfetch_unknown_gpu: {
     en: "Potato-powered Graphics",
-    tr: "Patates gücü grafikler",
+    tr: "Patates gücü grafikler"
   },
   apps_terminal_fastfetch_unknown_memory: {
     en: "More than a goldfish",
-    tr: "Bir japon balığından fazla",
+    tr: "Bir japon balığından fazla"
   },
   apps_terminal_find_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_find_help_option_name: {
     en: "Base of file name (the path with the leading directories removed) matches shell pattern.",
-    tr: "Dosya adının tabanı (baştaki dizinler kaldırılmış yol) kabuk deseni ile eşleşir.",
+    tr: "Dosya adının tabanı (baştaki dizinler kaldırılmış yol) kabuk deseni ile eşleşir."
   },
   apps_terminal_find_help_option_type: {
     en: "File is of type c: d directory, f regular file.",
-    tr: "Dosya c tipinde: d dizin, f normal dosya.",
+    tr: "Dosya c tipinde: d dizin, f normal dosya."
   },
   apps_terminal_find_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_grep_help_option_count: {
     en: "Print only a count of selected lines per FILE.",
-    tr: "Her DOSYA için yalnızca seçilen satırların sayısını yazdırır.",
+    tr: "Her DOSYA için yalnızca seçilen satırların sayısını yazdırır."
   },
   apps_terminal_grep_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_grep_help_option_ignore_case: {
     en: "Ignore case distinctions in patterns and input data.",
-    tr: "Desenlerde ve girdi verilerinde büyük/küçük harf ayrımını yoksayar.",
+    tr: "Desenlerde ve girdi verilerinde büyük/küçük harf ayrımını yoksayar."
   },
   apps_terminal_grep_help_option_line_number: {
     en: "Print line number with output lines.",
-    tr: "Çıktı satırlarıyla birlikte satır numarasını yazdırır.",
+    tr: "Çıktı satırlarıyla birlikte satır numarasını yazdırır."
   },
   apps_terminal_grep_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_grep_missing_pattern: {
     en: "Missing pattern.",
-    tr: "Desen eksik.",
+    tr: "Desen eksik."
   },
   apps_terminal_history_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_kill_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_kill_help_option_list: {
     en: "list all signal names",
-    tr: "tüm sinyal isimlerini listele",
+    tr: "tüm sinyal isimlerini listele"
   },
   apps_terminal_kill_help_option_signal: {
     en: "specify the signal to send",
-    tr: "gönderilecek sinyali belirt",
+    tr: "gönderilecek sinyali belirt"
   },
   apps_terminal_ls_help_description: {
     en: "List information about the FILEs (the current directory by default).",
-    tr: "DOSYAlar hakkında bilgi listeler (varsayılan olarak mevcut dizin).",
+    tr: "DOSYAlar hakkında bilgi listeler (varsayılan olarak mevcut dizin)."
   },
   apps_terminal_ls_help_option_all: {
     en: "Do not ignore entries starting with .",
-    tr: ". ile başlayan girdileri yoksayma.",
+    tr: ". ile başlayan girdileri yoksayma."
   },
   apps_terminal_ls_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_ls_help_option_human_readable: {
     en: "With -l and -s, print sizes like 1K 234M 2G etc.",
-    tr: "-l ve -s ile birlikte, boyutları 1K 234M 2G gibi gösterir.",
+    tr: "-l ve -s ile birlikte, boyutları 1K 234M 2G gibi gösterir."
   },
   apps_terminal_ls_help_option_long_format: {
     en: "Use a long listing format.",
-    tr: "Uzun liste formatını kullanır.",
+    tr: "Uzun liste formatını kullanır."
   },
   apps_terminal_ls_help_option_recursive: {
     en: "List subdirectories recursively.",
-    tr: "Alt dizinleri özyinelemeli olarak listeler.",
+    tr: "Alt dizinleri özyinelemeli olarak listeler."
   },
   apps_terminal_ls_help_option_sort_by_size: {
     en: "Sort by file size, largest first.",
-    tr: "Dosya boyutuna göre sırala, en büyük önce.",
+    tr: "Dosya boyutuna göre sırala, en büyük önce."
   },
   apps_terminal_ls_help_option_sort_by_time: {
     en: "Sort by modification time, newest first.",
-    tr: "Değiştirilme zamanına göre sırala, en yeni önce.",
+    tr: "Değiştirilme zamanına göre sırala, en yeni önce."
   },
   apps_terminal_ls_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_mkdir_created_directory: {
     en: "created directory",
-    tr: "dizin oluşturuldu",
+    tr: "dizin oluşturuldu"
   },
   apps_terminal_mkdir_dir_exists: {
     en: "Directory already exists.",
-    tr: "Dizin zaten mevcut.",
+    tr: "Dizin zaten mevcut."
   },
   apps_terminal_mkdir_help_description: {
     en: "Create the DIRECTORY(ies), if they do not already exist.",
-    tr: "Belirtilen DİZİN(ler)i, eğer mevcut değilse oluşturur.",
+    tr: "Belirtilen DİZİN(ler)i, eğer mevcut değilse oluşturur."
   },
   apps_terminal_mkdir_help_option_help: {
     en: "Display this help and exit.",
-    tr: "Bu yardımı gösterir ve çıkar.",
+    tr: "Bu yardımı gösterir ve çıkar."
   },
   apps_terminal_mkdir_help_option_mode: {
     en: "Set file mode (as in chmod), not a=rwx - umask.",
-    tr: "Dosya izinlerini ayarlar (chmod gibi), a=rwx - umask değil.",
+    tr: "Dosya izinlerini ayarlar (chmod gibi), a=rwx - umask değil."
   },
   apps_terminal_mkdir_help_option_parents: {
     en: "No error if existing, make parent directories as needed.",
-    tr: "Varsa hata vermez, gerekli üst dizinleri oluşturur.",
+    tr: "Varsa hata vermez, gerekli üst dizinleri oluşturur."
   },
   apps_terminal_mkdir_help_option_verbose: {
     en: "Print a message for each created directory.",
-    tr: "Oluşturulan her dizin için bir mesaj yazdırır.",
+    tr: "Oluşturulan her dizin için bir mesaj yazdırır."
   },
   apps_terminal_mkdir_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_mv_help_option_force: {
     en: "do not prompt before overwriting",
-    tr: "üzerine yazmadan önce sorma",
+    tr: "üzerine yazmadan önce sorma"
   },
   apps_terminal_mv_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_mv_help_option_no_target_directory: {
     en: "Treat DEST as a normal file.",
-    tr: "HEDEF'i normal bir dosya olarak ele alır.",
+    tr: "HEDEF'i normal bir dosya olarak ele alır."
   },
   apps_terminal_mv_help_option_target_directory: {
     en: "Move all SOURCE arguments into DIRECTORY.",
-    tr: "Tüm KAYNAK argümanlarını DİZİN'e taşır.",
+    tr: "Tüm KAYNAK argümanlarını DİZİN'e taşır."
   },
   apps_terminal_mv_help_option_verbose: {
     en: "Explain what is being done.",
-    tr: "Yapılan işlemleri açıklar.",
+    tr: "Yapılan işlemleri açıklar."
   },
   apps_terminal_mv_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_mv_missing_operand: {
     en: "Missing file operand.",
-    tr: "Eksik dosya operandı.",
+    tr: "Eksik dosya operandı."
   },
   apps_terminal_page_desc: {
     en: "The command-line interface to interact with the system. Type a command to get started.",
-    tr: "Sistemle etkileşimde bulunmak için komut satırı arayüzü. Başlamak için bir komut yazın.",
+    tr: "Sistemle etkileşimde bulunmak için komut satırı arayüzü. Başlamak için bir komut yazın."
   },
   apps_terminal_ps_help_option_filter_command: {
     en: "Filter by command name.",
-    tr: "Komut adına göre filtreler.",
+    tr: "Komut adına göre filtreler."
   },
   apps_terminal_ps_help_option_forest: {
     en: "Show process hierarchy in a tree format.",
-    tr: "İşlem hiyerarşisini ağaç formatında gösterir.",
+    tr: "İşlem hiyerarşisini ağaç formatında gösterir."
   },
   apps_terminal_ps_help_option_full_format: {
     en: "Full format listing.",
-    tr: "Tam format listesi.",
+    tr: "Tam format listesi."
   },
   apps_terminal_ps_help_option_group_list: {
     en: "List processes for specified groups.",
-    tr: "Belirtilen grupların işlemlerini listeler.",
+    tr: "Belirtilen grupların işlemlerini listeler."
   },
   apps_terminal_ps_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_ps_help_option_long_format: {
     en: "Long format.",
-    tr: "Uzun format.",
+    tr: "Uzun format."
   },
   apps_terminal_ps_help_option_processes: {
     en: "Show processes with specified PIDs.",
-    tr: "Belirtilen PID'lere sahip işlemleri gösterir.",
+    tr: "Belirtilen PID'lere sahip işlemleri gösterir."
   },
   apps_terminal_ps_help_option_show_all: {
     en: "Show all processes.",
-    tr: "Tüm işlemleri gösterir.",
+    tr: "Tüm işlemleri gösterir."
   },
   apps_terminal_ps_help_option_show_hierarchy: {
     en: "Show process hierarchy (tree).",
-    tr: "İşlem hiyerarşisini gösterir (ağaç).",
+    tr: "İşlem hiyerarşisini gösterir (ağaç)."
   },
   apps_terminal_ps_help_option_simple_format: {
     en: "Show process information in simple format.",
-    tr: "İşlem bilgilerini basit formatta gösterir.",
+    tr: "İşlem bilgilerini basit formatta gösterir."
   },
   apps_terminal_ps_help_option_sort: {
     en: "Sort by field (e.g. --sort=pid).",
-    tr: "Alana göre sırala (örn. --sort=pid).",
+    tr: "Alana göre sırala (örn. --sort=pid)."
   },
   apps_terminal_ps_help_option_sort_cpu: {
     en: "Sort by CPU usage.",
-    tr: "CPU kullanımına göre sırala.",
+    tr: "CPU kullanımına göre sırala."
   },
   apps_terminal_ps_help_option_sort_memory: {
     en: "Sort by memory usage.",
-    tr: "Bellek kullanımına göre sırala.",
+    tr: "Bellek kullanımına göre sırala."
   },
   apps_terminal_ps_help_option_sort_priority: {
     en: "Sort by priority.",
-    tr: "Önceliğe göre sırala.",
+    tr: "Önceliğe göre sırala."
   },
   apps_terminal_ps_help_option_user_list: {
     en: "List processes for specified users.",
-    tr: "Belirtilen kullanıcıların işlemlerini listeler.",
+    tr: "Belirtilen kullanıcıların işlemlerini listeler."
   },
   apps_terminal_rm_help_example_file: {
     en: "Remove a single file",
-    tr: "Tek bir dosyayı sil",
+    tr: "Tek bir dosyayı sil"
   },
   apps_terminal_rm_help_example_folder: {
     en: "Remove a folder and its contents",
-    tr: "Bir klasörü ve içeriğini sil",
+    tr: "Bir klasörü ve içeriğini sil"
   },
   apps_terminal_rm_help_example_force: {
     en: "Forcefully remove a folder and its contents",
-    tr: "Bir klasörü ve içeriğini zorla sil",
+    tr: "Bir klasörü ve içeriğini zorla sil"
   },
   apps_terminal_rm_help_examples: {
     en: "Examples:",
-    tr: "Örnekler:",
+    tr: "Örnekler:"
   },
   apps_terminal_rm_help_option_force: {
     en: "ignore nonexistent files, never prompt",
-    tr: "var olmayan dosyaları yoksay, asla sorma",
+    tr: "var olmayan dosyaları yoksay, asla sorma"
   },
   apps_terminal_rm_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardım mesajını göster ve çık",
+    tr: "bu yardım mesajını göster ve çık"
   },
   apps_terminal_rm_help_option_no_preserve_root: {
     en: 'Do not treat "/" specially.',
-    tr: '"/" dizinini özel olarak ele almaz.',
+    tr: '"/" dizinini özel olarak ele almaz.'
   },
   apps_terminal_rm_help_option_preserve_root: {
     en: 'Do not remove "/" (default).',
-    tr: '"/" dizinini silmez (varsayılan).',
+    tr: '"/" dizinini silmez (varsayılan).'
   },
   apps_terminal_rm_help_option_recursive: {
     en: "Remove directories and their contents recursively.",
-    tr: "Dizinleri ve içeriklerini özyinelemeli olarak siler.",
+    tr: "Dizinleri ve içeriklerini özyinelemeli olarak siler."
   },
   apps_terminal_rm_help_option_verbose: {
     en: "Explain what is being done.",
-    tr: "Yapılan işlemleri açıklar.",
+    tr: "Yapılan işlemleri açıklar."
   },
   apps_terminal_rm_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_rmdir_failed_not_empty: {
     en: "failed to remove: Directory not empty",
-    tr: "silinemedi: Dizin boş değil",
+    tr: "silinemedi: Dizin boş değil"
   },
   apps_terminal_rmdir_help_description: {
     en: "Remove the DIRECTORY(ies), if they are empty.",
-    tr: "Boş ise DİZİN(ler)i siler.",
+    tr: "Boş ise DİZİN(ler)i siler."
   },
   apps_terminal_rmdir_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_rmdir_help_option_ignore_non_empty: {
     en: "Ignore each failure to remove a non-empty directory.",
-    tr: "Boş olmayan dizinleri silme başarısızlıklarını yoksayar.",
+    tr: "Boş olmayan dizinleri silme başarısızlıklarını yoksayar."
   },
   apps_terminal_rmdir_help_option_parents: {
     en: "Remove DIRECTORY and its ancestors.",
-    tr: "DİZİN ve üst dizinlerini siler.",
+    tr: "DİZİN ve üst dizinlerini siler."
   },
   apps_terminal_rmdir_help_option_verbose: {
     en: "Output a diagnostic for every directory processed.",
-    tr: "İşlenen her dizin için tanılama çıktısı verir.",
+    tr: "İşlenen her dizin için tanılama çıktısı verir."
   },
   apps_terminal_rmdir_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_rmdir_removing_directory: {
     en: "removing directory",
-    tr: "dizin siliniyor",
+    tr: "dizin siliniyor"
   },
   apps_terminal_touch_file_exists: {
     en: "File already exists.",
-    tr: "Dosya zaten mevcut.",
+    tr: "Dosya zaten mevcut."
   },
   apps_terminal_touch_help_option_access_time: {
     en: "Change only the access time.",
-    tr: "Sadece erişim zamanını değiştirir.",
+    tr: "Sadece erişim zamanını değiştirir."
   },
   apps_terminal_touch_help_option_date: {
     en: "Parse STRING and use it instead of current time.",
-    tr: "METİN'i ayrıştırır ve mevcut zaman yerine kullanır.",
+    tr: "METİN'i ayrıştırır ve mevcut zaman yerine kullanır."
   },
   apps_terminal_touch_help_option_help: {
     en: "display this help and exit",
-    tr: "bu yardımı göster ve çık",
+    tr: "bu yardımı göster ve çık"
   },
   apps_terminal_touch_help_option_modification_time: {
     en: "Change only the modification time.",
-    tr: "Sadece değişiklik zamanını değiştirir.",
+    tr: "Sadece değişiklik zamanını değiştirir."
   },
   apps_terminal_touch_help_option_no_create: {
     en: "Do not create any files.",
-    tr: "Hiçbir dosya oluşturmaz.",
+    tr: "Hiçbir dosya oluşturmaz."
   },
   apps_terminal_touch_help_option_no_dereference: {
     en: "Affect each symbolic link instead of any referenced file.",
-    tr: "Referans verilen dosya yerine her sembolik bağlantıyı etkiler.",
+    tr: "Referans verilen dosya yerine her sembolik bağlantıyı etkiler."
   },
   apps_terminal_touch_help_option_reference: {
     en: "Use this file's times instead of current time.",
-    tr: "Mevcut zaman yerine bu dosyanın zamanlarını kullanır.",
+    tr: "Mevcut zaman yerine bu dosyanın zamanlarını kullanır."
   },
   apps_terminal_touch_help_option_time: {
     en: "Specify which time to change.",
-    tr: "Hangi zamanın değiştirileceğini belirtir.",
+    tr: "Hangi zamanın değiştirileceğini belirtir."
   },
   apps_terminal_touch_help_option_time_access: {
     en: "Access time (-a): 'access', 'atime', 'use'.",
-    tr: "Erişim zamanı (-a): 'access', 'atime', 'use'.",
+    tr: "Erişim zamanı (-a): 'access', 'atime', 'use'."
   },
   apps_terminal_touch_help_option_time_modification: {
     en: "Modification time (-m): 'modify', 'mtime'.",
-    tr: "Değişiklik zamanı (-m): 'modify', 'mtime'.",
+    tr: "Değişiklik zamanı (-m): 'modify', 'mtime'."
   },
   apps_terminal_touch_help_option_timestamp: {
     en: "Use [[CC]YY]MMDDhhmm[.ss] instead of current time.",
-    tr: "Mevcut zaman yerine [[CC]YY]MMDDhhmm[.ss] kullanır.",
+    tr: "Mevcut zaman yerine [[CC]YY]MMDDhhmm[.ss] kullanır."
   },
   apps_terminal_touch_help_option_version: {
     en: "Output version information and exit.",
-    tr: "Sürüm bilgisini gösterir ve çıkar.",
+    tr: "Sürüm bilgisini gösterir ve çıkar."
   },
   apps_terminal_user_permission_denied: {
     en: "User is not in the sudoers file. This incident will be reported.",
-    tr: "Kullanıcı sudoers dosyasında değil. Bu olay rapor edilecek.",
+    tr: "Kullanıcı sudoers dosyasında değil. Bu olay rapor edilecek."
   },
   apps_terminal_whoami_help_option_help: {
     en: "Display this help and exit.",
-    tr: "Bu yardımı gösterir ve çıkar.",
+    tr: "Bu yardımı gösterir ve çıkar."
   },
   apps_welcome_about_me: {
     en: "About Me",
-    tr: "Hakkımda",
+    tr: "Hakkımda"
   },
   apps_welcome_about_me_confirm: {
     en: "I have read and got to know you, nice to meet you.",
-    tr: "Okudum ve sizi tanıdım, tanıştığımıza memnun oldum.",
+    tr: "Okudum ve sizi tanıdım, tanıştığımıza memnun oldum."
   },
   apps_welcome_about_me_markdown: {
     en: `Hello, I’m **Ahmet Çetinkaya**. I was born and raised in [**Istanbul**](https://www.openstreetmap.org/node/1882099475#map=7/39.398/30.811) in 1999. My interest in technology started at a young age. I got my first computer when I was 6 years old, and since then, I’ve had a life deeply connected with computers. In my early years, I started creating mods for my favorite games using various technical programs, which were my first steps into the world of software.
@@ -978,83 +979,83 @@ My approach to technology is driven by a constant **desire to learn**, inspiring
 
 2022 yılında [**Kodlama.io**](https://github.com/kodlamaio-projects)'da başladığım staj, kariyerimde önemli bir dönüm noktasıydı. Staj döneminde ve sonrasında eğitimimle paralel olarak iş hayatına adım attım. Birçok resmi kurum ve önde gelen firmalar ile çalışarak; **projeler** yönettim ve geliştirdim, **danışmanlık** hizmeti verdim, aynı zamanda çeşitli kurumsal şirket eğitimlerinde ve hazırlık kamplarında **eğitmenlik** yaptım. Bu görevlerim, yazılım geliştirme becerilerimi pekiştirmemi sağladı ve başkalarına teknoloji ve yazılım konusunda eğitim vererek yeni nesil yazılımcılara rehberlik etme fırsatı sundu. 2023 yılında **bilgisayar mühendisi** olarak **4 üzerinden 3.70** not ortalamasıyla, **fakülte ikincisi** olarak mezun oldum ve iş hayatıma bilgisayar mühendisi olarak devam ettim.
 
-Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiyor ve her gün yeni şeyler keşfetmek için bana ilham veriyor. Bu yolculukta öğrendiklerimi paylaşmak, daha fazla insana dokunmak ve **yazılım dünyasına katkı sağlamak** en büyük hedefim. Yazılım geliştirme sürecimde, aynı zamanda çeşitli **yazılım felsefeleri, prensipleri** ve **kalite kriterlerini** benimseyip uygulamaya özen gösteriyorum. Bu, çalışmalarımın temel taşlarını oluşturuyor. Yazılım dünyasında başarılı olmanın, sadece teknolojik bilgiyle değil, aynı zamanda iyi bir yazılım pratiği ve kalite bilinciyle mümkün olduğuna inanıyorum.`,
+Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiyor ve her gün yeni şeyler keşfetmek için bana ilham veriyor. Bu yolculukta öğrendiklerimi paylaşmak, daha fazla insana dokunmak ve **yazılım dünyasına katkı sağlamak** en büyük hedefim. Yazılım geliştirme sürecimde, aynı zamanda çeşitli **yazılım felsefeleri, prensipleri** ve **kalite kriterlerini** benimseyip uygulamaya özen gösteriyorum. Bu, çalışmalarımın temel taşlarını oluşturuyor. Yazılım dünyasında başarılı olmanın, sadece teknolojik bilgiyle değil, aynı zamanda iyi bir yazılım pratiği ve kalite bilinciyle mümkün olduğuna inanıyorum.`
   },
   apps_welcome_about_me_page_desc: {
     en: "Hi, I'm Ahmet Çetinkaya. I'm a software developer and computer engineer focused on web technologies and software development. Learn more about my background, experience and skills.",
-    tr: "Merhaba, ben Ahmet Çetinkaya. Web teknolojileri ve yazılım geliştirme odaklı bir yazılım geliştirici ve bilgisayar mühendisiyim. Geçmişim, deneyimim ve yeteneklerim hakkında daha fazla bilgi edinin.",
+    tr: "Merhaba, ben Ahmet Çetinkaya. Web teknolojileri ve yazılım geliştirme odaklı bir yazılım geliştirici ve bilgisayar mühendisiyim. Geçmişim, deneyimim ve yeteneklerim hakkında daha fazla bilgi edinin."
   },
   apps_welcome_about_me_profile_image_alt: {
     en: "Ahmet Çetinkaya Profile Picture",
-    tr: "Ahmet Çetinkaya Profil Fotoğrafı",
+    tr: "Ahmet Çetinkaya Profil Fotoğrafı"
   },
   apps_welcome_about_me_short_text: {
     en: "Hi, I'm a software developer and a computer engineer. I'm interested in software development, web technologies,s and computer science.",
-    tr: "Merhaba, bir yazılım geliştirici ve bilgisayar mühendisiyim. Yazılım geliştirme, Web teknolojileri ve bilgisayar bilimleriyle ilgileniyorum.",
+    tr: "Merhaba, bir yazılım geliştirici ve bilgisayar mühendisiyim. Yazılım geliştirme, Web teknolojileri ve bilgisayar bilimleriyle ilgileniyorum."
   },
   apps_welcome_background: {
     en: "Background",
-    tr: "Geçmiş",
+    tr: "Geçmiş"
   },
   apps_welcome_certifications: {
     en: "Certifications",
-    tr: "Sertifikalar",
+    tr: "Sertifikalar"
   },
   apps_welcome_completed: {
     en: "Completed",
-    tr: "Tamamlandı",
+    tr: "Tamamlandı"
   },
   apps_welcome_completed_text: {
     en: "You have completed the welcome wizard.",
-    tr: "Tanışma sihirbazını tamamladınız.",
+    tr: "Tanışma sihirbazını tamamladınız."
   },
   apps_welcome_contact: {
     en: "Contact",
-    tr: "İletişim",
+    tr: "İletişim"
   },
   apps_welcome_contact_desc: {
     en: "Get in touch with me. Send me an email or connect through social media. I'm always open to discussing new projects, opportunities, or just having a friendly chat.",
-    tr: "Benimle iletişime geçin. Bana e-posta gönderin veya sosyal medya üzerinden bağlantı kurun. Her zaman yeni projeler, fırsatlar veya sadece dostça sohbet etmek için açığım.",
+    tr: "Benimle iletişime geçin. Bana e-posta gönderin veya sosyal medya üzerinden bağlantı kurun. Her zaman yeni projeler, fırsatlar veya sadece dostça sohbet etmek için açığım."
   },
   apps_welcome_educations: {
     en: "Educations",
-    tr: "Eğitimler",
+    tr: "Eğitimler"
   },
   apps_welcome_experiences: {
     en: "Experiences",
-    tr: "Deneyimler",
+    tr: "Deneyimler"
   },
   apps_welcome_finish: {
     en: "Finish",
-    tr: "Bitir",
+    tr: "Bitir"
   },
   apps_welcome_hello: {
     en: "Hello",
-    tr: "Merhaba",
+    tr: "Merhaba"
   },
   apps_welcome_if_you_want_to_contact_me: {
     en: "If you want to contact me, you can send an e-mail to:",
-    tr: "Benimle iletişime geçmek isterseniz, e-posta gönderebilirsiniz:",
+    tr: "Benimle iletişime geçmek isterseniz, e-posta gönderebilirsiniz:"
   },
   apps_welcome_present: {
     en: "Present",
-    tr: "Halen",
+    tr: "Halen"
   },
   apps_welcome_technologies: {
     en: "Technologies",
-    tr: "Teknolojiler",
+    tr: "Teknolojiler"
   },
   apps_welcome_technologiesIUse: {
     en: "Technologies I Use",
-    tr: "Kullandığım Teknolojiler",
+    tr: "Kullandığım Teknolojiler"
   },
   apps_welcome_welcome: {
     en: "Welcome",
-    tr: "Hoş Geldin",
+    tr: "Hoş Geldin"
   },
   apps_welcome_wizard: {
     en: "Welcome Wizard",
-    tr: "Karşılama Sihirbazı",
+    tr: "Karşılama Sihirbazı"
   },
   certificates_1_description_markdown: {
     en: `- **Web Development**: Modern techniques, principles
@@ -1078,11 +1079,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Backend Gücü**: Güçlü backend teknikleri
 - **ExpressJS**: Temeller, gelişmiş backend kodlama
 - **MongoDB**: Veritabanı modelleme
-- **JWT & Authentication**: JSON Web Token, kimlik doğrulama`,
+- **JWT & Authentication**: JSON Web Token, kimlik doğrulama`
   },
   certificates_1_name: {
     en: "Modern Web Development Course | Scratch to Advanced",
-    tr: "Modern Web Geliştirme Kursu | Sıfırdan Sektörün Yükseklerine",
+    tr: "Modern Web Geliştirme Kursu | Sıfırdan Sektörün Yükseklerine"
   },
   certificates_2_description_markdown: {
     en: `- **ReactJS Architecture**
@@ -1096,11 +1097,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **HTTP İstekleri**
 - **State Management**: Context API, Dispatch, Reducer, Action
 - **Formlar**
-- **CRUD Uygulaması**`,
+- **CRUD Uygulaması**`
   },
   certificates_2_name: {
     en: "React and Context API From Scratch",
-    tr: "Sıfırdan React ve Context Api",
+    tr: "Sıfırdan React ve Context Api"
   },
   certificates_3_description_markdown: {
     en: `- Unity Updates and Versions
@@ -1134,11 +1135,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Build Etme ve Platforma Göre Yayınlama (Windows, Mac, Android)
 - Animasyonlar, Hareket ve Kamera Kontrolü
 - Yapay Zeka ve Mobil Entegrasyon
-- Projeler: Top Kontrolü, Kamera Kontrolü, Engeller, Random Döndürme, Kurşun Ateş Etme, Asteroid ve Patlama Efektleri, Score Sistemi, Oyun Sonu, Ana Menü ve Level Geçişi, Kayıt Sistemi, Google AdMob ile Reklam, Düşman Oluşturma, Can Kazanma, Altın Toplama, Mobil Joystick ve Zıplama, Level Dizaynı, Build Etme (Google Play Store).`,
+- Projeler: Top Kontrolü, Kamera Kontrolü, Engeller, Random Döndürme, Kurşun Ateş Etme, Asteroid ve Patlama Efektleri, Score Sistemi, Oyun Sonu, Ana Menü ve Level Geçişi, Kayıt Sistemi, Google AdMob ile Reklam, Düşman Oluşturma, Can Kazanma, Altın Toplama, Mobil Joystick ve Zıplama, Level Dizaynı, Build Etme (Google Play Store).`
   },
   certificates_3_name: {
     en: "Unity C# | 2D & 3D Game Development From Scratch",
-    tr: "Unity C# | Sıfırdan 2D & 3D Oyun Geliştirme Eğitimi",
+    tr: "Unity C# | Sıfırdan 2D & 3D Oyun Geliştirme Eğitimi"
   },
   certificates_4_description_markdown: {
     en: `- Python programming fundamentals, real-life application
@@ -1160,11 +1161,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - C# ile veri tabanı programlama (Entity Framework): ORM, veri modelleme, migration'lar
 - Web API geliştirme: RESTful servisler oluşturma, HTTP metodları (GET, POST, PUT, DELETE), JSON
 - Web frontend geliştirme: HTML5, CSS3, duyarlı tasarım, Bootstrap framework
-- Angular framework: bileşenler, servisler, yönlendirme, veri bağlama, formlar, direktifler, RxJS`,
+- Angular framework: bileşenler, servisler, yönlendirme, veri bağlama, formlar, direktifler, RxJS`
   },
   certificates_4_name: {
     en: "Software Developer Training Camp - C# and Angular",
-    tr: "Yazılım Geliştirici Yetiştirme Kampı - C# ve Angular",
+    tr: "Yazılım Geliştirici Yetiştirme Kampı - C# ve Angular"
   },
   certificates_5_description_markdown: {
     en: `- Data Integrity and Design Errors
@@ -1190,11 +1191,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Open-Closed Prensibi
 - Sorgu Yönlendirme
 - Denormalizasyon
-- Kurumsal Mimarilerde Tasarım Değerlendirmesi`,
+- Kurumsal Mimarilerde Tasarım Değerlendirmesi`
   },
   certificates_5_name: {
     en: "SQL Server Database Design for Enterprise Architectures",
-    tr: "Kurumsal Mimariler İçin Sql Server Veri Tabanı Tasarımı ",
+    tr: "Kurumsal Mimariler İçin Sql Server Veri Tabanı Tasarımı "
   },
   certificates_6_description_markdown: {
     en: `- Real-life programming introduction
@@ -1226,11 +1227,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - React Temelleri
 - React Hooks
 - React/Redux
-- React Security`,
+- React Security`
   },
   certificates_6_name: {
     en: "Software Developer Training Camp - JAVA and React",
-    tr: "Yazılım Geliştirici Yetiştirme Kampı - JAVA ve React",
+    tr: "Yazılım Geliştirici Yetiştirme Kampı - JAVA ve React"
   },
   certificates_7_description_markdown: {
     en: `- JavaScript Basics
@@ -1240,11 +1241,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: `- JavaScript Temelleri
 - JavaScript OOP ve JavaScript İç Yapıları
 - Promiseler ve Asenkron Programlama
-- Reflect API, Proxy API`,
+- Reflect API, Proxy API`
   },
   certificates_7_name: {
     en: "Software Developer Training Camp - JavaScript",
-    tr: "Yazılım Geliştirici Yetiştirme Kampı - JavaScript",
+    tr: "Yazılım Geliştirici Yetiştirme Kampı - JavaScript"
   },
   certificates_8_description_markdown: {
     en: `- **Data Types and Working with Variables**
@@ -1344,11 +1345,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Reflection, Attribute ve İleri Düzey Konular**
 - Reflection ile Çalışma (MethodInfo, Invoke)
 - Attribute, Reflection ve Dependency Injection
-- Delegeler, Func, Action ve Events`,
+- Delegeler, Func, Action ve Events`
   },
   certificates_8_name: {
     en: "45+ Hour C# Course From Scratch to Advanced",
-    tr: "Sıfırdan İleri Seviyeye 45+ Saat C# Kursu",
+    tr: "Sıfırdan İleri Seviyeye 45+ Saat C# Kursu"
   },
   certificates_9_description_markdown: {
     en: `- **C# Programming Fundamentals**: Variables, data types, control structures (if-else, switch), loops (for, while), arrays
@@ -1382,11 +1383,11 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Bağımlılık Enjeksiyonu (Dependency Injection)**: Nesne bağımlılıklarını dışarıdan sağlamak, test edilebilirlik ve gevşek bağlama sağlama
 - **Veritabanı Performans İyileştirme ve İleri Düzey SQL**: İleri seviye sorgu optimizasyonu, index kullanımı, stored procedures, veri analizi teknikleri
 - **Test Odaklı Geliştirme (TDD)**: Birim testleri yazma, testler ile geliştirme, hata ayıklama, mock nesneleri kullanımı
-- **Yazılım Tasarım Desenleri**: Singleton, Factory, Strategy, Observer, Command, Repository, Dependency Injection desenleri`,
+- **Yazılım Tasarım Desenleri**: Singleton, Factory, Strategy, Observer, Command, Repository, Dependency Injection desenleri`
   },
   certificates_9_name: {
     en: ".NET Core and Angular Bootcamp",
-    tr: ".NET Core ve Angular Bootcamp",
+    tr: ".NET Core ve Angular Bootcamp"
   },
   certificates_10_description_markdown: {
     en: `- AWS Cloud Global Infrastructure (Regions, Availability Zones, Edge Locations)
@@ -1404,185 +1405,185 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Paylaşılan Sorumluluk Modeli (AWS: Cloud Güvenliği, Müşteri: Cloud İçindeki Güvenlik)
 - Temel Güvenlik Servisleri (IAM, AWS Shield, AWS WAF, KMS)
 - AWS Cloud Göç Araçları (AWS Migration Hub, DMS, SMS)
-- Finansal Faydalar ve Maliyet Yönetimi (Kullandıkça Öde, Rezervli Durumlar, EC2 Spot Instance'ları, AWS Fiyatlandırma Hesaplayıcısı, AWS Bütçeleri, AWS Organizasyonları)`,
+- Finansal Faydalar ve Maliyet Yönetimi (Kullandıkça Öde, Rezervli Durumlar, EC2 Spot Instance'ları, AWS Fiyatlandırma Hesaplayıcısı, AWS Bütçeleri, AWS Organizasyonları)`
   },
   certificates_10_name: {
     en: "AWS Cloud Practitioner Essentials",
-    tr: "AWS Bulut Uygulayıcı Temelleri",
+    tr: "AWS Bulut Uygulayıcı Temelleri"
   },
   common_apps: {
     en: "Apps",
-    tr: "Uygulamalar",
+    tr: "Uygulamalar"
   },
   common_bold: {
     en: "Bold",
-    tr: "Kalın",
+    tr: "Kalın"
   },
   common_clear_format: {
     en: "Clear format",
-    tr: "Formatı temizle",
+    tr: "Formatı temizle"
   },
   common_close: {
     en: "Close",
-    tr: "Kapat",
+    tr: "Kapat"
   },
   common_coding: {
     en: "Coding",
-    tr: "Kodlama",
+    tr: "Kodlama"
   },
   common_computer: {
     en: "Computer",
-    tr: "Bilgisayar",
+    tr: "Bilgisayar"
   },
   common_contact: {
     en: "Contact",
-    tr: "İletişim",
+    tr: "İletişim"
   },
   common_development: {
     en: "Development",
-    tr: "Geliştirme",
+    tr: "Geliştirme"
   },
   common_email: {
     en: "E-mail",
-    tr: "E-posta",
+    tr: "E-posta"
   },
   common_engineer: {
     en: "Engineer",
-    tr: "Mühendis",
+    tr: "Mühendis"
   },
   common_envelope: {
     en: "Envelope",
-    tr: "Zarf",
+    tr: "Zarf"
   },
   common_expression: {
     en: "Expression",
-    tr: "İfade",
+    tr: "İfade"
   },
   common_file: {
     en: "File",
-    tr: "Dosya",
+    tr: "Dosya"
   },
   common_games: {
     en: "Games",
-    tr: "Oyunlar",
+    tr: "Oyunlar"
   },
   common_header1: {
     en: "Header 1",
-    tr: "Başlık 1",
+    tr: "Başlık 1"
   },
   common_header2: {
     en: "Header 2",
-    tr: "Başlık 2",
+    tr: "Başlık 2"
   },
   common_hyperlink: {
     en: "Hyperlink",
-    tr: "Bağlantı",
+    tr: "Bağlantı"
   },
   common_italic: {
     en: "Italic",
-    tr: "İtalik",
+    tr: "İtalik"
   },
   common_maximize: {
     en: "Maximize",
-    tr: "Maksimize",
+    tr: "Maksimize"
   },
   common_menu: {
     en: "Menu",
-    tr: "Menü",
+    tr: "Menü"
   },
   common_message: {
     en: "Message",
-    tr: "Mesaj",
+    tr: "Mesaj"
   },
   common_next: {
     en: "Next",
-    tr: "İleri",
+    tr: "İleri"
   },
   common_options: {
     en: "Options",
-    tr: "Seçenekler",
+    tr: "Seçenekler"
   },
   common_ordered_list: {
     en: "Ordered List",
-    tr: "Sıralı Liste",
+    tr: "Sıralı Liste"
   },
   common_path: {
     en: "Path",
-    tr: "Yol",
+    tr: "Yol"
   },
   common_pattern: {
     en: "Pattern",
-    tr: "Desen",
+    tr: "Desen"
   },
   common_prev: {
     en: "Previous",
-    tr: "Geri",
+    tr: "Geri"
   },
   common_programming: {
     en: "Programming",
-    tr: "Programlama",
+    tr: "Programlama"
   },
   common_send: {
     en: "Send",
-    tr: "Gönder",
+    tr: "Gönder"
   },
   common_show_more: {
     en: "Show More",
-    tr: "Daha Fazla Göster",
+    tr: "Daha Fazla Göster"
   },
   common_software: {
     en: "Software",
-    tr: "Yazılım",
+    tr: "Yazılım"
   },
   common_source: {
     en: "Source",
-    tr: "Kaynak",
+    tr: "Kaynak"
   },
   common_steps: {
     en: "Steps",
-    tr: "Adımlar",
+    tr: "Adımlar"
   },
   common_system: {
     en: "System",
-    tr: "Sistem",
+    tr: "Sistem"
   },
   common_target_directory: {
     en: "Target Directory",
-    tr: "Hedef Dizin",
+    tr: "Hedef Dizin"
   },
   common_technology: {
     en: "Technology",
-    tr: "Teknoloji",
+    tr: "Teknoloji"
   },
   common_underline: {
     en: "Underline",
-    tr: "Altı Çizili",
+    tr: "Altı Çizili"
   },
   common_unknown: {
     en: "Unknown",
-    tr: "Bilinmiyor",
+    tr: "Bilinmiyor"
   },
   common_unknown_error: {
     en: "Unknown error",
-    tr: "Bilinmeyen hata",
+    tr: "Bilinmeyen hata"
   },
   common_unordered_list: {
     en: "Unordered List",
-    tr: "Sırasız Liste",
+    tr: "Sırasız Liste"
   },
   common_usage: {
     en: "Usage",
-    tr: "Kullanım",
+    tr: "Kullanım"
   },
   curriculum_vitae_1_description_markdown: {
     en: `- Various software projects analysis and development`,
-    tr: `- Çeşitli yazılım projeleri analizi ve geliştirme`,
+    tr: `- Çeşitli yazılım projeleri analizi ve geliştirme`
   },
   curriculum_vitae_2_description_markdown: {
     en: `- Instructor in ETIYA Academy In-House Training Program
 - Software Development on the DevArchitecture Framework`,
     tr: `- ETIYA Akademi Şirket İçi Eğitim Programında Eğitmenlik
-- DevArchitecture Framework Üzerinde Yazılım Geliştirme`,
+- DevArchitecture Framework Üzerinde Yazılım Geliştirme`
   },
   curriculum_vitae_3_description_markdown: {
     en: `- Software Development and Consulting for State Hydraulic Works (DSI)
@@ -1598,47 +1599,51 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - NArchitecture Framework Üzerinde Yazılım Geliştirme
 - TÜBİSAD Eğitim Programında Eğitmenlik
 - ETİYA-TÜBİSAD Eğitim Programında Eğitmenlik
-- BOSCH Eğitim Programında Eğitmenlik`,
+- BOSCH Eğitim Programında Eğitmenlik`
   },
   curriculum_vitae_computer_engineer: {
     en: "Computer Engineer",
-    tr: "Bilgisayar Mühendisi",
+    tr: "Bilgisayar Mühendisi"
   },
   curriculum_vitae_computer_engineering: {
     en: "Computer Engineering",
-    tr: "Bilgisayar Mühendisliği",
+    tr: "Bilgisayar Mühendisliği"
   },
   curriculum_vitae_intern: {
     en: "Intern",
-    tr: "Stajyer",
+    tr: "Stajyer"
   },
   curriculum_vitae_software_developer: {
     en: "Software Developer",
-    tr: "Yazılım Geliştirici",
+    tr: "Yazılım Geliştirici"
   },
   curriculum_vitae_software_developer_and_instructor: {
     en: "Software Developer and Instructor",
-    tr: "Yazılım Geliştirici ve Eğitmen",
+    tr: "Yazılım Geliştirici ve Eğitmen"
   },
   desktop_change_locale: {
     en: "Change Locale",
-    tr: "Dili Değiştir",
+    tr: "Dili Değiştir"
   },
   desktop_minimize: {
     en: "Minimize",
-    tr: "Küçült",
+    tr: "Küçült"
   },
   desktop_taskbar_other_windows_menu: {
     en: "Other windows menu",
-    tr: "Diğer pencereler menüsü",
+    tr: "Diğer pencereler menüsü"
+  },
+  desktop_taskbar_windows_menu: {
+    en: "Windows",
+    tr: "Pencereler"
   },
   educations_1_department: {
     en: "STEM (Science, Technology, Engineering, Mathematics)",
-    tr: "Sayısal",
+    tr: "Sayısal"
   },
   educations_2_department: {
     en: "Faculty of Architecture and Engineering - Computer Engineering",
-    tr: "Mimarlık ve Mühendislik Fakültesi - Bilgisayar Mühendisliği",
+    tr: "Mimarlık ve Mühendislik Fakültesi - Bilgisayar Mühendisliği"
   },
   educations_2_description_markdown: {
     en: `- Bachelor's thesis titled "Software Framework Implementing Microservice Architecture"
@@ -1648,129 +1653,129 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: `- "- "Mikroservis Mimarisini Gerçekleştiren Yazılım Çerçevesi" başlıklı lisans tezi
 - Tubitak yarışması için drone simülasyonu
 - Mehmet Akif Ersoy Veterinerlik Fakültesi Patoloji Bölümü için web ve mobil'de kullanılmak üzere hastane yazılımı geliştirme
-- Çeşitli birçok proje...`,
+- Çeşitli birçok proje...`
   },
   links_github: {
     en: "Github",
-    tr: "Github",
+    tr: "Github"
   },
   links_instagram: {
     en: "Instagram",
-    tr: "Instagram",
+    tr: "Instagram"
   },
   links_itchio: {
     en: "Itch.io",
-    tr: "Itch.io",
+    tr: "Itch.io"
   },
   links_linkedin: {
     en: "LinkedIn",
-    tr: "LinkedIn",
+    tr: "LinkedIn"
   },
   links_mastodon: {
     en: "Mastodon",
-    tr: "Mastodon",
+    tr: "Mastodon"
   },
   links_x: {
     en: "X",
-    tr: "X",
+    tr: "X"
   },
   organizations_ahmet_cetinkaya: {
     en: "Ahmet Çetinkaya (Freelance)",
-    tr: "Ahmet Çetinkaya (Serbest Çalışan)",
+    tr: "Ahmet Çetinkaya (Serbest Çalışan)"
   },
   organizations_amazon_web_service: {
     en: "Amazon Web Services",
-    tr: "Amazon Web Servisleri",
+    tr: "Amazon Web Servisleri"
   },
   organizations_amazon_web_services: {
     en: "Amazon Web Services",
-    tr: "Amazon Web Servisleri",
+    tr: "Amazon Web Servisleri"
   },
   organizations_antalya_karatay_anatolian_high_school: {
     en: "Antalya Karatay Anatolian High School",
-    tr: "Antalya Karatay Anadolu Lisesi",
+    tr: "Antalya Karatay Anadolu Lisesi"
   },
   organizations_kodlamaio: {
     en: "Kodlama.io",
-    tr: "Kodlama.io",
+    tr: "Kodlama.io"
   },
   organizations_meb: {
     en: "Ministry of National Education",
-    tr: "Milli Eğitim Bakanlığı",
+    tr: "Milli Eğitim Bakanlığı"
   },
   organizations_mehmet_akif_ersoy_university: {
     en: "Mehmet Akif Ersoy University",
-    tr: "Mehmet Akif Ersoy Üniversitesi",
+    tr: "Mehmet Akif Ersoy Üniversitesi"
   },
   organizations_mng_kargo: {
     en: "MNG Kargo",
-    tr: "MNG Kargo",
+    tr: "MNG Kargo"
   },
   organizations_udemy: {
     en: "Udemy",
-    tr: "Udemy",
+    tr: "Udemy"
   },
   system_boot: {
     en: "Boot",
-    tr: "Başlat",
+    tr: "Başlat"
   },
   system_booting: {
     en: "Booting...",
-    tr: "Başlatılıyor...",
+    tr: "Başlatılıyor..."
   },
   system_booting_desc: {
     en: "Booting the system...",
-    tr: "Sistem başlatılıyor...",
+    tr: "Sistem başlatılıyor..."
   },
   system_not_found: {
     en: "Not Found",
-    tr: "Bulunamadı",
+    tr: "Bulunamadı"
   },
   system_not_found_desc: {
     en: "The requested resource could not be found.",
-    tr: "İstenen kaynak bulunamadı.",
+    tr: "İstenen kaynak bulunamadı."
   },
   system_power: {
     en: "Power",
-    tr: "Güç",
+    tr: "Güç"
   },
   system_reboot: {
     en: "Reboot",
-    tr: "Yeniden Başlat",
+    tr: "Yeniden Başlat"
   },
   system_rebooting: {
     en: "Rebooting...",
-    tr: "Yeniden Başlatılıyor...",
+    tr: "Yeniden Başlatılıyor..."
   },
   system_rebooting_desc: {
     en: "Please wait while your system is rebooting.",
-    tr: "Sisteminiz yeniden başlatılırken lütfen bekleyin.",
+    tr: "Sisteminiz yeniden başlatılırken lütfen bekleyin."
   },
   system_shut_down: {
     en: "Shut Down",
-    tr: "Kapat",
+    tr: "Kapat"
   },
   system_shutting_down: {
     en: "Shutting Down...",
-    tr: "Kapatılıyor...",
+    tr: "Kapatılıyor..."
   },
   system_shutting_down_desc: {
     en: "Please wait while your system is shutting down.",
-    tr: "Sisteminiz kapatılırken lütfen bekleyin.",
+    tr: "Sisteminiz kapatılırken lütfen bekleyin."
   },
   system_terminal_help_output: {
     en: "Available commands:",
-    tr: "Kullanılabilir komutlar:",
+    tr: "Kullanılabilir komutlar:"
   },
   system_terminal_not_found_output: {
     en: "Command not found",
-    tr: "Komut bulunamadı",
+    tr: "Komut bulunamadı"
   },
   system_terminal_sudo_error: {
     en: "user is not in the sudoers file. This incident will be reported.",
-    tr: "kullanıcı sudoers dosyasında değil. Bu olay rapor edilecek.",
-  },
+    tr: "kullanıcı sudoers dosyasında değil. Bu olay rapor edilecek."
+  }
 };
 export default TranslationsData;
 export type TranslationKey = keyof typeof TranslationsData;
-export const locales = Object.keys(Locales) as Locales[];
+export const locales = (Object.keys(Locales) as Locales[]);

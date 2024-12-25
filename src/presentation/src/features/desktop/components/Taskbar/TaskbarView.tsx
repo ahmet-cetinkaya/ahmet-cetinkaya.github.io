@@ -41,12 +41,19 @@ export default function TaskbarView() {
 
   return (
     <Show when={windows().length > 0}>
+      {/* Desktop */}
       <span class="hidden select-none items-center gap-2 sm:flex">
         <For each={windows()}>{(window) => <TaskViewButton window={window} />}</For>
       </span>
 
-      <span class="flex select-none items-center gap-2 sm:hidden">
+      {/* Tablet */}
+      <span class="hidden select-none items-center gap-2 xs:flex sm:hidden">
         <MiniTaskView />
+      </span>
+
+      {/* Mobile */}
+      <span class="flex select-none items-center gap-2 xs:hidden">
+        <TaskViewDropdown />
       </span>
     </Show>
   );
@@ -69,7 +76,7 @@ export default function TaskbarView() {
                   onClick: () => onClickTaskView(window),
                 }) as DropdownItem,
             )}
-            buttonClass="h-8 text-xs w-8"
+            buttonClass="text-xs size-8"
             ariaLabel={translate(TranslationKeys.desktop_taskbar_other_windows_menu)}
           >
             <Icon icon={Icons.downArrow} class="size-4" />
@@ -79,12 +86,32 @@ export default function TaskbarView() {
     );
   }
 
+  function TaskViewDropdown() {
+    return (
+      <Dropdown
+        menuItems={windows().map(
+          (window) =>
+            ({
+              text: window.title,
+              onClick: () => onClickTaskView(window),
+            }) as DropdownItem,
+        )}
+        buttonClass="h-8 text-xs w-8"
+        ariaLabel={translate(TranslationKeys.desktop_taskbar_windows_menu)}
+      >
+        <Icon icon={Icons.downArrow} class="size-4" />
+      </Dropdown>
+    );
+  }
+
   function TaskViewButton(props: { window: Window }) {
     return (
       <Button
         onClick={() => onClickTaskView(props.window)}
-        class={mergeCls("h-8 w-fit min-w-16 text-xs", {
-          "bg-surface-300 hover:bg-surface-200 transition-colors duration-200 ease-in-out": windowsService.isActivated(props.window),
+        class={mergeCls("h-8 w-fit min-w-16 truncate text-xs", {
+          "bg-surface-300 transition-colors duration-200 ease-in-out hover:bg-surface-200": windowsService.isActivated(
+            props.window,
+          ),
         })}
         variant="primary"
         ariaLabel={translate(props.window.title)}

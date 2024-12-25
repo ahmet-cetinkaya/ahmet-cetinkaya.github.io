@@ -19,6 +19,7 @@ export default function EmailApp() {
   const [emailLinkUrl] = createResource(getEmailLink);
   const [subject, setSubject] = createSignal("");
   const [body, setBody] = createSignal("");
+  const [isSended, setIsSended] = createSignal(false);
 
   async function getEmailLink() {
     const email = await linksService.get((link) => link.id === Links.email);
@@ -36,6 +37,7 @@ export default function EmailApp() {
 
   function onEmailSend() {
     redirectToMailClient();
+    setIsSended(true);
   }
 
   return (
@@ -54,7 +56,8 @@ export default function EmailApp() {
 
         <EmailForm />
 
-        <div class="flex justify-end pe-4">
+        <div class="flex items-center justify-end pe-4 gap-4">
+          <Show when={isSended()}>{translate(TranslationKeys.apps_email_redirected_your_email_app)}</Show>
           <Button
             type="button"
             variant="primary"
@@ -99,7 +102,7 @@ export default function EmailApp() {
             <li>
               <Button
                 variant="text"
-                class="duration-3000 w-full rounded text-left transition-all ease-linear hover:bg-white hover:text-surface-500 transition-colors duration-200 ease-in-out"
+                class="duration-3000 w-full rounded text-left transition-all transition-colors duration-200 ease-in-out ease-linear hover:bg-white hover:text-surface-500"
                 ariaLabel={translate(folder().label)}
               >
                 <span class="flex items-center gap-2">
@@ -162,7 +165,7 @@ export default function EmailApp() {
               variant="text"
               onClick={props.onClick}
               ariaLabel={props.ariaLabel}
-              class="rounded p-1 text-white hover:bg-gray-100 hover:text-surface-500 transition-colors duration-200 ease-in-out"
+              class="rounded p-1 text-white transition-colors duration-200 ease-in-out hover:bg-gray-100 hover:text-surface-500"
             >
               {props.children}
             </Button>

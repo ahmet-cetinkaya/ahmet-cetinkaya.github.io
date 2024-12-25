@@ -10,6 +10,7 @@ export enum TranslationKeys {
   apps_email_enter_url = "apps_email_enter_url",
   apps_email_folders = "apps_email_folders",
   apps_email_inbox = "apps_email_inbox",
+  apps_email_redirected_your_email_app = "apps_email_redirected_your_email_app",
   apps_email_sent = "apps_email_sent",
   apps_email_subject = "apps_email_subject",
   apps_email_to = "apps_email_to",
@@ -325,6 +326,10 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_email_inbox: {
     en: "Inbox",
     tr: "Gelen Kutusu"
+  },
+  apps_email_redirected_your_email_app: {
+    en: "Redirected to your email app on your device.",
+    tr: "Cihazınızdaki e-posta uygulamanıza yönlendirildi."
   },
   apps_email_sent: {
     en: "Sent",

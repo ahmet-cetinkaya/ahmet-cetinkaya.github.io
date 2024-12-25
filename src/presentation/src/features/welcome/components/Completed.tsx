@@ -42,7 +42,7 @@ export default function Completed() {
   }
 
   return (
-    <div class="flex h-full flex-col items-center justify-center">
+    <div class="flex h-full flex-col items-center justify-center px-8 py-4">
       <Icon icon={Icons.check} class="size-32" />
       <Title>{translate(TranslationKeys.apps_welcome_completed)}</Title>
       <Title level={2} class="text-lg">

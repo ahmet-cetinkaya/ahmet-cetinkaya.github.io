@@ -98,7 +98,7 @@ export default function Background() {
   }
 
   return (
-    <>
+    <div class="px-8 py-4">
       <Title level={1}>{translate(TranslationKeys.apps_welcome_background)}</Title>
 
       <Show when={experienceActivities()} fallback={<Loading />}>
@@ -118,16 +118,16 @@ export default function Background() {
 
       <Show when={linkedInLink()}>
         <Link
-          class="fixed right-14 top-14 w-28"
+          class="fixed top-14 right-8 w-fit"
           href={linkedInLink()!.url}
           target="_blank"
           ariaLabel={translate(TranslationKeys.links_linkedin)}
         >
           <Icon icon={Icons.linkedin} class="size-4" />
-          <span class="ms-2">{translate(TranslationKeys.links_linkedin)}</span>
+          <span class="ms-2 hidden md:block">{translate(TranslationKeys.links_linkedin)}</span>
         </Link>
       </Show>
-    </>
+    </div>
   );
 
   function Loading() {

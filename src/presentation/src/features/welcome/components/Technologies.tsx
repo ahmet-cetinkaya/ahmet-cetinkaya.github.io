@@ -82,7 +82,7 @@ export default function Technologies() {
 
   return (
     <div class="size-full overflow-hidden">
-      <Title>{translate(TranslationKeys.apps_welcome_technologiesIUse)}</Title>
+      <Title class="px-8 py-4">{translate(TranslationKeys.apps_welcome_technologiesIUse)}</Title>
 
       <Show when={memoizedNetworkGraphData()}>
         <div aria-label="Technology network visualization">
@@ -92,7 +92,7 @@ export default function Technologies() {
           </p>
         </div>
 
-        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode} />
+        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode}/>
       </Show>
     </div>
   );

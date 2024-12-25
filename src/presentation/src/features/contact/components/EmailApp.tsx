@@ -49,7 +49,7 @@ export default function EmailApp() {
         <EmailFolders />
       </div>
 
-      <div class="size-full px-10">
+      <div class="size-full px-4 py-4">
         <Title level={2} class="mb-4 flex items-center justify-between px-4 pt-4 text-2xl font-bold">
           {translate(TranslationKeys.apps_email_compose)}
         </Title>

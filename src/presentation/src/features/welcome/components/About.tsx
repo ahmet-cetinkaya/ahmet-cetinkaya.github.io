@@ -18,7 +18,7 @@ export default function About(props: Props) {
   }
 
   return (
-    <div class="size-full">
+    <div class="size-full px-8 py-4">
       <Title level={1}>{translate(TranslationKeys.apps_welcome_about_me)}</Title>
 
       <div class="shadow-md h-3/4 overflow-y-auto rounded-lg border border-gray-300 bg-surface-400 p-4">

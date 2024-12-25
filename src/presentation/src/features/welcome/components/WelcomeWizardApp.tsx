@@ -123,7 +123,7 @@ export default function WelcomeWizardApp(props: Props) {
       </header>
       <div class="flex size-full flex-col overflow-hidden">
         <Show when={currentPart() < PARTS.length}>
-          <main class="flex-grow overflow-auto px-10 py-4">{getPartContent(currentPart())}</main>
+          <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
         </Show>
 
         <footer class="mb-4 me-4 flex flex-row-reverse justify-start gap-2">

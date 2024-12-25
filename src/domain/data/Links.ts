@@ -10,6 +10,7 @@ export enum Links {
   mastodon = 5,
   x = 6,
   instagram = 7,
+  donate,
 }
 
 const LinksData = [
@@ -26,6 +27,13 @@ const LinksData = [
     "https://linkedin.com/in/ahmet-cetinkaya",
     Icons.linkedin,
     new Date("2024-05-16 20:10:19"),
+  ),
+  new Link(
+    Links.donate,
+    TranslationKeys.links_donate,
+    "https://www.buymeacoffee.com/ahmetcetinkaya",
+    Icons.donate,
+    new Date("2024-12-25 20:27:52"),
   ),
   new Link(
     Links.email,

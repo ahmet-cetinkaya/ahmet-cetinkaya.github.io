@@ -265,6 +265,7 @@ export enum TranslationKeys {
   educations_1_department = "educations_1_department",
   educations_2_department = "educations_2_department",
   educations_2_description_markdown = "educations_2_description_markdown",
+  links_donate = "links_donate",
   links_github = "links_github",
   links_instagram = "links_instagram",
   links_itchio = "links_itchio",
@@ -1654,6 +1655,10 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Tubitak yarışması için drone simülasyonu
 - Mehmet Akif Ersoy Veterinerlik Fakültesi Patoloji Bölümü için web ve mobil'de kullanılmak üzere hastane yazılımı geliştirme
 - Çeşitli birçok proje...`
+  },
+  links_donate: {
+    en: "Donate",
+    tr: "Bağış"
   },
   links_github: {
     en: "Github",

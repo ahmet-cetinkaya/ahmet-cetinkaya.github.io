@@ -20,6 +20,7 @@ type Props = {
 export default function Window(props: Props) {
   const windowsService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
+  const i18n = Container.instance.i18n;
   const translate = useI18n();
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
@@ -40,7 +41,13 @@ export default function Window(props: Props) {
     if (!path()) return;
 
     await windowsService.active(props.window);
-    navigate(path()!);
+    navigateToLocalizedAppPath();
+  }
+
+  function navigateToLocalizedAppPath() {
+    const currentLocale = i18n.currentLocale.get();
+    const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
+    navigate(`${localePathPrefix}/${path()!}`);
   }
 
   function onClose() {
@@ -53,7 +60,7 @@ export default function Window(props: Props) {
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigate(path()!);
+    navigateToLocalizedAppPath();
   }
 
   function onDragEnd(_: MouseEvent, position: Position) {
@@ -71,7 +78,7 @@ export default function Window(props: Props) {
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigate(path()!);
+    navigateToLocalizedAppPath();
   }
 
   function onResizeEnd(_: Event, size: Size, position: Position) {
@@ -115,9 +122,12 @@ export default function Window(props: Props) {
       onResizeStart={onResizeStart}
       onResizeEnd={onResizeEnd}
       onToggleMaximize={onToggleMaximize}
-      class={mergeCls("shadow-md fixed min-h-52 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary", {
-        hidden: props.window.isMinimized,
-      })}
+      class={mergeCls(
+        "shadow-md fixed min-h-52 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary",
+        {
+          hidden: props.window.isMinimized,
+        },
+      )}
       headerClass="bg-surface-400"
       style={{
         "z-index": overrideLayer() ?? props.window.layer,

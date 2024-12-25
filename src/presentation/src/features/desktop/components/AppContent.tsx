@@ -1,6 +1,6 @@
 import { Apps } from "~/domain/data/Apps";
 import type { AppId } from "~/domain/models/App";
-import EmailApp from "../../contact/components/EmailApp";
+import EmailApp from "../../email/components/EmailApp";
 import DosBoxEngine from "../../games/components/DosBoxEngine";
 import WelcomeWizardApp from "../../welcome/components/WelcomeWizardApp";
 import Terminal from "../../system/components/Terminal/Terminal";

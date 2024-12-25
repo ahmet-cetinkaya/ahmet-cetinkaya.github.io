@@ -166,15 +166,14 @@ export default function Terminal(props: Props) {
       return;
     }
 
+    const localePathPrefix = i18n.currentLocale.get() === "en" ? "" : `/${i18n.currentLocale.get()}`;
     if (cmd.toLowerCase() === "reboot") {
-      const pathLocalePrefix = i18n.currentLocale.get() === "en" ? "" : `/${i18n.currentLocale.get()}`;
-      navigate(`${pathLocalePrefix}/reboot`);
+      navigate(`${localePathPrefix}/reboot`);
       return;
     }
 
     if (cmd.toLowerCase() === "shutdown") {
-      const pathLocalePrefix = i18n.currentLocale.get() === "en" ? "" : `/${i18n.currentLocale.get()}`;
-      navigate(`${pathLocalePrefix}/shutdown`);
+      navigate(`${localePathPrefix}/shutdown`);
       return;
     }
 

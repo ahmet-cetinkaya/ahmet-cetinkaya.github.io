@@ -14,6 +14,7 @@ import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 export default function TaskbarView() {
   const windowsService = Container.instance.windowsService;
   const appsService = Container.instance.appsService;
+  const i18n = Container.instance.i18n;
   const translate = useI18n();
 
   const [windows, setWindows] = createSignal<Window[]>([]);
@@ -35,7 +36,11 @@ export default function TaskbarView() {
     else {
       windowsService.active(window);
       const app = await appsService.get((a) => a.id === window.appId);
-      if (app) navigate(`/${app.path}`);
+      if (!app) return;
+
+      const currentLocale = i18n.currentLocale.get();
+      const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
+      navigate(`${localePathPrefix}/${app.path}`);
     }
   }
 

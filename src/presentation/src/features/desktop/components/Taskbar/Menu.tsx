@@ -86,13 +86,13 @@ export default function Menu() {
 
   function onPowerOptionClick(command: string) {
     const currentLocale = i18n.currentLocale.get();
-    const pathPrefix = currentLocale === Locales.tr ? "/tr" : "";
+    const localePathPrefix = currentLocale === Locales.tr ? "/tr" : "";
     switch (command) {
       case "reboot":
-        navigate(`${pathPrefix}/reboot`);
+        navigate(`${localePathPrefix}/reboot`);
         break;
       case "shutdown":
-        navigate(`${pathPrefix}/shutdown`);
+        navigate(`${localePathPrefix}/shutdown`);
         break;
     }
   }

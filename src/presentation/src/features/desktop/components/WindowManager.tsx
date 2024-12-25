@@ -40,7 +40,7 @@ export default function WindowManager() {
   async function openWindow(appId: Apps, args?: string[]) {
     const existingWindow = await windowService.get((window) => window.appId === appId);
     if (existingWindow) {
-      windowService.active(existingWindow);
+      await windowService.active(existingWindow);
       return;
     }
 

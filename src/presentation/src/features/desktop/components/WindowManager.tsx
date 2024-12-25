@@ -25,12 +25,16 @@ export default function WindowManager() {
   });
 
   async function openInitialApp() {
-    const { appPath, args } = parseAppPathFromLocation(window.location.pathname);
+    const appInfo = parseAppPathFromLocation(window.location.pathname);
+    if (ScreenHelper.isMobile()) {
+      if (!appInfo.args) appInfo.args = [];
+      appInfo.args.push("--maximized");
+    }
 
-    const app = await appsService.get((app) => app.path === appPath);
+    const app = await appsService.get((app) => app.path === appInfo.appPath);
     if (!app) return;
 
-    await openWindow(app.id, args);
+    await openWindow(app.id, appInfo.args);
   }
 
   async function openWindow(appId: Apps, args?: string[]) {

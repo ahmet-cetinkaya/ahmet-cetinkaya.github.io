@@ -115,7 +115,7 @@ export default function Window(props: Props) {
       onResizeStart={onResizeStart}
       onResizeEnd={onResizeEnd}
       onToggleMaximize={onToggleMaximize}
-      class={mergeCls("border-black bg-surface-500 text-white shadow-secondary", {
+      class={mergeCls("shadow-md fixed min-h-52 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary", {
         hidden: props.window.isMinimized,
       })}
       headerClass="bg-surface-400"

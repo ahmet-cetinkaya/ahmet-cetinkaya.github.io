@@ -135,7 +135,7 @@ export default function EmailApp() {
 
         <HtmlEditor
           onInput={setBody}
-          inputClass="w-full h-96 mt-2 px-3 py-2 appearance-none rounded bg-surface-400 border border-black leading-tight text-gray-200 shadow-primary overflow-y-auto focus:shadow-outline focus:outline-none"
+          inputClass="w-full h-40 mt-2 px-3 py-2 appearance-none rounded bg-surface-400 border border-black leading-tight text-gray-200 shadow-primary overflow-y-auto focus:shadow-outline focus:outline-none"
           enterUrlPromptText={translate(TranslationKeys.apps_email_enter_url)}
           toolbarButtons={{
             bold: { iconSvg: IconSvgs["Bold Icon"], label: translate(TranslationKeys.common_bold) },

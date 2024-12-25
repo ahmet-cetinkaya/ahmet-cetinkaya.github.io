@@ -14,14 +14,15 @@ export default class WelcomeWizardCommand implements ICIProgram {
 
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
+    const flags = this.parseFlags(args);
 
     const appWindow = new Window(
       CryptoExtensions.generateNanoId(),
       Apps.welcome,
       TranslationKeys.apps_welcome_wizard,
-      0,
-      false,
-      args.includes("--maximized"),
+      undefined,
+      undefined,
+      flags.maximized,
       undefined,
       undefined,
       undefined,
@@ -46,6 +47,12 @@ export default class WelcomeWizardCommand implements ICIProgram {
   --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}
   --part: {{${TranslationKeys.apps_terminal_commands_welcome_part}}}`,
       exitCode: ExitCodes.SUCCESS,
+    };
+  }
+
+  private parseFlags(args: string[]) {
+    return {
+      maximized: args.includes("--maximized"),
     };
   }
 }

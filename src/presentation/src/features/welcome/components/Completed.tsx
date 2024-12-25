@@ -27,18 +27,18 @@ export default function Completed() {
     return app;
   }
 
-  function onContactClick() {
+  async function onContactClick() {
     if (!contactApp()) return;
 
     const window = new Window(
       CryptoExtensions.generateNanoId(),
       contactApp()!.id,
       contactApp()!.name,
-      0,
-      false,
+      undefined,
+      undefined,
       ScreenHelper.isMobile(),
     );
-    windowsService.add(window);
+    requestAnimationFrame(() => windowsService.add(window));
   }
 
   return (

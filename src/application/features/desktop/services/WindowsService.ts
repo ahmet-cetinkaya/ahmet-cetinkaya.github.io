@@ -55,19 +55,17 @@ export default class WindowsService implements IWindowsService {
   //#region CRUD
   add(window: Window): Promise<void> {
     const windows = this._windowsStore.get();
-
+    
     const existsAppWindow = windows.find((w) => w.appId === window.appId);
     if (existsAppWindow) {
       this.active(existsAppWindow);
       return Promise.reject(new Error("App window already exists."));
     }
-
+    
     window.layer = Math.max(ArrayExtensions.max(windows, (w) => w.layer!) + 1, 1);
     window.createdDate = new Date();
     this._windowsStore.set([...windows.map((w) => ({ ...w })), window]);
-    // windows.push(window);
-    // this._windowsStore.set(windows);
-
+    
     return Promise.resolve();
   }
 
@@ -112,7 +110,7 @@ export default class WindowsService implements IWindowsService {
     const windowIndexToActive = windows.findIndex((w) => w.id === window.id);
     if (windowIndexToActive === -1) return Promise.reject("Window not found.");
     if (this.isActivated(windows[windowIndexToActive])) return Promise.reject("Window already activated.");
-
+    
     const maxLayer = Math.max(
       ArrayExtensions.max(windows, (w) => w.layer!),
       1,
@@ -120,16 +118,16 @@ export default class WindowsService implements IWindowsService {
     for (let i = 0; i < windows.length; i++) {
       if (windows[i].isMinimized) continue;
       if (windows[i].layer! < windows[windowIndexToActive].layer!) continue;
-
+      
       windows[i].layer!--;
       windows[i].updatedDate = new Date();
     }
-
+    
     window.layer = maxLayer;
     window.isMinimized = false;
     window.updatedDate = new Date();
     this._windowsStore.set([...windows.map((w) => ({ ...w }))]);
-
+    
     return Promise.resolve();
   }
 

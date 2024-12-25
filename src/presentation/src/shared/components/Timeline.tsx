@@ -6,6 +6,7 @@ import Icon from "./Icon";
 import LessViewContent from "~/core/acore-solidjs/ui/components/LessViewContent";
 import MarkdownParagraph from "~/core/acore-solidjs/ui/components/MarkdownParagraph";
 import Title from "./ui/Title";
+import Button from "./ui/Button";
 
 export type Activity = {
   id: number;
@@ -57,7 +58,20 @@ export default function Timeline(props: Props) {
               </header>
 
               <Show when={activity().descriptionMarkdown}>
-                <LessViewContent showMoreLabel={translate(TranslationKeys.common_show_more)}>
+                <LessViewContent
+                  showMoreLabel={translate(TranslationKeys.common_show_more)}
+                  customButtonComponent={(props) => (
+                    <Button
+                      onClick={props.onClick}
+                      class="py-2 text-sm"
+                      ariaLabel={translate(TranslationKeys.common_show_more)}
+                      variant="text"
+                    >
+                      {props.children}
+                    </Button>
+                  )}
+                  hidingClass="from-surface-500"
+                >
                   <MarkdownParagraph content={translate(activity().descriptionMarkdown!)} class="text-sm" />
                 </LessViewContent>
               </Show>

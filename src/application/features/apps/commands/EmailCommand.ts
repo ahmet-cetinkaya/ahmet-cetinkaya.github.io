@@ -14,8 +14,20 @@ export default class EmailCommand implements ICIProgram {
 
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
+    const flags = this.parseFlags(args);
 
-    const appWindow = new Window(CryptoExtensions.generateNanoId(), Apps.email, TranslationKeys.common_contact);
+    const appWindow = new Window(
+      CryptoExtensions.generateNanoId(),
+      Apps.email,
+      TranslationKeys.common_contact,
+      undefined,
+      undefined,
+      flags.maximized,
+      undefined,
+      undefined,
+      undefined,
+      args,
+    );
     await this.windowService.add(appWindow);
 
     return {
@@ -34,6 +46,12 @@ export default class EmailCommand implements ICIProgram {
 {{${TranslationKeys.common_options}}}:
   --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}`,
       exitCode: ExitCodes.SUCCESS,
+    };
+  }
+
+  private parseFlags(args: string[]) {
+    return {
+      maximized: args.includes("--maximized"),
     };
   }
 }

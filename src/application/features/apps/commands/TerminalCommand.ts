@@ -14,14 +14,15 @@ export default class TerminalCommand implements ICIProgram {
 
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
+    const flags = this.parseFlags(args);
 
     const appWindow = new Window(
       CryptoExtensions.generateNanoId(),
       Apps.terminal,
       TranslationKeys.apps_terminal,
-      0,
-      false,
-      args.includes("--maximized"),
+      undefined,
+      undefined,
+      flags.maximized,
       undefined,
       undefined,
       undefined,
@@ -45,6 +46,12 @@ export default class TerminalCommand implements ICIProgram {
 {{${TranslationKeys.common_options}}}:
   --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}`,
       exitCode: ExitCodes.SUCCESS,
+    };
+  }
+
+  private parseFlags(args: string[]) {
+    return {
+      maximized: args.includes("--maximized"),
     };
   }
 }

@@ -168,7 +168,7 @@ export default function Desktop() {
                     <AppShortcut
                       label={col.name}
                       icon={<ThreeDimensionalModel model={col.icon}></ThreeDimensionalModel>}
-                      href={col.path}
+                      href={`/${col.path}`}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}
                     />

@@ -35,7 +35,7 @@ export default function TaskbarView() {
     else {
       windowsService.active(window);
       const app = await appsService.get((a) => a.id === window.appId);
-      if (app) navigate(app.path);
+      if (app) navigate(`/${app.path}`);
     }
   }
 

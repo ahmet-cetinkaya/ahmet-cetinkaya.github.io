@@ -45,7 +45,7 @@ export default function Menu() {
             ({
               text: translate(app.name),
               icon: app.icon,
-              href: app.path,
+              href: `/${app.path}`,
               onClick: () => onAppClick(app.id),
             }) as BaseDropdownItem,
         ),

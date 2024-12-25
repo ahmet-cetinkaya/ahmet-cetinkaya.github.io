@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "astro": "astro",
-    "build": "astro check && astro build",
+    "build": "astro build",
+    "check": "astro check",
     "dev": "astro dev",
     "format": "prettier --write .",
     "preview": "astro preview",

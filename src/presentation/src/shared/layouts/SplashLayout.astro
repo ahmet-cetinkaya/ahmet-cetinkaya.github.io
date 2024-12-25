@@ -1,0 +1,13 @@
+---
+import Layout, { type Props as LayoutProps } from "./Layout.astro";
+
+export type Props = LayoutProps;
+---
+
+<Layout metaData={Astro.props.metaData}>
+  <main class="h-screen w-screen select-none bg-surface-500 py-10 text-white">
+    <span class="flex size-full select-none flex-col border-y-2 border-surface-400 p-4">
+      <slot />
+    </span>
+  </main>
+</Layout>

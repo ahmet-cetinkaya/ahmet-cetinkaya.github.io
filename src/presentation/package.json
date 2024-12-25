@@ -1,0 +1,37 @@
+{
+  "name": "ahmetcetinkaya.me",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "astro": "astro",
+    "build": "astro build",
+    "check": "astro check",
+    "dev": "astro dev",
+    "format": "prettier --write .",
+    "preview": "astro preview",
+    "start": "astro dev",
+    "create-i18n-pages": "rm -rf src/pages/tr && mkdir -p src/pages/tr && find src/pages/ -maxdepth 1 -mindepth 1 ! -name '_*' ! -name 'tr' -exec cp -r {} src/pages/tr/ \\;"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/solid-js": "^4.4.4",
+    "@astrojs/tailwind": "^5.1.2",
+    "@fontsource/oxanium": "^5.1.0",
+    "astro": "^4.16.13",
+    "astro-seo": "^0.8.4",
+    "js-dos": "^8.3.10",
+    "solid-js": "^1.9.3",
+    "tailwindcss": "^3.4.15",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.170.0",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-organize-attributes": "^1.0.0",
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

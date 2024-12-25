@@ -1,0 +1,140 @@
+---
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
+import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
+import SplashLayout from "../../shared/layouts/SplashLayout.astro";
+import Icon from "../../shared/components/Icon";
+import Icons from "~/domain/data/Icons";
+import Container from "~/presentation/Container";
+import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import RebootPageOGImage from "../_assets/images/reboot-page-og-image.webp";
+
+const i18n: II18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
+
+const title = `${translate(TranslationKeys.system_rebooting)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.system_rebooting_desc);
+const tags = [
+  ...SeoConstants.DEFAULT_TAGS,
+  translate(TranslationKeys.common_system),
+  translate(TranslationKeys.system_reboot),
+  translate(TranslationKeys.system_rebooting),
+  translate(TranslationKeys.system_power),
+  "loading",
+];
+
+const ogImageAlt = translate(TranslationKeys.system_rebooting);
+---
+
+<SplashLayout
+  metaData={{
+    title,
+    description,
+    canonical: Astro.url.pathname,
+    openGraph: {
+      basic: {
+        title: title,
+        type: "website",
+        image: RebootPageOGImage.src,
+        url: Astro.url.href,
+      },
+      optional: {
+        description,
+        locale: currentLocale,
+        siteName: SeoConstants.DEFAULT_TITLE,
+      },
+      image: {
+        alt: ogImageAlt,
+        width: RebootPageOGImage.width,
+        height: RebootPageOGImage.height,
+        type: `image/${RebootPageOGImage.format}`,
+      },
+    },
+    twitter: {
+      ...SeoConstants.DEFAULT_TWITTER,
+      description,
+      image: RebootPageOGImage.src,
+    },
+    extend: {
+      meta: [
+        SeoConstants.DEFAULT_AUTHOR_META,
+        {
+          name: "keywords",
+          content: tags.join(", "),
+        },
+      ],
+    },
+  }}
+>
+  <div class="font-mono flex size-full items-center justify-center text-white">
+    <span class="h-2/3 w-2/3">
+      <h1 class="-ms-20 text-8xl font-bold"><Icon icon={Icons.spinner} isSpin /></h1>
+      <h2 class="text-6xl font-bold">{translate(TranslationKeys.system_rebooting)}</h2>
+      <p class="text-lg">{translate(TranslationKeys.system_rebooting_desc)}</p>
+      <pre id="logs" class="mt-6 whitespace-pre-wrap"></pre>
+    </span>
+  </div>
+
+  <div id="blackScreen" class="absolute left-0 top-0 hidden h-screen w-screen bg-black"></div>
+</SplashLayout>
+
+<script define:vars={{ currentLocale, Locales }}>
+  const TYPING_DELAY = 50;
+  const INITIAL_DELAY = 500;
+  const SCREEN_TRANSITION_DELAY = 2000;
+  const NAVIGATION_DELAY = 1000;
+
+  const logsElement = document.getElementById("logs");
+  const blackScreenElement = document.getElementById("blackScreen");
+
+  const shutdownMessages = [
+    "Stopped target Graphical Interface.",
+    "Stopped target Multi-User System.",
+    "Stopped target Login Prompts.",
+    "Stopped target Timers.",
+    "Stopped target Sockets.",
+    "Stopped target Basic System.",
+    "Stopped target Paths.",
+    "Stopped target Slices.",
+    "Stopped target Local File Systems.",
+    "Reached target Shutdown.",
+    "Stopped Network Manager.",
+    "Stopped D-Bus System Message Bus.",
+    "Stopped Permit User Sessions.",
+    "Stopped Authorization Manager.",
+    "Stopped Accounts Service.",
+    "Stopped Disk Manager.",
+    "Stopped User Login Management.",
+    "Stopped Virtual Machine and Container Registration Service.",
+    "Stopped System Logging Service.",
+    "Stopped Daily Cleanup of Temporary Directories.",
+    `Saving user data...
+Closing database connections...
+Clearing session data...`,
+    "Stopping background jobs...",
+    "Logging out users...",
+    "Finalizing shutdown procedures...",
+  ];
+
+  setTimeout(() => displayMessages(), INITIAL_DELAY);
+
+  function displayMessages(index = 0) {
+    if (index < shutdownMessages.length) {
+      for (let line of shutdownMessages[index].split("\n"))
+        logsElement.insertAdjacentHTML("beforeend", createMessageLine(line));
+
+      setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
+    } else {
+      setTimeout(() => {
+        blackScreenElement.classList.remove("hidden");
+        const pathLocalePrefix = currentLocale === Locales.en ? "" : `/${currentLocale}`;
+        setTimeout(() => (window.location.href = `${pathLocalePrefix}/boot`), SCREEN_TRANSITION_DELAY);
+      }, NAVIGATION_DELAY);
+    }
+  }
+
+  function createMessageLine(message) {
+    return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
+  }
+</script>

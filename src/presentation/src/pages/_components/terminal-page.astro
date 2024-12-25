@@ -1,0 +1,68 @@
+---
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
+import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import Container from "~/presentation/Container";
+import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import TerminalPageOGImage from "../_assets/images/terminal-page-og-image.webp";
+
+const i18n: II18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
+
+const title = `${translate(TranslationKeys.apps_terminal)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.apps_terminal_page_desc);
+const tags = [
+  ...SeoConstants.DEFAULT_TAGS,
+  translate(TranslationKeys.common_system),
+  translate(TranslationKeys.apps_terminal),
+  "terminal",
+  "shell",
+  "command line",
+  "cli",
+];
+
+const ogImageAlt = translate(TranslationKeys.apps_terminal);
+---
+
+<DesktopLayout
+  metaData={{
+    title,
+    description,
+    canonical: Astro.url.pathname,
+    openGraph: {
+      basic: {
+        title,
+        type: "website",
+        image: TerminalPageOGImage.src,
+        url: Astro.url.href,
+      },
+      optional: {
+        description,
+        locale: currentLocale,
+        siteName: SeoConstants.DEFAULT_TITLE,
+      },
+      image: {
+        alt: ogImageAlt,
+        width: TerminalPageOGImage.width,
+        height: TerminalPageOGImage.height,
+        type: `image/${TerminalPageOGImage.format}`,
+      },
+    },
+    twitter: {
+      ...SeoConstants.DEFAULT_TWITTER,
+      description,
+      image: TerminalPageOGImage.src,
+    },
+    extend: {
+      meta: [
+        SeoConstants.DEFAULT_AUTHOR_META,
+        {
+          name: "keywords",
+          content: tags.join(", "),
+        },
+      ],
+    },
+  }}
+/>

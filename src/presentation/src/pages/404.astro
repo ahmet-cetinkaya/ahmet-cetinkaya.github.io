@@ -1,0 +1,142 @@
+---
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
+import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
+import SplashLayout from "~/presentation/src/shared/layouts/SplashLayout.astro";
+import Container from "~/presentation/Container";
+import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
+import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
+import NotFoundPageOGImage from "~/presentation/src/pages/_assets/images/not-found-page-og-image.webp";
+
+const i18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
+
+const title = `${translate(TranslationKeys.system_not_found)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.system_not_found_desc);
+const tags = ArrayExtensions.distinct([
+  ...SeoConstants.DEFAULT_TAGS,
+  translate(TranslationKeys.system_not_found),
+  "404",
+  "not found",
+  "error",
+]);
+
+const ogImageAlt = translate(TranslationKeys.system_not_found);
+---
+
+<SplashLayout
+  metaData={{
+    title,
+    description,
+    canonical: Astro.url.pathname,
+    openGraph: {
+      basic: {
+        title,
+        type: "website",
+        image: NotFoundPageOGImage.src,
+        url: Astro.url.href,
+      },
+      optional: {
+        description,
+        locale: currentLocale,
+        siteName: SeoConstants.DEFAULT_TITLE,
+      },
+      image: {
+        alt: ogImageAlt,
+        width: NotFoundPageOGImage.width,
+        height: NotFoundPageOGImage.height,
+        type: `image/${NotFoundPageOGImage.format}`,
+      },
+    },
+    twitter: {
+      ...SeoConstants.DEFAULT_TWITTER,
+      description,
+      image: NotFoundPageOGImage.src,
+      imageAlt: ogImageAlt,
+    },
+    extend: {
+      meta: [
+        SeoConstants.DEFAULT_AUTHOR_META,
+        {
+          name: "keywords",
+          content: tags.join(", "),
+        },
+        {
+          name: "robots",
+          content: "noindex",
+        },
+      ],
+    },
+  }}
+>
+  <div class="font-mono flex size-full items-center justify-center text-white">
+    <span class="h-2/3 w-2/3">
+      <h1 class="text-8xl font-bold">:(</h1>
+      <h2 class="mt-4 text-6xl font-bold">{translate(TranslationKeys.system_not_found)}</h2>
+      <pre id="panic-text" class="mt-6 whitespace-pre-wrap"></pre>
+    </span>
+  </div>
+
+  <div id="blackScreen" class="absolute left-0 top-0 hidden h-screen w-screen bg-black"></div>
+</SplashLayout>
+
+<script>
+  const REBOOT_DELAY = 5000;
+  const TYPING_DELAY = 100;
+  const INITIAL_DELAY = 500;
+  const SCREEN_TRANSITION_DELAY = 1000;
+
+  const panicElement = document.getElementById("panic-text")!;
+  const blackScreenElement = document.getElementById("blackScreen")!;
+
+  const panicMessages = [
+    "Kernel panic - not syncing: Fatal exception in interrupt",
+    "CPU: 0 PID: 1 Comm: systemd Not tainted 6.1.0-13-amd64 #1 SMP PREEMPT_DYNAMIC",
+    "Hardware name: Generic x86_64",
+    "RIP: 0010:__crash_kexec+0x2d/0x40",
+    `Code: Unable to access memory at location "${location.pathname}"`,
+    `RSP: 0018:ffff88821fc07cc0 EFLAGS: 00000282
+           RAX: 0000000000000000 RBX: ffff888200000000 RCX: 0000000000000000
+           RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888200000000
+           RBP: ffff88821fc07cc0 R08: 0000000000000001 R09: 0000000000000001
+           R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+           R13: ffff888200000000 R14: ffff888200000000 R15: 0000000000000000
+           FS:  0000000000000000(0000) GS:ffff88823ec00000(0000) knlGS:0000000000000000
+           CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+           CR2: 0000000000000000 CR3: 000000021fc01000 CR4: 00000000003706f0`,
+    `Call Trace: panic+0x106/0x2e9,
+                       do_exit+0x29b/0xb70,
+                       reboot_handler+0x1f/0x30,
+                       notifier_call_chain+0x55/0x80,
+                       usermodehelper_exec_mods+0x114/0x150,
+                       panic_smp_self_stop+0x10/0x10`,
+    "Kernel Offset: disabled",
+  ];
+
+  setTimeout(() => displayMessages(), INITIAL_DELAY);
+
+  function displayMessages(index = 0) {
+    if (index < panicMessages.length) {
+      panicElement.insertAdjacentHTML("beforeend", createMessageLine(panicMessages[index]));
+      setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
+    } else {
+      updateCountdown(REBOOT_DELAY / 1000, true);
+    }
+  }
+
+  function createMessageLine(message: string, isError = true) {
+    return `<span>${isError ? '[ <span class="text-red-500">FAILED</span> ] ' : ""}${message}\n</span>`;
+  }
+
+  function updateCountdown(seconds: number, isFirst = false) {
+    if (seconds > 0) {
+      if (isFirst) panicElement.insertAdjacentHTML("beforeend", `<br>`);
+      if (!isFirst) panicElement.lastElementChild?.remove();
+      panicElement.insertAdjacentHTML("beforeend", createMessageLine(`Rebooting in ${seconds} seconds...`, false));
+      setTimeout(() => updateCountdown(seconds - 1), 1000);
+    } else {
+      blackScreenElement.classList.remove("hidden");
+      setTimeout(() => (location.href = "/boot"), SCREEN_TRANSITION_DELAY);
+    }
+  }
+</script>

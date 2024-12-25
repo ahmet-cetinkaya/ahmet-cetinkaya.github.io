@@ -1,86 +1,25 @@
 {
-  "name": "ahmet-cetinkaya.github.io",
-  "private": true,
-  "description": "Ahmet Çetinkaya's personal website.",
-  "version": "0.1.0",
-  "author": "Ahmet Çetinkaya <ahmetcetinkaya7@outlook.com>",
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
-  },
-  "dependencies": {
-    "@fontsource/poppins": "^4.5.10",
-    "@popperjs/core": "^2.11.6",
-    "axios": "^0.27.2",
-    "bootstrap": "^5.2.3",
-    "classnames": "^2.3.2",
-    "dotenv": "^16.0.3",
-    "draco3d": "^1.5.6",
-    "gatsby": "^4.24.8",
-    "gatsby-plugin-feed": "^4.24.0",
-    "gatsby-plugin-google-gtag": "^4.24.0",
-    "gatsby-plugin-image": "^2.24.0",
-    "gatsby-plugin-manifest": "^4.24.0",
-    "gatsby-plugin-react-i18next": "^2.0.5",
-    "gatsby-plugin-react-redux": "^1.1.0",
-    "gatsby-plugin-sass": "^5.24.0",
-    "gatsby-plugin-sharp": "^4.24.0",
-    "gatsby-plugin-sitemap": "^5.24.0",
-    "gatsby-remark-copy-linked-files": "^5.24.0",
-    "gatsby-remark-images": "^6.24.0",
-    "gatsby-remark-prismjs": "^6.24.0",
-    "gatsby-remark-responsive-iframe": "^5.24.0",
-    "gatsby-remark-smartypants": "^5.24.0",
-    "gatsby-source-filesystem": "^4.24.0",
-    "gatsby-transformer-remark": "^5.24.0",
-    "gatsby-transformer-sharp": "^4.24.0",
-    "i18next": "^21.10.0",
-    "normalize.css": "^8.0.1",
-    "prismjs": "^1.29.0",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-i18next": "^11.18.6",
-    "react-icons": "^4.10.1",
-    "react-obfuscate": "^3.6.9",
-    "react-popper": "^2.3.0",
-    "react-redux": "^8.0.5",
-    "redux": "^4.2.0",
-    "sass": "^1.56.1",
-    "three": "^0.155.0",
-    "webpack-filter-warnings-plugin": "^1.2.1"
+  "name": "ahmetcetinkaya.me",
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
+    "install-all": "bun install && (cd src/presentation && bun install && cd ../..) && (cd src/core/acore-ts/ && bun install && cd ../..) && (cd src/core/acore-solidjs/ && bun install && cd ../..)",
+    "lint": "eslint .",
+    "start": "cd src/presentation && bun start"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-methods": "^7.18.6",
-    "@babel/preset-react": "^7.18.6",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "2.7.1"
+    "@eslint/js": "^9.15.0",
+    "@types/bun": "latest",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0",
+    "prettier": "3.3.3",
+    "prettier-plugin-jsdoc": "^1.3.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-packagejson": "^2.5.5",
+    "typescript-eslint": "^8.15.0"
   },
-  "homepage": "https://github.com/gatsbyjs/ahmet-cetinkaya.github.io#readme",
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "0BSD",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gatsbyjs/ahmet-cetinkaya.github.io.git"
-  },
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "clean-start": "gatsby clean && gatsby develop",
-    "test": "gatsby clean && gatsby build && gatsby clean && gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "lint": "eslint .",
-    "lint-fix": "eslint . --fix"
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }

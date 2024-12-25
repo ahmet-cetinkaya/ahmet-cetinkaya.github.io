@@ -1,0 +1,85 @@
+---
+import { TranslationKeys } from "~/domain/data/Translations";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import { useI18nStatic } from "../../shared/utils/i18nTranslate";
+import Container from "~/presentation/Container";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
+import AboutPageOGImage from "../_assets/images/about-page-og-image.webp";
+
+type Props = {
+  isHome: boolean;
+};
+const props: Props = Astro.props;
+
+const i18n = Container.instance.i18n;
+const translate = useI18nStatic(Astro.url);
+const currentLocale = i18n.getLocaleFromUrl(Astro.url, i18n.locales[0]);
+
+const title = props.isHome
+  ? SeoConstants.DEFAULT_TITLE
+  : `${translate(TranslationKeys.apps_welcome_about_me)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.apps_welcome_about_me_short_text);
+
+const technologiesService = Container.instance.technologiesService;
+const extendedDefaultTags = await SeoConstants.getExtendedDefaultTags(technologiesService);
+const tags = ArrayExtensions.distinct([
+  ...extendedDefaultTags,
+  translate(TranslationKeys.common_coding),
+  translate(TranslationKeys.common_development),
+  translate(TranslationKeys.common_engineer),
+  translate(TranslationKeys.common_programming),
+  translate(TranslationKeys.common_software),
+  translate(TranslationKeys.common_technology),
+  translate(TranslationKeys.curriculum_vitae_computer_engineer),
+  translate(TranslationKeys.curriculum_vitae_computer_engineer),
+  translate(TranslationKeys.curriculum_vitae_computer_engineering),
+  translate(TranslationKeys.curriculum_vitae_computer_engineering),
+  translate(TranslationKeys.curriculum_vitae_software_developer),
+  translate(TranslationKeys.curriculum_vitae_software_developer),
+]);
+
+const ogImageAlt = translate(TranslationKeys.apps_welcome_about_me_profile_image_alt);
+---
+
+<DesktopLayout
+  metaData={{
+    title,
+    description: description,
+    canonical: Astro.url.pathname,
+    openGraph: {
+      basic: {
+        title,
+        type: "website",
+        image: AboutPageOGImage.src,
+        url: Astro.url.href,
+      },
+      optional: {
+        description: description,
+        locale: currentLocale,
+        siteName: SeoConstants.DEFAULT_TITLE,
+      },
+      image: {
+        alt: ogImageAlt,
+        width: AboutPageOGImage.width,
+        height: AboutPageOGImage.height,
+        type: `image/${AboutPageOGImage.format}`,
+      },
+    },
+    twitter: {
+      ...SeoConstants.DEFAULT_TWITTER,
+      description: description,
+      image: AboutPageOGImage.src,
+      imageAlt: ogImageAlt,
+    },
+    extend: {
+      meta: [
+        SeoConstants.DEFAULT_AUTHOR_META,
+        {
+          name: "keywords",
+          content: tags.join(", "),
+        },
+      ],
+    },
+  }}
+/>

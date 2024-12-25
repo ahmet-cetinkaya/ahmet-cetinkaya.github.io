@@ -1,0 +1,42 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import CommonMeta from "../components/CommonMeta.astro";
+import Favicons from "../components/Favicons.astro";
+import Metadata, { type Props as MetadataProps } from "../components/Metadata.astro";
+import SiteVerification from "../components/SiteVerification.astro";
+import Container from "~/presentation/Container";
+import { locales } from "~/domain/data/Translations";
+import "@fontsource/oxanium";
+import Preload from "../components/Preload.astro";
+
+export type Props = {
+  metaData: MetadataProps;
+};
+
+const i18n = Container.instance.i18n;
+const language = i18n.getLocaleFromUrl(Astro.url, locales[0]);
+---
+
+<!doctype html>
+<html lang={language} dir="ltr">
+  <head>
+    <CommonMeta />
+    <Favicons />
+
+    <Metadata {...Astro.props.metaData} />
+    <SiteVerification />
+
+    <Preload />
+    <ViewTransitions fallback="swap" />
+  </head>
+
+  <body class="tracking-tight antialiased">
+    <slot />
+
+    <style is:global>
+      img {
+        content-visibility: auto;
+      }
+    </style>
+  </body>
+</html>

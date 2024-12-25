@@ -1,0 +1,6 @@
+[submodule "src/core/acore-ts"]
+	path = src/core/acore-ts
+	url = https://github.com/ahmet-cetinkaya/acore-ts.git
+[submodule "src/core/acore-solidjs"]
+	path = src/core/acore-solidjs
+	url = https://github.com/ahmet-cetinkaya/acore-solidjs.git

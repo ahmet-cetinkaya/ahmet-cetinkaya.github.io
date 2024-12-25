@@ -39,13 +39,17 @@ export default function Menu() {
       };
 
       const apps = await appsService.getAll((app) => app.categoryId === category.id);
+
+      const currentLocale = i18n.currentLocale.get();
+      const localePathPrefix = currentLocale === Locales.en ? "" : `/${currentLocale}`;
+
       categoryMenuHeader.items!.push(
         ...apps.map(
           (app) =>
             ({
               text: translate(app.name),
               icon: app.icon,
-              href: `/${app.path}`,
+              href: `${localePathPrefix}/${app.path}`,
               onClick: () => onAppClick(app.id),
             }) as BaseDropdownItem,
         ),

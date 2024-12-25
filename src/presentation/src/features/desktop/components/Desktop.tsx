@@ -9,6 +9,7 @@ import appCommands from "~/presentation/src/shared/constants/AppCommands";
 import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
 import File from "~/domain/models/File";
 import Extensions from "~/application/features/system/constants/Extensions";
+import { Locales } from "~/domain/data/Translations";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -18,19 +19,23 @@ const EXEC_REGEX = /Exec=(.+)/;
 export default function Desktop() {
   const appsService: IAppsService = Container.instance.appsService;
   const fileSystemService: IFileSystemService = Container.instance.fileSystemService;
+  const i18n = Container.instance.i18n;
 
   let containerRef: HTMLDivElement | undefined;
   let matrixDimensions: { dimension1: number; dimension2: number } | undefined;
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
+  const [currentLocale, setCurrentLocale] = createSignal<string>(Locales.en);
 
   onMount(() => {
     window.addEventListener("resize", onResize);
+    i18n.currentLocale.subscribe(setCurrentLocale);
   });
 
   onCleanup(() => {
     window.removeEventListener("resize", () => onResize);
+    i18n.currentLocale.unsubscribe(setCurrentLocale);
   });
 
   function onContainerMount(element: HTMLDivElement) {
@@ -168,7 +173,7 @@ export default function Desktop() {
                     <AppShortcut
                       label={col.name}
                       icon={<ThreeDimensionalModel model={col.icon}></ThreeDimensionalModel>}
-                      href={`/${col.path}`}
+                      href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}
                     />

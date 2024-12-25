@@ -1,10 +1,10 @@
-import { createResource, Show } from "solid-js";
+import { createResource, createSignal, onCleanup, onMount, Show } from "solid-js";
 import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
 import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
 import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
 import { Apps } from "~/domain/data/Apps";
 import Icons from "~/domain/data/Icons";
-import { TranslationKeys } from "~/domain/data/Translations";
+import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import Window from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
@@ -17,9 +17,19 @@ import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
 export default function Completed() {
   const appsService: IAppsService = Container.instance.appsService;
   const windowsService: IWindowsService = Container.instance.windowsService;
+  const i18n = Container.instance.i18n;
   const translate = useI18n();
 
   const [contactApp] = createResource(getContactApp);
+  const [currentLocale, setCurrentLocale] = createSignal<string>(Locales.en);
+
+  onMount(() => {
+    i18n.currentLocale.subscribe(setCurrentLocale);
+  });
+
+  onCleanup(() => {
+    i18n.currentLocale.unsubscribe(setCurrentLocale);
+  });
 
   async function getContactApp() {
     const app = await appsService.get((x) => x.id === Apps.email);
@@ -55,7 +65,7 @@ export default function Completed() {
         <Show when={contactApp()}>
           <AppShortcut
             label={contactApp()!.name}
-            href={contactApp()!.path}
+            href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${contactApp()!.path}`}
             onClick={onContactClick}
             icon={<ThreeDimensionalModel model={contactApp()!.icon} />}
             class="mt-2 size-32"

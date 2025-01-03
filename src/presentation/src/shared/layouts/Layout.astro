@@ -1,5 +1,5 @@
 ---
-import { ClientRouter } from "astro:transitions";
+import { ViewTransitions } from "astro:transitions";
 import Metadata, { type Props as MetadataProps } from "~/core/acore-astro/src/components/Metadata.astro";
 import Container from "~/presentation/Container";
 import { locales } from "~/domain/data/Translations";
@@ -57,7 +57,7 @@ const metadata: MetadataProps = {
   <head>
     <Metadata {...metadata} />
     <Preload />
-    <ClientRouter />
+    <ViewTransitions />
     <Analytics title={metadata.title} pathName={Astro.url.pathname} />
   </head>
 

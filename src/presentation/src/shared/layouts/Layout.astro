@@ -4,9 +4,10 @@ import Metadata, { type Props as MetadataProps } from "~/core/acore-astro/src/co
 import Container from "~/presentation/Container";
 import { locales } from "~/domain/data/Translations";
 import "@fontsource/oxanium";
-import Preload from "../components/Preload.astro";
-import SeoConstants from "../constants/SeoConstants";
+import Preload from "~/presentation/src/shared/components/Preload.astro";
+import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
 import { getImage } from "astro:assets";
+import Analytics from "~/presentation/src/shared/components/Analytics.astro";
 
 export type Props = {
   metadata: Partial<MetadataProps>;
@@ -57,6 +58,7 @@ const metadata: MetadataProps = {
     <Metadata {...metadata} />
     <Preload />
     <ClientRouter />
+    <Analytics title={metadata.title} pathName={Astro.url.pathname} />
   </head>
 
   <body class="tracking-tight antialiased">

@@ -15,7 +15,7 @@ This project is built using the following technologies:
 
 ### Minimal Package Usage
 
-This project minimizes the use of external packages. When necessary, implementations are written using core packages ([`acore-ts`](https://github.com/ahmet-cetinkaya/acore-ts), [`acore-solidjs`](https://github.com/ahmet-cetinkaya/acore-solidjs)) to ensure better control and optimization of the codebase.
+This project minimizes the use of external packages. When necessary, implementations are written using core packages ([`acore-ts`](https://github.com/ahmet-cetinkaya/acore-ts), [`acore-solidjs`](https://github.com/ahmet-cetinkaya/acore-solidjs), [`acore-astro](https://github.com/ahmet-cetinkaya/acore-astro)) to ensure better control and optimization of the codebase.
 
 ## ⚡ Getting Started
 

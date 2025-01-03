@@ -4,3 +4,6 @@
 [submodule "src/core/acore-solidjs"]
 	path = src/core/acore-solidjs
 	url = https://github.com/ahmet-cetinkaya/acore-solidjs.git
+[submodule "src/core/acore-solid"]
+	path = src/core/acore-solid
+	url = https://github.com/ahmet-cetinkaya/acore-astro.git

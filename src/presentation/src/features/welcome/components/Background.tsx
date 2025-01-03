@@ -118,7 +118,7 @@ export default function Background() {
 
       <Show when={linkedInLink()}>
         <Link
-          class="fixed top-14 right-8 w-fit"
+          class="fixed right-8 top-14 w-fit"
           href={linkedInLink()!.url}
           target="_blank"
           ariaLabel={translate(TranslationKeys.links_linkedin)}

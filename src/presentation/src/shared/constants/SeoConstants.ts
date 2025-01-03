@@ -1,5 +1,4 @@
 import type ITechnologiesService from "~/application/features/technologies/services/abstraction/ITechnologiesService";
-import type { Twitter } from "../../shared/components/Metadata.astro";
 
 export default class SeoConstants {
   static readonly DEFAULT_TITLE = "Ahmet Çetinkaya";
@@ -34,13 +33,6 @@ export default class SeoConstants {
     const technologies = await technologiesService.getAll();
     return [...this.DEFAULT_TAGS, ...technologies.map((t) => t.name)];
   }
-
-  static readonly DEFAULT_TWITTER: Twitter = {
-    card: "summary",
-    creator: "@ahmetctnky_dev",
-    site: "@ahmetctnky_dev",
-    title: "Ahmet Çetinkaya",
-  };
 
   static readonly DEFAULT_AUTHOR_META = {
     name: "Ahmet Çetinkaya",

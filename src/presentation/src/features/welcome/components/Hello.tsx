@@ -9,7 +9,7 @@ export default function Hello() {
   const translate = useI18n();
 
   return (
-    <div class="flex size-full flex-col md:flex-row px-8 py-4">
+    <div class="flex size-full flex-col px-8 py-4 md:flex-row">
       <div class="basis-1/2">
         <ThreeDimensionalModel model={Icons.computer} />
       </div>

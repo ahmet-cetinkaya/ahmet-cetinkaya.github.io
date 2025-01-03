@@ -92,7 +92,7 @@ export default function Technologies() {
           </p>
         </div>
 
-        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode}/>
+        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode} />
       </Show>
     </div>
   );

@@ -56,7 +56,7 @@ export default function EmailApp() {
 
         <EmailForm />
 
-        <div class="flex items-center justify-end pe-4 gap-4">
+        <div class="flex items-center justify-end gap-4 pe-4">
           <Show when={isSended()}>{translate(TranslationKeys.apps_email_redirected_your_email_app)}</Show>
           <Button
             type="button"

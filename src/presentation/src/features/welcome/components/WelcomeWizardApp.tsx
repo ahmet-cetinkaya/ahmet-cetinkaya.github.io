@@ -173,7 +173,7 @@ export default function WelcomeWizardApp(props: Props) {
               <Button
                 variant="text"
                 class={mergeCls(
-                  "duration-3000 w-full rounded text-left hover:bg-white hover:text-surface-500 transition-colors duration-200 ease-in-out",
+                  "duration-3000 w-full rounded text-left transition-colors duration-200 ease-in-out hover:bg-white hover:text-surface-500",
                   {
                     "bg-surface-400 font-bold": currentPart() === index,
                   },

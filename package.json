@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "bun install && (cd src/presentation && bun install && cd ../..) && (cd src/core/acore-ts/ && bun install && cd ../..) && (cd src/core/acore-solidjs/ && bun install && cd ../..)",
+    "install-all": "bun install && find . -name 'package.json' ! -path '*/node_modules/*' -execdir bun install \\;",
     "lint": "eslint .",
     "start": "cd src/presentation && bun start"
   },

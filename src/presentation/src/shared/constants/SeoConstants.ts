@@ -28,6 +28,7 @@ export default class SeoConstants {
     "Technology",
     "Web Development",
   ];
+  static DEFAULT_FAVICON_SVG: string = "/favicon.svg";
 
   static async getExtendedDefaultTags(technologiesService: ITechnologiesService): Promise<string[]> {
     const technologies = await technologiesService.getAll();

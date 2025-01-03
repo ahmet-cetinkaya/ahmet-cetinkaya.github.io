@@ -1,65 +1,40 @@
 ---
 import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SplashLayout from "../../shared/layouts/SplashLayout.astro";
-import Icon from "../../shared/components/Icon";
+import SplashLayout from "~/presentation/src/shared/layouts/SplashLayout.astro";
+import Icon from "~/presentation/src/shared/components/Icon";
 import Icons from "~/domain/data/Icons";
-import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
 import Container from "~/presentation/Container";
-import SeoConstants from "../../shared/constants/SeoConstants";
-import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
-import BootPageOGImage from "../_assets/images/power-page-og-image.webp";
+import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
+import BootPageOGImage from "~/presentation/src/pages/_assets/images/power-page-og-image.webp";
 
-const i18n: II18n = Container.instance.i18n;
+const i18n = Container.instance.i18n;
 const translate = useI18nStatic(Astro.url);
 const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
 
-const title = `${translate(TranslationKeys.system_booting)} | Ahmet Çetinkaya`;
+const title = `${translate(TranslationKeys.system_booting)} | ${SeoConstants.DEFAULT_TITLE}`;
 const description = translate(TranslationKeys.system_booting_desc);
-const tags = ArrayExtensions.distinct([...SeoConstants.DEFAULT_TAGS, translate(TranslationKeys.system_booting)]);
-
 const ogImageAlt = translate(TranslationKeys.apps_welcome_about_me_profile_image_alt);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  image: BootPageOGImage.src,
+};
 ---
 
 <SplashLayout
-  metaData={{
+  metadata={{
     title,
     description,
-    canonical: Astro.url.pathname,
-    openGraph: {
-      basic: {
-        title,
-        type: "website",
-        image: BootPageOGImage.src,
-        url: Astro.url.href,
-      },
-      optional: {
-        description: description,
-        locale: currentLocale,
-        siteName: SeoConstants.DEFAULT_TITLE,
-      },
-      image: {
-        alt: ogImageAlt,
-        width: BootPageOGImage.width,
-        height: BootPageOGImage.height,
-        type: `image/${BootPageOGImage.format}`,
-      },
+    locale: currentLocale,
+    ogImage: {
+      image: BootPageOGImage,
+      alt: ogImageAlt,
     },
-    twitter: {
-      ...SeoConstants.DEFAULT_TWITTER,
-      description,
-      image: BootPageOGImage.src,
-      imageAlt: ogImageAlt,
-    },
-    extend: {
-      meta: [
-        SeoConstants.DEFAULT_AUTHOR_META,
-        {
-          name: "keywords",
-          content: tags.join(", "),
-        },
-      ],
-    },
+    structuredData,
   }}
 >
   <div class="font-mono flex size-full items-center justify-center text-white">

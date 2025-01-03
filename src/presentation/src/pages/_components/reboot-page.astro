@@ -1,70 +1,40 @@
 ---
 import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SplashLayout from "../../shared/layouts/SplashLayout.astro";
-import Icon from "../../shared/components/Icon";
+import SplashLayout from "~/presentation/src/shared/layouts/SplashLayout.astro";
+import Icon from "~/presentation/src/shared/components/Icon";
 import Icons from "~/domain/data/Icons";
 import Container from "~/presentation/Container";
-import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
-import SeoConstants from "../../shared/constants/SeoConstants";
-import RebootPageOGImage from "../_assets/images/reboot-page-og-image.webp";
+import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
+import RebootPageOGImage from "~/presentation/src/pages/_assets/images/reboot-page-og-image.webp";
 
-const i18n: II18n = Container.instance.i18n;
+const i18n = Container.instance.i18n;
 const translate = useI18nStatic(Astro.url);
 const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
 
 const title = `${translate(TranslationKeys.system_rebooting)} | ${SeoConstants.DEFAULT_TITLE}`;
 const description = translate(TranslationKeys.system_rebooting_desc);
-const tags = [
-  ...SeoConstants.DEFAULT_TAGS,
-  translate(TranslationKeys.common_system),
-  translate(TranslationKeys.system_reboot),
-  translate(TranslationKeys.system_rebooting),
-  translate(TranslationKeys.system_power),
-  "loading",
-];
-
 const ogImageAlt = translate(TranslationKeys.system_rebooting);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  image: RebootPageOGImage.src,
+};
 ---
 
 <SplashLayout
-  metaData={{
+  metadata={{
     title,
     description,
-    canonical: Astro.url.pathname,
-    openGraph: {
-      basic: {
-        title: title,
-        type: "website",
-        image: RebootPageOGImage.src,
-        url: Astro.url.href,
-      },
-      optional: {
-        description,
-        locale: currentLocale,
-        siteName: SeoConstants.DEFAULT_TITLE,
-      },
-      image: {
-        alt: ogImageAlt,
-        width: RebootPageOGImage.width,
-        height: RebootPageOGImage.height,
-        type: `image/${RebootPageOGImage.format}`,
-      },
+    locale: currentLocale,
+    ogImage: {
+      image: RebootPageOGImage,
+      alt: ogImageAlt,
     },
-    twitter: {
-      ...SeoConstants.DEFAULT_TWITTER,
-      description,
-      image: RebootPageOGImage.src,
-    },
-    extend: {
-      meta: [
-        SeoConstants.DEFAULT_AUTHOR_META,
-        {
-          name: "keywords",
-          content: tags.join(", "),
-        },
-      ],
-    },
+    structuredData,
   }}
 >
   <div class="font-mono flex size-full items-center justify-center text-white">
@@ -76,7 +46,7 @@ const ogImageAlt = translate(TranslationKeys.system_rebooting);
     </span>
   </div>
 
-  <div id="blackScreen" class="absolute left-0 top-0 hidden h-svh w-svh bg-black"></div>
+  <div id="blackScreen" class="w-svh absolute left-0 top-0 hidden h-svh bg-black"></div>
 </SplashLayout>
 
 <script define:vars={{ currentLocale, Locales }}>

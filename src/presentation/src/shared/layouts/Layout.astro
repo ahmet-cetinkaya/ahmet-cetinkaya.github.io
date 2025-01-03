@@ -1,42 +1,65 @@
 ---
-import { ViewTransitions } from "astro:transitions";
-import CommonMeta from "../components/CommonMeta.astro";
-import Favicons from "../components/Favicons.astro";
-import Metadata, { type Props as MetadataProps } from "../components/Metadata.astro";
-import SiteVerification from "../components/SiteVerification.astro";
+import { ClientRouter } from "astro:transitions";
+import Metadata, { type Props as MetadataProps } from "~/core/acore-astro/src/components/Metadata.astro";
 import Container from "~/presentation/Container";
 import { locales } from "~/domain/data/Translations";
 import "@fontsource/oxanium";
 import Preload from "../components/Preload.astro";
+import SeoConstants from "../constants/SeoConstants";
+import { getImage } from "astro:assets";
 
 export type Props = {
-  metaData: MetadataProps;
+  metadata: Partial<MetadataProps>;
 };
 
+const props = Astro.props;
 const i18n = Container.instance.i18n;
 const language = i18n.getLocaleFromUrl(Astro.url, locales[0]);
+
+const faviconSvg = await getImage({
+  src: "/favicon.svg",
+  alt: "Favicon",
+  width: 512,
+  height: 512,
+  sizes: "512x512",
+  formats: ["svg"],
+});
+
+const metadata: MetadataProps = {
+  title: SeoConstants.DEFAULT_TITLE,
+  site: Astro.site!.toString(),
+  author: SeoConstants.DEFAULT_AUTHOR_META.content,
+  favicon: {
+    image: {
+      src: faviconSvg.src,
+      width: faviconSvg.options.width!,
+      height: faviconSvg.options.height!,
+      format: "svg",
+    },
+    maskColor: "#8D46E7",
+  },
+  themeColor: "#F4D03F",
+  extend: {
+    meta: [
+      {
+        name: "color-scheme",
+        content: "dark light",
+      },
+    ],
+  },
+  ...props.metadata,
+};
 ---
 
 <!doctype html>
 <html lang={language} dir="ltr">
   <head>
-    <CommonMeta />
-    <Favicons />
-
-    <Metadata {...Astro.props.metaData} />
-    <SiteVerification />
-
+    <Metadata {...metadata} />
     <Preload />
-    <ViewTransitions fallback="swap" />
+    <ClientRouter />
   </head>
 
   <body class="tracking-tight antialiased">
     <slot />
-
-    <style is:global>
-      img {
-        content-visibility: auto;
-      }
-    </style>
   </body>
 </html>

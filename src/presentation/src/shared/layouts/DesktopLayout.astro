@@ -8,8 +8,8 @@ import Layout, { type Props as LayoutProps } from "./Layout.astro";
 export type Props = LayoutProps;
 ---
 
-<Layout metaData={Astro.props.metaData}>
-  <div class="flex h-svh w-svh flex-col overflow-hidden">
+<Layout metadata={Astro.props.metadata}>
+  <div class="w-svh flex h-svh flex-col overflow-hidden">
     <Taskbar />
 
     <main class="flex-grow">

@@ -4,7 +4,6 @@ import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
 import SplashLayout from "~/presentation/src/shared/layouts/SplashLayout.astro";
 import Container from "~/presentation/Container";
 import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
-import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
 import NotFoundPageOGImage from "~/presentation/src/pages/_assets/images/not-found-page-og-image.webp";
 
 const i18n = Container.instance.i18n;
@@ -13,54 +12,29 @@ const currentLocale = i18n.getLocaleFromUrl(Astro.url, Locales.en);
 
 const title = `${translate(TranslationKeys.system_not_found)} | ${SeoConstants.DEFAULT_TITLE}`;
 const description = translate(TranslationKeys.system_not_found_desc);
-const tags = ArrayExtensions.distinct([
-  ...SeoConstants.DEFAULT_TAGS,
-  translate(TranslationKeys.system_not_found),
-  "404",
-  "not found",
-  "error",
-]);
-
 const ogImageAlt = translate(TranslationKeys.system_not_found);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  image: NotFoundPageOGImage.src,
+};
 ---
 
 <SplashLayout
-  metaData={{
+  metadata={{
     title,
     description,
-    canonical: Astro.url.pathname,
-    openGraph: {
-      basic: {
-        title,
-        type: "website",
-        image: NotFoundPageOGImage.src,
-        url: Astro.url.href,
-      },
-      optional: {
-        description,
-        locale: currentLocale,
-        siteName: SeoConstants.DEFAULT_TITLE,
-      },
-      image: {
-        alt: ogImageAlt,
-        width: NotFoundPageOGImage.width,
-        height: NotFoundPageOGImage.height,
-        type: `image/${NotFoundPageOGImage.format}`,
-      },
+    locale: currentLocale,
+    ogImage: {
+      image: NotFoundPageOGImage,
+      alt: ogImageAlt,
     },
-    twitter: {
-      ...SeoConstants.DEFAULT_TWITTER,
-      description,
-      image: NotFoundPageOGImage.src,
-      imageAlt: ogImageAlt,
-    },
+    structuredData,
     extend: {
       meta: [
-        SeoConstants.DEFAULT_AUTHOR_META,
-        {
-          name: "keywords",
-          content: tags.join(", "),
-        },
         {
           name: "robots",
           content: "noindex",
@@ -77,7 +51,7 @@ const ogImageAlt = translate(TranslationKeys.system_not_found);
     </span>
   </div>
 
-  <div id="blackScreen" class="absolute left-0 top-0 hidden h-svh w-svh bg-black"></div>
+  <div id="blackScreen" class="w-svh absolute left-0 top-0 hidden h-svh bg-black"></div>
 </SplashLayout>
 
 <script>

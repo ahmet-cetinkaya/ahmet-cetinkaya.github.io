@@ -19,6 +19,7 @@
     "@astrojs/tailwind": "^5.1.4",
     "@fontsource/oxanium": "^5.1.1",
     "astro": "^4.16.18",
+    "astro-compressor": "^1.0.0",
     "astro-seo": "^0.8.4",
     "js-dos": "^8.3.10",
     "solid-js": "^1.9.3",

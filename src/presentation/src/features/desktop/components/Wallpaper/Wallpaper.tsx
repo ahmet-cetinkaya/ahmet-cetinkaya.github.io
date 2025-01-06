@@ -42,37 +42,33 @@ export default function Wallpaper(props: Props) {
   return (
     <div class={mergeCls("relative size-full overflow-hidden", props.class)}>
       <Image
-        class="absolute -z-50 size-full object-cover object-center"
         src={BackgroundPart2.src}
-        srcset={`${BackgroundPart2Small.src} 720w,
-                 ${BackgroundPart2Medium.src} 1080w,
-                 ${BackgroundPart2.src} 2000w`}
-        sizes="(max-width: 720px) 720px,
-               (max-width: 1080px) 1080px,
-               2000px"
-        width="720"
-        height="auto"
-        loading="lazy"
+        loading="eager"
+        fetchpriority="high"
         decoding="async"
         alt="Background part 2"
+        sources={[
+          { media: "(max-width: 720px)", srcset: BackgroundPart2Small.src },
+          { media: "(max-width: 1080px)", srcset: BackgroundPart2Medium.src },
+          { media: "(min-width: 1081px)", srcset: BackgroundPart2.src },
+        ]}
+        class="absolute -z-50 size-full object-cover object-center"
         style={{
           transform: `translate(${backgroundPosition()?.left ?? 0}px, ${backgroundPosition()?.top ?? 0}px) scale(1.02)`,
         }}
       />
       <Image
-        class="absolute top-96 -z-40 size-full object-cover object-top"
         src={BackgroundPart1.src}
-        srcset={`${BackgroundPart1Small.src} 720w,
-                 ${BackgroundPart1Medium.src} 1080w,
-                 ${BackgroundPart1.src} 2000w`}
-        sizes="(max-width: 720px) 720px,
-               (max-width: 1080px) 1080px,
-               2000px"
-        width="720"
-        height="auto"
-        loading="lazy"
+        loading="eager"
+        fetchpriority="high"
         decoding="async"
         alt="Background part 1"
+        class="absolute top-96 -z-40 size-full object-cover object-top"
+        sources={[
+          { media: "(max-width: 720px)", srcset: BackgroundPart1Small.src },
+          { media: "(max-width: 1080px)", srcset: BackgroundPart1Medium.src },
+          { media: "(min-width: 1081px)", srcset: BackgroundPart1.src },
+        ]}
       />
     </div>
   );

@@ -7,3 +7,6 @@
 [submodule "src/presentation/src/core/acore-solidjs"]
 	path = src/presentation/src/core/acore-solidjs
 	url = https://github.com/ahmet-cetinkaya/acore-solidjs.git
+[submodule "src/presentation/src/core/acore-ts"]
+	path = src/presentation/src/core/acore-ts
+	url = https://github.com/ahmet-cetinkaya/acore-ts.git

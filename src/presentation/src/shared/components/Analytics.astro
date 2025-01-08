@@ -7,10 +7,13 @@ const props = Astro.props;
 ---
 
 <!-- Analytics -->
-<script defer src="https://analytics.ahmetcetinkaya.me/script.js" data-website-id="9855347d-e4c0-47b0-acdd-a5d5119a106a"
-></script>
+<script
+  is:inline
+  defer
+  src="https://analytics.ahmetcetinkaya.me/script.js"
+  data-website-id="9855347d-e4c0-47b0-acdd-a5d5119a106a"></script>
 
-<script define:vars={{ pathName: props.pathName, title: props.title }}>
+<script is:inline define:vars={{ pathName: props.pathName, title: props.title }}>
   document.addEventListener("astro:after-swap", () =>
     umami.track((props) => ({ ...props, url: pathName, title: title })),
   );

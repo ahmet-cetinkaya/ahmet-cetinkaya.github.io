@@ -7,5 +7,6 @@
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
-  }
+  },
+  "exclude": ["dist", "public"]
 }

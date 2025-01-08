@@ -17,7 +17,7 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
   </span>
 </div>
 
-<script define:vars={{ Times, locale }}>
+<script is:inline define:vars={{ Times, locale }}>
   document.addEventListener("astro:after-swap", onMount);
 
   function onMount() {

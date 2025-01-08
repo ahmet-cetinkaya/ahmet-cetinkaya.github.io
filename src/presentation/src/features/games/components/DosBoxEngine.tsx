@@ -1,5 +1,5 @@
 import { onCleanup } from "solid-js";
-import JSDosWrapper from "~/core/acore-ts/jsdos/JSDosWrapper";
+import JSDosWrapper from "~/presentation/src/core/acore-ts/jsdos/JSDosWrapper";
 import { Apps } from "~/domain/data/Apps";
 import { Paths } from "~/domain/data/Directories";
 
@@ -10,8 +10,8 @@ type Props = {
 export default function DosBoxEngine(props: Props) {
   let dos: JSDosWrapper;
 
-  function onContainerMount(element: HTMLDivElement) {
-    dos = new JSDosWrapper(element, {
+  async function onContainerMount(element: HTMLDivElement) {
+    dos = await JSDosWrapper.create(element, {
       url: getAppImagePath(),
       autoStart: true,
       volume: 0.3,

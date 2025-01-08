@@ -1,7 +1,7 @@
 import { navigate } from "astro:transitions/client";
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js";
-import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import ArrayExtensions from "~/presentation/src/core/acore-ts/data/array/ArrayExtensions";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Window from "~/domain/models/Window";

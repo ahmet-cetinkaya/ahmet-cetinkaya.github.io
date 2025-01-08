@@ -1,5 +1,5 @@
 import { createResource, Index } from "solid-js";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Link from "~/presentation/src/shared/components/ui/Link";

@@ -1,7 +1,7 @@
 import { navigate } from "astro:transitions/client";
 import { createResource, createSignal } from "solid-js";
-import Position from "~/core/acore-ts/ui/models/Position";
-import type Size from "~/core/acore-ts/ui/models/Size";
+import Position from "~/presentation/src/core/acore-ts/ui/models/Position";
+import type Size from "~/presentation/src/core/acore-ts/ui/models/Size";
 import Icons from "~/domain/data/Icons";
 import { TranslationKeys } from "~/domain/data/Translations";
 import WindowModel from "~/domain/models/Window";
@@ -11,7 +11,7 @@ import Button from "~/presentation/src/shared/components/ui/Button";
 import Modal from "~/presentation/src/core/acore-solidjs/ui/components/Modal";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "./AppContent";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 
 type Props = {
   window: WindowModel;

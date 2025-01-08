@@ -1,4 +1,4 @@
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import { TranslationKeys } from "~/domain/data/Translations";
 import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
 import Title from "~/presentation/src/shared/components/ui/Title";

@@ -1,5 +1,5 @@
 import { createSignal, For, createEffect, createMemo } from "solid-js";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import { TranslationKeys } from "~/domain/data/Translations";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import { Paths } from "~/domain/data/Directories";
@@ -12,7 +12,7 @@ import CdCommand from "~/application/features/system/commands/CdCommand";
 import EchoCommand from "~/application/features/system/commands/EchoCommand";
 import LsCommand from "~/application/features/system/commands/LsCommand";
 import Container from "~/presentation/Container";
-import PathUtils from "~/core/acore-ts/data/path/PathUtils";
+import PathUtils from "~/presentation/src/core/acore-ts/data/path/PathUtils";
 import appCommands from "~/presentation/src/shared/constants/AppCommands";
 import MkdirCommand from "~/application/features/system/commands/MkdirCommand";
 import TouchCommand from "~/application/features/system/commands/TouchCommand";

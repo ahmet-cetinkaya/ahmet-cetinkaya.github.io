@@ -1,7 +1,7 @@
 import { createResource, createSignal, onCleanup, onMount, Show } from "solid-js";
 import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
 import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
-import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
+import CryptoExtensions from "~/presentation/src/core/acore-ts/crypto/CryptoExtensions";
 import { Apps } from "~/domain/data/Apps";
 import Icons from "~/domain/data/Icons";
 import { Locales, TranslationKeys } from "~/domain/data/Translations";

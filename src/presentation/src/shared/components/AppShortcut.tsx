@@ -1,5 +1,5 @@
 import type { JSX } from "solid-js/jsx-runtime";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import type { TranslationKey } from "~/domain/data/Translations";
 import { useI18n } from "../utils/i18nTranslate";
 import Link from "./ui/Link";

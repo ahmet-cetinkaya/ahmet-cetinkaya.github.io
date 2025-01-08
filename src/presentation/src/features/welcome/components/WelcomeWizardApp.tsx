@@ -1,6 +1,6 @@
 import { createSignal, Index, Show } from "solid-js";
 import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
-import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
 import { Apps } from "~/domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";

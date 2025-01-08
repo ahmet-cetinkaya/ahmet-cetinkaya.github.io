@@ -4,7 +4,7 @@ import Icons from "~/domain/data/Icons";
 import { Links } from "~/domain/data/Links";
 import { TranslationKeys } from "~/domain/data/Translations";
 import Container from "~/presentation/Container";
-import HtmlEditor from "~/core/acore-solidjs/ui/components/HtmlEditor";
+import HtmlEditor from "~/presentation/src/core/acore-solidjs/ui/components/HtmlEditor";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
 import Input from "~/presentation/src/shared/components/ui/Input";

@@ -3,8 +3,8 @@ import type Icons from "~/domain/data/Icons";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import { useI18n } from "../utils/i18nTranslate";
 import Icon from "./Icon";
-import LessViewContent from "~/core/acore-solidjs/ui/components/LessViewContent";
-import MarkdownParagraph from "~/core/acore-solidjs/ui/components/MarkdownParagraph";
+import LessViewContent from "~/presentation/src/core/acore-solidjs/ui/components/LessViewContent";
+import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
 import Title from "./ui/Title";
 import Button from "./ui/Button";
 

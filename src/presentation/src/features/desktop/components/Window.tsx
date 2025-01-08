@@ -8,7 +8,7 @@ import WindowModel from "~/domain/models/Window";
 import Container from "~/presentation/Container";
 import Icon from "~/presentation/src/shared/components/Icon";
 import Button from "~/presentation/src/shared/components/ui/Button";
-import Modal from "~/core/acore-solidjs/ui/components/Modal";
+import Modal from "~/presentation/src/core/acore-solidjs/ui/components/Modal";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 import AppContent from "./AppContent";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";

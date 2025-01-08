@@ -15,6 +15,6 @@ export default [
     },
   },
   {
-    ignores: ["src/presentation/public/scripts/**", "src/presentation/dist/**"],
+    ignores: ["src/presentation/public/home", "src/presentation/dist", "src/presentation/.astro"],
   },
 ];

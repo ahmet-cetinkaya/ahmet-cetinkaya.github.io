@@ -1,6 +1,6 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
 import Container from "~/presentation/Container";
-import Key from "~/core/acore-solidjs/ui/components/Key";
+import Key from "~/presentation/src/core/acore-solidjs/ui/components/Key";
 import Window from "./Window";
 import WindowModel from "~/domain/models/Window";
 import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";

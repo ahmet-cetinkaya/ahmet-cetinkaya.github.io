@@ -1,5 +1,5 @@
 import { AmbientLight, PointLight, type Scene } from "three";
-import ThreeDimensionModelViewer from "~/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
+import ThreeDimensionModelViewer from "~/presentation/src/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
 import LoadingModelPreview from "./Loading3DModelPreview";
 import { TranslationKeys } from "~/domain/data/Translations";
 import ComputerModelPreview from "./assets/images/retro-computer-model-preview.webp";

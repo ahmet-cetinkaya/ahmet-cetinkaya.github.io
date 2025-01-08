@@ -2,7 +2,7 @@ import { Scene, DirectionalLight, SpotLight } from "three";
 import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "~/domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
-import ThreeDimensionModelViewer from "~/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
+import ThreeDimensionModelViewer from "~/presentation/src/core/acore-solidjs/ui/components/ThreeDimensionModelViewer";
 import TerminalModelPreview from "./assets/images/terminal-model-preview.webp";
 import { DRACO_DIRECTORY } from "./constants/draco";
 

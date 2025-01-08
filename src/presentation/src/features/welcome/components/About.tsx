@@ -1,6 +1,6 @@
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import { TranslationKeys } from "~/domain/data/Translations";
-import MarkdownParagraph from "~/core/acore-solidjs/ui/components/MarkdownParagraph";
+import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
 import Title from "~/presentation/src/shared/components/ui/Title";
 import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
 

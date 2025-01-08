@@ -3,8 +3,9 @@
   "version": "3.0.0",
   "type": "module",
   "scripts": {
+    "build": "cd src/presentation && bun run build",
     "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "bun install && find . -name 'package.json' ! -path '*/node_modules/*' -execdir bun install \\;",
+    "install-all": "bun install && (cd src/presentation && bun install)",
     "lint": "eslint .",
     "start": "cd src/presentation && bun start"
   },

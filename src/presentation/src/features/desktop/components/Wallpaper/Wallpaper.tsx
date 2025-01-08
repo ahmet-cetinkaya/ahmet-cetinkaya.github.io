@@ -2,7 +2,7 @@ import { createSignal, onCleanup, onMount } from "solid-js";
 import AnimationHelper from "~/core/acore-ts/ui/animation/AnimationHelper";
 import { mergeCls } from "~/core/acore-ts/ui/ClassHelpers";
 import Position from "~/core/acore-ts/ui/models/Position";
-import Image from "~/core/acore-solidjs/ui/components/Image";
+import Image from "~/presentation/src/core/acore-solidjs/ui/components/Image";
 import BackgroundPart1 from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized.webp";
 import BackgroundPart1Medium from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized-1080.webp";
 import BackgroundPart1Small from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized-720.webp";

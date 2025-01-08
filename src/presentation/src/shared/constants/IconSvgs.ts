@@ -1,4 +1,4 @@
-import ACoreIconSvgs from "~/core/acore-solidjs/ui/constants/IconSvgs";
+import ACoreIconSvgs from "~/presentation/src/core/acore-solidjs/ui/constants/IconSvgs";
 import Icons from "~/domain/data/Icons";
 
 const IconSvgs: Record<Icons, string> = {

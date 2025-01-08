@@ -1,0 +1,31 @@
+---
+import type Icons from "~/domain/data/Icons";
+import Layout, { type Props as LayoutProps } from "./Layout.astro";
+import Icon from "../components/Icon";
+
+export interface Props extends LayoutProps {
+  title?: string;
+  titleIcon?: Icons;
+  titleIconSpin?: boolean;
+  subtitle?: string;
+}
+const props = Astro.props;
+---
+
+<Layout metadata={props.metadata}>
+  <main class="w-svh h-svh select-none bg-surface-500 py-10 text-white">
+    <span class="flex size-full select-none flex-col border-y-2 border-surface-400 p-4">
+      <div class="font-mono flex size-full items-center justify-center text-white">
+        <span class="h-2/3 w-2/3">
+          <h1 class="text-8xl font-bold">
+            {props.titleIcon && <Icon icon={props.titleIcon} isSpin={props.titleIconSpin} class="-ms-20" />}
+            {props.title}
+          </h1>
+          {props.subtitle && <h2 class="mt-4 text-6xl font-bold">{props.subtitle}</h2>}
+          <pre id="logs" class="mt-4 h-2/3 overflow-y-auto whitespace-pre-wrap"></pre>
+          <slot />
+        </span>
+      </div>
+    </span>
+  </main>
+</Layout>

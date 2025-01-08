@@ -19,19 +19,19 @@ export default function SocialButtons(props: Props) {
   }
 
   return (
-    <div class={mergeCls("w-full flex gap-4 overflow-scroll", props.class)}>
+    <div class={mergeCls("flex w-full gap-4 overflow-scroll", props.class)}>
       <Index each={socialLinks()}>
-      {(socialLink) => (
-        <Link
-        href={socialLink().url}
-        target="_blank"
-        rel="noopener noreferrer"
-        ariaLabel={socialLink().name}
-        variant="text"
-        >
-        <Icon icon={socialLink().icon} class="size-6" fillColor="white" />
-        </Link>
-      )}
+        {(socialLink) => (
+          <Link
+            href={socialLink().url}
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel={socialLink().name}
+            variant="text"
+          >
+            <Icon icon={socialLink().icon} class="size-6" fillColor="white" />
+          </Link>
+        )}
       </Index>
     </div>
   );

@@ -1,8 +1,7 @@
 ---
 import { Locales, TranslationKeys } from "~/domain/data/Translations";
 import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SplashLayout from "~/presentation/src/shared/layouts/SplashLayout.astro";
-import Icon from "~/presentation/src/shared/components/Icon";
+import SystemManagerLayout from "~/presentation/src/shared/layouts/SystemManagerLayout.astro";
 import Icons from "~/domain/data/Icons";
 import Container from "~/presentation/Container";
 import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
@@ -25,7 +24,7 @@ const structuredData = {
 };
 ---
 
-<SplashLayout
+<SystemManagerLayout
   metadata={{
     title,
     description,
@@ -36,61 +35,56 @@ const structuredData = {
     },
     structuredData,
   }}
+  subtitle={translate(TranslationKeys.system_shutting_down)}
+  titleIcon={Icons.spinner}
+  titleIconSpin={true}
 >
-  <div class="font-mono flex size-full items-center justify-center text-white">
-    <span class="h-2/3 w-2/3">
-      <h1 class="-ms-20 text-8xl font-bold"><Icon icon={Icons.spinner} isSpin /></h1>
-      <h2 class="text-6xl font-bold">{translate(TranslationKeys.system_shutting_down)}</h2>
-      <p class="text-lg">{translate(TranslationKeys.system_shutting_down_desc)}</p>
-      <pre id="logs" class="mt-6 whitespace-pre-wrap"></pre>
-    </span>
-  </div>
-</SplashLayout>
+  <script>
+    const TYPING_DELAY = 50;
+    const INITIAL_DELAY = 500;
+    const NAVIGATION_DELAY = 1000;
 
-<script>
-  const TYPING_DELAY = 50;
-  const INITIAL_DELAY = 500;
-  const NAVIGATION_DELAY = 1000;
+    const logsElement = document.getElementById("logs")!;
 
-  const logsElement = document.getElementById("logs")!;
+    const shutdownMessages = [
+      "Stopped target Graphical Interface.",
+      "Stopped target Multi-User System.",
+      "Stopped target Login Prompts.",
+      "Stopped target Timers.",
+      "Stopped target Sockets.",
+      "Stopped target Basic System.",
+      "Stopped target Paths.",
+      "Stopped target Slices.",
+      "Stopped target Local File Systems.",
+      "Reached target Shutdown.",
+      "Stopped Network Manager.",
+      "Stopped D-Bus System Message Bus.",
+      "Saving user data...",
+      "Closing database connections...",
+      "Clearing session data...",
+      "Stopping background jobs...",
+      "Logging out users...",
+      "Finalizing shutdown procedures...",
+    ];
 
-  const shutdownMessages = [
-    "Stopped target Graphical Interface.",
-    "Stopped target Multi-User System.",
-    "Stopped target Login Prompts.",
-    "Stopped target Timers.",
-    "Stopped target Sockets.",
-    "Stopped target Basic System.",
-    "Stopped target Paths.",
-    "Stopped target Slices.",
-    "Stopped target Local File Systems.",
-    "Reached target Shutdown.",
-    "Stopped Network Manager.",
-    "Stopped D-Bus System Message Bus.",
-    "Saving user data...",
-    "Closing database connections...",
-    "Clearing session data...",
-    "Stopping background jobs...",
-    "Logging out users...",
-    "Finalizing shutdown procedures...",
-  ];
+    setTimeout(() => displayMessages(), INITIAL_DELAY);
 
-  setTimeout(() => displayMessages(), INITIAL_DELAY);
-
-  function displayMessages(index = 0) {
-    if (index < shutdownMessages.length) {
-      for (let line of shutdownMessages[index].split("\n")) {
-        logsElement.insertAdjacentHTML("beforeend", createMessageLine(line));
+    function displayMessages(index = 0) {
+      if (index < shutdownMessages.length) {
+        for (let line of shutdownMessages[index].split("\n")) {
+          logsElement.insertAdjacentHTML("beforeend", createMessageLine(line));
+          logsElement.scrollTop = logsElement.scrollHeight;
+        }
+        setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
+      } else {
+        setTimeout(() => {
+          window.location.href = "about:blank";
+        }, NAVIGATION_DELAY);
       }
-      setTimeout(() => displayMessages(index + 1), TYPING_DELAY);
-    } else {
-      setTimeout(() => {
-        window.location.href = "about:blank";
-      }, NAVIGATION_DELAY);
     }
-  }
 
-  function createMessageLine(message: string) {
-    return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
-  }
-</script>
+    function createMessageLine(message: string) {
+      return `[ <span class="text-green-500">OK</span> ] ${message}\n`;
+    }
+  </script>
+</SystemManagerLayout>

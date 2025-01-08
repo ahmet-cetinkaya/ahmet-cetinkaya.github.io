@@ -1,9 +1,9 @@
 [submodule "src/core/acore-ts"]
 	path = src/core/acore-ts
 	url = https://github.com/ahmet-cetinkaya/acore-ts.git
-[submodule "src/core/acore-solidjs"]
-	path = src/core/acore-solidjs
-	url = https://github.com/ahmet-cetinkaya/acore-solidjs.git
-[submodule "src/core/acore-astro"]
-	path = src/core/acore-astro
+[submodule "src/presentation/src/core/acore-astro"]
+	path = src/presentation/src/core/acore-astro
 	url = https://github.com/ahmet-cetinkaya/acore-astro.git
+[submodule "src/presentation/src/core/acore-solidjs"]
+	path = src/presentation/src/core/acore-solidjs
+	url = https://github.com/ahmet-cetinkaya/acore-solidjs.git

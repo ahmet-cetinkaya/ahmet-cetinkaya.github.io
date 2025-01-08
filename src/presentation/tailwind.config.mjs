@@ -44,8 +44,8 @@ export default {
       sans: ["Oxanium", "monospace"],
     },
     boxShadow: {
-      primary: "4px 4px 0px rgba(244, 208, 63, 0.4)",
-      secondary: "6px 6px 0px rgba(56, 42, 110, 0.6)",
+      primary: "4px 4px 0px rgba(244, 208, 63, 0.5)",
+      secondary: "6px 6px 0px rgba(56, 42, 110, 0.8)",
       surface: "4px 4px 0px #706f70",
     },
     extend: {

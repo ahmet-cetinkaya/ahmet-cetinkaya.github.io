@@ -113,8 +113,8 @@ export default function Window(props: Props) {
           <Icon icon={Icons.minimize} class="size-4" />
         </Button>
       }
-      maximizeOffset={{ top: 72, left: 10, right: 10, bottom: 16 }}
-      dragOffset={{ top: 72 }}
+      maximizeOffset={{ top: 88, left: 16, right: 16, bottom: 16 }}
+      dragOffset={{ top: 88 }}
       onClick={onClick}
       onClose={onClose}
       onDragStart={onDragStart}

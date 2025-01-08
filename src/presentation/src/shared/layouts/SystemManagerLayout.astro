@@ -13,16 +13,16 @@ const props = Astro.props;
 ---
 
 <Layout metadata={props.metadata}>
-  <main class="w-svh h-svh select-none bg-surface-500 py-10 text-white">
-    <span class="flex size-full select-none flex-col border-y-2 border-surface-400 p-4">
+  <main class="w-svh h-svh select-none bg-surface-500 py-4 text-white md:py-10">
+    <span class="flex size-full select-none flex-col border-y-2 border-surface-400 p-2 md:p-4">
       <div class="font-mono flex size-full items-center justify-center text-white">
-        <span class="h-2/3 w-2/3">
-          <h1 class="text-8xl font-bold">
-            {props.titleIcon && <Icon icon={props.titleIcon} isSpin={props.titleIconSpin} class="-ms-20" />}
+        <span class="h-full w-full p-4 md:h-2/3 md:w-2/3 md:px-0">
+          <h1 class="flex items-center text-6xl font-bold md:text-9xl">
+            {props.titleIcon && <Icon icon={props.titleIcon} isSpin={props.titleIconSpin} class="size-16 md:size-32" />}
             {props.title}
           </h1>
-          {props.subtitle && <h2 class="mt-4 text-6xl font-bold">{props.subtitle}</h2>}
-          <pre id="logs" class="mt-4 h-2/3 overflow-y-auto whitespace-pre-wrap"></pre>
+          {props.subtitle && <h2 class="mt-2 text-2xl font-bold md:mt-4 md:text-6xl">{props.subtitle}</h2>}
+          <pre id="logs" class="mt-4 h-[60vh] overflow-y-auto whitespace-pre-wrap text-sm md:h-2/3 md:text-base"></pre>
           <slot />
         </span>
       </div>

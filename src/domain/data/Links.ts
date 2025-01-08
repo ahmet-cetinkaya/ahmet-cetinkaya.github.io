@@ -10,7 +10,7 @@ export enum Links {
   mastodon = 5,
   x = 6,
   instagram = 7,
-  donate,
+  donate = 8,
 }
 
 const LinksData = [

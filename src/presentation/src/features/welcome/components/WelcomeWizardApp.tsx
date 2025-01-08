@@ -126,7 +126,7 @@ export default function WelcomeWizardApp(props: Props) {
           <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
         </Show>
 
-        <footer class="mb-4 me-4 flex flex-row-reverse justify-start gap-2">
+        <footer class="mb-4 me-4 flex flex-row-reverse justify-start gap-2 pt-4">
           <Button
             onClick={onNextPart}
             class="w-16"

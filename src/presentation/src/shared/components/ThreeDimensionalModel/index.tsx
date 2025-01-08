@@ -9,16 +9,18 @@ type Props = {
   class?: string;
 };
 
+const MODEL_CLASSES = "flex items-center justify-center";
+
 export default function ThreeDimensionalModel(props: Props) {
   switch (props.model) {
     case Icons.computer:
-      return <Computer3DModel />;
+      return <Computer3DModel class={MODEL_CLASSES} />;
     case Icons.envelope:
-      return <Envelope3DModel />;
+      return <Envelope3DModel class={MODEL_CLASSES} />;
     case Icons.terminal:
-      return <Terminal3DModel />;
+      return <Terminal3DModel class={MODEL_CLASSES} />;
     case Icons.doom:
-      return <Doom3DModel />;
+      return <Doom3DModel class={MODEL_CLASSES} />;
     default:
       throw new Error("3D Model not found: " + props.model);
   }

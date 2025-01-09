@@ -11,7 +11,7 @@ export default function DosBoxEngine(props: Props) {
   let dos: JSDosWrapper;
 
   async function onContainerMount(element: HTMLDivElement) {
-    dos = await JSDosWrapper.create(element, {
+    dos = new JSDosWrapper(element, {
       url: getAppImagePath(),
       autoStart: true,
       volume: 0.3,

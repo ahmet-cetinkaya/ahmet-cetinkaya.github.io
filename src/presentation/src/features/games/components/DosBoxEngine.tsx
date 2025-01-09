@@ -38,6 +38,11 @@ export default function DosBoxEngine(props: Props) {
         .jsdos-rso .sidebar {
           display: none;
         }
+
+        .jsdos-rso .emulator-button-touch-zone {
+          border: none;
+          margin: 0 !important;
+        }
       `}</style>
     </div>
   );

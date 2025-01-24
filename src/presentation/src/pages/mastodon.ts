@@ -3,10 +3,11 @@ import LinksData, { Links } from "~/domain/data/Links";
 
 export const GET: APIRoute = () => {
   const targetUrl = LinksData.find((l) => l.id === Links.mastodon)!.url;
-  return new Response(null, {
-    status: 301,
+  return new Response("", {
+    status: 308,
     headers: {
-      Location: targetUrl
+      Location: targetUrl,
+      'Content-Type': 'text/plain'
     }
   });
 };

@@ -61,6 +61,32 @@ const metadata: MetadataProps = {
     <Preload />
     <ClientRouter />
     <Analytics title={metadata.title} pathName={Astro.url.pathname} />
+    <style is:global>
+      * {
+        scrollbar-color: #f4d03f transparent;
+        scrollbar-width: auto;
+      }
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: #f4d03f;
+        border: 4px solid transparent;
+        border-radius: 24px;
+        background-clip: padding-box;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #dcbb39;
+        border: 4px solid transparent;
+        background-clip: padding-box;
+      }
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    </style>
   </head>
 
   <body class="tracking-tight antialiased">

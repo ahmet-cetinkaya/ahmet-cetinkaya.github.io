@@ -1,0 +1,12 @@
+---
+import RedirectLayout from "~/presentation/src/shared/layouts/RedirectLayout.astro";
+import LinksData, { Links } from "~/domain/data/Links";
+
+const targetUrl = LinksData.find((l) => l.id === Links.github)!.url;
+---
+<RedirectLayout
+  title="Redirecting to GitHub"
+  description="Redirecting to Ahmet Çetinkaya's GitHub profile"
+  targetUrl={targetUrl}
+  serviceName="GitHub"
+/>

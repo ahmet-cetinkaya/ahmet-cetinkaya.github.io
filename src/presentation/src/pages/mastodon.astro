@@ -1,0 +1,12 @@
+---
+import RedirectLayout from "~/presentation/src/shared/layouts/RedirectLayout.astro";
+import LinksData, { Links } from "~/domain/data/Links";
+
+const targetUrl = LinksData.find((l) => l.id === Links.mastodon)!.url;
+---
+<RedirectLayout
+  title="Redirecting to Mastodon"
+  description="Redirecting to Ahmet Çetinkaya's Mastodon profile"
+  targetUrl={targetUrl}
+  serviceName="Mastodon"
+/>

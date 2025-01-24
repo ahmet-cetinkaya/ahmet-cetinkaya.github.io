@@ -1,0 +1,12 @@
+---
+import RedirectLayout from "~/presentation/src/shared/layouts/RedirectLayout.astro";
+import LinksData, { Links } from "~/domain/data/Links";
+
+const targetUrl = LinksData.find((l) => l.id === Links.x)!.url;
+---
+<RedirectLayout
+  title="Redirecting to Twitter/X"
+  description="Redirecting to Ahmet Çetinkaya's Twitter/X profile"
+  targetUrl={targetUrl}
+  serviceName="Twitter/X"
+/>

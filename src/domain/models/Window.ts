@@ -1,4 +1,4 @@
-import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import Entity from "~/core/acore-ts/domain/abstraction/Entity";
 import type Position from "~/core/acore-ts/ui/models/Position";
 import type Size from "~/core/acore-ts/ui/models/Size";
 import type { TranslationKey } from "../data/Translations";

@@ -1,4 +1,4 @@
-import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import Entity from "~/core/acore-ts/domain/abstraction/Entity";
 import type Icons from "../data/Icons";
 
 export type TechnologyId = number;

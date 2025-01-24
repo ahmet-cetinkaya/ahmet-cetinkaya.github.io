@@ -1,4 +1,4 @@
-import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import Entity from "~/core/acore-ts/domain/abstraction/Entity";
 import type { TranslationKey } from "../data/Translations";
 import type { OrganizationId } from "./Organization";
 

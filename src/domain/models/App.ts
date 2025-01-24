@@ -1,4 +1,4 @@
-import { Entity } from "~/core/acore-ts/domain/abstraction/Entity";
+import Entity from "~/core/acore-ts/domain/abstraction/Entity";
 import type { Apps } from "../data/Apps";
 import type Icons from "../data/Icons";
 import type { TranslationKey } from "../data/Translations";

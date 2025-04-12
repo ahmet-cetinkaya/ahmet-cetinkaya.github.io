@@ -2,6 +2,7 @@ export enum Locales {
   en = "en",
   tr = "tr",
 }
+
 export enum TranslationKeys {
   apps_doom = "apps_doom",
   apps_doom_desc = "apps_doom_desc",
@@ -298,6 +299,7 @@ export enum TranslationKeys {
   system_terminal_not_found_output = "system_terminal_not_found_output",
   system_terminal_sudo_error = "system_terminal_sudo_error",
 }
+
 const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_doom: {
     en: "DOOM",
@@ -968,36 +970,36 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     tr: "Okudum ve sizi tanıdım, tanıştığımıza memnun oldum.",
   },
   apps_welcome_about_me_markdown: {
-    en: `Hello, I’m **Ahmet Çetinkaya**. I was born and raised in [**Istanbul**](https://www.openstreetmap.org/node/1882099475#map=7/39.398/30.811) in 1999. My interest in technology started at a young age. I got my first computer when I was 6 years old, and since then, I’ve had a life deeply connected with computers. In my early years, I started creating mods for my favorite games using various technical programs, which were my first steps into the world of software.
+    en: `Hello, I'm **Ahmet Çetinkaya**. I was born and raised in [**Istanbul**](https://www.openstreetmap.org/node/1882099475#map=7/39.398/30.811) in 1999. My interest in technology started at a young age. I got my first computer when I was 6 years old, and since then, I've had a life deeply connected with computers. In my early years, I started creating mods for my favorite games using various technical programs, which were my first steps into the world of software.
 
 After completing my primary education in Istanbul, I moved to [**Antalya**](https://www.openstreetmap.org/node/428039517#map=7/37.823/30.927) and continued my secondary education at **Antalya Karatay Anatolian High School**. During high school, alongside my focus on science subjects, I developed an interest in **web programming**. I created and managed several websites and also wrote **technology** news. This experience helped me gain expertise in both software and digital media.
 
 In 2018, I began studying Computer Engineering at [**Mehmet Akif Ersoy University**](https://www.mehmetakif.edu.tr), starting with an English preparatory program followed by four years of dedicated education and self-improvement. These years not only enhanced my technical skills but also helped me develop important competencies such as problem-solving, analytical thinking, and teamwork.
 
-In 2022, my internship at [**Kodlama.io**](https://github.com/kodlamaio-projects) marked a significant turning point in my career. During and after the internship, I took my first steps into the workforce while continuing my education. I worked with various public institutions and leading companies, managing and developing **projects**, providing **consulting** services, and teaching in various corporate training programs and boot camps. These roles helped solidify my software development skills and gave me the opportunity to guide the next generation of software developers by teaching them about technology and software. In 2023, I graduated as a **Computer Engineer** with a **3.70 GPA** out of 4, ranking second in my faculty, and continued my career as a computer engineer.
+In 2022, my internship at [**Kodlama.io**](https://github.com/kodlamaio-projects) marked a significant turning point in my career. During and after the internship, I took my first steps into the workforce while continuing my education. I worked with various public institutions and leading companies, managing and developing **projects**, providing **consulting** services, and teaching in various corporate training programs and boot camps. These roles helped solidify my software engineering skills and gave me the opportunity to guide the next generation of software developers by teaching them about technology and software. In 2023, I graduated as a **Computer Engineer** with a **3.70 GPA** out of 4, ranking second in my faculty, and continued my career as a computer engineer.
 
-My approach to technology is driven by a constant **desire to learn**, inspiring me to discover new things every day. Sharing what I’ve learned on this journey, reaching more people, and contributing to the **software world** is my ultimate goal. In my software development process, I strive to embrace and apply various **software philosophies, principles**, and **quality criteria**, which form the foundation of my work. I believe that success in the software world is not only possible through technological knowledge but also through good software practices and quality awareness.`,
+My approach to technology is driven by a constant **desire to learn**, inspiring me to discover new things every day. Sharing what I've learned on this journey, reaching more people, and contributing to the **software world** is my ultimate goal. In my software engineering process, I strive to embrace and apply various **software philosophies, principles**, and **quality criteria**, which form the foundation of my work. I believe that success in the software world is not only possible through technological knowledge but also through good software practices and quality awareness.`,
     tr: `Merhaba, ben **Ahmet Çetinkaya**. 1999 yılında [**İstanbul**](https://www.openstreetmap.org/node/1882099475#map=7/39.398/30.811)'da doğdum ve büyüdüm. Teknolojiye olan ilgim küçük yaşlarda başladı. 6 yaşında ilk bilgisayarıma sahip oldum ve o günden itibaren bilgisayarlarla içli dışlı bir yaşamım oldu. Küçük yaşlarda, farklı teknik programları kullanarak sevdiğim oyunlara modlar yapmaya başladım; bu da yazılım dünyasına attığım ilk adımlarım oldu.
 
 İlköğretim yıllarımı İstanbul'da tamamladıktan sonra, [**Antalya**](https://www.openstreetmap.org/node/428039517#map=7/37.823/30.927)'da yaşamaya başlayarak ortaöğrenimimi **Antalya Karatay Anadolu Lisesi**'nde sürdürdüm. Lise yıllarımda, sayısal derslerin yanında aynı zamanda **web programlama** alanına da bir merak geliştirdim. Çeşitli web sayfaları oluşturarak yönettim, ayrıca **teknoloji** haberleri yazdım. Bu sayede hem yazılım hem de dijital medya alanında tecrübe kazandım.
 
 2018 yılında, [**Mehmet Akif Ersoy Üniversitesi**](https://www.mehmetakif.edu.tr)'nde **Bilgisayar Mühendisliği** bölümüne başladım. İngilizce hazırlık programı ve ardından dört yıl süren eğitim ve kişisel gelişim sürecimle devam ettim. Bu yıllar, teknik becerilerimi geliştirmekle kalmayıp, aynı zamanda problem çözme, analitik düşünme ve takım çalışması gibi önemli yetkinlikler kazanmama da yardımcı oldu.
 
-2022 yılında [**Kodlama.io**](https://github.com/kodlamaio-projects)'da başladığım staj, kariyerimde önemli bir dönüm noktasıydı. Staj döneminde ve sonrasında eğitimimle paralel olarak iş hayatına adım attım. Birçok resmi kurum ve önde gelen firmalar ile çalışarak; **projeler** yönettim ve geliştirdim, **danışmanlık** hizmeti verdim, aynı zamanda çeşitli kurumsal şirket eğitimlerinde ve hazırlık kamplarında **eğitmenlik** yaptım. Bu görevlerim, yazılım geliştirme becerilerimi pekiştirmemi sağladı ve başkalarına teknoloji ve yazılım konusunda eğitim vererek yeni nesil yazılımcılara rehberlik etme fırsatı sundu. 2023 yılında **bilgisayar mühendisi** olarak **4 üzerinden 3.70** not ortalamasıyla, **fakülte ikincisi** olarak mezun oldum ve iş hayatıma bilgisayar mühendisi olarak devam ettim.
+2022 yılında [**Kodlama.io**](https://github.com/kodlamaio-projects)'da başladığım staj, kariyerimde önemli bir dönüm noktasıydı. Staj döneminde ve sonrasında eğitimimle paralel olarak iş hayatına adım attım. Birçok resmi kurum ve önde gelen firmalar ile çalışarak; **projeler** yönettim ve geliştirdim, **danışmanlık** hizmeti verdim, aynı zamanda çeşitli kurumsal şirket eğitimlerinde ve hazırlık kamplarında **eğitmenlik** yaptım. Bu görevlerim, yazılım mühendisliği becerilerimi pekiştirmemi sağladı ve başkalarına teknoloji ve yazılım konusunda eğitim vererek yeni nesil yazılım geliştiricilerine rehberlik etme fırsatı sundu. 2023 yılında **bilgisayar mühendisi** olarak **4 üzerinden 3.70** not ortalamasıyla, **fakülte ikincisi** olarak mezun oldum ve iş hayatıma bilgisayar mühendisi olarak devam ettim.
 
 Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiyor ve her gün yeni şeyler keşfetmek için bana ilham veriyor. Bu yolculukta öğrendiklerimi paylaşmak, daha fazla insana dokunmak ve **yazılım dünyasına katkı sağlamak** en büyük hedefim. Yazılım geliştirme sürecimde, aynı zamanda çeşitli **yazılım felsefeleri, prensipleri** ve **kalite kriterlerini** benimseyip uygulamaya özen gösteriyorum. Bu, çalışmalarımın temel taşlarını oluşturuyor. Yazılım dünyasında başarılı olmanın, sadece teknolojik bilgiyle değil, aynı zamanda iyi bir yazılım pratiği ve kalite bilinciyle mümkün olduğuna inanıyorum.`,
   },
   apps_welcome_about_me_page_desc: {
-    en: "Hi, I'm Ahmet Çetinkaya. I'm a software developer and computer engineer focused on web technologies and software development. Learn more about my background, experience and skills.",
-    tr: "Merhaba, ben Ahmet Çetinkaya. Web teknolojileri ve yazılım geliştirme odaklı bir yazılım geliştirici ve bilgisayar mühendisiyim. Geçmişim, deneyimim ve yeteneklerim hakkında daha fazla bilgi edinin.",
+    en: "Hi, I'm Ahmet Çetinkaya. I'm a computer engineer focused on web technologies and software engineering. Learn more about my background, experience and skills.",
+    tr: "Merhaba, ben Ahmet Çetinkaya. Web teknolojileri ve yazılım mühendisliği odaklı bir bilgisayar mühendisiyim. Geçmişim, deneyimim ve yeteneklerim hakkında daha fazla bilgi edinin.",
   },
   apps_welcome_about_me_profile_image_alt: {
     en: "Ahmet Çetinkaya Profile Picture",
     tr: "Ahmet Çetinkaya Profil Fotoğrafı",
   },
   apps_welcome_about_me_short_text: {
-    en: "Hi, I'm a software developer and a computer engineer. I'm interested in software development, web technologies,s and computer science.",
-    tr: "Merhaba, bir yazılım geliştirici ve bilgisayar mühendisiyim. Yazılım geliştirme, Web teknolojileri ve bilgisayar bilimleriyle ilgileniyorum.",
+    en: "Hi, I'm a computer engineer. I'm interested in software engineering, web technologies and computer science.",
+    tr: "Merhaba, ben bir bilgisayar mühendisiyim. Yazılım mühendisliği, web teknolojileri ve bilgisayar bilimleriyle ilgileniyorum.",
   },
   apps_welcome_background: {
     en: "Background",
@@ -1380,7 +1382,7 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - **Veritabanı Programlaması**: SQL ile temel sorgulamalar, ilişkisel veritabanları, join'ler, alt sorgular, veri bütünlüğü
 - **LINQ (Language Integrated Query)**: Koleksiyonlarda veri sorgulama, filtreleme, sıralama, gruplama
 - **Entity Framework ve ORM**: Veri modelleme, migration işlemleri, C# ile veritabanı bağlantıları, veri erişim katmanı (repository pattern)
-- **Web API Geliştirme**: RESTful API’ler oluşturma, HTTP metotları (GET, POST, PUT, DELETE), JSON ile veri iletimi
+- **Web API Geliştirme**: RESTful API'ler oluşturma, HTTP metotları (GET, POST, PUT, DELETE), JSON ile veri iletimi
 - **Frontend Web Geliştirme**: HTML5, CSS3, responsive tasarım, kullanıcı dostu arayüzler, Bootstrap framework
 - **Angular Framework**: Bileşenler (components), servisler (services), yönlendirme (routing), veri bağlama (data binding), formlar, RxJS ile reaktif programlama
 - **Temiz Mimari (Clean Architecture)**: Katmanlı mimari, bağımlılık yönetimi, iş mantığının ayrı tutulması, test edilebilirlik
@@ -1405,7 +1407,7 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - AWS Cloud Migration Tools (AWS Migration Hub, DMS, SMS)
 - Financial Benefits and Cost Management (Pay-as-you-go, Reserved Instances, EC2 Spot Instances, AWS Pricing Calculator, AWS Budgets, AWS Organizations)`,
     tr: `- AWS Cloud Küresel Altyapısı (Bölgeler, Erişilebilirlik Bölgeleri, Edge Lokasyonları)
-- AWS Cloud’un Faydaları (Ölçeklenebilirlik, Yüksek Erişilebilirlik, Performans, Güvenlik, Maliyet Etkinliği, Küresel Ulaşılabilirlik)
+- AWS Cloud'un Faydaları (Ölçeklenebilirlik, Yüksek Erişilebilirlik, Performans, Güvenlik, Maliyet Etkinliği, Küresel Ulaşılabilirlik)
 - AWS Temel Servisleri: Hesaplama (EC2, Lambda, Lightsail), Ağ (VPC, Route 53, Direct Connect), Veritabanları (RDS, DynamoDB, Redshift), Depolama (S3, EBS, Glacier)
 - AWS İyi Tasarlanmış Altyapı Çerçevesi (Operasyonel Mükemmeliyet, Güvenlik, Güvenilirlik, Performans Verimliliği, Maliyet Optimizasyonu)
 - Paylaşılan Sorumluluk Modeli (AWS: Cloud Güvenliği, Müşteri: Cloud İçindeki Güvenlik)
@@ -1620,12 +1622,12 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "Stajyer",
   },
   curriculum_vitae_software_developer: {
-    en: "Software Developer",
-    tr: "Yazılım Geliştirici",
+    en: "Software Engineer",
+    tr: "Yazılım Mühendisi",
   },
   curriculum_vitae_software_developer_and_instructor: {
-    en: "Software Developer and Instructor",
-    tr: "Yazılım Geliştirici ve Eğitmen",
+    en: "Software Engineer and Instructor",
+    tr: "Yazılım Mühendisi ve Eğitmen",
   },
   desktop_change_locale: {
     en: "Change Locale",
@@ -1656,10 +1658,10 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
 - Drone simulation for TÜBİTAK competition
 - Development of hospital software for Mehmet Akif Ersoy University Faculty of Veterinary Medicine, Pathology Department, for use on web and mobile
 - Various other projects...`,
-    tr: `- "- "Mikroservis Mimarisini Gerçekleştiren Yazılım Çerçevesi" başlıklı lisans tezi
-- Tubitak yarışması için drone simülasyonu
-- Mehmet Akif Ersoy Veterinerlik Fakültesi Patoloji Bölümü için web ve mobil'de kullanılmak üzere hastane yazılımı geliştirme
-- Çeşitli birçok proje...`,
+    tr: `- "Mikroservis Mimarisini Gerçekleştiren Yazılım Çerçevesi" başlıklı lisans tezi
+- TÜBİTAK yarışması için drone simülasyonu
+- Mehmet Akif Ersoy Üniversitesi Veterinerlik Fakültesi Patoloji Bölümü için web ve mobilde kullanılmak üzere hastane yazılımı geliştirme
+- Çeşitli diğer projeler...`,
   },
   links_donate: {
     en: "Donate",
@@ -1786,6 +1788,7 @@ Teknolojiye olan **tutumum**, sürekli olarak **öğrenme isteğim**le birleşiy
     tr: "kullanıcı sudoers dosyasında değil. Bu olay rapor edilecek.",
   },
 };
+
 export default TranslationsData;
 export type TranslationKey = keyof typeof TranslationsData;
 export const locales = Object.keys(Locales) as Locales[];

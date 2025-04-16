@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "format": "prettier --write .",
     "preview": "astro preview",
-    "start": "astro dev"
+    "start": "astro dev --host"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

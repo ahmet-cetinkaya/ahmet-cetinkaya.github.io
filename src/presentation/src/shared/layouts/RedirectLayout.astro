@@ -8,14 +8,15 @@ interface Props {
 
 const { title, description, targetUrl, serviceName } = Astro.props;
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>{title}</title>
-    <meta name="description" content={description}>
-    <meta http-equiv="refresh" content={`0;url=${targetUrl}`}>
-    <link rel="canonical" href={targetUrl}>
+    <meta name="description" content={description} />
+    <meta http-equiv="refresh" content={`0;url=${targetUrl}`} />
+    <link rel="canonical" href={targetUrl} />
   </head>
   <body>
     <p>Redirecting to <a href={targetUrl}>{serviceName}</a>...</p>

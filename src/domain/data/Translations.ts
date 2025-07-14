@@ -1584,30 +1584,42 @@ Currently, I am based in **Antalya** and primarily work with **.NET Core**, **An
     tr: "Kullanım",
   },
   curriculum_vitae_1_description_markdown: {
-    en: `- Various software projects analysis and development`,
-    tr: `- Çeşitli yazılım projeleri analizi ve geliştirme`,
+    en: `- Developed custom web applications and solutions for various clients across different industries
+- Managed all stages of software projects including analysis, architecture design, development, and deployment
+- Worked with technologies such as .NET Core, Angular, C#, JavaScript, Node.js, SQL, Git, and various web development frameworks`,
+    tr: `- Çeşitli sektörlerden müşteriler için özel web uygulamaları ve çözümler geliştirdim
+- Analiz, mimari tasarım, geliştirme ve dağıtım dahil yazılım projelerinin tüm aşamalarını yönettim
+- .NET Core, Angular, C#, JavaScript, Node.js, SQL, Git ve çeşitli web geliştirme çerçeveleri gibi teknolojilerle çalıştım`,
   },
   curriculum_vitae_2_description_markdown: {
-    en: `- Instructor in ETIYA Academy In-House Training Program
-- Software Development on the DevArchitecture Framework`,
-    tr: `- ETIYA Akademi Şirket İçi Eğitim Programında Eğitmenlik
-- DevArchitecture Framework Üzerinde Yazılım Geliştirme`,
+    en: `- Supported training sessions at ETIYA Academy on C# and Clean Code principles, contributing to improved code consistency and maintainability among trainees
+- Contributed to core modules of the DevArchitecture Framework, enhancing its layered structure and functionality through implemented features that were successfully merged into production`,
+    tr: `- ETIYA Akademi'de C# ve Clean Code prensipleri konularında eğitim oturumlarını destekledim, kursiyerler arasında kod tutarlılığı ve sürdürülebilirliğinin geliştirilmesine katkıda bulundum
+- DevArchitecture Framework'ün temel modüllerine katkıda bulundum, katmanlı yapısını ve işlevselliğini başarıyla üretime entegre edilen özellikler aracılığıyla geliştirdim`,
   },
   curriculum_vitae_3_description_markdown: {
-    en: `- Software Development and Consulting for State Hydraulic Works (DSI)
-- Software Development and Consulting for BOSCH
-- Instructor in ESBAŞ In-house Training Program
-- Software Development on the NArchitecture Framework
-- Instructor in TÜBİSAD Training Program
-- Instructor in ETİYA-TÜBİSAD Training Program
-- Instructor in BOSCH Training Program`,
-    tr: `- Devlet Su İşleri (DSİ) için Yazılım Geliştirme ve Danışmanlık
-- BOSCH için Yazılım Geliştirme ve Danışmanlık
-- ESBAŞ Şirket İçi Eğitim Programında Eğitmenlik
-- NArchitecture Framework Üzerinde Yazılım Geliştirme
-- TÜBİSAD Eğitim Programında Eğitmenlik
-- ETİYA-TÜBİSAD Eğitim Programında Eğitmenlik
-- BOSCH Eğitim Programında Eğitmenlik`,
+    en: `**Software Development Projects:**
+- Developed scalable enterprise applications for BOSCH using .NET Core, Angular, C#, and the NArchitecture framework to enhance modularity and maintainability, resulting in more efficient development workflows
+- Built digital transformation software for Devlet Su İşleri (DSİ) with .NET Core and Angular, modernizing internal systems and improving operational efficiency
+- Contributed as a core developer to the NArchitecture Framework, designing modular solutions adopted by enterprise teams to standardize and streamline .NET architectures
+
+**Technical Training & Consulting:**
+- Delivered full-stack .NET Core and Angular trainings at TOBETO, covering C#, Clean Code, CQRS, and Domain-Driven Design, which improved participants' ability to apply architectural best practices
+- Provided corporate training at BOSCH on Clean Architecture and modern development practices, leading to improved coding standards and alignment across teams
+- Conducted hands-on training at ETIYA on Angular (TypeScript), C#, Java, and scalable architecture (CQRS, N-layered), including project simulations and Azure DevOps pipelines
+- Facilitated workshops at ESBAŞ on enterprise development with .NET, introducing concepts like microservices, Clean Architecture, and code generation, helping teams adopt modular development
+- Delivered sessions for TÜBİSAD on clean code, software engineering principles, and frontend technologies (Angular, TypeScript, JavaScript), supporting quality improvements in production code`,
+    tr: `**Yazılım Geliştirme Projeleri:**
+- BOSCH için .NET Core, Angular, C# ve NArchitecture framework kullanarak modülerlik ve sürdürülebilirliği artıran, daha verimli geliştirme iş akışları sağlayan ölçeklenebilir kurumsal uygulamalar geliştirdim
+- Devlet Su İşleri (DSİ) için .NET Core ve Angular ile dijital dönüşüm yazılımı geliştirdim, dahili sistemleri modernleştirdim ve operasyonel verimliliği artırdım
+- NArchitecture Framework'ün temel geliştirici olarak katkıda bulundum, kurumsal ekiplerin .NET mimarilerini standardize etmesi ve düzene sokması için benimsenmiş modüler çözümler tasarladım
+
+**Teknik Eğitim ve Danışmanlık:**
+- TOBETO'da C#, Clean Code, CQRS ve Domain-Driven Design konularını kapsayan tam yığın .NET Core ve Angular eğitimleri verdim, katılımcıların mimari en iyi uygulamaları uygulama yeteneklerini geliştirdim
+- BOSCH'ta Clean Architecture ve modern geliştirme uygulamaları konularında kurumsal eğitim verdim, kodlama standartlarının geliştirilmesine ve ekipler arasında uyum sağlanmasına yol açtım
+- ETIYA'da Angular (TypeScript), C#, Java ve ölçeklenebilir mimari (CQRS, N-katmanlı) konularında proje simülasyonları ve Azure DevOps pipeline'ları dahil olmak üzere uygulamalı eğitim verdim
+- ESBAŞ'ta .NET ile kurumsal geliştirme konularında atölyeler düzenledim, mikroservisler, Clean Architecture ve kod üretimi gibi kavramları tanıttım, ekiplerin modüler geliştirme benimsemeleri için yardımcı oldum
+- TÜBİSAD için temiz kod, yazılım mühendisliği prensipleri ve frontend teknolojileri (Angular, TypeScript, JavaScript) konularında oturumlar verdim, üretim kodunda kalite iyileştirmelerini destekledim`,
   },
   curriculum_vitae_computer_engineer: {
     en: "Computer Engineer",
@@ -1654,14 +1666,16 @@ Currently, I am based in **Antalya** and primarily work with **.NET Core**, **An
     tr: "Mimarlık ve Mühendislik Fakültesi - Bilgisayar Mühendisliği",
   },
   educations_2_description_markdown: {
-    en: `- Bachelor's thesis titled "Software Framework Implementing Microservice Architecture"
-- Drone simulation for TÜBİTAK competition
-- Development of hospital software for Mehmet Akif Ersoy University Faculty of Veterinary Medicine, Pathology Department, for use on web and mobile
-- Various other projects...`,
-    tr: `- "Mikroservis Mimarisini Gerçekleştiren Yazılım Çerçevesi" başlıklı lisans tezi
-- TÜBİTAK yarışması için drone simülasyonu
-- Mehmet Akif Ersoy Üniversitesi Veterinerlik Fakültesi Patoloji Bölümü için web ve mobilde kullanılmak üzere hastane yazılımı geliştirme
-- Çeşitli diğer projeler...`,
+    en: `- Graduated with a GPA of 3.70/4.00, ranked 2nd in the faculty
+- Developed a graduation thesis titled "Software Framework Implementing Microservice Architecture"
+- Participated in TÜBİTAK competitions, building a drone simulation system
+- Built hospital management software (web and mobile) for the Faculty of Veterinary Pathology
+- Contributed to various other academic and personal software projects`,
+    tr: `- 3.70/4.00 AGNO ile mezun oldum, fakültede 2. sırada yer aldım
+- "Mikroservis Mimarisini Gerçekleştiren Yazılım Çerçevesi" başlıklı lisans tezi geliştirdim
+- TÜBİTAK yarışmalarına katıldım, drone simülasyon sistemi geliştirdim
+- Veterinerlik Patoloji Fakültesi için hastane yönetim yazılımı (web ve mobil) geliştirdim
+- Çeşitli diğer akademik ve kişisel yazılım projelerine katkıda bulundum`,
   },
   links_donate: {
     en: "Donate",

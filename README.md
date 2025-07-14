@@ -1,8 +1,8 @@
-![Software overlay image](https://github.com/user-attachments/assets/d26f83f5-4bdc-4fd3-b72c-02cea5f68406)
-
 # ![Software logo](https://github.com/user-attachments/assets/31fbd891-aee5-4e12-9b48-906cfbbfebd4) `Ahmet Çetinkaya` ![GitHub license](https://img.shields.io/github/license/ahmet-cetinkaya/ahmet-cetinkaya.github.io) ![GitHub stars](https://img.shields.io/github/stars/ahmet-cetinkaya/ahmet-cetinkaya.github.io?style=social)
 
-This is a personal website project designed to resemble an operating system, featuring essential functionalities. It introduces myself, shares my portfolio, and publishes blog posts. The website serves as a central hub for showcasing my work, thoughts, and experiences in the field of software development. Check out the [live site](https://ahmetcetinkaya.me/).
+This project is a personal website crafted to emulate the look and feel of a modern operating system. It acts as an interactive digital portfolio, combining essential desktop-like features with a clean, intuitive interface. The site introduces Ahmet Çetinkaya, showcases selected works, and publishes technical blog posts, all in one cohesive environment. Explore the [live site](https://ahmetcetinkaya.me/) to see it in action.
+
+![Software overlay image](https://github.com/user-attachments/assets/d26f83f5-4bdc-4fd3-b72c-02cea5f68406)
 
 ## 💻 Technologies Used
 

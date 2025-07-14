@@ -2,6 +2,7 @@ import { Index, Show } from "solid-js";
 import type Icons from "~/domain/data/Icons";
 import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
 import { useI18n } from "../utils/i18nTranslate";
+import { useDateFormatter } from "../utils/dateFormat";
 import Icon from "./Icon";
 import LessViewContent from "~/presentation/src/core/acore-solidjs/ui/components/LessViewContent";
 import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
@@ -24,6 +25,7 @@ type Props = {
 
 export default function Timeline(props: Props) {
   const translate = useI18n();
+  const { formatDateRange } = useDateFormatter();
 
   return (
     <section class="relative">
@@ -46,15 +48,13 @@ export default function Timeline(props: Props) {
                   </Title>
                 </Show>
 
-                <time class="text-sm text-gray-300">{activity().startDate.toDateString()}</time>
-                <Show
-                  when={activity().endDate}
-                  fallback={
-                    <time class="text-sm text-gray-300"> - {translate(TranslationKeys.apps_welcome_present)}</time>
-                  }
-                >
-                  <time class="text-sm text-gray-300"> - {activity().endDate!.toDateString()}</time>
-                </Show>
+                <time class="text-sm text-gray-300">
+                  {formatDateRange(
+                    activity().startDate,
+                    activity().endDate,
+                    translate(TranslationKeys.apps_welcome_present),
+                  )}
+                </time>
               </header>
 
               <Show when={activity().descriptionMarkdown}>

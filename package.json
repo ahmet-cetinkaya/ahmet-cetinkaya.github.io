@@ -3,11 +3,14 @@
   "version": "3.0.0",
   "type": "module",
   "scripts": {
-    "build": "cd src/presentation && bun run build",
-    "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "bun install && find . -name 'package.json' ! -path '*/node_modules/*' ! -path './src/presentation/src/core/*' -execdir bun install \\;",
+    "build": "cd src/presentation && npm run build",
+    "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && npm run format)",
+    "install-all": "npm install && find . -name 'package.json' ! -path '*/node_modules/*' -execdir npm install \\;",
+    "install-all-bun": "bun install && find . -name 'package.json' ! -path '*/node_modules/*' ! -path './src/presentation/src/core/*' -execdir bun install \\;",
+    "postinstall": "npm run install-submodules",
+    "install-submodules": "cd src/presentation/src/core/acore-ts && npm install && cd ../acore-solidjs && npm install && cd ../acore-astro && npm install",
     "lint": "eslint .",
-    "start": "cd src/presentation && bun start"
+    "start": "cd src/presentation && npm start"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

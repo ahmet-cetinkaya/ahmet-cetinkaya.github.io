@@ -1,11 +1,11 @@
 ---
-import { Locales, TranslationKeys } from "~/domain/data/Translations";
-import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SystemManagerLayout from "~/presentation/src/shared/layouts/SystemManagerLayout.astro";
-import Container from "~/presentation/Container";
-import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
-import NotFoundPageOGImage from "~/presentation/src/pages/_assets/images/not-found-page-og-image.webp";
-import Icons from "~/domain/data/Icons";
+import { Locales, TranslationKeys } from "@domain/data/Translations";
+import { useI18nStatic } from "../shared/utils/i18nTranslate";
+import SystemManagerLayout from "../shared/layouts/SystemManagerLayout.astro";
+import Container from "../../Container";
+import SeoConstants from "../shared/constants/SeoConstants";
+import NotFoundPageOGImage from "./_assets/images/not-found-page-og-image.webp";
+import Icons from "@domain/data/Icons";
 
 const i18n = Container.instance.i18n;
 const translate = useI18nStatic(Astro.url);

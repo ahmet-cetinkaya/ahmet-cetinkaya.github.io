@@ -1,0 +1,9 @@
+[submodule "packages/acore-ts"]
+	path = packages/acore-ts
+	url = git@github.com:ahmet-cetinkaya/acore-ts.git
+[submodule "packages/acore-astro"]
+	path = packages/acore-astro
+	url = https://github.com/ahmet-cetinkaya/acore-astro
+[submodule "packages/acore-solidjs"]
+	path = packages/acore-solidjs
+	url = https://github.com/ahmet-cetinkaya/acore-solidjs

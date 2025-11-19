@@ -1,7 +1,7 @@
-import Entity from "~/core/acore-ts/domain/abstraction/Entity";
-import type Position from "~/core/acore-ts/ui/models/Position";
-import type Size from "~/core/acore-ts/ui/models/Size";
-import type { TranslationKey } from "../data/Translations";
+import type { TranslationKey } from "@domain/data/Translations";
+import Entity from "@packages/acore-ts/domain/abstraction/Entity";
+import type Position from "@packages/acore-ts/ui/models/Position";
+import type Size from "@packages/acore-ts/ui/models/Size";
 import type { AppId } from "./App";
 
 export type WindowId = string;

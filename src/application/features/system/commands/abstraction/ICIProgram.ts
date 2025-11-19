@@ -1,4 +1,4 @@
-import type { TranslationKey } from "~/domain/data/Translations";
+import type { TranslationKey } from "@domain/data/Translations";
 
 export enum ExitCodes {
   SUCCESS = 0,

@@ -1,4 +1,4 @@
-import Directory from "../models/Directory";
+import Directory from "@domain/models/Directory";
 
 const MIN_DATE = new Date(0);
 

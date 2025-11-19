@@ -1,9 +1,9 @@
 ---
-import { TranslationKeys } from "~/domain/data/Translations";
-import DesktopLayout from "~/presentation/src/shared/layouts/DesktopLayout.astro";
-import { useI18nStatic } from "~/presentation/src/shared/utils/i18nTranslate";
-import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
-import DoomPageOGImage from "~/presentation/src/pages/_assets/images/doom-page-og-image.webp";
+import { TranslationKeys } from "@domain/data/Translations";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import { useI18nStatic } from "../../shared/utils/i18nTranslate";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import DoomPageOGImage from "../_assets/images/doom-page-og-image.webp";
 
 const translate = useI18nStatic(Astro.url);
 

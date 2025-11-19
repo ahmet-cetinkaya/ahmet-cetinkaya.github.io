@@ -1,17 +1,17 @@
 import { navigate } from "astro:transitions/client";
 import { createResource, createSignal } from "solid-js";
-import Position from "~/presentation/src/core/acore-ts/ui/models/Position";
-import type Size from "~/presentation/src/core/acore-ts/ui/models/Size";
-import Icons from "~/domain/data/Icons";
-import { TranslationKeys } from "~/domain/data/Translations";
-import WindowModel from "~/domain/models/Window";
-import Container from "~/presentation/Container";
-import Icon from "~/presentation/src/shared/components/Icon";
-import Button from "~/presentation/src/shared/components/ui/Button";
-import Modal from "~/presentation/src/core/acore-solidjs/ui/components/Modal";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import AppContent from "./AppContent";
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
+import Position from "@packages/acore-ts/ui/models/Position";
+import type Size from "@packages/acore-ts/ui/models/Size";
+import Icons from "@domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import WindowModel from "@domain/models/Window";
+import Container from "@presentation/Container";
+import Icon from "@shared/components/Icon";
+import Button from "@shared/components/ui/Button";
+import Modal from "@packages/acore-solidjs/ui/components/Modal";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import AppContent from "@presentation/src/features/desktop/components/AppContent";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
 type Props = {
   window: WindowModel;

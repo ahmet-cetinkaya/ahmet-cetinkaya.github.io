@@ -1,13 +1,13 @@
-import Times from "~/core/acore-ts/data/date/constants/Times";
-import DateExtensions from "~/core/acore-ts/data/date/DateExtensions";
-import TimeSpan from "~/core/acore-ts/data/date/models/TimeSpan";
-import OutputHelper from "~/core/acore-ts/data/output/OutputHelper";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Window from "~/domain/models/Window";
-import type IWindowsService from "../../desktop/services/abstraction/IWindowsService";
-import OSVariables from "../constants/OSVariables";
-import systemProcesses from "../constants/systemProcesses";
-import type { Process } from "../models/Process";
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import OSVariables from "@application/features/system/constants/OSVariables";
+import systemProcesses from "@application/features/system/constants/systemProcesses";
+import type { Process } from "@application/features/system/models/Process";
+import { TranslationKeys } from "@domain/data/Translations";
+import Window from "@domain/models/Window";
+import Times from "@packages/acore-ts/data/date/constants/Times";
+import DateExtensions from "@packages/acore-ts/data/date/DateExtensions";
+import TimeSpan from "@packages/acore-ts/data/date/models/TimeSpan";
+import OutputHelper from "@packages/acore-ts/data/output/OutputHelper";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 

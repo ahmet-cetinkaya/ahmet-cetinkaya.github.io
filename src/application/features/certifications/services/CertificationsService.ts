@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import CertificationsData from "~/domain/data/Certifications";
-import type Certification from "~/domain/models/Certification";
+import CertificationsData from "@domain/data/Certifications";
+import type Certification from "@domain/models/Certification";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type ICertificationsService from "./abstraction/ICertificationsService";
 
 export default class CertificationsService implements ICertificationsService {

@@ -1,17 +1,17 @@
-import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
-import type ICategoriesService from "~/application/features/categories/services/abstraction/ICategoriesService";
-import type ICertificationsService from "~/application/features/certifications/services/abstraction/ICertificationsService";
-import type ICurriculumVitaeService from "~/application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
-import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
-import type IEducationsService from "~/application/features/educations/services/abstraction/IEducationsService";
-import type ILinksService from "~/application/features/links/abstraction/ILinksService";
-import type IOrganizationsService from "~/application/features/organizations/services/abstraction/IOrganizationsService";
-import type ITechnologiesService from "~/application/features/technologies/services/abstraction/ITechnologiesService";
-import type II18n from "~/core/acore-ts/i18n/abstraction/II18n";
-import I18n from "~/core/acore-ts/i18n/I18n";
-import TranslationsData from "~/domain/data/Translations";
-import ApplicationContainer, { type IApplicationContainer } from "./../application/ApplicationContainer";
-import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
+import type IAppsService from "@application/features/apps/services/abstraction/IAppsService";
+import type ICategoriesService from "@application/features/categories/services/abstraction/ICategoriesService";
+import type ICertificationsService from "@application/features/certifications/services/abstraction/ICertificationsService";
+import type ICurriculumVitaeService from "@application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import type IEducationsService from "@application/features/educations/services/abstraction/IEducationsService";
+import type ILinksService from "@application/features/links/abstraction/ILinksService";
+import type IOrganizationsService from "@application/features/organizations/services/abstraction/IOrganizationsService";
+import type ITechnologiesService from "@application/features/technologies/services/abstraction/ITechnologiesService";
+import type II18n from "@packages/acore-ts/i18n/abstraction/II18n";
+import I18n from "@packages/acore-ts/i18n/I18n";
+import TranslationsData from "@domain/data/Translations";
+import ApplicationContainer, { type IApplicationContainer } from "@application/ApplicationContainer";
+import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 
 export interface IContainer extends IApplicationContainer {
   i18n: II18n;

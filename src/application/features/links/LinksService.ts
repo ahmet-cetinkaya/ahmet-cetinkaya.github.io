@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import LinksData from "~/domain/data/Links";
-import type Link from "~/domain/models/Link";
+import LinksData from "@domain/data/Links";
+import type Link from "@domain/models/Link";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type ILinksService from "./abstraction/ILinksService";
 
 export default class LinksService implements ILinksService {

@@ -1,4 +1,4 @@
-import Link from "../models/Link";
+import Link from "@domain/models/Link";
 import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";
 

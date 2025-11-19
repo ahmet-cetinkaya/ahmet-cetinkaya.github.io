@@ -1,15 +1,15 @@
 import { createSignal, For, onCleanup, onMount } from "solid-js";
-import type App from "~/domain/models/App";
-import Container from "~/presentation/Container";
-import AppShortcut from "~/presentation/src/shared/components/AppShortcut";
-import ThreeDimensionalModel from "~/presentation/src/shared/components/ThreeDimensionalModel";
-import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
-import type IAppsService from "~/application/features/apps/services/abstraction/IAppsService";
-import appCommands from "~/presentation/src/shared/constants/AppCommands";
-import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
-import File from "~/domain/models/File";
-import Extensions from "~/application/features/system/constants/Extensions";
-import { Locales } from "~/domain/data/Translations";
+import type App from "@domain/models/App";
+import Container from "@presentation/Container";
+import AppShortcut from "@shared/components/AppShortcut";
+import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel";
+import ScreenHelper from "@shared/utils/ScreenHelper";
+import type IAppsService from "@application/features/apps/services/abstraction/IAppsService";
+import appCommands from "@shared/constants/AppCommands";
+import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
+import File from "@domain/models/File";
+import Extensions from "@application/features/system/constants/Extensions";
+import { Locales } from "@domain/data/Translations";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];

@@ -1,16 +1,16 @@
 import { createSignal, Index, Show, createMemo, createResource } from "solid-js";
-import type ILinksService from "~/application/features/links/abstraction/ILinksService";
-import Icons from "~/domain/data/Icons";
-import { Links } from "~/domain/data/Links";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
-import HtmlEditor from "~/presentation/src/core/acore-solidjs/ui/components/HtmlEditor";
-import Icon from "~/presentation/src/shared/components/Icon";
-import Button from "~/presentation/src/shared/components/ui/Button";
-import Input from "~/presentation/src/shared/components/ui/Input";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
+import type ILinksService from "@application/features/links/abstraction/ILinksService";
+import Icons from "@domain/data/Icons";
+import { Links } from "@domain/data/Links";
+import { TranslationKeys } from "@domain/data/Translations";
+import Container from "@presentation/Container";
+import HtmlEditor from "@packages/acore-solidjs/ui/components/HtmlEditor";
+import Icon from "@shared/components/Icon";
+import Button from "@shared/components/ui/Button";
+import Input from "@shared/components/ui/Input";
+import Title from "@shared/components/ui/Title";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import IconSvgs from "@shared/constants/IconSvgs";
 
 export default function EmailApp() {
   const linksService: ILinksService = Container.instance.linksService;

@@ -1,19 +1,19 @@
 import { createResource, Show } from "solid-js";
-import type ICertificationsService from "~/application/features/certifications/services/abstraction/ICertificationsService";
-import type ICurriculumVitaeService from "~/application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
-import type IEducationsService from "~/application/features/educations/services/abstraction/IEducationsService";
-import type ILinksService from "~/application/features/links/abstraction/ILinksService";
-import type IOrganizationsService from "~/application/features/organizations/services/abstraction/IOrganizationsService";
-import Icons from "~/domain/data/Icons";
-import { Links } from "~/domain/data/Links";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
-import Icon from "~/presentation/src/shared/components/Icon";
-import LoadingArea from "~/presentation/src/shared/components/LoadingArea";
-import Timeline, { type Activity } from "~/presentation/src/shared/components/Timeline";
-import Link from "~/presentation/src/shared/components/ui/Link";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import type ICertificationsService from "@application/features/certifications/services/abstraction/ICertificationsService";
+import type ICurriculumVitaeService from "@application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
+import type IEducationsService from "@application/features/educations/services/abstraction/IEducationsService";
+import type ILinksService from "@application/features/links/abstraction/ILinksService";
+import type IOrganizationsService from "@application/features/organizations/services/abstraction/IOrganizationsService";
+import Icons from "@domain/data/Icons";
+import { Links } from "@domain/data/Links";
+import { TranslationKeys } from "@domain/data/Translations";
+import Container from "@presentation/Container";
+import Icon from "@shared/components/Icon";
+import LoadingArea from "@shared/components/LoadingArea";
+import Timeline, { type Activity } from "@shared/components/Timeline";
+import Link from "@shared/components/ui/Link";
+import Title from "@shared/components/ui/Title";
+import { useI18n } from "@shared/utils/i18nTranslate";
 
 export default function Background() {
   const curriculumVitaeService: ICurriculumVitaeService = Container.instance.curriculumVitaeService;

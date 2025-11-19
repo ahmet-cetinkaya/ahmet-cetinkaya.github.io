@@ -1,4 +1,4 @@
-import Icons from "~/domain/data/Icons";
+import Icons from "@domain/data/Icons";
 import Envelope3DModel from "./Envelope3DModel";
 import Computer3DModel from "./Computer3DModel";
 import Terminal3DModel from "./Terminal3DModel";

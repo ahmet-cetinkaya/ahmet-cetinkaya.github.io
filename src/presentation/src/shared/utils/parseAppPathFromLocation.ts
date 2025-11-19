@@ -1,5 +1,5 @@
-import Container from "~/presentation/Container";
-import { Parts as WelcomeWizardAppParts } from "../../features/welcome/components/WelcomeWizardApp";
+import Container from "@presentation/Container";
+import { Parts as WelcomeWizardAppParts } from "@presentation/src/features/welcome/components/WelcomeWizardApp";
 
 const DEFAULT_APP_PATH = "about-me";
 

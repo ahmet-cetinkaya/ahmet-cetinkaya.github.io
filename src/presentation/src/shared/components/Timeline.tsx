@@ -1,13 +1,13 @@
 import { Index, Show } from "solid-js";
-import type Icons from "~/domain/data/Icons";
-import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
-import { useI18n } from "../utils/i18nTranslate";
-import { useDateFormatter } from "../utils/dateFormat";
-import Icon from "./Icon";
-import LessViewContent from "~/presentation/src/core/acore-solidjs/ui/components/LessViewContent";
-import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
-import Title from "./ui/Title";
-import Button from "./ui/Button";
+import type Icons from "@domain/data/Icons";
+import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import { useDateFormatter } from "@shared/utils/dateFormat";
+import Icon from "@shared/components/Icon";
+import LessViewContent from "@packages/acore-solidjs/ui/components/LessViewContent";
+import MarkdownParagraph from "@packages/acore-solidjs/ui/components/MarkdownParagraph";
+import Title from "@shared/components/ui/Title";
+import Button from "@shared/components/ui/Button";
 
 export type Activity = {
   id: number;

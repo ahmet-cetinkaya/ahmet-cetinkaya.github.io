@@ -1,10 +1,10 @@
-import CryptoExtensions from "~/core/acore-ts/crypto/CryptoExtensions";
-import { Apps } from "~/domain/data/Apps";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Window from "~/domain/models/Window";
-import type IWindowsService from "../../desktop/services/abstraction/IWindowsService";
-import type ICIProgram from "../../system/commands/abstraction/ICIProgram";
-import { ExitCodes, type CommandOutput } from "../../system/commands/abstraction/ICIProgram";
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
+import { ExitCodes, type CommandOutput } from "@application/features/system/commands/abstraction/ICIProgram";
+import { Apps } from "@domain/data/Apps";
+import { TranslationKeys } from "@domain/data/Translations";
+import Window from "@domain/models/Window";
+import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 
 export default class DoomCommand implements ICIProgram {
   name = "doom";

@@ -1,5 +1,5 @@
-import { Paths } from "~/domain/data/Directories";
-import { TranslationKeys } from "~/domain/data/Translations";
+import { Paths } from "@domain/data/Directories";
+import { TranslationKeys } from "@domain/data/Translations";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { type CommandOutput, ExitCodes } from "./abstraction/ICIProgram";
 

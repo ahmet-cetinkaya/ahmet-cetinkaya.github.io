@@ -1,7 +1,7 @@
-import type IFileSystemService from "~/application/features/system/services/abstraction/IFileSystemService";
-import PathUtils from "~/core/acore-ts/data/path/PathUtils";
-import { TranslationKeys } from "~/domain/data/Translations";
-import File from "~/domain/models/File";
+import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
+import { TranslationKeys } from "@domain/data/Translations";
+import File from "@domain/models/File";
+import PathUtils from "@packages/acore-ts/data/path/PathUtils";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 

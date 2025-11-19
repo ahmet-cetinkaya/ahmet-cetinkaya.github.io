@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import TechnologiesData from "~/domain/data/Technologies";
-import type Technology from "~/domain/models/Technology";
+import TechnologiesData from "@domain/data/Technologies";
+import type Technology from "@domain/models/Technology";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type ITechnologiesService from "./abstraction/ITechnologiesService";
 
 export default class TechnologiesService implements ITechnologiesService {

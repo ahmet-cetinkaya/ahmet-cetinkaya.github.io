@@ -1,6 +1,6 @@
 import Icon from "./Icon";
-import Icons from "~/domain/data/Icons";
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
+import Icons from "@domain/data/Icons";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
 type Props = {
   class?: string;

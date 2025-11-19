@@ -1,4 +1,4 @@
-import Entity from "~/core/acore-ts/domain/abstraction/Entity";
+import Entity from "@packages/acore-ts/domain/abstraction/Entity";
 
 export type PostId = string;
 

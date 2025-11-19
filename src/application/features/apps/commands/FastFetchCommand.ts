@@ -1,6 +1,6 @@
-import { TranslationKeys } from "~/domain/data/Translations";
-import type ICIProgram from "../../system/commands/abstraction/ICIProgram";
-import { ExitCodes, type CommandOutput } from "../../system/commands/abstraction/ICIProgram";
+import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
+import { ExitCodes, type CommandOutput } from "@application/features/system/commands/abstraction/ICIProgram";
+import { TranslationKeys } from "@domain/data/Translations";
 
 export default class FastFetchCommand implements ICIProgram {
   name = "fastfetch";

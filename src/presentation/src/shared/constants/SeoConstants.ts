@@ -1,4 +1,4 @@
-import type ITechnologiesService from "~/application/features/technologies/services/abstraction/ITechnologiesService";
+import type ITechnologiesService from "@application/features/technologies/services/abstraction/ITechnologiesService";
 
 export default class SeoConstants {
   static readonly DEFAULT_TITLE = "Ahmet Çetinkaya";

@@ -1,9 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": "../",
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"]
+      "@/*": ["../../src/*"],
+      "@packages/*": ["../../packages/*"],
+      "@domain/*": ["../../src/domain/*"],
+      "@application/*": ["../../src/application/*"],
+      "@presentation/*": ["./src/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@presentation/root/*": ["./*"]
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js"

@@ -1,4 +1,4 @@
-import App from "~/domain/models/App";
+import App from "@domain/models/App";
 import { Categories } from "./Categories";
 import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";

@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import AppsData from "~/domain/data/Apps";
-import type App from "~/domain/models/App";
+import AppsData from "@domain/data/Apps";
+import type App from "@domain/models/App";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type IAppsService from "./abstraction/IAppsService";
 
 export default class AppsService implements IAppsService {

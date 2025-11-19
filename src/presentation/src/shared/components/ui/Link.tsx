@@ -1,6 +1,6 @@
 import type { JSX } from "solid-js/jsx-runtime";
 
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import { buttonVariantClassNames } from "./Button";
 
 const linkVariantClassNames = {

@@ -1,5 +1,5 @@
-import Entity from "~/core/acore-ts/domain/abstraction/Entity";
-import type { TranslationKey } from "../data/Translations";
+import type { TranslationKey } from "@domain/data/Translations";
+import Entity from "@packages/acore-ts/domain/abstraction/Entity";
 import type { OrganizationId } from "./Organization";
 
 export type EducationId = number;

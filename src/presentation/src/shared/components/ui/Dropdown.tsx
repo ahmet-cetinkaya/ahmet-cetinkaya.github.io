@@ -1,12 +1,12 @@
 import { createMemo, createSignal, Index, createEffect, Show, type JSX } from "solid-js";
-import CryptoExtensions from "~/presentation/src/core/acore-ts/crypto/CryptoExtensions";
-import type { TranslationKey } from "~/domain/data/Translations";
-import { useI18n } from "../../utils/i18nTranslate";
-import Button from "./Button";
-import Link from "./Link";
-import Icon from "../Icon";
-import type Icons from "~/domain/data/Icons";
-import Title from "./Title";
+import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
+import type { TranslationKey } from "@domain/data/Translations";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import Button from "@shared/components/ui/Button";
+import Link from "@shared/components/ui/Link";
+import Icon from "@shared/components/Icon";
+import type Icons from "@domain/data/Icons";
+import Title from "@shared/components/ui/Title";
 
 export type DropdownItem = {
   text: TranslationKey;

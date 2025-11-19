@@ -1,12 +1,12 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import Container from "~/presentation/Container";
-import Key from "~/presentation/src/core/acore-solidjs/ui/components/Key";
-import Window from "./Window";
-import WindowModel from "~/domain/models/Window";
-import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
-import appCommands from "~/presentation/src/shared/constants/AppCommands";
-import type { Apps } from "~/domain/data/Apps";
-import { parseAppPathFromLocation } from "~/presentation/src/shared/utils/parseAppPathFromLocation";
+import Container from "@presentation/Container";
+import Key from "@packages/acore-solidjs/ui/components/Key";
+import Window from "@presentation/src/features/desktop/components/Window";
+import WindowModel from "@domain/models/Window";
+import ScreenHelper from "@shared/utils/ScreenHelper";
+import appCommands from "@shared/constants/AppCommands";
+import type { Apps } from "@domain/data/Apps";
+import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
 
 export default function WindowManager() {
   const windowService = Container.instance.windowsService;

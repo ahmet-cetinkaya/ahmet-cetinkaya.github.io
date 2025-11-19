@@ -1,4 +1,4 @@
-import Technology from "../models/Technology";
+import Technology from "@domain/models/Technology";
 import Icons from "./Icons";
 
 export enum Technologies {

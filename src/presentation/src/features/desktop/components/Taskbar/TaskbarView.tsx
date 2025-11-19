@@ -1,15 +1,15 @@
 import { navigate } from "astro:transitions/client";
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js";
-import ArrayExtensions from "~/presentation/src/core/acore-ts/data/array/ArrayExtensions";
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
-import Icons from "~/domain/data/Icons";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Window from "~/domain/models/Window";
-import Container from "~/presentation/Container";
-import Icon from "~/presentation/src/shared/components/Icon";
-import Button from "~/presentation/src/shared/components/ui/Button";
-import Dropdown, { type DropdownItem } from "~/presentation/src/shared/components/ui/Dropdown";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import ArrayExtensions from "@packages/acore-ts/data/array/ArrayExtensions";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
+import Icons from "@domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import Window from "@domain/models/Window";
+import Container from "@presentation/Container";
+import Icon from "@shared/components/Icon";
+import Button from "@shared/components/ui/Button";
+import Dropdown, { type DropdownItem } from "@shared/components/ui/Dropdown";
+import { useI18n } from "@shared/utils/i18nTranslate";
 
 export default function TaskbarView() {
   const windowsService = Container.instance.windowsService;

@@ -1,8 +1,8 @@
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
-import { TranslationKeys } from "~/domain/data/Translations";
-import MarkdownParagraph from "~/presentation/src/core/acore-solidjs/ui/components/MarkdownParagraph";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
+import { TranslationKeys } from "@domain/data/Translations";
+import MarkdownParagraph from "@packages/acore-solidjs/ui/components/MarkdownParagraph";
+import Title from "@shared/components/ui/Title";
+import { useI18n } from "@shared/utils/i18nTranslate";
 
 type Props = {
   isConfirmedValue: boolean;

@@ -1,15 +1,13 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import Metadata, {
-  type Props as MetadataProps,
-} from "~/presentation/src/core/acore-astro/src/components/Metadata.astro";
-import Container from "~/presentation/Container";
-import { locales } from "~/domain/data/Translations";
+import Metadata, { type Props as MetadataProps } from "@packages/acore-astro/src/components/Metadata.astro";
+import Container from "../../../Container";
+import { locales } from "@domain/data/Translations";
 import "@fontsource/oxanium";
-import Preload from "~/presentation/src/shared/components/Preload.astro";
-import SeoConstants from "~/presentation/src/shared/constants/SeoConstants";
+import Preload from "../components/Preload.astro";
+import SeoConstants from "../constants/SeoConstants";
 import { getImage } from "astro:assets";
-import Analytics from "~/presentation/src/shared/components/Analytics.astro";
+import Analytics from "../components/Analytics.astro";
 
 export type Props = {
   metadata: Partial<MetadataProps>;

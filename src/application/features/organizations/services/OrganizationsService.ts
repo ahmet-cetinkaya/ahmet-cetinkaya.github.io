@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import OrganizationsData from "~/domain/data/Organizations";
-import type Organization from "~/domain/models/Organization";
+import OrganizationsData from "@domain/data/Organizations";
+import type Organization from "@domain/models/Organization";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type IOrganizationsService from "./abstraction/IOrganizationsService";
 
 export default class OrganizationsService implements IOrganizationsService {

@@ -1,4 +1,4 @@
-import File from "../models/File";
+import File from "@domain/models/File";
 import { Apps } from "./Apps";
 import { Paths } from "./Directories";
 

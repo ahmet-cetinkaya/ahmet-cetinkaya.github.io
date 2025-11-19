@@ -1,9 +1,9 @@
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import { useI18n } from "@shared/utils/i18nTranslate";
 import SocialButtons from "./SocialButtons";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import ThreeDimensionalModel from "~/presentation/src/shared/components/ThreeDimensionalModel";
-import Icons from "~/domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import Title from "@shared/components/ui/Title";
+import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel";
+import Icons from "@domain/data/Icons";
 
 export default function Hello() {
   const translate = useI18n();

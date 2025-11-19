@@ -1,6 +1,6 @@
-import { TranslationKeys } from "~/domain/data/Translations";
-import type IWindowsService from "../../desktop/services/abstraction/IWindowsService";
-import systemProcesses from "../constants/systemProcesses";
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import systemProcesses from "@application/features/system/constants/systemProcesses";
+import { TranslationKeys } from "@domain/data/Translations";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 

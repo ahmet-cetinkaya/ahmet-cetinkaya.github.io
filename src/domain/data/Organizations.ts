@@ -1,4 +1,4 @@
-import Organization from "../models/Organization";
+import Organization from "@domain/models/Organization";
 import Icons from "./Icons";
 import { TranslationKeys } from "./Translations";
 

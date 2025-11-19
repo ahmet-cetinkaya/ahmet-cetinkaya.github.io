@@ -1,6 +1,6 @@
-import Entity from "~/core/acore-ts/domain/abstraction/Entity";
-import type { Categories } from "../data/Categories";
-import type { TranslationKey } from "../data/Translations";
+import type { Categories } from "@domain/data/Categories";
+import type { TranslationKey } from "@domain/data/Translations";
+import Entity from "@packages/acore-ts/domain/abstraction/Entity";
 
 export type CategoryId = Categories;
 

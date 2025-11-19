@@ -1,4 +1,4 @@
-import type Certification from "../models/Certification";
+import type Certification from "@domain/models/Certification";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 

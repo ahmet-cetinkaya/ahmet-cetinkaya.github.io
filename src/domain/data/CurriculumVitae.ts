@@ -1,4 +1,4 @@
-import type CurriculumVitae from "../models/CurriculumVitae";
+import type CurriculumVitae from "@domain/models/CurriculumVitae";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 

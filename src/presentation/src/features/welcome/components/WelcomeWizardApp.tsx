@@ -1,19 +1,19 @@
 import { createSignal, Index, Show } from "solid-js";
-import type IWindowsService from "~/application/features/desktop/services/abstraction/IWindowsService";
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
-import { Apps } from "~/domain/data/Apps";
-import { TranslationKeys, type TranslationKey } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
-import Button from "~/presentation/src/shared/components/ui/Button";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import About from "./About";
-import Background from "./Background";
-import Completed from "./Completed";
-import Hello from "./Hello";
-import Technologies from "./Technologies";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import Icons from "~/domain/data/Icons";
-import Icon from "~/presentation/src/shared/components/Icon";
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
+import { Apps } from "@domain/data/Apps";
+import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
+import Container from "@presentation/Container";
+import Button from "@shared/components/ui/Button";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import About from "@presentation/src/features/welcome/components/About";
+import Background from "@presentation/src/features/welcome/components/Background";
+import Completed from "@presentation/src/features/welcome/components/Completed";
+import Hello from "@presentation/src/features/welcome/components/Hello";
+import Technologies from "@presentation/src/features/welcome/components/Technologies";
+import Title from "@shared/components/ui/Title";
+import Icons from "@domain/data/Icons";
+import Icon from "@shared/components/Icon";
 
 const PARTS: { label: TranslationKey; icon: Icons }[] = [
   { label: TranslationKeys.apps_welcome_hello, icon: Icons.handWave },

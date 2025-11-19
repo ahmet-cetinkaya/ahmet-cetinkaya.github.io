@@ -2,10 +2,13 @@
   "name": "ahmetcetinkaya.me",
   "version": "3.0.0",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "cd src/presentation && bun run build",
     "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "bun install && find . -name 'package.json' ! -path '*/node_modules/*' ! -path './src/presentation/src/core/*' -execdir bun install \\;",
+    "install-all": "find . -name 'package.json' ! -path '*/node_modules/*' -execdir bun install \\;",
     "lint": "eslint .",
     "start": "cd src/presentation && bun start"
   },
@@ -18,6 +21,7 @@
     "prettier-plugin-jsdoc": "^1.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-packagejson": "^2.5.18",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "typescript-eslint": "^8.36.0"
   },
   "peerDependencies": {

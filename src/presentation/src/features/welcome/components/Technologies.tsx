@@ -1,13 +1,13 @@
 import { createResource, Show, createMemo } from "solid-js";
-import type ITechnologiesService from "~/application/features/technologies/services/abstraction/ITechnologiesService";
-import Icons from "~/domain/data/Icons";
-import { TranslationKeys } from "~/domain/data/Translations";
-import Technology from "~/domain/models/Technology";
-import Container from "~/presentation/Container";
-import NetworkGraph, { type Node } from "~/presentation/src/core/acore-solidjs/ui/components/NetworkGraph";
-import Title from "~/presentation/src/shared/components/ui/Title";
-import IconSvgs from "~/presentation/src/shared/constants/IconSvgs";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
+import type ITechnologiesService from "@application/features/technologies/services/abstraction/ITechnologiesService";
+import Icons from "@domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import Technology from "@domain/models/Technology";
+import Container from "@presentation/Container";
+import NetworkGraph, { type Node } from "@packages/acore-solidjs/ui/components/NetworkGraph";
+import Title from "@shared/components/ui/Title";
+import IconSvgs from "@shared/constants/IconSvgs";
+import { useI18n } from "@shared/utils/i18nTranslate";
 
 const SVG_BLOB_TYPE = "image/svg+xml;charset=utf-8";
 

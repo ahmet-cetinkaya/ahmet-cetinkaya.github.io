@@ -1,4 +1,4 @@
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
 type Props = {
   id?: string;

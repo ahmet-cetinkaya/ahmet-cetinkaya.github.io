@@ -1,8 +1,8 @@
-import ArrayExtensions from "~/core/acore-ts/data/array/ArrayExtensions";
-import type PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import Store from "~/core/acore-ts/store/Store";
-import type { IStore } from "~/core/acore-ts/store/abstraction/IStore";
-import type Window from "~/domain/models/Window";
+import type Window from "@domain/models/Window";
+import ArrayExtensions from "@packages/acore-ts/data/array/ArrayExtensions";
+import type PaginationResult from "@packages/acore-ts/repository/PaginationResult";
+import Store from "@packages/acore-ts/store/Store";
+import type { IStore } from "@packages/acore-ts/store/abstraction/IStore";
 import type IWindowsService from "./abstraction/IWindowsService";
 
 export default class WindowsService implements IWindowsService {

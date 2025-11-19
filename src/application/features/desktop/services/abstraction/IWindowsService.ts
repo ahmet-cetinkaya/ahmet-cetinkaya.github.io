@@ -1,12 +1,12 @@
-import type { IObservable } from "~/core/acore-ts/async/abstraction/IObservable";
+import type Window from "@domain/models/Window";
+import type { IObservable } from "@packages/acore-ts/async/abstraction/IObservable";
 import type {
   IAddable,
   IGettable,
   IListable,
   IRemovable,
   IUpdatable,
-} from "~/core/acore-ts/repository/abstraction/IRepository";
-import type Window from "~/domain/models/Window";
+} from "@packages/acore-ts/repository/abstraction/IRepository";
 
 export default interface IWindowsService
   extends IAddable<Window>,

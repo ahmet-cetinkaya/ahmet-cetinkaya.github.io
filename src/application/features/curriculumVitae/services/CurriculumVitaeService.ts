@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import CurriculumVitaesData from "~/domain/data/CurriculumVitae";
-import type CurriculumVitae from "~/domain/models/CurriculumVitae";
+import CurriculumVitaesData from "@domain/data/CurriculumVitae";
+import type CurriculumVitae from "@domain/models/CurriculumVitae";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type ICurriculumVitaeService from "./abstraction/ICurriculumVitaeService";
 
 export default class CurriculumVitaeService implements ICurriculumVitaeService {

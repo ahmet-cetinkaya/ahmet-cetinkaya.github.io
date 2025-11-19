@@ -1,4 +1,4 @@
-import type { Process } from "../models/Process";
+import type { Process } from "@application/features/system/models/Process";
 import OSVariables from "./OSVariables";
 
 const systemProcesses: Process[] = [

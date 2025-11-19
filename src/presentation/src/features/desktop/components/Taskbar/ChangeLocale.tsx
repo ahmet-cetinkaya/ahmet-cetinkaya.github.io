@@ -1,8 +1,8 @@
 import { navigate } from "astro:transitions/client";
 import { createSignal, onMount, Show } from "solid-js";
-import { Locales, locales } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
-import Button from "~/presentation/src/shared/components/ui/Button";
+import { Locales, locales } from "@domain/data/Translations";
+import Container from "@presentation/Container";
+import Button from "@shared/components/ui/Button";
 
 export default function ChangeLocale() {
   const i18n = Container.instance.i18n;

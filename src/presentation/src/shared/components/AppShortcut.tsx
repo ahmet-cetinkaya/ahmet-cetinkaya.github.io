@@ -1,8 +1,8 @@
 import type { JSX } from "solid-js/jsx-runtime";
-import { mergeCls } from "~/presentation/src/core/acore-ts/ui/ClassHelpers";
-import type { TranslationKey } from "~/domain/data/Translations";
-import { useI18n } from "../utils/i18nTranslate";
-import Link from "./ui/Link";
+import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
+import type { TranslationKey } from "@domain/data/Translations";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import Link from "@shared/components/ui/Link";
 
 type Props = {
   class?: string;

@@ -1,4 +1,4 @@
-import Category from "../models/Category";
+import Category from "@domain/models/Category";
 import { TranslationKeys } from "./Translations";
 
 export enum Categories {

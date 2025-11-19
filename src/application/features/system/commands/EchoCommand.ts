@@ -1,4 +1,4 @@
-import { TranslationKeys } from "~/domain/data/Translations";
+import { TranslationKeys } from "@domain/data/Translations";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 

@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import DirectoryData from "~/domain/data/Directories";
-import FilesData from "~/domain/data/Files";
+import DirectoryData from "@domain/data/Directories";
+import FilesData from "@domain/data/Files";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type IFileSystemService from "./abstraction/IFileSystemService";
 import type { FileSystemEntry } from "./abstraction/IFileSystemService";
 

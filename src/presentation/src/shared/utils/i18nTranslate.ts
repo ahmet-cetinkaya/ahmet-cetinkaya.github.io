@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
-import type { TranslationKey } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
+import type { TranslationKey } from "@domain/data/Translations";
+import Container from "@presentation/Container";
 
 export function useI18n(url: URL | null = null) {
   const i18n = Container.instance.i18n;

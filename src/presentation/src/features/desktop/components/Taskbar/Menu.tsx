@@ -1,15 +1,15 @@
 import { navigate } from "astro:transitions/client";
 import { createSignal, onCleanup, onMount, Show } from "solid-js";
-import type { Apps } from "~/domain/data/Apps";
-import Icons from "~/domain/data/Icons";
-import { Locales, TranslationKeys } from "~/domain/data/Translations";
-import Container from "~/presentation/Container";
-import Icon from "~/presentation/src/shared/components/Icon";
-import type { BaseDropdownItem } from "~/presentation/src/core/acore-solidjs/ui/components/Dropdown";
-import Dropdown from "~/presentation/src/core/acore-solidjs/ui/components/Dropdown";
-import { useI18n } from "~/presentation/src/shared/utils/i18nTranslate";
-import appCommands from "~/presentation/src/shared/constants/AppCommands";
-import ScreenHelper from "~/presentation/src/shared/utils/ScreenHelper";
+import type { Apps } from "@domain/data/Apps";
+import Icons from "@domain/data/Icons";
+import { Locales, TranslationKeys } from "@domain/data/Translations";
+import Container from "@presentation/Container";
+import Icon from "@shared/components/Icon";
+import type { BaseDropdownItem } from "@packages/acore-solidjs/ui/components/Dropdown";
+import Dropdown from "@packages/acore-solidjs/ui/components/Dropdown";
+import { useI18n } from "@shared/utils/i18nTranslate";
+import appCommands from "@shared/constants/AppCommands";
+import ScreenHelper from "@shared/utils/ScreenHelper";
 
 export default function Menu() {
   const categoriesService = Container.instance.categoriesService;

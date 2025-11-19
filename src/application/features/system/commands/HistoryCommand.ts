@@ -1,7 +1,7 @@
-import { Paths } from "~/domain/data/Directories";
-import { TranslationKeys } from "~/domain/data/Translations";
-import File from "~/domain/models/File";
-import type IFileSystemService from "../services/abstraction/IFileSystemService";
+import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
+import { Paths } from "@domain/data/Directories";
+import { TranslationKeys } from "@domain/data/Translations";
+import File from "@domain/models/File";
 import type ICIProgram from "./abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 

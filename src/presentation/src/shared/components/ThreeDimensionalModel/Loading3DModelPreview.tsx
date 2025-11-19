@@ -1,6 +1,6 @@
-import type { TranslationKeys } from "~/domain/data/Translations";
-import Image from "~/presentation/src/core/acore-solidjs/ui/components/Image";
-import { useI18n } from "../../utils/i18nTranslate";
+import type { TranslationKeys } from "@domain/data/Translations";
+import Image from "@packages/acore-solidjs/ui/components/Image";
+import { useI18n } from "@shared/utils/i18nTranslate";
 
 type Props = {
   src: string;

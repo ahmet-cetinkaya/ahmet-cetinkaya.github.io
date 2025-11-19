@@ -1,6 +1,6 @@
-import PaginationResult from "~/core/acore-ts/repository/PaginationResult";
-import EducationsData from "~/domain/data/Educations";
-import type Education from "~/domain/models/Education";
+import EducationsData from "@domain/data/Educations";
+import type Education from "@domain/models/Education";
+import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type IEducationsService from "./abstraction/IEducationsService";
 
 export default class EducationsService implements IEducationsService {

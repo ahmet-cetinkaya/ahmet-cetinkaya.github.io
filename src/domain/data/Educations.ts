@@ -1,4 +1,4 @@
-import Education from "../models/Education";
+import Education from "@domain/models/Education";
 import { Organizations } from "./Organizations";
 import { TranslationKeys } from "./Translations";
 

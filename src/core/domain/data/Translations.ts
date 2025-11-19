@@ -189,6 +189,7 @@ export enum TranslationKeys {
   apps_welcome_present = "apps_welcome_present",
   apps_welcome_technologies = "apps_welcome_technologies",
   apps_welcome_technologiesIUse = "apps_welcome_technologiesIUse",
+  apps_welcome_technologies_center_graph = "apps_welcome_technologies_center_graph",
   apps_welcome_welcome = "apps_welcome_welcome",
   apps_welcome_wizard = "apps_welcome_wizard",
   certificates_1_description_markdown = "certificates_1_description_markdown",
@@ -1056,6 +1057,10 @@ Currently, I am based in **Antalya** and primarily work with **.NET Core**, **An
   apps_welcome_technologiesIUse: {
     en: "Technologies I Use",
     tr: "Kullandığım Teknolojiler",
+  },
+  apps_welcome_technologies_center_graph: {
+    en: "Center graph",
+    tr: "Grafiki ortala",
   },
   apps_welcome_welcome: {
     en: "Welcome",

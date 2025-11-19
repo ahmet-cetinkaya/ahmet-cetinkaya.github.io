@@ -8,6 +8,7 @@ enum Icons {
   azureDevOps = "Azure DevOps Icon",
   bold = "Bold Icon",
   check = "Check Icon",
+  center = "Center Icon",
   close = "Close Icon",
   code = "Code Icon",
   computer = "Computer Icon",

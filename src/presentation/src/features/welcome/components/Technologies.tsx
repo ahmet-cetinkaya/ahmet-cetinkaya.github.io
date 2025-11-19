@@ -92,7 +92,11 @@ export default function Technologies() {
           </p>
         </div>
 
-        <NetworkGraph nodes={memoizedNetworkGraphData()!} renderNode={drawNode} />
+        <NetworkGraph
+          nodes={memoizedNetworkGraphData()!}
+          renderNode={drawNode}
+          centerButtonTitle={`${translate(TranslationKeys.apps_welcome_technologies_center_graph)} (Ctrl+Shift+C)`}
+        />
       </Show>
     </div>
   );

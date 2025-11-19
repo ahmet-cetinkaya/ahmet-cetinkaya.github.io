@@ -5,11 +5,13 @@
     "paths": {
       "@/*": ["../../src/*"],
       "@packages/*": ["../../packages/*"],
-      "@domain/*": ["../../src/domain/*"],
-      "@application/*": ["../../src/application/*"],
+      "@domain/*": ["../../src/core/domain/*"],
+      "@application/*": ["../../src/core/application/*"],
       "@presentation/*": ["./src/*"],
+      "@presentation/src/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
-      "@presentation/root/*": ["./*"]
+      "@presentation/root/*": ["./*"],
+      "@presentation/Container": ["./Container.ts"]
     },
     "jsx": "preserve",
     "jsxImportSource": "solid-js"

@@ -15,9 +15,11 @@ export default defineConfig({
       alias: {
         "@": path.resolve("./src"),
         "@packages": path.resolve("../../packages"),
-        "@domain": path.resolve("../../src/domain"),
-        "@application": path.resolve("../../src/application"),
+        "@domain": path.resolve("../../src/core/domain"),
+        "@application": path.resolve("../../src/core/application"),
         "@presentation": path.resolve("."),
+        "@presentation/src": path.resolve("./src"),
+        "@presentation/Container": path.resolve("./Container.ts"),
         "@shared": path.resolve("./src/shared"),
         "solid-js/web": path.resolve("./node_modules/solid-js/web"),
         "solid-js": path.resolve("./node_modules/solid-js"),

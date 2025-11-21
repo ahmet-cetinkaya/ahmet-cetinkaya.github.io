@@ -33,7 +33,9 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install-all
+        run: |
+          chmod +x scripts/install-all.sh
+          bun install-all
 
       - name: Build website
         run: cd src/presentation && bun run build

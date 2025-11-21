@@ -38,15 +38,20 @@ export default defineConfig({
     optimizeDeps: {
       include: [
         "three",
-        "three/examples/jsm/controls/OrbitControls",
-        "three/examples/jsm/loaders/DRACOLoader",
-        "three/examples/jsm/loaders/GLTFLoader",
+        "three/examples/jsm/controls/OrbitControls.js",
+        "three/examples/jsm/loaders/DRACOLoader.js",
+        "three/examples/jsm/loaders/GLTFLoader.js",
       ],
       force: true,
     },
     build: {
       rollupOptions: {
         external: [],
+        output: {
+          manualChunks: {
+            three: ["three"],
+          },
+        },
       },
     },
   },

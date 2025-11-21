@@ -3,16 +3,22 @@ import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "@domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
 import ThreeDimensionModelViewer from "@packages/acore-solidjs/ui/components/ThreeDimensionModelViewer";
-import EnvelopeModelPreview from "./assets/images/envelope-model-preview.webp";
 import { DRACO_DIRECTORY } from "./constants/draco";
+import ModelPaths from "@shared/constants/ModelPaths";
+import type { Model3DConfig } from "./models";
+import { DefaultConfigs } from "./constants/defaultConfigs";
+const EnvelopeModelPreview = "/home/ac/Models/envelope/envelope-thumbnail.webp";
 
 type Props = {
   class?: string;
+  config?: Model3DConfig;
 };
 
-const MODEL = "/models/envelope.glb";
+const MODEL = ModelPaths.ENVELOPE;
 
 export default function Envelope3DModel(props: Props) {
+  const config = props.config || DefaultConfigs.full;
+
   function configureScene(scene: Scene) {
     // Lights
     const ambientLight = new AmbientLight("#fff", 1);
@@ -22,19 +28,46 @@ export default function Envelope3DModel(props: Props) {
     scene.add(pointLight);
   }
 
+  function configureControls(controls: any) {
+    const controlsConfig = config.controls || {};
+    const animationConfig = config.animation || {};
+
+    // Apply control configurations
+    controls.enableRotate = controlsConfig.enableRotate ?? true;
+    controls.enableZoom = controlsConfig.enableZoom ?? true;
+    controls.enablePan = controlsConfig.enablePan ?? false;
+    controls.enableDamping = controlsConfig.enableDamping ?? true;
+    controls.dampingFactor = controlsConfig.dampingFactor ?? 0.25;
+    controls.maxPolarAngle = controlsConfig.maxPolarAngle ?? Math.PI / 2;
+    controls.minZoom = controlsConfig.minZoom ?? 0.4;
+    controls.maxZoom = controlsConfig.maxZoom ?? 5;
+
+    // Apply animation configurations
+    controls.autoRotate = animationConfig.enableAutoRotate ?? false;
+    controls.autoRotateSpeed = animationConfig.autoRotateSpeed ?? 2;
+  }
+
   function configureModel(gltf: GLTF) {
-    gltf.scene.position.y = -3;
+    gltf.scene.position.y = -2;
+    gltf.scene.position.x = 0.2;
+    gltf.scene.position.z = 0;
   }
 
   return (
     <ThreeDimensionModelViewer
       decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={0.055}
+      modelScale={0.053}
       configureScene={configureScene}
       configureModel={configureModel}
+      configureControls={configureControls}
+      autoRotate={config.animation?.enableAutoRotate}
+      enableInitialAnimation={config.animation?.enableInitialAnimation}
+      initializationDelay={config.animation?.initializationDelay}
       class={props.class}
-      loadingElement={<LoadingModelPreview src={EnvelopeModelPreview.src} alt={TranslationKeys.common_envelope} />}
+      loadingElement={
+        <LoadingModelPreview src={EnvelopeModelPreview} alt={TranslationKeys.common_envelope} class="size-[80%]" />
+      }
     />
   );
 }

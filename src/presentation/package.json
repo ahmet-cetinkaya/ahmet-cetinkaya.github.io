@@ -27,7 +27,7 @@
     "three": "^0.181.2"
   },
   "devDependencies": {
-    "@types/three": "^0.172.0",
+    "@types/three": "^0.181.0",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-tailwindcss": "^0.6.14"

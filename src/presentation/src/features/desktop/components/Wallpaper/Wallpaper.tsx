@@ -1,75 +1,124 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
-import AnimationHelper from "@packages/acore-ts/ui/animation/AnimationHelper";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
-import Position from "@packages/acore-ts/ui/models/Position";
-import Image from "@packages/acore-solidjs/ui/components/Image";
-import BackgroundPart1 from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized.webp";
-import BackgroundPart1Medium from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized-1080.webp";
-import BackgroundPart1Small from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-1_optimized-720.webp";
-import BackgroundPart2 from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-2_optimized.webp";
-import BackgroundPart2Medium from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-2_optimized-1080.webp";
-import BackgroundPart2Small from "./assets/images/ahmet-cetinkaya-code-space-wallpaper/part-2_optimized-720.webp";
+import WallpaperPaths from "@shared/constants/WallpaperPaths";
+import { createSignal, onMount, onCleanup } from "solid-js";
 
 type Props = {
   class?: string;
 };
 
 export default function Wallpaper(props: Props) {
-  const [backgroundPosition, setBackgroundPosition] = createSignal<Position | undefined>();
-  let animationFrameId: number | null = null;
+  const layer1 = WallpaperPaths.getLayer1Paths();
+  const layer2 = WallpaperPaths.getLayer2Paths();
 
-  onMount(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-  });
+  // Mouse tracking signals for parallax effects
+  const [mousePosition, setMousePosition] = createSignal({ x: 0, y: 0 });
+  const [transform2, setTransform2] = createSignal({ x: 0, y: 0 });
 
-  onCleanup(() => {
-    document.removeEventListener("mousemove", handleMouseMove);
+  // Parallax intensity settings
+  const PARALLAX_INTENSITY_LAYER_2 = 0.05; // Increased movement for layer 2 only
 
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
-  });
+  // Throttle function to prevent excessive updates
+  let throttleTimeout: ReturnType<typeof setTimeout> | null = null;
+  const THROTTLE_DELAY = 16; // ~60fps
+
+  function throttle(callback: () => void) {
+    if (throttleTimeout) return;
+    throttleTimeout = setTimeout(() => {
+      callback();
+      throttleTimeout = null;
+    }, THROTTLE_DELAY);
+  }
 
   function handleMouseMove(event: MouseEvent) {
-    if (document.body.clientWidth <= 992) {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      return;
-    }
+    throttle(() => {
+      const { clientX, clientY } = event;
+      const { innerWidth, innerHeight } = window;
 
-    animationFrameId = requestAnimationFrame(() => {
-      setBackgroundPosition(AnimationHelper.movePositionOnMouseMove(event, 20));
+      // Calculate normalized mouse position (-1 to 1)
+      const x = (clientX - innerWidth / 2) / (innerWidth / 2);
+      const y = (clientY - innerHeight / 2) / (innerHeight / 2);
+
+      setMousePosition({ x, y });
+
+      // Apply parallax transformation only to layer 2
+      setTransform2({
+        x: x * PARALLAX_INTENSITY_LAYER_2 * 100,
+        y: y * PARALLAX_INTENSITY_LAYER_2 * 100,
+      });
     });
   }
 
+  function handleMouseLeave() {
+    // Reset to center when mouse leaves
+    setMousePosition({ x: 0, y: 0 });
+    setTransform2({ x: 0, y: 0 });
+  }
+
+  onMount(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+  });
+
+  onCleanup(() => {
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseleave", handleMouseLeave);
+    if (throttleTimeout) {
+      clearTimeout(throttleTimeout);
+    }
+  });
+
   return (
     <div class={mergeCls("relative size-full overflow-hidden", props.class)}>
-      <Image
-        src={BackgroundPart2.src}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        alt="Background part 2"
-        sources={[
-          { media: "(max-width: 720px)", srcset: BackgroundPart2Small.src },
-          { media: "(max-width: 1080px)", srcset: BackgroundPart2Medium.src },
-          { media: "(min-width: 1081px)", srcset: BackgroundPart2.src },
-        ]}
-        class="absolute -z-50 size-full object-cover object-center"
+      {/* Background layer 2 - bottom layer with parallax */}
+      <div
+        class="wallpaper-bg-2 absolute inset-0 size-full bg-cover bg-center transition-transform duration-300 ease-out"
         style={{
-          transform: `translate(${backgroundPosition()?.left ?? 0}px, ${backgroundPosition()?.top ?? 0}px) scale(1.02)`,
+          "background-image": `url("${layer2.large}")`,
+          "z-index": "-50",
+          "transform": `translate(${transform2().x}px, ${transform2().y}px)`,
         }}
       />
-      <Image
-        src={BackgroundPart1.src}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        alt="Background part 1"
-        class="absolute top-96 -z-40 size-full object-cover object-top"
-        sources={[
-          { media: "(max-width: 720px)", srcset: BackgroundPart1Small.src },
-          { media: "(max-width: 1080px)", srcset: BackgroundPart1Medium.src },
-          { media: "(min-width: 1081px)", srcset: BackgroundPart1.src },
-        ]}
+      {/* Background layer 1 - top layer positioned from top - no parallax */}
+      <div
+        class="wallpaper-bg-1 absolute inset-x-0 top-96 h-screen bg-cover bg-top"
+        style={{
+          "background-image": `url("${layer1.large}")`,
+          "z-index": "-40",
+        }}
       />
+
+      {/* Responsive styles handled in a style tag */}
+      <style>{`
+        @media (max-width: 720px) {
+          .wallpaper-bg-1 {
+            background-image: url("${layer1.small}") !important;
+          }
+          .wallpaper-bg-2 {
+            background-image: url("${layer2.small}") !important;
+          }
+          /* Disable parallax on mobile for performance */
+          .wallpaper-bg-2 {
+            transform: none !important;
+          }
+        }
+        @media (max-width: 1080px) {
+          .wallpaper-bg-1 {
+            background-image: url("${layer1.medium}") !important;
+          }
+          .wallpaper-bg-2 {
+            background-image: url("${layer2.medium}") !important;
+          }
+          /* Reduce parallax intensity on tablet */
+          .wallpaper-bg-2 {
+            transform: translate(calc(${transform2().x}px * 0.5), calc(${transform2().y}px * 0.5)) !important;
+          }
+        }
+
+        /* Smooth transitions for better UX */
+        .wallpaper-bg-2 {
+          will-change: transform;
+        }
+      `}</style>
     </div>
   );
 }

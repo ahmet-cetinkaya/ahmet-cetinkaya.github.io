@@ -1,43 +1,16 @@
 ---
-import RetroComputerModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/retro-computer-model-preview.webp";
-import EnvelopeModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/envelope-model-preview.webp";
-import TerminalModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/terminal-model-preview.webp";
-import DoomModelPreview from "../../shared/components/ThreeDimensionalModel/assets/images/doom-model-preview.webp";
+import ThumbnailPaths from "../constants/ThumbnailPaths";
 
-type PreloadImage =
-  | {
-      default: ImageMetadata;
-      medium?: ImageMetadata;
-      small?: ImageMetadata;
-    }
-  | ImageMetadata;
-
-const images: PreloadImage[] = [
-  RetroComputerModelPreview,
-  EnvelopeModelPreview,
-  TerminalModelPreview,
-  DoomModelPreview,
+const images = [
+  ThumbnailPaths.COMPUTER,
+  ThumbnailPaths.ENVELOPE,
+  ThumbnailPaths.TERMINAL,
+  ThumbnailPaths.DOOM,
 ];
-
-function roundWidth(width: number) {
-  const magnitude = Math.pow(10, Math.floor(Math.log10(width)));
-  return Math.floor(width / magnitude) * magnitude;
-}
 ---
 
 {
-  images.map((image) =>
-    typeof image === "object" && "default" in image ? (
-      <link
-        rel="preload"
-        href={image.default.src}
-        as="image"
-        type="image/webp"
-        imagesrcset={`${image.small?.src ? `${image.small.src} ${roundWidth(image.small.width)}w,` : ""}${image.medium?.src ? `${image.medium.src} ${roundWidth(image.medium.width)}w,` : ""}${image.default.src} ${roundWidth(image.default.width)}w`}
-        imagesizes={`${image.small?.width ? `(max-width: ${roundWidth(image.small.width)}px) ${roundWidth(image.small.width)}px,` : ""}${image.medium?.width ? `(max-width: ${roundWidth(image.medium.width)}px) ${roundWidth(image.medium.width)}px,` : ""}${roundWidth(image.default.width)}px`}
-      />
-    ) : (
-      <link rel="preload" href={image.src} as="image" type="image/webp" />
-    ),
-  )
+  images.map((image) => (
+    <link rel="preload" href={image} as="image" type="image/webp" />
+  ))
 }

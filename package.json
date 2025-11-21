@@ -7,9 +7,10 @@
   ],
   "scripts": {
     "build": "cd src/presentation && bun run build",
-    "format": "(prettier --write . \"!src/presentation/**/*\") && (cd src/presentation && bun format)",
-    "install-all": "find . -name 'package.json' ! -path '*/node_modules/*' -execdir bun install \\;",
-    "lint": "eslint .",
+    "clean": "./scripts/clean.sh",
+    "format": "./scripts/format.sh",
+    "install-all": "./scripts/install-all.sh",
+    "lint": "./scripts/lint.sh",
     "start": "cd src/presentation && bun start"
   },
   "devDependencies": {

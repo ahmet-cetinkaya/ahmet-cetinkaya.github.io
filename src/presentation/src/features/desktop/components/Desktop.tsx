@@ -5,9 +5,7 @@ import AppShortcut from "@shared/components/AppShortcut";
 import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel/ThreeDimensionalModel";
 import { DefaultConfigs } from "@shared/components/ThreeDimensionalModel/constants/defaultConfigs";
 import ScreenHelper from "@shared/utils/ScreenHelper";
-import type IAppsService from "@application/features/apps/services/abstraction/IAppsService";
 import appCommands from "@shared/constants/AppCommands";
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
 import { Locales } from "@domain/data/Translations";
@@ -18,9 +16,7 @@ type DesktopShortcutMatrix = DesktopShortcut[][];
 const EXEC_REGEX = /Exec=(.+)/;
 
 export default function Desktop() {
-  const appsService: IAppsService = Container.instance.appsService;
-  const fileSystemService: IFileSystemService = Container.instance.fileSystemService;
-  const i18n = Container.instance.i18n;
+  const { appsService, fileSystemService, i18n } = Container.instance;
 
   let containerRef: HTMLDivElement | undefined;
   let matrixDimensions: { dimension1: number; dimension2: number } | undefined;

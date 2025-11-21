@@ -1,4 +1,5 @@
 import { Scene, AmbientLight, DirectionalLight } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "@domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
@@ -28,7 +29,7 @@ export default function Envelope3DModel(props: Props) {
     scene.add(pointLight);
   }
 
-  function configureControls(controls: any) {
+  function configureControls(controls: OrbitControls) {
     const controlsConfig = config.controls || {};
     const animationConfig = config.animation || {};
 

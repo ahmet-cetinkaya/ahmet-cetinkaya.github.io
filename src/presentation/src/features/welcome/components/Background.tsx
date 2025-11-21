@@ -1,9 +1,4 @@
 import { createResource, Show } from "solid-js";
-import type ICertificationsService from "@application/features/certifications/services/abstraction/ICertificationsService";
-import type ICurriculumVitaeService from "@application/features/curriculumVitae/services/abstraction/ICurriculumVitaeService";
-import type IEducationsService from "@application/features/educations/services/abstraction/IEducationsService";
-import type ILinksService from "@application/features/links/abstraction/ILinksService";
-import type IOrganizationsService from "@application/features/organizations/services/abstraction/IOrganizationsService";
 import Icons from "@domain/data/Icons";
 import { Links } from "@domain/data/Links";
 import { TranslationKeys } from "@domain/data/Translations";
@@ -16,11 +11,8 @@ import Title from "@shared/components/ui/Title";
 import { useI18n } from "@shared/utils/i18nTranslate";
 
 export default function Background() {
-  const curriculumVitaeService: ICurriculumVitaeService = Container.instance.curriculumVitaeService;
-  const certificationsService: ICertificationsService = Container.instance.certificationsService;
-  const educationsService: IEducationsService = Container.instance.educationsService;
-  const organizationsService: IOrganizationsService = Container.instance.organizationsService;
-  const linksService: ILinksService = Container.instance.linksService;
+  const { curriculumVitaeService, certificationsService, educationsService, organizationsService, linksService } =
+    Container.instance;
 
   const translate = useI18n();
 
@@ -93,7 +85,7 @@ export default function Background() {
 
   async function getOrganization(organizationId: number) {
     const organization = await organizationsService.get((x) => x.id === organizationId);
-    if (!organization) throw new Error("Organization not found: " + organizationId);
+    if (!organization) throw new Error(`Organization not found: ${organizationId}`);
     return organization;
   }
 

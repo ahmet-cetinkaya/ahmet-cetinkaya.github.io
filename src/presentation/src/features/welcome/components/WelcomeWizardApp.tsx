@@ -1,5 +1,4 @@
 import { createSignal, Index, Show } from "solid-js";
-import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
@@ -36,7 +35,7 @@ type Props = {
 };
 
 export default function WelcomeWizardApp(props: Props) {
-  const windowsService: IWindowsService = Container.instance.windowsService;
+  const { windowsService } = Container.instance;
 
   const translate = useI18n();
 

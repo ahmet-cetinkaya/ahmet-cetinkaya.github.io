@@ -49,9 +49,7 @@ type Props = {
 };
 
 export default function Terminal(props: Props) {
-  const fileSystemService = Container.instance.fileSystemService;
-  const windowsService = Container.instance.windowsService;
-  const i18n = Container.instance.i18n;
+  const { fileSystemService, windowsService, i18n } = Container.instance;
   const translate = useI18n();
 
   const [history, setHistory] = createSignal<CommandEntry[]>([]);

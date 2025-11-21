@@ -1,5 +1,4 @@
 import { createResource, Show, createMemo } from "solid-js";
-import type ITechnologiesService from "@application/features/technologies/services/abstraction/ITechnologiesService";
 import Icons from "@domain/data/Icons";
 import { TranslationKeys } from "@domain/data/Translations";
 import Technology from "@domain/models/Technology";
@@ -12,7 +11,7 @@ import { useI18n } from "@shared/utils/i18nTranslate";
 const SVG_BLOB_TYPE = "image/svg+xml;charset=utf-8";
 
 export default function Technologies() {
-  const technologiesService: ITechnologiesService = Container.instance.technologiesService;
+  const { technologiesService } = Container.instance;
   const translate = useI18n();
   let technologies: Technology[] | undefined;
 

@@ -1,5 +1,4 @@
 import { createSignal, Index, Show, createMemo, createResource } from "solid-js";
-import type ILinksService from "@application/features/links/abstraction/ILinksService";
 import Icons from "@domain/data/Icons";
 import { Links } from "@domain/data/Links";
 import { TranslationKeys } from "@domain/data/Translations";
@@ -13,7 +12,7 @@ import { useI18n } from "@shared/utils/i18nTranslate";
 import IconSvgs from "@shared/constants/IconSvgs";
 
 export default function EmailApp() {
-  const linksService: ILinksService = Container.instance.linksService;
+  const { linksService } = Container.instance;
   const translate = useI18n();
 
   const [emailLinkUrl] = createResource(getEmailLink);

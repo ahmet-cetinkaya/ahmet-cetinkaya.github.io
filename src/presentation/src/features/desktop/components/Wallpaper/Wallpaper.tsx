@@ -11,7 +11,7 @@ export default function Wallpaper(props: Props) {
   const layer2 = WallpaperPaths.getLayer2Paths();
 
   // Mouse tracking signals for parallax effects
-  const [mousePosition, setMousePosition] = createSignal({ x: 0, y: 0 });
+  const [, setMousePosition] = createSignal({ x: 0, y: 0 });
   const [transform2, setTransform2] = createSignal({ x: 0, y: 0 });
 
   // Parallax intensity settings
@@ -75,7 +75,7 @@ export default function Wallpaper(props: Props) {
         style={{
           "background-image": `url("${layer2.large}")`,
           "z-index": "-50",
-          "transform": `translate(${transform2().x}px, ${transform2().y}px)`,
+          transform: `translate(${transform2().x}px, ${transform2().y}px)`,
         }}
       />
       {/* Background layer 1 - top layer positioned from top - no parallax */}

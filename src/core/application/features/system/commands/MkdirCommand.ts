@@ -91,7 +91,7 @@ export default class MkdirCommand implements ICIProgram {
         let currentPath = "";
 
         for (const part of parts) {
-          currentPath += "/" + part;
+          currentPath += `/${part}`;
           if (!(await this.pathExists(currentPath))) {
             const newDir = new Directory(currentPath, new Date());
             await this.fileSystemService.add(newDir);

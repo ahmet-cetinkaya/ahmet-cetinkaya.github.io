@@ -18,9 +18,7 @@ type Props = {
 };
 
 export default function Window(props: Props) {
-  const windowsService = Container.instance.windowsService;
-  const appsService = Container.instance.appsService;
-  const i18n = Container.instance.i18n;
+  const { windowsService, appsService, i18n } = Container.instance;
   const translate = useI18n();
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);

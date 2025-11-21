@@ -1,16 +1,7 @@
 ---
 import ThumbnailPaths from "../constants/ThumbnailPaths";
 
-const images = [
-  ThumbnailPaths.COMPUTER,
-  ThumbnailPaths.ENVELOPE,
-  ThumbnailPaths.TERMINAL,
-  ThumbnailPaths.DOOM,
-];
+const images = [ThumbnailPaths.COMPUTER, ThumbnailPaths.ENVELOPE, ThumbnailPaths.TERMINAL, ThumbnailPaths.DOOM];
 ---
 
-{
-  images.map((image) => (
-    <link rel="preload" href={image} as="image" type="image/webp" />
-  ))
-}
+{images.map((image) => <link rel="preload" href={image} as="image" type="image/webp" />)}

@@ -1,4 +1,5 @@
 import { AmbientLight, PointLight, type Scene } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import ThreeDimensionModelViewer from "@packages/acore-solidjs/ui/components/ThreeDimensionModelViewer";
 import LoadingModelPreview from "./Loading3DModelPreview";
 import { TranslationKeys } from "@domain/data/Translations";
@@ -30,7 +31,7 @@ export default function Computer3DModel(props: Props) {
     scene.add(pointLight);
   }
 
-  function configureControls(controls: any) {
+  function configureControls(controls: OrbitControls) {
     const controlsConfig = config.controls || {};
     const animationConfig = config.animation || {};
 

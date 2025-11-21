@@ -74,7 +74,6 @@ export default class RmCommand implements ICIProgram {
   }
 
   private logVerbose(message: string): void {
-    console.log(message);
     this.verboseMessages.push(message);
   }
 

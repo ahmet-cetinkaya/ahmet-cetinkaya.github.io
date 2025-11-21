@@ -12,9 +12,7 @@ import appCommands from "@shared/constants/AppCommands";
 import ScreenHelper from "@shared/utils/ScreenHelper";
 
 export default function Menu() {
-  const categoriesService = Container.instance.categoriesService;
-  const appsService = Container.instance.appsService;
-  const i18n = Container.instance.i18n;
+  const { categoriesService, appsService, i18n } = Container.instance;
   const translate = useI18n();
 
   const [menuItems, setMenuItems] = createSignal<BaseDropdownItem[]>([]);

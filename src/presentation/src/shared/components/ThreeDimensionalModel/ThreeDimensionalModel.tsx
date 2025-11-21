@@ -19,8 +19,7 @@ export default function ThreeDimensionalModel(props: Props) {
   const [hasError, setHasError] = createSignal(false);
 
   // Handle errors in 3D model loading
-  onError((error) => {
-    console.error("Error loading 3D model:", error);
+  onError(() => {
     setHasError(true);
     props.onError?.();
   });

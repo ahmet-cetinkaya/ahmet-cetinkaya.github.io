@@ -5,7 +5,7 @@ import Container from "@presentation/Container";
 import Button from "@shared/components/ui/Button";
 
 export default function ChangeLocale() {
-  const i18n = Container.instance.i18n;
+  const { i18n } = Container.instance;
 
   const [currentLanguage, setCurrentLocale] = createSignal<string | undefined>();
 

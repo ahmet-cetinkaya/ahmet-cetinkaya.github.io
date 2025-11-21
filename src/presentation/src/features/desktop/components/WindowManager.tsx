@@ -10,7 +10,7 @@ import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation
 
 export default function WindowManager() {
   const windowService = Container.instance.windowsService;
-  const appsService = Container.instance.appsService;
+  const { appsService } = Container.instance;
   const [windows, setWindows] = createSignal<WindowModel[]>([]);
 
   onMount(async () => {

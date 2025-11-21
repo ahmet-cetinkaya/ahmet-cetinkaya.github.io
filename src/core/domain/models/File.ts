@@ -19,13 +19,13 @@ export default class File extends Entity<FileId> {
   }
 
   get extension(): string {
-    const name = this.name;
+    const { name } = this;
     const lastDotIndex = name.lastIndexOf(".");
     return lastDotIndex !== -1 ? name.slice(lastDotIndex + 1) : "";
   }
 
   get nameWithoutExtension(): string {
-    const name = this.name;
+    const { name } = this;
     const lastDotIndex = name.lastIndexOf(".");
     return lastDotIndex !== -1 ? name.slice(0, lastDotIndex) : name;
   }

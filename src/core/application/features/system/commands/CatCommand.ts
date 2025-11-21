@@ -112,10 +112,10 @@ export default class CatCommand implements ICIProgram {
       if (flags.showNonPrinting)
         processedLine = processedLine.replace(
           /[^\x20-\x7E\t\n]/g,
-          (match) => "^" + String.fromCharCode(match.charCodeAt(0) + 64),
+          (match) => `^${String.fromCharCode(match.charCodeAt(0) + 64)}`,
         );
 
-      if (flags.showEnds) processedLine = processedLine + "$";
+      if (flags.showEnds) processedLine = `${processedLine}$`;
 
       if (flags.number || (flags.numberNonBlank && line.trim()))
         processedLine = `${String(i + 1).padStart(6, " ")}  ${processedLine}`;

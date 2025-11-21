@@ -85,7 +85,7 @@ export default class RmdirCommand implements ICIProgram {
       if (!(entry instanceof Directory))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
-      const children = await this.fileSystemService.getAll((e) => e.fullPath.startsWith(targetPath + "/"));
+      const children = await this.fileSystemService.getAll((e) => e.fullPath.startsWith(`${targetPath}/`));
       if (children.length > 0 && !flags.ignoreFailOnNonEmpty) {
         return this.createErrorOutput(
           `${this.name}: {{${TranslationKeys.apps_terminal_rmdir_failed_not_empty}}}: ${path}`,
@@ -95,9 +95,9 @@ export default class RmdirCommand implements ICIProgram {
       if (flags.parents) {
         const parts = targetPath.split("/").filter(Boolean);
         for (let i = parts.length; i > 0; i--) {
-          const currentPath = "/" + parts.slice(0, i).join("/");
+          const currentPath = `/${parts.slice(0, i).join("/")}`;
           const hasChildren =
-            (await this.fileSystemService.getAll((e) => e.fullPath.startsWith(currentPath + "/"))).length > 0;
+            (await this.fileSystemService.getAll((e) => e.fullPath.startsWith(`${currentPath}/`))).length > 0;
 
           if (!hasChildren || flags.ignoreFailOnNonEmpty) {
             await this.fileSystemService.remove((e) => e.fullPath === currentPath);

@@ -1,6 +1,4 @@
 import { createResource, createSignal, onCleanup, onMount, Show } from "solid-js";
-import type IAppsService from "@application/features/apps/services/abstraction/IAppsService";
-import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 import { Apps } from "@domain/data/Apps";
 import Icons from "@domain/data/Icons";
@@ -15,9 +13,7 @@ import { useI18n } from "@shared/utils/i18nTranslate";
 import ScreenHelper from "@shared/utils/ScreenHelper";
 
 export default function Completed() {
-  const appsService: IAppsService = Container.instance.appsService;
-  const windowsService: IWindowsService = Container.instance.windowsService;
-  const i18n = Container.instance.i18n;
+  const { appsService, windowsService, i18n } = Container.instance;
   const translate = useI18n();
 
   const [contactApp] = createResource(getContactApp);

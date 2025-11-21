@@ -3,7 +3,7 @@ import type { TranslationKey } from "@domain/data/Translations";
 import Container from "@presentation/Container";
 
 export function useI18n(url: URL | null = null) {
-  const i18n = Container.instance.i18n;
+  const { i18n } = Container.instance;
 
   const currentUrl = url || new URL(window.location.href);
   let currentLocale = i18n.getLocaleFromUrl(currentUrl, i18n.locales[0]);
@@ -18,7 +18,7 @@ export function useI18n(url: URL | null = null) {
 }
 
 export function useCurrentLocale(url: URL | null = null) {
-  const i18n = Container.instance.i18n;
+  const { i18n } = Container.instance;
 
   const currentUrl = url || new URL(window.location.href);
   let currentLocale = i18n.getLocaleFromUrl(currentUrl, i18n.locales[0]);
@@ -33,7 +33,7 @@ export function useCurrentLocale(url: URL | null = null) {
 }
 
 export function useI18nStatic(url: URL | null = null) {
-  const i18n = Container.instance.i18n;
+  const { i18n } = Container.instance;
 
   const currentUrl = url || new URL(window.location.href);
   let currentLocale = i18n.getLocaleFromUrl(currentUrl, i18n.locales[0]);

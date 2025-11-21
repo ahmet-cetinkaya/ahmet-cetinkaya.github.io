@@ -22,9 +22,18 @@ fi
 
 # 1. TypeScript/JavaScript linting
 print_info "🟨 Running ESLint for TypeScript/JavaScript files..."
-if command -v eslint &>/dev/null; then
+ESLINT_CMD=""
+if [[ -f "./node_modules/.bin/eslint" ]]; then
+    ESLINT_CMD="./node_modules/.bin/eslint"
+elif command -v eslint &>/dev/null; then
+    ESLINT_CMD="eslint"
+elif command -v npx &>/dev/null; then
+    ESLINT_CMD="npx eslint"
+fi
+
+if [[ -n "$ESLINT_CMD" ]]; then
     # Run ESLint on all TS/JS files excluding node_modules
-    if eslint . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs 2>/dev/null; then
+    if $ESLINT_CMD . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs 2>/dev/null; then
         print_success "✅ ESLint checks passed"
     else
         print_error "❌ ESLint found issues"
@@ -32,29 +41,53 @@ if command -v eslint &>/dev/null; then
     fi
 else
     print_warning "⚠️  Skipping ESLint - not available"
+    print_info "💡 Run 'bun install-all' to install ESLint"
+    LINT_FAILED=1
 fi
 
 # 2. Shell script linting with shellcheck
 print_info "🐚 Running ShellCheck for shell scripts..."
 if command -v shellcheck &>/dev/null; then
-    # Find and lint shell scripts
-    SHELL_SCRIPTS=$(find . -name "*.sh" -not -path "*/node_modules/*" -not -path "*/.git/*")
-    if [[ -n "$SHELL_SCRIPTS" ]]; then
-        if echo "$SHELL_SCRIPTS" | xargs shellcheck 2>/dev/null; then
-            print_success "✅ ShellScript checks passed"
-        else
-            print_error "❌ ShellCheck found issues"
-            LINT_FAILED=1
-        fi
+    # Run shellcheck from scripts directory to properly resolve source files
+    if (cd scripts && shellcheck -x _common.sh ./*.sh) 2>/dev/null; then
+        print_success "✅ ShellScript checks passed"
     else
-        print_info "💡 No shell scripts found to lint"
+        print_error "❌ ShellCheck found issues"
+        LINT_FAILED=1
     fi
 else
     print_warning "⚠️  ShellCheck not found, skipping shell script linting"
     print_info "💡 Install ShellCheck: apt-get install shellcheck or brew install shellcheck"
 fi
 
-# 3. Prettier format check
+# 3. Markdown linting with markdownlint-cli2
+print_info "📝 Running Markdownlint for Markdown files..."
+# Check for markdownlint-cli2 in PATH or local node_modules/.bin
+MARKDOWNLINT_CMD=""
+if command -v markdownlint-cli2 &>/dev/null; then
+    MARKDOWNLINT_CMD="markdownlint-cli2"
+elif [[ -f "./node_modules/.bin/markdownlint-cli2" ]]; then
+    MARKDOWNLINT_CMD="./node_modules/.bin/markdownlint-cli2"
+elif command -v npx &>/dev/null; then
+    MARKDOWNLINT_CMD="npx markdownlint-cli2"
+fi
+
+if [[ -n "$MARKDOWNLINT_CMD" ]]; then
+    # Run markdownlint-cli2 with appropriate glob patterns
+    if $MARKDOWNLINT_CMD "**/*.md" "#node_modules" "#dist" "#.git" 2>/dev/null; then
+        print_success "✅ Markdown files passed linting"
+    else
+        print_error "❌ Markdownlint found issues"
+        LINT_FAILED=1
+        print_info "💡 Run '$MARKDOWNLINT_CMD --fix **/*.md' to fix markdown issues"
+    fi
+else
+    print_warning "⚠️  markdownlint-cli2 not found, skipping markdown linting"
+    print_info "💡 Install markdownlint-cli2: npm install -g markdownlint-cli2"
+    print_info "💡 Or install locally: npm install markdownlint-cli2 --save-dev"
+fi
+
+# 4. Prettier format check
 print_info "🎨 Checking code formatting with Prettier..."
 if command -v prettier &>/dev/null; then
     # Check if files are formatted (dry run)
@@ -69,14 +102,14 @@ else
     print_warning "⚠️  Prettier not found, skipping format check"
 fi
 
-# 4. Check for common issues
+# 5. Check for common issues
 print_info "🔎 Checking for common issues..."
 
 # Check for console.log statements (excluding test and dist files)
-CONSOLE_LOGS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | \
-    grep -v node_modules | \
-    grep -v test | \
-    grep -v dist | \
+CONSOLE_LOGS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
+    grep -v node_modules |
+    grep -v test |
+    grep -v dist |
     xargs grep -l "console\.log\|console\.warn\|console\.error" 2>/dev/null || true)
 
 if [[ -n "$CONSOLE_LOGS" ]]; then
@@ -86,8 +119,8 @@ if [[ -n "$CONSOLE_LOGS" ]]; then
 fi
 
 # Check for TODO/FIXME comments
-TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | \
-    grep -v node_modules | \
+TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
+    grep -v node_modules |
     xargs grep -n "TODO\|FIXME\|XXX\|HACK" 2>/dev/null || true)
 
 if [[ -n "$TODO_COMMENTS" ]]; then

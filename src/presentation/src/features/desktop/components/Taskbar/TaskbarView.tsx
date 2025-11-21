@@ -12,9 +12,7 @@ import Dropdown, { type DropdownItem } from "@shared/components/ui/Dropdown";
 import { useI18n } from "@shared/utils/i18nTranslate";
 
 export default function TaskbarView() {
-  const windowsService = Container.instance.windowsService;
-  const appsService = Container.instance.appsService;
-  const i18n = Container.instance.i18n;
+  const { windowsService, appsService, i18n } = Container.instance;
   const translate = useI18n();
 
   const [windows, setWindows] = createSignal<Window[]>([]);

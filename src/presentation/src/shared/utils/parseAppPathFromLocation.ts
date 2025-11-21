@@ -19,7 +19,7 @@ export function parseAppPathFromLocation(pathname: string): AppPathInfo {
 }
 
 function normalizePathname(pathname: string): string {
-  const i18n = Container.instance.i18n;
+  const { i18n } = Container.instance;
   let path = pathname.startsWith("/") ? pathname.slice(1) : pathname;
 
   // Remove locale prefix if present

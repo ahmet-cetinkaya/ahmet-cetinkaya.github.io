@@ -82,7 +82,7 @@ export default class FastFetchCommand implements ICIProgram {
   }
 
   private getSystemInfo(): string[] {
-    const userAgent = navigator.userAgent;
+    const { userAgent } = navigator;
     const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory
       ? `${(navigator as Navigator & { deviceMemory?: number }).deviceMemory} GB`
       : `{{${TranslationKeys.apps_terminal_fastfetch_unknown_memory}}}`;

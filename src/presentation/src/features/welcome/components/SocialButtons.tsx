@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function SocialButtons(props: Props) {
-  const linksService = Container.instance.linksService;
+  const { linksService } = Container.instance;
 
   const [socialLinks] = createResource(getSocialLinks);
 

@@ -8,7 +8,7 @@ import { DRACO_DIRECTORY } from "./constants/draco";
 import ModelPaths from "@shared/constants/ModelPaths";
 import type { Model3DConfig } from "./models";
 import { DefaultConfigs } from "./constants/defaultConfigs";
-const TerminalModelPreview = "/home/ac/Models/terminal/terminal-thumbnail.webp";
+import ThumbnailPaths from "@shared/constants/ThumbnailPaths";
 
 type Props = {
   class?: string;
@@ -59,8 +59,7 @@ export default function Terminal3DModel(props: Props) {
   }
 
   function configureModel(gltf: GLTF) {
-    gltf.scene.position.x = 0;
-    gltf.scene.position.y = 0;
+    // Keep rotation if needed, but remove position as it's handled by normalization
     gltf.scene.rotation.y = 6;
   }
 
@@ -68,16 +67,21 @@ export default function Terminal3DModel(props: Props) {
     <ThreeDimensionModelViewer
       decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={2.9}
+      modelScale={0.9}
       configureScene={configureScene}
       configureModel={configureModel}
       configureControls={configureControls}
       autoRotate={config.animation?.enableAutoRotate}
       enableInitialAnimation={config.animation?.enableInitialAnimation}
       initializationDelay={config.animation?.initializationDelay}
+      minHorizontalScale={config.minHorizontalScale ?? 7}
       class={props.class}
       loadingElement={
-        <LoadingModelPreview src={TerminalModelPreview} alt={TranslationKeys.apps_terminal} class="h-[85%] w-[85%]" />
+        <LoadingModelPreview
+          src={ThumbnailPaths.TERMINAL}
+          alt={TranslationKeys.apps_terminal}
+          class="h-[85%] w-[85%]"
+        />
       }
     />
   );

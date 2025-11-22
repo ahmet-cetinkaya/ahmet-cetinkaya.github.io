@@ -1,6 +1,5 @@
 import { Scene, DirectionalLight } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "@domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
 import ThreeDimensionModelViewer from "@packages/acore-solidjs/ui/components/ThreeDimensionModelViewer";
@@ -8,7 +7,7 @@ import { DRACO_DIRECTORY } from "./constants/draco";
 import ModelPaths from "@shared/constants/ModelPaths";
 import type { Model3DConfig } from "./models";
 import { DefaultConfigs } from "./constants/defaultConfigs";
-const DoomModelPreview = "/home/ac/Models/doom/doom-thumbnail.webp";
+import ThumbnailPaths from "@shared/constants/ThumbnailPaths";
 
 type Props = {
   class?: string;
@@ -50,25 +49,20 @@ export default function Doom3DModel(props: Props) {
     controls.autoRotateSpeed = animationConfig.autoRotateSpeed ?? 2;
   }
 
-  function configureModel(gltf: GLTF) {
-    gltf.scene.position.x = -2.3;
-    gltf.scene.position.y = -2.9;
-  }
-
   return (
     <ThreeDimensionModelViewer
       decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={0.22}
+      modelScale={0.8}
       configureScene={configureScene}
-      configureModel={configureModel}
       configureControls={configureControls}
       autoRotate={config.animation?.enableAutoRotate}
       enableInitialAnimation={config.animation?.enableInitialAnimation}
       initializationDelay={config.animation?.initializationDelay}
+      minHorizontalScale={config.minHorizontalScale ?? 7}
       class={props.class}
       loadingElement={
-        <LoadingModelPreview src={DoomModelPreview} alt={TranslationKeys.apps_doom} class="h-[100%] w-[100%]" />
+        <LoadingModelPreview src={ThumbnailPaths.DOOM} alt={TranslationKeys.apps_doom} class="h-[100%] w-[100%]" />
       }
     />
   );

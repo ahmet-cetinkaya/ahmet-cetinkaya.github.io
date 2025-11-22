@@ -7,8 +7,7 @@ import { DRACO_DIRECTORY } from "./constants/draco";
 import ModelPaths from "@shared/constants/ModelPaths";
 import type { Model3DConfig } from "./models";
 import { DefaultConfigs } from "./constants/defaultConfigs";
-import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
-const ComputerModelPreview = "/home/ac/Models/computer/computer-thumbnail.webp";
+import ThumbnailPaths from "@shared/constants/ThumbnailPaths";
 
 type Props = {
   class?: string;
@@ -50,18 +49,12 @@ export default function Computer3DModel(props: Props) {
     controls.autoRotateSpeed = animationConfig.autoRotateSpeed ?? 2;
   }
 
-  function configureModel(gltf: GLTF) {
-    gltf.scene.position.y = 0.7;
-    gltf.scene.position.x = -0.8;
-    gltf.scene.position.z = 0;
-  }
-
   return (
     <ThreeDimensionModelViewer
       decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={16}
-      configureModel={configureModel}
+      modelScale={1.5}
+      minHorizontalScale={config.minHorizontalScale ?? 7}
       configureScene={configureScene}
       configureControls={configureControls}
       autoRotate={config.animation?.enableAutoRotate}
@@ -69,7 +62,7 @@ export default function Computer3DModel(props: Props) {
       initializationDelay={config.animation?.initializationDelay}
       class={props.class}
       loadingElement={
-        <LoadingModelPreview src={ComputerModelPreview} alt={TranslationKeys.common_computer} class="size-[100%]" />
+        <LoadingModelPreview src={ThumbnailPaths.COMPUTER} alt={TranslationKeys.common_computer} class="size-[100%]" />
       }
     />
   );

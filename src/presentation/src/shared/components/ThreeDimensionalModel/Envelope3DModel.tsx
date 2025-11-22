@@ -1,6 +1,5 @@
 import { Scene, AmbientLight, DirectionalLight } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import type { GLTF } from "three/examples/jsm/Addons.js";
 import { TranslationKeys } from "@domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
 import ThreeDimensionModelViewer from "@packages/acore-solidjs/ui/components/ThreeDimensionModelViewer";
@@ -8,7 +7,7 @@ import { DRACO_DIRECTORY } from "./constants/draco";
 import ModelPaths from "@shared/constants/ModelPaths";
 import type { Model3DConfig } from "./models";
 import { DefaultConfigs } from "./constants/defaultConfigs";
-const EnvelopeModelPreview = "/home/ac/Models/envelope/envelope-thumbnail.webp";
+import ThumbnailPaths from "@shared/constants/ThumbnailPaths";
 
 type Props = {
   class?: string;
@@ -48,26 +47,20 @@ export default function Envelope3DModel(props: Props) {
     controls.autoRotateSpeed = animationConfig.autoRotateSpeed ?? 2;
   }
 
-  function configureModel(gltf: GLTF) {
-    gltf.scene.position.y = -2;
-    gltf.scene.position.x = 0.2;
-    gltf.scene.position.z = 0;
-  }
-
   return (
     <ThreeDimensionModelViewer
       decoderPath={DRACO_DIRECTORY}
       modelPath={MODEL}
-      modelScale={0.053}
+      modelScale={1.4}
       configureScene={configureScene}
-      configureModel={configureModel}
       configureControls={configureControls}
       autoRotate={config.animation?.enableAutoRotate}
       enableInitialAnimation={config.animation?.enableInitialAnimation}
       initializationDelay={config.animation?.initializationDelay}
+      minHorizontalScale={config.minHorizontalScale ?? 7}
       class={props.class}
       loadingElement={
-        <LoadingModelPreview src={EnvelopeModelPreview} alt={TranslationKeys.common_envelope} class="size-[80%]" />
+        <LoadingModelPreview src={ThumbnailPaths.ENVELOPE} alt={TranslationKeys.common_envelope} class="size-[80%]" />
       }
     />
   );

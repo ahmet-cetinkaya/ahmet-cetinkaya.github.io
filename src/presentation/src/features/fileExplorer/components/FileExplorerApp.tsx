@@ -467,242 +467,248 @@ export default function FileExplorerApp(props: Props) {
     });
   }
 
+  // Helper function to create clipboard items from paths
+  async function createClipboardItems(paths: string[]) {
+    const clipboardItems = paths.map((path) => ({
+      path,
+      name: path.split("/").pop() || "",
+      isDirectory: false, // We'll determine this below
+      originalPath: path,
+    }));
+
+    // Determine which items are directories
+    for (const item of clipboardItems) {
+      const entry = await fileSystemService.get((e) => e.fullPath === item.path);
+      if (entry) {
+        item.isDirectory = entry instanceof Directory;
+      }
+    }
+
+    return clipboardItems;
+  }
+
+  // File operation handlers
+  async function handleOpenOperation(paths: string[]) {
+    for (const path of paths) {
+      const entry = await fileSystemService.get((e) => e.fullPath === path);
+      if (entry) {
+        await openFile(entry);
+      }
+    }
+  }
+
+  function handleDeleteOperation(paths: string[]) {
+    if (paths.length === 0) return;
+
+    const confirmMessage =
+      paths.length === 1
+        ? `Are you sure you want to delete "${paths[0].split("/").pop()}"?`
+        : `Are you sure you want to delete ${paths.length} selected items?`;
+
+    setConfirmDialog({
+      isOpen: true,
+      title: "Confirm Delete",
+      message: confirmMessage,
+      type: "danger",
+      onConfirm: async () => {
+        try {
+          const service = new FileExplorerService(fileSystemService);
+          await service.deleteEntries(paths);
+          clearSelection();
+          refresh();
+        } catch (error) {
+          handleError(error);
+        }
+      },
+      onCancel: () => {
+        // User cancelled, do nothing
+      },
+    });
+  }
+
+  function handleRenameOperation(paths: string[]) {
+    if (paths.length !== 1) return;
+
+    const currentPath = paths[0];
+    const currentName = currentPath.split("/").pop() || "";
+
+    setInputDialog({
+      isOpen: true,
+      title: "Rename",
+      message: `Enter new name for "${currentName}":`,
+      placeholder: "New name",
+      defaultValue: currentName,
+      onConfirm: async (newName) => {
+        try {
+          if (newName.trim() !== "" && newName !== currentName) {
+            const service = new FileExplorerService(fileSystemService);
+            await service.renameEntry(currentPath, newName.trim());
+            refresh();
+          }
+        } catch (error) {
+          handleError(error);
+        }
+      },
+      onCancel: () => {
+        // User cancelled, do nothing
+      },
+    });
+  }
+
+  async function handleCopyOperation(paths: string[]) {
+    if (paths.length === 0) return;
+    const clipboardItems = await createClipboardItems(paths);
+    ClipboardService.copy(clipboardItems, state().currentPath);
+  }
+
+  async function handleCutOperation(paths: string[]) {
+    if (paths.length === 0) return;
+    const cutItems = await createClipboardItems(paths);
+    ClipboardService.cut(cutItems, state().currentPath);
+    setCutFiles(new Set(paths)); // Track cut files for opacity styling
+    clearSelection();
+  }
+
+  async function handlePasteOperation() {
+    const clipboard = ClipboardService.getClipboard();
+    if (!clipboard || !ClipboardService.canPaste(state().currentPath)) {
+      return;
+    }
+
+    try {
+      const service = new FileExplorerService(fileSystemService);
+
+      if (ClipboardService.isCutOperation()) {
+        // Move operation (cut + paste)
+        await service.moveEntries(
+          clipboard.items.map((item) => item.originalPath),
+          state().currentPath,
+        );
+        ClipboardService.completeCutOperation();
+        setCutFiles(new Set<string>()); // Clear cut files after successful paste
+      } else {
+        // Copy operation
+        await service.copyEntries(
+          clipboard.items.map((item) => item.originalPath),
+          state().currentPath,
+        );
+      }
+
+      refresh();
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function handleOpenInTerminalOperation(paths: string[]) {
+    if (paths.length === 1) {
+      const directoryPath = paths[0];
+
+      try {
+        // Use the same window management system as WindowManager
+        const { Apps } = await import("@domain/data/Apps");
+        const appCommands = (await import("@shared/constants/AppCommands")).default;
+
+        // Check if terminal is already open
+        const existingWindow = await Container.instance.windowsService.get((window) => window.appId === Apps.terminal);
+
+        if (existingWindow) {
+          // Activate existing terminal window
+          await Container.instance.windowsService.active(existingWindow);
+        } else {
+          // Open new terminal with directory as argument
+          const terminalCommand = appCommands[Apps.terminal]();
+          await terminalCommand.execute(directoryPath);
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  }
+
+  async function handleViewOperation(paths: string[]) {
+    if (paths.length === 1) {
+      // FUTURE: Implement file viewer for read-only file content preview
+    }
+  }
+
+  async function handleEditOperation(paths: string[]) {
+    if (paths.length === 1) {
+      // FUTURE: Implement file editor for in-place file editing
+    }
+  }
+
+  async function handlePropertiesOperation(paths: string[]) {
+    if (paths.length === 1) {
+      const entry = await fileSystemService.get((e) => e.fullPath === paths[0]);
+      if (entry) {
+        setPropertiesPanel({
+          visible: true,
+          entry,
+        });
+      }
+    }
+  }
+
+  // Main file operation handler
   async function handleFileOperation(operation: string, paths: string[]) {
     try {
       switch (operation) {
         case "open":
-          // Open selected files
-          for (const path of paths) {
-            const entry = await fileSystemService.get((e) => e.fullPath === path);
-            if (entry) {
-              await openFile(entry);
-            }
-          }
+          await handleOpenOperation(paths);
           break;
 
-        case "delete": {
-          // Delete files with confirmation
-          if (paths.length === 0) return;
-
-          const confirmMessage =
-            paths.length === 1
-              ? `Are you sure you want to delete "${paths[0].split("/").pop()}"?`
-              : `Are you sure you want to delete ${paths.length} selected items?`;
-
-          setConfirmDialog({
-            isOpen: true,
-            title: "Confirm Delete",
-            message: confirmMessage,
-            type: "danger",
-            onConfirm: async () => {
-              try {
-                const fileExplorerService = FileExplorerService;
-                const service = new fileExplorerService(fileSystemService);
-                await service.deleteEntries(paths);
-                clearSelection();
-                refresh();
-              } catch (error) {
-                handleError(error);
-              }
-            },
-            onCancel: () => {
-              // User cancelled, do nothing
-            },
-          });
+        case "delete":
+          handleDeleteOperation(paths);
           break;
-        }
 
-        case "rename": {
-          // Rename file (only works for single file)
-          if (paths.length !== 1) return;
-
-          const currentPath = paths[0];
-          const currentName = currentPath.split("/").pop() || "";
-
-          setInputDialog({
-            isOpen: true,
-            title: "Rename",
-            message: `Enter new name for "${currentName}":`,
-            placeholder: "New name",
-            defaultValue: currentName,
-            onConfirm: async (newName) => {
-              try {
-                if (newName.trim() !== "" && newName !== currentName) {
-                  const fileExplorerService = FileExplorerService;
-                  const service = new fileExplorerService(fileSystemService);
-                  await service.renameEntry(currentPath, newName.trim());
-                  refresh();
-                }
-              } catch (error) {
-                handleError(error);
-              }
-            },
-            onCancel: () => {
-              // User cancelled, do nothing
-            },
-          });
+        case "rename":
+          handleRenameOperation(paths);
           break;
-        }
 
-        case "copy": {
-          // Copy files to clipboard
-          if (paths.length === 0) return;
-
-          const clipboardItems = paths.map((path) => ({
-            path,
-            name: path.split("/").pop() || "",
-            isDirectory: false, // We'll determine this below
-            originalPath: path,
-          }));
-
-          // Determine which items are directories
-          for (const item of clipboardItems) {
-            const entry = await fileSystemService.get((e) => e.fullPath === item.path);
-            if (entry) {
-              item.isDirectory = entry instanceof Directory;
-            }
-          }
-
-          ClipboardService.copy(clipboardItems, state().currentPath);
+        case "copy":
+          await handleCopyOperation(paths);
           break;
-        }
 
-        case "cut": {
-          // Cut files to clipboard
-          if (paths.length === 0) return;
-
-          const cutItems = paths.map((path) => ({
-            path,
-            name: path.split("/").pop() || "",
-            isDirectory: false, // We'll determine this below
-            originalPath: path,
-          }));
-
-          // Determine which items are directories
-          for (const item of cutItems) {
-            const entry = await fileSystemService.get((e) => e.fullPath === item.path);
-            if (entry) {
-              item.isDirectory = entry instanceof Directory;
-            }
-          }
-
-          ClipboardService.cut(cutItems, state().currentPath);
-          setCutFiles(new Set(paths)); // Track cut files for opacity styling
-          clearSelection();
+        case "cut":
+          await handleCutOperation(paths);
           break;
-        }
 
-        case "paste": {
-          // Paste from clipboard
-          const clipboard = ClipboardService.getClipboard();
-          if (!clipboard || !ClipboardService.canPaste(state().currentPath)) {
-            return;
-          }
-
-          try {
-            const fileExplorerService = FileExplorerService;
-            const service = new fileExplorerService(fileSystemService);
-
-            if (ClipboardService.isCutOperation()) {
-              // Move operation (cut + paste)
-              await service.moveEntries(
-                clipboard.items.map((item) => item.originalPath),
-                state().currentPath,
-              );
-              ClipboardService.completeCutOperation();
-              setCutFiles(new Set<string>()); // Clear cut files after successful paste
-            } else {
-              // Copy operation
-              await service.copyEntries(
-                clipboard.items.map((item) => item.originalPath),
-                state().currentPath,
-              );
-            }
-
-            refresh();
-          } catch (error) {
-            handleError(error);
-          }
+        case "paste":
+          await handlePasteOperation();
           break;
-        }
 
         case "new-folder":
-          // Create new folder
           await createFolder();
           break;
 
-        case "new-file": {
-          // Create new file
+        case "new-file":
           await createFile();
           break;
-        }
 
         case "refresh":
           refresh();
           break;
 
-        case "open-in-terminal": {
-          // Open directory in terminal
-          if (paths.length === 1) {
-            const directoryPath = paths[0];
-
-            try {
-              // Use the same window management system as WindowManager
-              const { Apps } = await import("@domain/data/Apps");
-              const appCommands = (await import("@shared/constants/AppCommands")).default;
-
-              // Check if terminal is already open
-              const existingWindow = await Container.instance.windowsService.get(
-                (window) => window.appId === Apps.terminal,
-              );
-
-              if (existingWindow) {
-                // Activate existing terminal window
-                await Container.instance.windowsService.active(existingWindow);
-              } else {
-                // Open new terminal with directory as argument
-                const terminalCommand = appCommands[Apps.terminal]();
-                await terminalCommand.execute(directoryPath);
-              }
-            } catch (error) {
-              handleError(error);
-            }
-          }
+        case "open-in-terminal":
+          await handleOpenInTerminalOperation(paths);
           break;
-        }
 
-        case "view": {
-          // View file content (placeholder - will implement in Phase 2)
-          if (paths.length === 1) {
-            // FUTURE: Implement file viewer for read-only file content preview
-          }
+        case "view":
+          await handleViewOperation(paths);
           break;
-        }
 
-        case "edit": {
-          // Edit file content (placeholder - will implement in Phase 2)
-          if (paths.length === 1) {
-            // FUTURE: Implement file editor for in-place file editing
-          }
+        case "edit":
+          await handleEditOperation(paths);
           break;
-        }
 
-        case "properties": {
-          // Show properties panel
-          if (paths.length === 1) {
-            const entry = await fileSystemService.get((e) => e.fullPath === paths[0]);
-            if (entry) {
-              setPropertiesPanel({
-                visible: true,
-                entry,
-              });
-            }
-          }
+        case "properties":
+          await handlePropertiesOperation(paths);
           break;
-        }
 
         default:
-        // Unknown operation
+          // Unknown operation
+          break;
       }
     } catch (error) {
       handleError(error);

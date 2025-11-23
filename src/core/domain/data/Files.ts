@@ -1,4 +1,5 @@
 import File from "@domain/models/File";
+import { Apps } from "./Apps";
 import { Paths } from "./Directories";
 
 const FilesData: File[] = [
@@ -67,7 +68,7 @@ const FilesData: File[] = [
     `${Paths.USER_DESKTOP}/welcome.desktop`,
     `[Desktop Entry]
 Name=Welcome
-Exec=welcome
+Exec=${Apps.welcome}
 Icon=computer
 Type=Application
 Categories=Application;
@@ -79,7 +80,7 @@ StartupNotify=true`,
     `${Paths.USER_DESKTOP}/contact.desktop`,
     `[Desktop Entry]
 Name=Contact
-Exec=email
+Exec=${Apps.email}
 Icon=envelope
 Type=Application
 Categories=Application;
@@ -91,7 +92,7 @@ StartupNotify=true`,
     `${Paths.USER_DESKTOP}/file-explorer.desktop`,
     `[Desktop Entry]
 Name=File Explorer
-Exec=fileExplorer
+Exec=${Apps.fileExplorer}
 Icon=computer
 Type=Application
 Categories=System;
@@ -103,7 +104,7 @@ StartupNotify=true`,
     `${Paths.USER_DESKTOP}/terminal.desktop`,
     `[Desktop Entry]
 Name=Terminal
-Exec=terminal
+Exec=${Apps.terminal}
 Icon=terminal
 Type=Application
 Categories=System;Terminal;
@@ -115,7 +116,7 @@ StartupNotify=true`,
     `${Paths.USER_DESKTOP}/doom.desktop`,
     `[Desktop Entry]
 Name=Doom
-Exec=doom
+Exec=${Apps.doom}
 Icon=doom
 Type=Application
 Categories=Game;

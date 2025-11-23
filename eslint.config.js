@@ -70,8 +70,27 @@ export default [
     },
   },
   {
+    files: ["**/*.astro"],
+    languageOptions: {
+      parser: tsEslint.parser,
+      parserOptions: {
+        extraFileExtensions: [".astro"],
+        project: "src/presentation/tsconfig.json",
+      },
+      globals: globals.browser,
+    },
+    rules: {
+      // Basic rules for Astro files - focus on TypeScript in script blocks
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "no-console": "warn",
+      "no-debugger": "error",
+      "prefer-const": "error",
+      "no-var": "error",
+    },
+  },
+  {
     ignores: [
-      "**/*.astro",
       "src/presentation/public/home",
       "src/presentation/dist",
       "src/presentation/.astro",

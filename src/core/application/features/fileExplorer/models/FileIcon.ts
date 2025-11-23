@@ -158,19 +158,25 @@ export function getFileIconConfig(fileName: string, isDirectory: boolean): FileI
     return FILE_TYPE_ICONS[FileType.DIRECTORY];
   }
 
-  const extension = fileName.split(".").pop()?.toLowerCase() || "";
-  const baseName = fileName.split(".").shift()?.toLowerCase() || "";
+  const lowerFileName = fileName.toLowerCase();
 
-  // Check for exact filename matches first (like .gitignore)
-  const baseFileType = baseName as FileType;
-  if (Object.values(FileType).includes(baseFileType) && FILE_TYPE_ICONS[baseFileType]) {
-    return FILE_TYPE_ICONS[baseFileType];
+  // Check for exact filename matches (e.g., "dockerfile")
+  if (Object.values(FileType).includes(lowerFileName as FileType) && FILE_TYPE_ICONS[lowerFileName as FileType]) {
+    return FILE_TYPE_ICONS[lowerFileName as FileType];
+  }
+
+  // Check for dotfiles by name without dot (e.g. .gitignore -> gitignore)
+  if (lowerFileName.startsWith(".")) {
+    const dotfileName = lowerFileName.substring(1);
+    if (Object.values(FileType).includes(dotfileName as FileType) && FILE_TYPE_ICONS[dotfileName as FileType]) {
+      return FILE_TYPE_ICONS[dotfileName as FileType];
+    }
   }
 
   // Then check for extension matches
-  const extensionFileType = extension as FileType;
-  if (Object.values(FileType).includes(extensionFileType) && FILE_TYPE_ICONS[extensionFileType]) {
-    return FILE_TYPE_ICONS[extensionFileType];
+  const extension = lowerFileName.split(".").pop() || "";
+  if (Object.values(FileType).includes(extension as FileType) && FILE_TYPE_ICONS[extension as FileType]) {
+    return FILE_TYPE_ICONS[extension as FileType];
   }
 
   // Fallback to default

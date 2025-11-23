@@ -5,24 +5,8 @@ import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import PathUtils from "@packages/acore-ts/data/path/PathUtils";
 
-// Simple logger for core application (avoid circular dependencies)
-class CoreLogger {
-  private isDevelopment = process.env.NODE_ENV !== "production";
-
-  debug(message: string, ...args: unknown[]): void {
-    if (this.isDevelopment) {
-      console.log(`[DEBUG] ${message}`, ...args);
-    }
-  }
-
-  error(message: string, ...args: unknown[]): void {
-    if (this.isDevelopment) {
-      console.error(`[ERROR] ${message}`, ...args);
-    }
-  }
-}
-
-const logger = new CoreLogger();
+// Use the shared logger utility instead of creating a duplicate logger class
+import { logger } from "@shared/utils/logger";
 
 export enum FileViewMode {
   GRID = "grid",
@@ -87,7 +71,12 @@ export default class FileExplorerService {
     return this.sortEntries(entries, options.sortBy, options.sortOrder);
   }
 
-  async getDirectoryTree(path: string): Promise<Map<string, FileSystemEntry[]>> {
+  /**
+   * Get files in all subdirectories of the given path.
+   * Returns a flat map where keys are directory paths and values are arrays of files in each directory.
+   * This method only returns files, not directories themselves.
+   */
+  async getFilesInSubdirectories(path: string): Promise<Map<string, FileSystemEntry[]>> {
     const tree = new Map<string, FileSystemEntry[]>();
 
     const entries = await this.fileSystemService.getAll((entry) => {

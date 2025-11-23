@@ -12,6 +12,11 @@ const appCommands: Record<Apps, () => ICIProgram<unknown>> = {
   email: () => new EmailCommand(Container.instance.windowsService),
   welcome: () => new WelcomeWizardCommand(Container.instance.windowsService),
   terminal: () => new TerminalCommand(Container.instance.windowsService),
-  fileExplorer: () => new FileExplorerCommand(Container.instance.windowsService, Container.instance as Container),
+  fileExplorer: () =>
+    new FileExplorerCommand(
+      Container.instance.fileSystemService,
+      Container.instance.windowsService,
+      Container.instance as Container,
+    ),
 };
 export default appCommands;

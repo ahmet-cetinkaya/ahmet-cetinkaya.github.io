@@ -13,6 +13,35 @@ interface PermissionErrorProps {
 export default function PermissionError({ message, path, onClose }: PermissionErrorProps) {
   const translate = useI18n();
 
+  // Create error description using the message for debugging purposes
+  const createErrorDescription = (): string => {
+    if (message) {
+      // Extract path from message if no path prop provided
+      if (!actualPath && message) {
+        // Look for paths in quotes: "/path/to/file"
+        const quotedPathMatch = message.match(/["']([^"']+)["']/);
+        if (quotedPathMatch) {
+          return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, {
+            path: quotedPathMatch[1],
+          });
+        }
+
+        // Look for paths that start with /
+        const pathMatch = message.match(/([/][^\s]+)/);
+        if (pathMatch) {
+          return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, {
+            path: pathMatch[1],
+          });
+        }
+      }
+
+      // If no path found in message, show generic error
+      return translate(TranslationKeys.apps_terminal_permission_denied_description);
+    }
+
+    return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, { path: actualPath });
+  };
+
   // Window size for permission error
   const size = new Size(400, 250);
 
@@ -30,42 +59,11 @@ export default function PermissionError({ message, path, onClose }: PermissionEr
     return result;
   };
 
-  // Use provided path directly, or extract from message, or fallback
-  const getPath = (): string => {
-    if (path) {
-      return path; // Use provided path first
-    }
+  // Use provided path directly - parent component should extract path from error message
+  // This simplifies the component and centralizes path extraction logic
+  const actualPath = path || "";
 
-    if (message) {
-      // Look for paths in quotes: "/path/to/file"
-      const quotedPathMatch = message.match(/["']([^"']+)["']/);
-      if (quotedPathMatch) {
-        return quotedPathMatch[1];
-      }
-
-      // Look for paths that start with /
-      const pathMatch = message.match(/([/][^\s]+)/);
-      if (pathMatch) {
-        return pathMatch[1];
-      }
-    }
-
-    return ""; // Default empty string
-  };
-
-  const actualPath = getPath();
-
-  // Create description with path parameter
-  const getDescriptionWithPath = (): string => {
-    return actualPath
-      ? translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, { path: actualPath })
-      : translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, { path: "" }).replace(
-          ' ""',
-          "",
-        );
-  };
-
-  const finalDescription = getDescriptionWithPath();
+  const finalDescription = createErrorDescription();
 
   return (
     <Dialog

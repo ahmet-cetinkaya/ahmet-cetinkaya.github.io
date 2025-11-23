@@ -275,8 +275,6 @@ export default class FileExplorerService {
     // Validate that we can write to the destination path
     PermissionService.validatePath(destinationPath);
 
-    // This is a simplified implementation
-    // In a real implementation, you'd need to handle directory copying recursively
     for (const sourcePath of sourcePaths) {
       // Validate that we can read from the source path
       PermissionService.validatePath(sourcePath);
@@ -284,27 +282,67 @@ export default class FileExplorerService {
       const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === sourcePath);
       if (!sourceEntry) continue;
 
-      const isDirectory = sourceEntry instanceof Directory;
-      const uniqueName = await this.generateUniqueName(destinationPath, sourceEntry.name, isDirectory);
+      await this.copyEntryRecursive(sourceEntry, destinationPath);
+    }
+  }
 
-      // Manually construct the path to avoid PathUtils.normalize issues
-      const destPath = destinationPath === "/" ? `/${uniqueName}` : `${destinationPath}/${uniqueName}`;
+  private async copyEntryRecursive(sourceEntry: FileSystemEntry, destinationPath: string): Promise<void> {
+    const isDirectory = sourceEntry instanceof Directory;
+    const uniqueName = await this.generateUniqueName(destinationPath, sourceEntry.name, isDirectory);
 
-      // Validate the final destination path
-      PermissionService.validatePath(destPath);
+    // Manually construct the path to avoid PathUtils.normalize issues
+    const destPath = destinationPath === "/" ? `/${uniqueName}` : `${destinationPath}/${uniqueName}`;
 
-      logger.debug(`Copying: ${sourceEntry.name} -> ${uniqueName}`);
-      logger.debug(`Destination path: ${destinationPath}, Unique name: ${uniqueName}, Combined path: ${destPath}`);
+    // Validate the final destination path
+    PermissionService.validatePath(destPath);
 
-      if (sourceEntry instanceof File) {
-        const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size, new Date());
-        await this.fileSystemService.add(newFile);
-        logger.debug(`Created file with name: ${newFile.name} at path: ${newFile.fullPath}`);
-      } else {
-        const newDirectory = new Directory(destPath, new Date());
-        await this.fileSystemService.add(newDirectory);
-        logger.debug(`Created directory with name: ${newDirectory.name} at path: ${newDirectory.fullPath}`);
+    logger.debug(`Copying: ${sourceEntry.name} -> ${uniqueName}`);
+    logger.debug(`Destination path: ${destinationPath}, Unique name: ${uniqueName}, Combined path: ${destPath}`);
+
+    if (sourceEntry instanceof File) {
+      const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size, new Date());
+      await this.fileSystemService.add(newFile);
+      logger.debug(`Created file with name: ${newFile.name} at path: ${newFile.fullPath}`);
+    } else {
+      // Create the directory first
+      const newDirectory = new Directory(destPath, new Date());
+      await this.fileSystemService.add(newDirectory);
+      logger.debug(`Created directory with name: ${newDirectory.name} at path: ${newDirectory.fullPath}`);
+
+      // Recursively copy all contents of the directory
+      await this.copyDirectoryContents(sourceEntry.fullPath, destPath);
+    }
+  }
+
+  private async copyDirectoryContents(sourceDirPath: string, destDirPath: string): Promise<void> {
+    try {
+      // Get all entries in the source directory
+      const entries = await this.fileSystemService.getAll((entry) => {
+        const entryDir = entry instanceof Directory ? entry.fullPath : (entry as File).directory || "/";
+        return entryDir === sourceDirPath && entry.fullPath !== sourceDirPath;
+      });
+
+      for (const entry of entries) {
+        if (entry instanceof File) {
+          // Copy file to destination directory
+          const destFilePath = destDirPath === "/" ? `/${entry.name}` : `${destDirPath}/${entry.name}`;
+          const newFile = new File(destFilePath, entry.content, new Date(), entry.size, new Date());
+          await this.fileSystemService.add(newFile);
+          logger.debug(`Copied file: ${entry.name} to ${destFilePath}`);
+        } else {
+          // Recursively copy subdirectory
+          const destSubDirPath = destDirPath === "/" ? `/${entry.name}` : `${destDirPath}/${entry.name}`;
+          const newDirectory = new Directory(destSubDirPath, new Date());
+          await this.fileSystemService.add(newDirectory);
+          logger.debug(`Copied directory: ${entry.name} to ${destSubDirPath}`);
+
+          // Recursively copy contents of subdirectory
+          await this.copyDirectoryContents(entry.fullPath, destSubDirPath);
+        }
       }
+    } catch (error) {
+      logger.error(`Error copying directory contents from ${sourceDirPath} to ${destDirPath}:`, error);
+      throw new Error(`Failed to copy directory contents: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

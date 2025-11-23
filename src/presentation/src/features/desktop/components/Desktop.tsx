@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount } from "solid-js";
+import { createSignal, For, onCleanup, onMount, lazy, Suspense } from "solid-js";
 import type App from "@domain/models/App";
 import type {
   FileChangeListener,
@@ -7,7 +7,6 @@ import type {
 } from "@application/features/system/services/abstraction/IFileSystemService";
 import Container from "@presentation/Container";
 import AppShortcut from "@shared/components/AppShortcut";
-import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel/ThreeDimensionalModel";
 import { DefaultConfigs } from "@shared/components/ThreeDimensionalModel/constants/defaultConfigs";
 import ScreenHelper from "@shared/utils/ScreenHelper";
 import appCommands from "@shared/constants/AppCommands";
@@ -15,6 +14,9 @@ import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
 import { Locales } from "@domain/data/Translations";
 import { logger } from "@shared/utils/logger";
+
+// Lazy load the heavy ThreeDimensionalModel component
+const ThreeDimensionalModel = lazy(() => import("@shared/components/ThreeDimensionalModel/ThreeDimensionalModel"));
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -192,7 +194,11 @@ export default function Desktop() {
                   {col ? (
                     <AppShortcut
                       label={col.name}
-                      icon={<ThreeDimensionalModel model={col.icon} config={DefaultConfigs.desktopIcon} />}
+                      icon={
+                        <Suspense fallback={<div class="h-12 w-12 animate-pulse rounded-lg bg-gray-200" />}>
+                          <ThreeDimensionalModel model={col.icon} config={DefaultConfigs.desktopIcon} />
+                        </Suspense>
+                      }
                       href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`}
                       onClick={() => onShortcutClick(col)}
                       onDragStart={() => onShortcutDragStart(col)}

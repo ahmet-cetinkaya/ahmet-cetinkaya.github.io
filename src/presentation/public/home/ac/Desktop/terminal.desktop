@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Terminal
+Exec=terminal
+Icon=terminal
+Type=Application
+Categories=System;Terminal;
+Terminal=false
+StartupNotify=true

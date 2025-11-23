@@ -11,12 +11,14 @@
     "format": "./scripts/format.sh",
     "install-all": "./scripts/install-all.sh",
     "lint": "./scripts/lint.sh",
-    "start": "cd src/presentation && bun start"
+    "start": "cd src/presentation && bun start",
+    "test": "./scripts/test.sh"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@types/bun": "^1.2.18",
     "eslint": "^9.31.0",
+    "eslint-plugin-solid": "^0.14.5",
     "globals": "^15.15.0",
     "markdownlint-cli2": "^0.19.0",
     "prettier": "3.4.2",

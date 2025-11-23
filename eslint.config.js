@@ -1,4 +1,5 @@
 import pluginJs from "@eslint/js";
+import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
 
@@ -40,23 +41,20 @@ export default [
     },
   },
   {
-    files: ["**/*.astro"],
-    languageOptions: {
-      parser: tsEslint.parser,
-      parserOptions: {
-        extraFileExtensions: [".astro"],
-      },
-    },
-  },
-  {
-    files: ["src/presentation/**/*.{ts,tsx,astro}"],
+    files: ["src/presentation/**/*.{ts,tsx}"],
+    ...solid,
     languageOptions: {
       globals: {
         ...globals.browser,
       },
+      parser: tsEslint.parser,
+      parserOptions: {
+        project: "src/presentation/tsconfig.json",
+      },
     },
     rules: {
-      // Browser-specific rules can go here
+      // Override any specific rules if needed
+      "no-console": "warn", // Keep console warnings for browser code
     },
   },
   {

@@ -105,19 +105,6 @@ fi
 # 5. Check for common issues
 print_info "🔎 Checking for common issues..."
 
-# Check for console.log statements (excluding test and dist files)
-CONSOLE_LOGS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
-    grep -v node_modules |
-    grep -v test |
-    grep -v dist |
-    xargs grep -l "console\.log\|console\.warn\|console\.error" 2>/dev/null || true)
-
-if [[ -n "$CONSOLE_LOGS" ]]; then
-    print_warning "⚠️  Found console statements in production code:"
-    echo "$CONSOLE_LOGS" | head -3
-    print_info "💡 Consider removing or replacing with proper logging"
-fi
-
 # Check for TODO/FIXME comments
 TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
     grep -v node_modules |

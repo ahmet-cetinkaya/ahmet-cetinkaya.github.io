@@ -1,5 +1,10 @@
 import { createSignal, For, onCleanup, onMount } from "solid-js";
 import type App from "@domain/models/App";
+import type {
+  FileChangeListener,
+  FileChangeType,
+  FileSystemEntry,
+} from "@application/features/system/services/abstraction/IFileSystemService";
 import Container from "@presentation/Container";
 import AppShortcut from "@shared/components/AppShortcut";
 import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel/ThreeDimensionalModel";
@@ -9,6 +14,7 @@ import appCommands from "@shared/constants/AppCommands";
 import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
 import { Locales } from "@domain/data/Translations";
+import { logger } from "@shared/utils/logger";
 
 type DesktopShortcut = App | null;
 type DesktopShortcutMatrix = DesktopShortcut[][];
@@ -25,14 +31,31 @@ export default function Desktop() {
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
   const [currentLocale, setCurrentLocale] = createSignal<string>(Locales.en);
 
+  let fileChangeListener: FileChangeListener | undefined;
+
   onMount(() => {
     window.addEventListener("resize", onResize);
     i18n.currentLocale.subscribe(setCurrentLocale);
+
+    // Listen for desktop file changes
+    fileChangeListener = (change: { type: FileChangeType; entry: FileSystemEntry }) => {
+      logger.fileOperation("desktop file changed", change);
+      generateMatrix();
+    };
+
+    if (fileChangeListener) {
+      fileSystemService.addListener(fileChangeListener);
+    }
   });
 
   onCleanup(() => {
     window.removeEventListener("resize", () => onResize);
     i18n.currentLocale.unsubscribe(setCurrentLocale);
+
+    // Clean up file system listener
+    if (fileChangeListener) {
+      fileSystemService.removeListener(fileChangeListener);
+    }
   });
 
   function onContainerMount(element: HTMLDivElement) {

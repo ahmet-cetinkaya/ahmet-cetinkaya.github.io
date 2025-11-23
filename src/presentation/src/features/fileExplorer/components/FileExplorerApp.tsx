@@ -296,7 +296,6 @@ export default function FileExplorerApp(props: Props) {
       // Handle file opening based on type
       // FUTURE: Implement file opening logic based on file type
       // For now, files are handled by their respective applications
-      console.log(`Opening file: ${entry.name} (${entry.fullPath})`);
     }
   }
 
@@ -676,7 +675,6 @@ export default function FileExplorerApp(props: Props) {
           // View file content (placeholder - will implement in Phase 2)
           if (paths.length === 1) {
             // FUTURE: Implement file viewer for read-only file content preview
-            console.log(`View file: ${paths[0]}`);
           }
           break;
         }
@@ -685,7 +683,6 @@ export default function FileExplorerApp(props: Props) {
           // Edit file content (placeholder - will implement in Phase 2)
           if (paths.length === 1) {
             // FUTURE: Implement file editor for in-place file editing
-            console.log(`Edit file: ${paths[0]}`);
           }
           break;
         }

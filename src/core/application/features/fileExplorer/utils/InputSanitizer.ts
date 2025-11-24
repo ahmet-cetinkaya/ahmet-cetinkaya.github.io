@@ -1,3 +1,4 @@
+import PermissionService from "@application/features/system/services/PermissionService";
 import { FILE_OPERATIONS, PATH_CONSTANTS } from "../constants";
 import { InvalidFilenameError, InvalidPathError } from "../errors";
 
@@ -246,6 +247,112 @@ export class PathSanitizer {
     }
 
     return this.joinPath(basePath, relativePath);
+  }
+}
+
+/**
+ * Consolidated validation utilities to reduce code duplication
+ */
+export class ValidationHelper {
+  /**
+   * Validate both path format and permissions in one call
+   */
+  static validatePathWithPermissions(path: string): void {
+    PathSanitizer.validatePath(path);
+    PermissionService.validatePath(path);
+  }
+
+  /**
+   * Validate multiple paths at once
+   */
+  static validatePathsWithPermissions(paths: string[]): void {
+    for (const path of paths) {
+      this.validatePathWithPermissions(path);
+    }
+  }
+
+  /**
+   * Sanitize filename and validate parent path permissions
+   */
+  static sanitizeFileNameAndValidateParent(parentPath: string, fileName: string): {
+    sanitizedName: string;
+    fullPath: string;
+  } {
+    const sanitizedName = PathSanitizer.sanitizeFileName(fileName);
+    const fullPath = PathSanitizer.joinPath(parentPath, sanitizedName);
+
+    // Validate both parent path and resulting full path
+    this.validatePathWithPermissions(parentPath);
+    this.validatePathWithPermissions(fullPath);
+
+    return { sanitizedName, fullPath };
+  }
+
+  /**
+   * Validate and prepare file operation inputs
+   */
+  static validateFileOperation(
+    parentPath: string,
+    name: string,
+    operation: "create" | "rename" | "copy" | "move" = "create"
+  ): {
+    validatedParentPath: string;
+    sanitizedName: string;
+    fullPath: string;
+  } {
+    // Validate parent path and permissions
+    this.validatePathWithPermissions(parentPath);
+
+    // Sanitize the name
+    const sanitizedName = PathSanitizer.sanitizeFileName(name);
+
+    // Additional validation for rename operations
+    if (operation === "rename" && !sanitizedName.trim()) {
+      throw new InvalidFilenameError(name, "Name cannot be empty after sanitization");
+    }
+
+    // Construct and validate full path
+    const fullPath = PathSanitizer.joinPath(parentPath, sanitizedName);
+
+    return {
+      validatedParentPath: parentPath,
+      sanitizedName,
+      fullPath,
+    };
+  }
+
+  /**
+   * Validate operation paths (source and destination)
+   */
+  static validateOperationPaths(
+    sourcePaths: string[],
+    destinationPath: string
+  ): {
+    validatedSources: string[];
+    validatedDestination: string;
+  } {
+    // Validate all source paths
+    this.validatePathsWithPermissions(sourcePaths);
+
+    // Validate destination path
+    this.validatePathWithPermissions(destinationPath);
+
+    return {
+      validatedSources: [...sourcePaths],
+      validatedDestination: destinationPath,
+    };
+  }
+
+  /**
+   * Check for self-referencing operations (moving directory into itself)
+   */
+  static validateSelfReference(sourcePath: string, destinationPath: string): void {
+    if (destinationPath.startsWith(sourcePath + "/") || destinationPath === sourcePath) {
+      throw new InvalidPathError(
+        `${sourcePath} -> ${destinationPath}`,
+        "Cannot move directory into itself or its subdirectory"
+      );
+    }
   }
 }
 

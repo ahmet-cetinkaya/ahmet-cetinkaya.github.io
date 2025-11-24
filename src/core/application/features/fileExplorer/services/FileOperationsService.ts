@@ -7,7 +7,7 @@ import { logger } from "@shared/utils/logger";
 import { PERFORMANCE_LIMITS } from "../constants";
 import { FileNotFoundError, OperationFailedError } from "../errors";
 import { DirectoryOperations } from "../utils/DirectoryOperations";
-import { PathSanitizer } from "../utils/InputSanitizer";
+import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";
 import { globalOperationQueue, OperationType } from "../utils/OperationQueue";
 
 /**
@@ -26,15 +26,19 @@ export default class FileOperationsService {
    */
   async createDirectory(parentPath: string, name: string): Promise<{ directory: Directory; actualName: string }> {
     try {
-      PathSanitizer.validatePath(parentPath);
-      const sanitizedName = PathSanitizer.sanitizeFileName(name);
-
-      PermissionService.validatePath(parentPath);
+      // Validate and prepare inputs using consolidated helper
+      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(
+        parentPath,
+        name,
+        "create"
+      );
 
       // Generate unique name if directory already exists
-      const actualName = await this.generateUniqueName(parentPath, sanitizedName, true);
-      const fullPath = PathSanitizer.joinPath(parentPath, actualName);
-      PermissionService.validatePath(fullPath);
+      const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, true);
+      const fullPath = PathSanitizer.joinPath(validatedParentPath, actualName);
+
+      // Validate the final path
+      ValidationHelper.validatePathWithPermissions(fullPath);
 
       const newDirectory = new Directory(fullPath, new Date());
       await this.fileSystemService.add(newDirectory);
@@ -59,15 +63,19 @@ export default class FileOperationsService {
     content: string = "",
   ): Promise<{ file: File; actualName: string }> {
     try {
-      PathSanitizer.validatePath(parentPath);
-      const sanitizedName = PathSanitizer.sanitizeFileName(name);
-
-      PermissionService.validatePath(parentPath);
+      // Validate and prepare inputs using consolidated helper
+      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(
+        parentPath,
+        name,
+        "create"
+      );
 
       // Generate unique name if file already exists
-      const actualName = await this.generateUniqueName(parentPath, sanitizedName, false);
-      const fullPath = PathSanitizer.joinPath(parentPath, actualName);
-      PermissionService.validatePath(fullPath);
+      const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, false);
+      const fullPath = PathSanitizer.joinPath(validatedParentPath, actualName);
+
+      // Validate the final path
+      ValidationHelper.validatePathWithPermissions(fullPath);
 
       const sanitizedContent = this.sanitizeFileContent(content);
       const contentBytes = new TextEncoder().encode(sanitizedContent).length;
@@ -114,17 +122,20 @@ export default class FileOperationsService {
       return;
     }
 
-    PathSanitizer.validatePath(destinationPath);
-    PermissionService.validatePath(destinationPath);
+    // Validate all operation paths using consolidated helper
+    const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
+      sourcePaths,
+      destinationPath
+    );
 
-    const allPaths = [...sourcePaths, destinationPath];
+    const allPaths = [...validatedSources, validatedDestination];
 
     return new Promise((resolve, reject) => {
       globalOperationQueue.add({
         type: OperationType.COPY,
         priority: 5, // Medium priority for copy operations
         paths: allPaths,
-        execute: () => this.executeCopy(sourcePaths, destinationPath),
+        execute: () => this.executeCopy(validatedSources, validatedDestination),
         onComplete: () => resolve(),
         onError: reject,
       });
@@ -139,17 +150,20 @@ export default class FileOperationsService {
       return;
     }
 
-    PathSanitizer.validatePath(destinationPath);
-    PermissionService.validatePath(destinationPath);
+    // Validate all operation paths using consolidated helper
+    const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
+      sourcePaths,
+      destinationPath
+    );
 
-    const allPaths = [...sourcePaths, destinationPath];
+    const allPaths = [...validatedSources, validatedDestination];
 
     return new Promise((resolve, reject) => {
       globalOperationQueue.add({
         type: OperationType.MOVE,
         priority: 7, // High-medium priority for move operations
         paths: allPaths,
-        execute: () => this.executeMove(sourcePaths, destinationPath),
+        execute: () => this.executeMove(validatedSources, validatedDestination),
         onComplete: () => resolve(),
         onError: reject,
       });

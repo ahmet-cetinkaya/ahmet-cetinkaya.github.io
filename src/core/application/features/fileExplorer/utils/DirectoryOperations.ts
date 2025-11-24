@@ -1,3 +1,4 @@
+import PermissionService from "@application/features/system/services/PermissionService";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import Directory from "@domain/models/Directory";
@@ -133,7 +134,7 @@ export class DirectoryOperations {
   }
 
   /**
-   * Iteratively copy directory contents
+   * Iteratively copy directory contents with enhanced security and validation
    */
   async copyDirectoryContents(
     sourceDirPath: string,
@@ -149,10 +150,19 @@ export class DirectoryOperations {
     const startTime = Date.now();
     const timeoutTime = startTime + timeoutMs;
 
+    // Validate paths and permissions
+    PermissionService.validatePath(sourceDirPath);
+    PermissionService.validatePath(destDirPath);
+
     // Validate source directory exists
     const sourceExists = await this.pathExists(sourceDirPath);
     if (!sourceExists) {
       throw new Error(`Source directory not found: ${sourceDirPath}`);
+    }
+
+    // Prevent copying directory into itself
+    if (destDirPath.startsWith(sourceDirPath + "/") || destDirPath === sourceDirPath) {
+      throw new Error(`Cannot copy directory into itself or its subdirectory: ${sourceDirPath} -> ${destDirPath}`);
     }
 
     // Use queue for iterative copy
@@ -234,7 +244,7 @@ export class DirectoryOperations {
   }
 
   /**
-   * Iteratively delete directory contents
+   * Iteratively delete directory contents with enhanced security validation
    */
   async deleteDirectoryContents(dirPath: string, options: DirectoryTraversalOptions = {}): Promise<void> {
     const { maxDepth = PERFORMANCE_LIMITS.MAX_RECURSION_DEPTH, timeoutMs = PERFORMANCE_LIMITS.OPERATION_TIMEOUT_MS } =
@@ -242,6 +252,14 @@ export class DirectoryOperations {
 
     const startTime = Date.now();
     const timeoutTime = startTime + timeoutMs;
+
+    // Validate path and permissions before deletion
+    PermissionService.validatePath(dirPath);
+
+    // Additional safety check: prevent deletion of root directory
+    if (dirPath === "/" || dirPath.trim() === "/") {
+      throw new Error("Cannot delete root directory for safety reasons");
+    }
 
     // Collect all paths to delete (post-order traversal)
     const pathsToDelete: Array<{ path: string; type: "file" | "directory" }> = [];
@@ -282,18 +300,29 @@ export class DirectoryOperations {
     pathsToDelete.push({ path: dirPath, type: "directory" });
 
     // Delete all collected paths (reverse order: files first, then directories)
-    for (const { path, type } of pathsToDelete.reverse()) {
+    // Process in batches for better performance
+    const batchSize = 50;
+    const reversedPaths = pathsToDelete.reverse();
+
+    for (let i = 0; i < reversedPaths.length; i += batchSize) {
       // Check timeout
       if (Date.now() > timeoutTime) {
         throw new OperationTimeoutError("directory deletion", timeoutMs);
       }
 
-      try {
-        await this.fileSystemService.remove((entry) => entry.fullPath === path);
-      } catch (error) {
-        logger.error(`Error deleting ${type} ${path}:`, error);
-        // Continue with other deletions
-      }
+      const batch = reversedPaths.slice(i, i + batchSize);
+
+      // Delete batch in parallel for better performance
+      await Promise.allSettled(
+        batch.map(async ({ path, type }) => {
+          try {
+            await this.fileSystemService.remove((entry) => entry.fullPath === path);
+          } catch (error) {
+            logger.error(`Error deleting ${type} ${path}:`, error);
+            // Continue with other deletions
+          }
+        })
+      );
     }
 
     logger.debug(`Directory deletion completed: ${pathsToDelete.length} items deleted from ${dirPath}`);

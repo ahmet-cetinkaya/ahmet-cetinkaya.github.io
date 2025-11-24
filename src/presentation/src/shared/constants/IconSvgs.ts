@@ -90,6 +90,14 @@ const IconSvgs: Record<Icons, string> = {
   [Icons.terminal]: "/icons/terminal.svg",
   [Icons.paste]: "/icons/paste.svg",
   [Icons.eye]: "/icons/eye.svg",
+  [Icons.python]: "/icons/python.svg",
+  [Icons.docker]: "/icons/docker.svg",
+  [Icons.image]: "/icons/image.svg",
+  [Icons.music]: "/icons/music.svg",
+  [Icons.video]: "/icons/video.svg",
+  [Icons.pdf]: "/icons/pdf.svg",
+  [Icons.spreadsheet]: "/icons/spreadsheet.svg",
+  [Icons.archive]: "/icons/archive.svg",
 };
 
 export default IconSvgs;

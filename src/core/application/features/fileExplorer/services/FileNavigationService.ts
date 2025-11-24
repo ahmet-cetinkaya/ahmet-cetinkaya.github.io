@@ -1,5 +1,6 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
 import { CACHE_CONFIG, UI_CONSTANTS } from "../constants";
 import { FileSortCriteria, SortOrder } from "../models/FileSelection";
@@ -321,21 +322,7 @@ export default class FileNavigationService {
    * Get immediate children of a directory
    */
   private async getImmediateChildren(path: string): Promise<FileSystemEntry[]> {
-    const entries = await this.fileSystemService.getAll((entry) => {
-      if (path === "/") {
-        // Root directory - show immediate children
-        const parts = entry.fullPath.split("/").filter(Boolean);
-        return parts.length === 1;
-      }
-
-      // Other directories - show immediate children
-      const entryParts = entry.fullPath.split("/").filter(Boolean);
-      const pathParts = path.split("/").filter(Boolean);
-
-      return entry.fullPath.startsWith(path) && entryParts.length === pathParts.length + 1;
-    });
-
-    return entries;
+    return this.fileSystemService.getChildren(path);
   }
 
   /**
@@ -371,7 +358,7 @@ export default class FileNavigationService {
           comparison = a.name.localeCompare(b.name);
           break;
         case FileSortCriteria.SIZE:
-          if (a.isFile && b.isFile) {
+          if (a instanceof File && b instanceof File) {
             comparison = a.size - b.size;
           } else {
             comparison = a.name.localeCompare(b.name);
@@ -384,7 +371,7 @@ export default class FileNavigationService {
           break;
         }
         case FileSortCriteria.TYPE:
-          if (a.isFile && b.isFile) {
+          if (a instanceof File && b instanceof File) {
             comparison = a.extension.localeCompare(b.extension);
           } else {
             comparison = a.name.localeCompare(b.name);

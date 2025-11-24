@@ -297,7 +297,8 @@ export default class FileOperationsService {
   private async copyFile(sourceFile: File, destPath: string): Promise<void> {
     PermissionService.validatePath(destPath);
 
-    const newFile = new File(destPath, sourceFile.content, sourceFile.createdDate, sourceFile.size, new Date());
+    const content = await this.fileSystemService.readFileContent(sourceFile.fullPath);
+    const newFile = new File(destPath, content, sourceFile.createdDate, sourceFile.size, new Date());
 
     await this.fileSystemService.add(newFile);
   }

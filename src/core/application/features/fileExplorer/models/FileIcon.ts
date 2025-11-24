@@ -1,4 +1,4 @@
-import type Icons from "@domain/data/Icons";
+import Icons from "@domain/data/Icons";
 import { CACHE_CONFIG, FILE_TYPE_PATTERNS } from "../constants";
 
 const iconConfigCache = new Map<string, FileIconConfig>();
@@ -97,60 +97,60 @@ export interface FileIconConfig {
 
 export const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.DIRECTORY]: {
-    icon: "folder",
+    icon: Icons.folder,
     color: IconColor.YELLOW,
     isDirectory: true,
   },
 
-  [FileType.TEXT]: { icon: "file", color: IconColor.GRAY, isDirectory: false },
-  [FileType.MARKDOWN]: { icon: "file", color: IconColor.BLUE, isDirectory: false },
-  [FileType.JSON]: { icon: "code", color: IconColor.GREEN, isDirectory: false },
-  [FileType.XML]: { icon: "code", color: IconColor.ORANGE, isDirectory: false },
+  [FileType.TEXT]: { icon: Icons.file, color: IconColor.GRAY, isDirectory: false },
+  [FileType.MARKDOWN]: { icon: Icons.file, color: IconColor.BLUE, isDirectory: false },
+  [FileType.JSON]: { icon: Icons.code, color: IconColor.GREEN, isDirectory: false },
+  [FileType.XML]: { icon: Icons.code, color: IconColor.ORANGE, isDirectory: false },
 
-  [FileType.JAVASCRIPT]: { icon: "javascript", color: IconColor.YELLOW, isDirectory: false },
-  [FileType.JSX]: { icon: "react", color: IconColor.CYAN, isDirectory: false },
-  [FileType.TYPESCRIPT]: { icon: "typescript", color: IconColor.BLUE_500, isDirectory: false },
-  [FileType.TSX]: { icon: "react", color: IconColor.BLUE_500, isDirectory: false },
-  [FileType.HTML]: { icon: "code", color: IconColor.ORANGE, isDirectory: false },
-  [FileType.CSS]: { icon: "code", color: IconColor.BLUE, isDirectory: false },
-  [FileType.SCSS]: { icon: "code", color: IconColor.PINK, isDirectory: false },
-  [FileType.PYTHON]: { icon: "python", color: IconColor.GREEN_500, isDirectory: false },
-  [FileType.JAVA]: { icon: "java", color: IconColor.RED, isDirectory: false },
-  [FileType.PHP]: { icon: "php", color: IconColor.INDIGO, isDirectory: false },
-  [FileType.CSHARP]: { icon: "csharp", color: IconColor.PURPLE, isDirectory: false },
+  [FileType.JAVASCRIPT]: { icon: Icons.javascript, color: IconColor.YELLOW, isDirectory: false },
+  [FileType.JSX]: { icon: Icons.react, color: IconColor.CYAN, isDirectory: false },
+  [FileType.TYPESCRIPT]: { icon: Icons.typescript, color: IconColor.BLUE_500, isDirectory: false },
+  [FileType.TSX]: { icon: Icons.react, color: IconColor.BLUE_500, isDirectory: false },
+  [FileType.HTML]: { icon: Icons.code, color: IconColor.ORANGE, isDirectory: false },
+  [FileType.CSS]: { icon: Icons.code, color: IconColor.BLUE, isDirectory: false },
+  [FileType.SCSS]: { icon: Icons.code, color: IconColor.PINK, isDirectory: false },
+  [FileType.PYTHON]: { icon: Icons.python, color: IconColor.GREEN_500, isDirectory: false },
+  [FileType.JAVA]: { icon: Icons.java, color: IconColor.RED, isDirectory: false },
+  [FileType.PHP]: { icon: Icons.php, color: IconColor.INDIGO, isDirectory: false },
+  [FileType.CSHARP]: { icon: Icons.csharp, color: IconColor.PURPLE, isDirectory: false },
 
-  [FileType.GITIGNORE]: { icon: "github", color: IconColor.GRAY_500, isDirectory: false },
-  [FileType.DOCKERFILE]: { icon: "docker", color: IconColor.BLUE_500, isDirectory: false },
-  [FileType.ENV]: { icon: "file", color: IconColor.GRAY_600, isDirectory: false },
+  [FileType.GITIGNORE]: { icon: Icons.github, color: IconColor.GRAY_500, isDirectory: false },
+  [FileType.DOCKERFILE]: { icon: Icons.docker, color: IconColor.BLUE_500, isDirectory: false },
+  [FileType.ENV]: { icon: Icons.file, color: IconColor.GRAY_600, isDirectory: false },
 
-  [FileType.PNG]: { icon: "image", color: IconColor.GREEN, isDirectory: false },
-  [FileType.JPG]: { icon: "image", color: IconColor.GREEN, isDirectory: false },
-  [FileType.JPEG]: { icon: "image", color: IconColor.GREEN, isDirectory: false },
-  [FileType.GIF]: { icon: "image", color: IconColor.GREEN, isDirectory: false },
-  [FileType.SVG]: { icon: "image", color: IconColor.GREEN, isDirectory: false },
-  [FileType.MP3]: { icon: "music", color: IconColor.PURPLE_400, isDirectory: false },
-  [FileType.WAV]: { icon: "music", color: IconColor.PURPLE_400, isDirectory: false },
-  [FileType.MP4]: { icon: "video", color: IconColor.RED_400, isDirectory: false },
-  [FileType.AVI]: { icon: "video", color: IconColor.RED_400, isDirectory: false },
+  [FileType.PNG]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
+  [FileType.JPG]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
+  [FileType.JPEG]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
+  [FileType.GIF]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
+  [FileType.SVG]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
+  [FileType.MP3]: { icon: Icons.music, color: IconColor.PURPLE_400, isDirectory: false },
+  [FileType.WAV]: { icon: Icons.music, color: IconColor.PURPLE_400, isDirectory: false },
+  [FileType.MP4]: { icon: Icons.video, color: IconColor.RED_400, isDirectory: false },
+  [FileType.AVI]: { icon: Icons.video, color: IconColor.RED_400, isDirectory: false },
 
-  [FileType.PDF]: { icon: "file", color: IconColor.RED, isDirectory: false },
-  [FileType.DOC]: { icon: "file", color: IconColor.BLUE_600, isDirectory: false },
-  [FileType.DOCX]: { icon: "file", color: IconColor.BLUE_600, isDirectory: false },
-  [FileType.XLS]: { icon: "file", color: IconColor.GREEN_600, isDirectory: false },
-  [FileType.XLSX]: { icon: "file", color: IconColor.GREEN_600, isDirectory: false },
+  [FileType.PDF]: { icon: Icons.pdf, color: IconColor.RED, isDirectory: false },
+  [FileType.DOC]: { icon: Icons.file, color: IconColor.BLUE_600, isDirectory: false },
+  [FileType.DOCX]: { icon: Icons.file, color: IconColor.BLUE_600, isDirectory: false },
+  [FileType.XLS]: { icon: Icons.spreadsheet, color: IconColor.GREEN_600, isDirectory: false },
+  [FileType.XLSX]: { icon: Icons.spreadsheet, color: IconColor.GREEN_600, isDirectory: false },
 
-  [FileType.ZIP]: { icon: "file", color: IconColor.YELLOW_600, isDirectory: false },
-  [FileType.TAR]: { icon: "file", color: IconColor.YELLOW_600, isDirectory: false },
-  [FileType.GZ]: { icon: "file", color: IconColor.YELLOW_600, isDirectory: false },
+  [FileType.ZIP]: { icon: Icons.archive, color: IconColor.YELLOW_600, isDirectory: false },
+  [FileType.TAR]: { icon: Icons.archive, color: IconColor.YELLOW_600, isDirectory: false },
+  [FileType.GZ]: { icon: Icons.archive, color: IconColor.YELLOW_600, isDirectory: false },
 
-  [FileType.EXE]: { icon: "terminal", color: IconColor.GRAY, isDirectory: false },
-  [FileType.SH]: { icon: "terminal", color: IconColor.GRAY, isDirectory: false },
-  [FileType.BAT]: { icon: "terminal", color: IconColor.GRAY, isDirectory: false },
+  [FileType.EXE]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
+  [FileType.SH]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
+  [FileType.BAT]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
 
-  [FileType.JSDOS]: { icon: "doom", color: IconColor.RED_400, isDirectory: false },
-  [FileType.GAME]: { icon: "godotEngine", color: IconColor.PURPLE_400, isDirectory: false },
+  [FileType.JSDOS]: { icon: Icons.doom, color: IconColor.RED_400, isDirectory: false },
+  [FileType.GAME]: { icon: Icons.godotEngine, color: IconColor.PURPLE_400, isDirectory: false },
 
-  [FileType.DEFAULT]: { icon: "file", color: IconColor.GRAY, isDirectory: false },
+  [FileType.DEFAULT]: { icon: Icons.file, color: IconColor.GRAY, isDirectory: false },
 };
 
 export function getFileIconConfig(fileName: string, isDirectory: boolean): FileIconConfig {

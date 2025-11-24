@@ -87,5 +87,13 @@ enum Icons {
   userSmile = "User Smile Icon",
   userForbidden = "User Forbidden Icon",
   x = "X Icon",
+  python = "Python Icon",
+  docker = "Docker Icon",
+  image = "Image Icon",
+  music = "Music Icon",
+  video = "Video Icon",
+  pdf = "PDF Icon",
+  spreadsheet = "Spreadsheet Icon",
+  archive = "Archive Icon",
 }
 export default Icons;

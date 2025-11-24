@@ -4,6 +4,7 @@ import Icons from "@domain/data/Icons";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
+import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface ConfirmDialogProps {
   icon?: Icons;
   type?: "danger" | "warning" | "info";
   size?: Size;
+  description?: string | TranslationKeys;
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
@@ -42,7 +44,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
   const getDefaultIcon = (): Icons => {
     switch (props.type) {
       case "danger":
-        return Icons.userForbidden;
+        return Icons.trash;
       case "warning":
         return Icons.spinner;
       default:
@@ -54,20 +56,29 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
     <Dialog
       title={props.title || "Confirm Action"}
       message={translateText(props.message)}
+      description={props.description && translateText(props.description)}
       icon={props.icon || getDefaultIcon()}
       isOpen={props.isOpen}
       onClose={handleClose}
-      size={props.size || new Size(400, 200)}
-      draggable={true}
+      size={props.size || new Size(400, 160)}
+      draggable={false}
       closeAriaLabel="Close confirmation dialog"
       showOkButton={false}
+      enableAutoResize={true}
+      sizingOptions={DialogSizeCalculator.createSizeOptions("confirm")}
       customButtons={[
-        <div class="flex space-x-2">
-          <Button onClick={handleCancel} variant="text" size="small" class="px-3 py-2 text-sm" ariaLabel="Cancel">
-            {translateText(props.cancelButtonText || TranslationKeys.common_close)}
+        <div class="flex justify-end space-x-2">
+          <Button onClick={handleCancel} variant="text" size="small" class="px-4 py-2 text-sm" ariaLabel="Cancel">
+            {props.cancelButtonText &&
+            Object.values(TranslationKeys).includes(props.cancelButtonText as TranslationKeys)
+              ? translate(props.cancelButtonText as TranslationKeys)
+              : props.cancelButtonText || "Cancel"}
           </Button>
-          <Button onClick={handleConfirm} variant="primary" size="small" class="px-3 py-2 text-sm" ariaLabel="Confirm">
-            {translateText(props.confirmButtonText || TranslationKeys.common_close)}
+          <Button onClick={handleConfirm} variant="primary" size="small" class="px-4 py-2 text-sm" ariaLabel="Confirm">
+            {props.confirmButtonText &&
+            Object.values(TranslationKeys).includes(props.confirmButtonText as TranslationKeys)
+              ? translate(props.confirmButtonText as TranslationKeys)
+              : props.confirmButtonText || "OK"}
           </Button>
         </div>,
       ]}

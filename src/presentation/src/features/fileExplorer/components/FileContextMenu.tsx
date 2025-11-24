@@ -1,8 +1,6 @@
 import { For, Show, createEffect, onCleanup } from "solid-js";
 import { Portal } from "solid-js/web";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
-import File from "@domain/models/File";
-import Directory from "@domain/models/Directory";
 import Icon from "@shared/components/Icon";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
@@ -19,7 +17,7 @@ type ContextMenuItem = {
   separator?: boolean;
 };
 
-type Props = {
+type FileContextMenuProps = {
   entry?: () => FileSystemEntry | undefined;
   position: () => { x: number; y: number };
   selectedFiles: () => string[];
@@ -30,10 +28,9 @@ type Props = {
   currentPath: () => string;
 };
 
-export default function FileContextMenu(props: Props) {
+export default function FileContextMenu(props: FileContextMenuProps) {
   const translate = useI18n();
 
-  // Debug logging
   logger.uiInteraction("FileContextMenu", "render", {
     visible: props.visible(),
     position: props.position(),
@@ -41,7 +38,6 @@ export default function FileContextMenu(props: Props) {
     selectedFilesCount: props.selectedFiles().length,
   });
 
-  // Close menu when clicking outside
   createEffect(() => {
     if (props.visible()) {
       const handleClickOutside = (e: MouseEvent) => {
@@ -73,15 +69,11 @@ export default function FileContextMenu(props: Props) {
     const entry = props.entry?.();
     const hasSelection = selectedFiles.length > 0;
     const hasContextTarget = entry !== undefined;
-    const isDirectory = entry instanceof Directory;
-    const isFile = entry instanceof File;
 
-    // Get the target paths for context menu operations
     const targetPaths = hasSelection ? selectedFiles : hasContextTarget ? [entry!.fullPath] : [];
 
-    let hasContent = false; // Track if we have existing menu items
+    let hasContent = false;
 
-    // File operations (when there are selected files OR a context target)
     if (hasSelection || hasContextTarget) {
       items.push(
         {
@@ -101,7 +93,6 @@ export default function FileContextMenu(props: Props) {
         },
       );
 
-      // Check if there's clipboard content to paste
       const clipboard = ClipboardService.getClipboard();
       const hasClipboardContent = clipboard && clipboard.items.length > 0;
       const canPaste = hasClipboardContent && ClipboardService.canPaste(props.currentPath());
@@ -115,7 +106,6 @@ export default function FileContextMenu(props: Props) {
         });
       }
 
-      // Mark that we have content and add separator before rename/delete
       if (items.length > 0) {
         hasContent = true;
       }
@@ -142,24 +132,11 @@ export default function FileContextMenu(props: Props) {
       );
     }
 
-    // Directory-specific actions
-    if (isDirectory && targetPaths.length === 1) {
-      // No directory-specific actions currently
-    }
-
-    // File-specific actions
-    if (isFile && targetPaths.length === 1) {
-      // No file-specific actions currently
-    }
-
-    // General actions (only for background clicks - no context target)
     if (!hasContextTarget) {
-      // Check if there's clipboard content to paste
       const clipboard = ClipboardService.getClipboard();
       const hasClipboardContent = clipboard && clipboard.items.length > 0;
       const canPaste = hasClipboardContent && ClipboardService.canPaste(props.currentPath());
 
-      // Add separator before general actions if we had file operations
       if (hasContent) {
         items.push({ separator: true, label: "", action: () => {} });
       }
@@ -172,7 +149,6 @@ export default function FileContextMenu(props: Props) {
           disabled: !canPaste,
         });
 
-        // Add separator before next group if we added paste
         items.push({ separator: true, label: "", action: () => {} });
       }
 

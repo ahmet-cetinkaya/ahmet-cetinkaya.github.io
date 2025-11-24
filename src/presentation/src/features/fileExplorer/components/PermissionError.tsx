@@ -4,11 +4,11 @@ import Dialog from "@presentation/src/features/desktop/components/Dialog";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
 
-interface PermissionErrorProps {
+type PermissionErrorProps = {
   message: string;
   path?: string;
   onClose?: () => void;
-}
+};
 
 export default function PermissionError({ message, path, onClose }: PermissionErrorProps) {
   const translate = useI18n();

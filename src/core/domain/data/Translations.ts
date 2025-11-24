@@ -28,6 +28,28 @@ export enum TranslationKeys {
   apps_file_explorer_sort_by_size = "apps_file_explorer_sort_by_size",
   apps_file_explorer_sort_by_modified = "apps_file_explorer_sort_by_modified",
   apps_file_explorer_sort_by_type = "apps_file_explorer_sort_by_type",
+  apps_file_explorer_error_file_not_found = "apps_file_explorer_error_file_not_found",
+  apps_file_explorer_error_permission_denied = "apps_file_explorer_error_permission_denied",
+  apps_file_explorer_error_invalid_filename = "apps_file_explorer_error_invalid_filename",
+  apps_file_explorer_error_path_too_long = "apps_file_explorer_error_path_too_long",
+  apps_file_explorer_error_already_exists = "apps_file_explorer_error_already_exists",
+  apps_file_explorer_error_directory_not_empty = "apps_file_explorer_error_directory_not_empty",
+  apps_file_explorer_error_operation_timeout = "apps_file_explorer_error_operation_timeout",
+  apps_file_explorer_error_quota_exceeded = "apps_file_explorer_error_quota_exceeded",
+  apps_file_explorer_error_network_error = "apps_file_explorer_error_network_error",
+  apps_file_explorer_error_invalid_path = "apps_file_explorer_error_invalid_path",
+  apps_file_explorer_error_directory_too_deep = "apps_file_explorer_error_directory_too_deep",
+  apps_file_explorer_error_operation_failed = "apps_file_explorer_error_operation_failed",
+  apps_file_explorer_success_file_copied = "apps_file_explorer_success_file_copied",
+  apps_file_explorer_success_files_copied = "apps_file_explorer_success_files_copied",
+  apps_file_explorer_success_file_moved = "apps_file_explorer_success_file_moved",
+  apps_file_explorer_success_files_moved = "apps_file_explorer_success_files_moved",
+  apps_file_explorer_success_file_deleted = "apps_file_explorer_success_file_deleted",
+  apps_file_explorer_success_files_deleted = "apps_file_explorer_success_files_deleted",
+  apps_file_explorer_success_file_renamed = "apps_file_explorer_success_file_renamed",
+  apps_file_explorer_success_directory_created = "apps_file_explorer_success_directory_created",
+  apps_file_explorer_success_file_created = "apps_file_explorer_success_file_created",
+  apps_terminal_common_path_required = "apps_terminal_common_path_required",
   common_file = "common_file",
   common_new_file = "common_new_file",
   common_new_folder = "common_new_folder",
@@ -92,7 +114,6 @@ export enum TranslationKeys {
   apps_terminal_commands_welcome_part = "apps_terminal_commands_welcome_part",
   apps_terminal_commands_welcome_started = "apps_terminal_commands_welcome_started",
   apps_terminal_commands_whoami_description = "apps_terminal_commands_whoami_description",
-  apps_terminal_common_path_required = "apps_terminal_common_path_required",
   apps_terminal_cp_help_option_force = "apps_terminal_cp_help_option_force",
   apps_terminal_cp_help_option_help = "apps_terminal_cp_help_option_help",
   apps_terminal_cp_help_option_no_target_directory = "apps_terminal_cp_help_option_no_target_directory",
@@ -429,6 +450,94 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     en: "Sort by Type",
     tr: "Türe Göre Sırala",
   },
+  apps_file_explorer_error_file_not_found: {
+    en: "The file or directory could not be found.",
+    tr: "Dosya veya dizin bulunamadı.",
+  },
+  apps_file_explorer_error_permission_denied: {
+    en: "You don't have permission to access this location.",
+    tr: "Bu konuma erişim izniniz yok.",
+  },
+  apps_file_explorer_error_invalid_filename: {
+    en: "The filename is invalid. Please avoid special characters and reserved names.",
+    tr: "Dosya adı geçersiz. Lütfen özel karakterleri ve ayrılmış adlardan kaçının.",
+  },
+  apps_file_explorer_error_path_too_long: {
+    en: "The path is too long. Please use a shorter name or move to a different location.",
+    tr: "Yol çok uzun. Lütfen daha kısa bir ad kullanın veya farklı bir konuma taşıyın.",
+  },
+  apps_file_explorer_error_already_exists: {
+    en: "A file or folder with this name already exists.",
+    tr: "Bu adla bir dosya veya klasör zaten mevcut.",
+  },
+  apps_file_explorer_error_directory_not_empty: {
+    en: "The directory is not empty. Please remove all contents first.",
+    tr: "Dizin boş değil. Lütfen önce tüm içerikleri kaldırın.",
+  },
+  apps_file_explorer_error_operation_timeout: {
+    en: "The operation took too long to complete. Please try again.",
+    tr: "İşlem tamamlanmak için çok uzun sürdü. Lütfen tekrar deneyin.",
+  },
+  apps_file_explorer_error_quota_exceeded: {
+    en: "Storage quota exceeded. Please free up space and try again.",
+    tr: "Depolama kotası aşıldı. Lütfen alan açın ve tekrar deneyin.",
+  },
+  apps_file_explorer_error_network_error: {
+    en: "Network connection error. Please check your connection and try again.",
+    tr: "Ağ bağlantı hatası. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
+  },
+  apps_file_explorer_error_invalid_path: {
+    en: "The specified path is invalid. Please check the path and try again.",
+    tr: "Belirtilen yol geçersiz. Lütfen yolu kontrol edin ve tekrar deneyin.",
+  },
+  apps_file_explorer_error_directory_too_deep: {
+    en: "The directory structure is too deep. Please reduce nesting levels.",
+    tr: "Dizin yapısı çok derin. Lütfen iç içe geçme seviyelerini azaltın.",
+  },
+  apps_file_explorer_error_operation_failed: {
+    en: "The operation failed to complete. Please try again.",
+    tr: "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
+  },
+  apps_file_explorer_success_file_copied: {
+    en: "File copied successfully",
+    tr: "Dosya başarıyla kopyalandı",
+  },
+  apps_file_explorer_success_files_copied: {
+    en: "Files copied successfully",
+    tr: "Dosyalar başarıyla kopyalandı",
+  },
+  apps_file_explorer_success_file_moved: {
+    en: "File moved successfully",
+    tr: "Dosya başarıyla taşındı",
+  },
+  apps_file_explorer_success_files_moved: {
+    en: "Files moved successfully",
+    tr: "Dosyalar başarıyla taşındı",
+  },
+  apps_file_explorer_success_file_deleted: {
+    en: "File deleted successfully",
+    tr: "Dosya başarıyla silindi",
+  },
+  apps_file_explorer_success_files_deleted: {
+    en: "Files deleted successfully",
+    tr: "Dosyalar başarıyla silindi",
+  },
+  apps_file_explorer_success_file_renamed: {
+    en: "File renamed successfully",
+    tr: "Dosya başarıyla yeniden adlandırıldı",
+  },
+  apps_file_explorer_success_directory_created: {
+    en: "Directory created successfully",
+    tr: "Dizin başarıyla oluşturuldu",
+  },
+  apps_file_explorer_success_file_created: {
+    en: "File created successfully",
+    tr: "Dosya başarıyla oluşturuldu",
+  },
+  apps_terminal_common_path_required: {
+    en: "Path required",
+    tr: "Yol gereklidir",
+  },
   common_file: {
     en: "File",
     tr: "Dosya",
@@ -684,10 +793,6 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_terminal_commands_whoami_description: {
     en: "Print effective user name.",
     tr: "Etkin kullanıcı adını yazdırır.",
-  },
-  apps_terminal_common_path_required: {
-    en: "No such file or directory.",
-    tr: "Böyle bir dosya veya dizin yok.",
   },
   apps_terminal_cp_help_option_force: {
     en: "overwrite existing files without prompting",

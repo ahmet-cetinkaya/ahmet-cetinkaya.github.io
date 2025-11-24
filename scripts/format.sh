@@ -28,6 +28,20 @@ else
     print_info "💡 Install shfmt: go install mvdan.cc/sh/v3/cmd/shfmt@latest"
 fi
 
+print_info "🔧 Running ESLint auto-fix on root project files"
+# Run ESLint auto-fix on root project files, excluding presentation layer
+if command -v bun &>/dev/null; then
+    if bunx eslint --fix . --ext .js,.jsx,.ts,.tsx "!src/presentation/**/*" 2>/dev/null; then
+        print_success "✅ ESLint auto-fix completed successfully"
+    else
+        print_warning "⚠️  ESLint auto-fix failed or found unfixable issues"
+    fi
+else
+    print_error "❌ bun is required for this project"
+    print_info "💡 Install bun: https://bun.sh"
+    exit 1
+fi
+
 print_info "📝 Formatting root project files (excluding presentation layer)"
 # Format root project files, excluding presentation layer (hide unchanged messages)
 if prettier --write . "!src/presentation/**/*" 2>/dev/null | grep -v "unchanged" || true; then
@@ -46,16 +60,18 @@ if command -v bun &>/dev/null; then
         print_warning "⚠️  Presentation layer formatting failed - dependencies might be missing"
         print_info "💡 Try running 'bun install-all' first"
     fi
-else
-    print_warning "bun not found, trying npm/yarn"
-    if command -v npm &>/dev/null; then
-        npm run format | grep -v "unchanged" || true
-    elif command -v yarn &>/dev/null; then
-        yarn format | grep -v "unchanged" || true
+
+    print_info "🔧 Running ESLint auto-fix on presentation layer"
+    # Run ESLint auto-fix on presentation layer
+    if bun run lint --fix 2>/dev/null; then
+        print_success "✅ Presentation layer ESLint auto-fix completed successfully"
     else
-        print_error "No package manager found (bun, npm, yarn)"
-        exit 1
+        print_warning "⚠️  Presentation layer ESLint auto-fix failed or found unfixable issues"
     fi
+else
+    print_error "❌ bun is required for this project"
+    print_info "💡 Install bun: https://bun.sh"
+    exit 1
 fi
 
 cd - >/dev/null

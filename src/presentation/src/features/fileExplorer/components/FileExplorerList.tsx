@@ -6,7 +6,7 @@ import FileIcon from "./FileIcon";
 import WindowsStyleTitle from "./WindowsStyleTitle";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
-type Props = {
+type FileExplorerListProps = {
   entries: FileSystemEntry[];
   selectedFiles: Set<string>;
   cutFiles: Set<string>;
@@ -15,7 +15,7 @@ type Props = {
   onFileContextMenu: (entry: FileSystemEntry | undefined, event: MouseEvent) => void;
 };
 
-export default function FileExplorerList(props: Props) {
+export default function FileExplorerList(props: FileExplorerListProps) {
   function handleFileClick(entry: FileSystemEntry, event: MouseEvent) {
     event.preventDefault();
 

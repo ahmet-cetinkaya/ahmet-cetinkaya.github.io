@@ -1,9 +1,9 @@
-import { For, createSignal, Show } from "solid-js";
+import { For, createSignal, Show, createMemo } from "solid-js";
 import Icon from "@shared/components/Icon";
 import Icons from "@domain/data/Icons";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
-type Props = {
+type FileExplorerBreadcrumbProps = {
   currentPath: string;
   onNavigate: (path: string) => void;
 };
@@ -14,12 +14,12 @@ interface BreadcrumbItem {
   isRoot: boolean;
 }
 
-export default function FileExplorerBreadcrumb(props: Props) {
+export default function FileExplorerBreadcrumb(props: FileExplorerBreadcrumbProps) {
   const [isEditing, setIsEditing] = createSignal(false);
   const [editPath, setEditPath] = createSignal(props.currentPath);
 
-  // Generate breadcrumb items from current path
-  const breadcrumbItems = () => {
+  // Generate breadcrumb items from current path - memoized to prevent unnecessary recalculations
+  const breadcrumbItems = createMemo(() => {
     const items: BreadcrumbItem[] = [];
     const parts = props.currentPath.split("/").filter(Boolean);
 
@@ -42,7 +42,7 @@ export default function FileExplorerBreadcrumb(props: Props) {
     }
 
     return items;
-  };
+  });
 
   function handleBreadcrumbClick(path: string) {
     if (path !== props.currentPath) {
@@ -74,7 +74,7 @@ export default function FileExplorerBreadcrumb(props: Props) {
   }
 
   return (
-    <div class="flex items-center p-2">
+    <div class="flex h-10 min-h-[2.5rem] items-center p-2">
       <Show
         when={isEditing()}
         fallback={
@@ -109,7 +109,7 @@ export default function FileExplorerBreadcrumb(props: Props) {
         {/* Path editing input */}
         <input
           type="text"
-          class="w-full rounded bg-surface-300 px-2 py-1 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="h-6 w-full rounded bg-surface-300 px-2 py-1 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={editPath()}
           onInput={(e) => setEditPath(e.currentTarget.value)}
           onKeyDown={handlePathSubmit}

@@ -20,10 +20,8 @@ export default class FileExplorerCommand implements ICIProgram {
 
   async execute(...args: string[]): Promise<CommandOutput> {
     try {
-      // Parse arguments to get target path
       const targetPath = args[0] || "/home/ac";
 
-      // Validate path exists
       const pathExists = await this.pathExists(targetPath);
       if (!pathExists) {
         const { i18n } = this.container;
@@ -35,23 +33,20 @@ export default class FileExplorerCommand implements ICIProgram {
       }
 
       const { i18n } = this.container;
-
-      // Get current locale for translation
       const currentLocale = i18n.currentLocale.value || i18n.getBrowserLocale() || i18n.locales[0] || "en";
 
-      // Create window for file explorer with translated title
       const appWindow = new Window(
         CryptoExtensions.generateNanoId(),
         Apps.fileExplorer,
         i18n.translate(currentLocale, TranslationKeys.apps_file_explorer_title),
-        undefined, // layer
-        false, // isMinimized
-        false, // isMaximized
-        undefined, // position
-        undefined, // size
-        undefined, // createdDate
-        undefined, // updatedDate
-        { initialPath: targetPath }, // args
+        undefined,
+        false,
+        false,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        { initialPath: targetPath },
       );
 
       await this.windowService.add(appWindow);

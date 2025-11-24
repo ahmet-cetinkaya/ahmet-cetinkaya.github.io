@@ -6,29 +6,29 @@ import {
 import Icon from "@shared/components/Icon";
 import Icons from "@domain/data/Icons";
 import Button from "@shared/components/ui/Button";
-import Dropdown, { type DropdownItem } from "@shared/components/ui/Dropdown";
+import Dropdown from "@shared/components/ui/Dropdown";
 import { TranslationKeys } from "@domain/data/Translations";
+import FileExplorerBreadcrumb from "./FileExplorerBreadcrumb";
 
-type Props = {
+type FileExplorerToolbarProps = {
   currentPath: string;
-  viewMode: FileViewMode;
-  sortBy: FileSortCriteria;
-  sortOrder: SortOrder;
-  onNavigateBack: () => void;
-  onNavigateForward: () => void;
-  onNavigateUp: () => void;
-  onRefresh: () => void;
-  onViewModeChange: (mode: FileViewMode) => void;
-  onSortChange: (sortBy: FileSortCriteria, sortOrder: SortOrder) => void;
+  breadcrumbPath: string;
+  canGoBack: () => boolean;
+  canGoForward: () => boolean;
+  onGoBack: () => void;
+  onGoForward: () => void;
+  onNavigate: (path: string) => void;
   onCreateFolder: () => void;
   onCreateFile: () => void;
-  onListOptions: () => void;
-  canNavigateBack?: boolean;
-  canNavigateForward?: boolean;
+  onViewModeChange: (mode: FileViewMode) => void;
+  currentViewMode: FileViewMode;
+  onSortChange: (sortBy: FileSortCriteria) => void;
+  currentSortBy: FileSortCriteria;
+  currentSortOrder: SortOrder;
 };
 
-export default function FileExplorerToolbar(props: Props) {
-  const createMenuItems: DropdownItem[] = [
+export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
+  const createMenuItems = () => [
     {
       text: TranslationKeys.common_new_folder,
       icon: Icons.folderPlus,
@@ -41,45 +41,110 @@ export default function FileExplorerToolbar(props: Props) {
     },
   ];
 
+  const optionsMenuItems = () => [
+    {
+      text: TranslationKeys.apps_file_explorer_view_options,
+      items: [
+        {
+          text: TranslationKeys.apps_file_explorer_view_grid,
+          icon: props.currentViewMode === FileViewMode.GRID ? Icons.check : Icons.spinner,
+          onClick: () => props.onViewModeChange(FileViewMode.GRID),
+        },
+        {
+          text: TranslationKeys.apps_file_explorer_view_list,
+          icon: props.currentViewMode === FileViewMode.LIST ? Icons.check : Icons.unorderedList,
+          onClick: () => props.onViewModeChange(FileViewMode.LIST),
+        },
+      ],
+    },
+    {
+      text: TranslationKeys.apps_file_explorer_sort_options,
+      items: [
+        {
+          text: TranslationKeys.apps_file_explorer_sort_by_name,
+          icon:
+            props.currentSortBy === FileSortCriteria.NAME
+              ? props.currentSortOrder === SortOrder.ASC
+                ? Icons.upArrow
+                : Icons.downArrow
+              : Icons.center,
+          onClick: () => props.onSortChange(FileSortCriteria.NAME),
+        },
+        {
+          text: TranslationKeys.apps_file_explorer_sort_by_size,
+          icon:
+            props.currentSortBy === FileSortCriteria.SIZE
+              ? props.currentSortOrder === SortOrder.ASC
+                ? Icons.upArrow
+                : Icons.downArrow
+              : Icons.center,
+          onClick: () => props.onSortChange(FileSortCriteria.SIZE),
+        },
+        {
+          text: TranslationKeys.apps_file_explorer_sort_by_modified,
+          icon:
+            props.currentSortBy === FileSortCriteria.MODIFIED
+              ? props.currentSortOrder === SortOrder.ASC
+                ? Icons.upArrow
+                : Icons.downArrow
+              : Icons.center,
+          onClick: () => props.onSortChange(FileSortCriteria.MODIFIED),
+        },
+        {
+          text: TranslationKeys.apps_file_explorer_sort_by_type,
+          icon:
+            props.currentSortBy === FileSortCriteria.TYPE
+              ? props.currentSortOrder === SortOrder.ASC
+                ? Icons.upArrow
+                : Icons.downArrow
+              : Icons.center,
+          onClick: () => props.onSortChange(FileSortCriteria.TYPE),
+        },
+      ],
+    },
+  ];
+
   return (
-    <div class="flex items-center justify-between border-b border-surface-300 bg-surface-500 p-2">
-      {/* BACK_ICON | FORWARD_ICON */}
+    <div class="relative flex items-center justify-between border-b border-surface-300 bg-surface-500 p-2">
+      {/* Navigation Controls */}
       <div class="flex items-center space-x-1">
         <Button
-          variant="text"
+          variant="primary"
           size="small"
           ariaLabel="Navigate back"
-          onClick={props.onNavigateBack}
-          disabled={props.canNavigateBack === false}
+          onClick={props.onGoBack}
+          disabled={!props.canGoBack()}
           class="p-2"
         >
           <Icon icon={Icons.leftArrow} class="h-4 w-4" />
         </Button>
 
         <Button
-          variant="text"
+          variant="primary"
           size="small"
           ariaLabel="Navigate forward"
-          onClick={props.onNavigateForward}
-          disabled={props.canNavigateForward === false}
+          onClick={props.onGoForward}
+          disabled={!props.canGoForward()}
           class="p-2"
         >
           <Icon icon={Icons.rightArrow} class="h-4 w-4" />
         </Button>
       </div>
 
-      {/* BREADCRUMB - This will be handled by the Breadcrumb component, so we'll leave space for it */}
-      <div class="flex flex-1 items-center">{/* Breadcrumb will be rendered separately in FileExplorerApp */}</div>
+      {/* Breadcrumb Navigation */}
+      <div class="mx-4 flex flex-1 items-center justify-center">
+        <FileExplorerBreadcrumb currentPath={props.breadcrumbPath} onNavigate={props.onNavigate} />
+      </div>
 
-      {/* CREATE_BUTTON (Dropdown) | LIST_OPTIONS_ICON */}
+      {/* Action Controls */}
       <div class="flex items-center space-x-1">
-        <Dropdown menuItems={createMenuItems} ariaLabel="Create new file or folder" buttonClass="p-2">
+        <Dropdown menuItems={createMenuItems()} ariaLabel="Create new file or folder" buttonClass="p-2">
           <Icon icon={Icons.plus} class="h-4 w-4" />
         </Dropdown>
 
-        <Button variant="text" size="small" ariaLabel="List options" onClick={props.onListOptions} class="p-2">
+        <Dropdown menuItems={optionsMenuItems()} ariaLabel="View and sort options" buttonClass="p-2">
           <Icon icon={Icons.orderedList} class="h-4 w-4" />
-        </Button>
+        </Dropdown>
       </div>
     </div>
   );

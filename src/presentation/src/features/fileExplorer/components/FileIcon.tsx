@@ -6,13 +6,13 @@ import Icons from "@domain/data/Icons";
 import Icon from "@shared/components/Icon";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
-type Props = {
+type FileIconProps = {
   entry: FileSystemEntry;
   size?: "small" | "medium" | "large";
   class?: string;
 };
 
-export default function FileIcon(props: Props) {
+export default function FileIcon(props: FileIconProps) {
   const sizeClasses = {
     small: "h-6 w-6",
     medium: "h-8 w-8",
@@ -34,7 +34,6 @@ export default function FileIcon(props: Props) {
           />
         }
       >
-        {/* 3D model would be rendered here */}
         <Icon
           icon={isDirectory() ? Icons.folder : Icons.file}
           class={mergeCls(sizeClasses[props.size || "medium"], iconConfig().color, "text-primary-500")}

@@ -5,7 +5,7 @@ import FileIcon from "./FileIcon";
 import WindowsStyleTitle from "./WindowsStyleTitle";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
-type Props = {
+type FileExplorerGridProps = {
   entries: FileSystemEntry[];
   selectedFiles: Set<string>;
   cutFiles: Set<string>;
@@ -14,7 +14,7 @@ type Props = {
   onFileContextMenu: (entry: FileSystemEntry | undefined, event: MouseEvent) => void;
 };
 
-export default function FileExplorerGrid(props: Props) {
+export default function FileExplorerGrid(props: FileExplorerGridProps) {
   function handleFileClick(entry: FileSystemEntry, event: MouseEvent) {
     event.preventDefault();
 

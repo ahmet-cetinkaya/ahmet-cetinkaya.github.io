@@ -1,11 +1,11 @@
-import { Show, type JSX } from "solid-js";
-import Icon from "@presentation/src/shared/components/Icon";
+import { Show, createEffect, createSignal, type JSX } from "solid-js";
 import Icons from "@domain/data/Icons";
 import { TranslationKeys } from "@domain/data/Translations";
 import Modal from "@packages/acore-solidjs/ui/components/Modal";
 import Button from "@shared/components/ui/Button";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
+import DialogSizeCalculator, { type DialogSizingOptions } from "@shared/utils/DialogSizeCalculator";
 
 interface DialogProps {
   title?: string | TranslationKeys;
@@ -23,6 +23,11 @@ interface DialogProps {
   description?: string | TranslationKeys;
   style?: JSX.CSSProperties;
   children?: JSX.Element;
+  // Auto-sizing options
+  enableAutoResize?: boolean;
+  sizingOptions?: DialogSizingOptions;
+  // Backdrop options
+  closeOnBackdropClick?: boolean;
 }
 
 /**
@@ -31,6 +36,7 @@ interface DialogProps {
  */
 export default function Dialog(props: DialogProps) {
   const translate = useI18n();
+  const [dynamicSize, setDynamicSize] = createSignal<Size>(props.size || new Size(320, 200));
 
   const {
     title = "Dialog",
@@ -48,10 +54,50 @@ export default function Dialog(props: DialogProps) {
     style,
     children,
     message,
+    enableAutoResize = true,
+    sizingOptions,
+    closeOnBackdropClick = true,
   } = props;
+
+  // Calculate optimal size based on content
+  createEffect(() => {
+    if (enableAutoResize && isOpen) {
+      const contentText = `${translateText(title || "")} ${translateText(message || "")} ${translateText(description || "")}`;
+      const hasInput = children !== undefined;
+      const hasButtons = showOkButton || customButtons !== undefined;
+      const hasError = contentText.toLowerCase().includes("error") || contentText.toLowerCase().includes("failed");
+
+      const metrics = DialogSizeCalculator.analyzeContent(
+        contentText,
+        hasInput,
+        hasButtons,
+        hasError,
+        icon !== undefined,
+      );
+
+      const calculatedSize = DialogSizeCalculator.calculateOptimalSize(metrics, sizingOptions);
+      const constrainedSize = DialogSizeCalculator.getViewportConstrainedSize(calculatedSize);
+
+      // Use the larger of calculated size or provided size
+      const finalSize = new Size(
+        Math.max(size.width, constrainedSize.width),
+        Math.max(size.height, constrainedSize.height),
+      );
+
+      setDynamicSize(finalSize);
+    } else {
+      setDynamicSize(size);
+    }
+  });
 
   const handleClose = () => {
     if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleBackdropClick = () => {
+    if (closeOnBackdropClick && onClose) {
       onClose();
     }
   };
@@ -63,39 +109,72 @@ export default function Dialog(props: DialogProps) {
 
   return (
     <Show when={isOpen}>
+      {/* Background overlay/dim */}
+      <div class="fixed inset-0 z-[99] bg-black bg-opacity-30" onClick={handleBackdropClick} />
+
       <Modal
         title={translateText(title)}
-        size={size}
+        size={dynamicSize()}
         draggable={draggable}
         maximizable={false}
         onClose={handleClose}
         closeAriaLabel={closeAriaLabel}
-        // Center the dialog by not providing position, letting Modal center it by default
-        class={`shadow-md fixed min-h-40 min-w-40 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary ${customClass}`}
+        // Use Window-style classes with higher z-index for dialogs
+        class={`shadow-md fixed min-h-40 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary ${customClass}`}
         headerClass="bg-surface-400 border-b border-black"
         customHeaderButtons={customButtons}
-        style={style}
+        style={{
+          "z-index": 101, // Above the backdrop overlay (z-[99])
+          transition: enableAutoResize ? "width 0.2s ease-out, height 0.2s ease-out" : "none",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)", // Center dialog
+          margin: 0, // Override auto-margining
+          ...style,
+        }}
       >
-        <div class="flex h-full flex-col p-3">
-          {/* Icon and Message/Children - Left aligned, icon vertically centered */}
-          <div class="mb-4 flex flex-grow items-start">
-            {icon && <Icon icon={icon} class="mr-4 mt-1 h-8 w-8 flex-shrink-0 text-2xl text-red-500" />}
-            <div class="flex-grow">
-              {/* Message text (fallback for simple dialogs) */}
-              {message && (
-                <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{translateText(message)}</p>
+        <div class="flex h-full flex-col">
+          {/* Scrollable Content Area */}
+          <div class="flex-grow overflow-y-auto p-4">
+            {/* Icon and Message/Children - Left aligned, icon vertically centered */}
+            <div class="flex items-start">
+              {icon && (
+                <div class="mr-3 mt-0.5 flex flex-shrink-0 items-center justify-center">
+                  <img
+                    src={(() => {
+                      // Use string comparison as a fallback in case enum comparison fails
+                      const iconStr = String(icon);
+                      const folderPlusStr = String(Icons.folderPlus);
+                      const filePlusStr = String(Icons.filePlus);
+                      const editStr = String(Icons.edit);
+                      const trashStr = String(Icons.trash);
+
+                      if (iconStr === folderPlusStr || icon === Icons.folderPlus) return "/icons/folder-plus.svg";
+                      if (iconStr === filePlusStr || icon === Icons.filePlus) return "/icons/file-plus.svg";
+                      if (iconStr === editStr || icon === Icons.edit) return "/icons/edit.svg";
+                      if (iconStr === trashStr || icon === Icons.trash) return "/icons/trash.svg";
+
+                      return "/icons/file.svg"; // Default fallback icon
+                    })()}
+                    alt="Dialog icon"
+                    class="h-6 w-6"
+                    style="filter: brightness(0) invert(0.7);" // Makes icon gray (70% brightness)
+                  />
+                </div>
               )}
-              {/* Description text */}
-              {description && (
-                <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{translateText(description)}</p>
-              )}
-              {/* Custom content (children) */}
-              {children}
+              <div class="min-w-0 flex-grow">
+                {/* Message text (fallback for simple dialogs) */}
+                {message && <p class="mb-3 text-sm leading-relaxed text-gray-200">{translateText(message)}</p>}
+                {/* Description text */}
+                {description && <p class="mb-3 text-sm leading-relaxed text-gray-200">{translateText(description)}</p>}
+                {/* Custom content (children) */}
+                {children}
+              </div>
             </div>
           </div>
 
-          {/* Action Buttons - Full width OK button */}
-          <div class="border-t border-black pt-3">
+          {/* Fixed Footer with Action Buttons */}
+          <div class="flex-shrink-0 border-t border-black bg-surface-500 p-3">
             {customButtons}
             {showOkButton && (
               <Button

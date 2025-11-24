@@ -1,13 +1,13 @@
 import { createMemo } from "solid-js";
 
-interface Props {
+type WindowsStyleTitleProps = {
   text: string;
   class?: string;
   maxLength?: number;
   wrap?: boolean;
-}
+};
 
-export default function WindowsStyleTitle(props: Props) {
+export default function WindowsStyleTitle(props: WindowsStyleTitleProps) {
   const truncatedText = createMemo(() => {
     const { text } = props;
     const maxLength = props.maxLength || 20;

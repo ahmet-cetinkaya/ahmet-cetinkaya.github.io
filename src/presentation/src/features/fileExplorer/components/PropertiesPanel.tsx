@@ -7,13 +7,13 @@ import Icons from "@domain/data/Icons";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import ScreenHelper from "@shared/utils/ScreenHelper";
 
-type Props = {
+type PropertiesPanelProps = {
   entry: FileSystemEntry | null;
   onClose: () => void;
   isVisible: boolean;
 };
 
-export default function PropertiesPanel(props: Props) {
+export default function PropertiesPanel(props: PropertiesPanelProps) {
   const [panelPosition, setPanelPosition] = createSignal<"right" | "bottom">("right");
 
   function formatDate(date: Date): string {

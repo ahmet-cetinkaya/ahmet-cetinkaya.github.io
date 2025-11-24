@@ -517,7 +517,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   return (
     <>
-      <div class={mergeCls("flex size-full flex-col bg-surface-400", isMobile() ? "text-sm" : "")}>
+      <div class={mergeCls("flex size-full flex-col", isMobile() ? "text-sm" : "")}>
         <FileExplorerToolbar
           currentPath={state().currentPath}
           breadcrumbPath={breadcrumbPath()}
@@ -537,13 +537,13 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
         <div
           class={mergeCls(
-            "flex flex-1",
+            "flex flex-1 overflow-hidden",
             propertiesPanel().visible && propertiesPanel().entry ? (isMobile() ? "flex-col" : "flex-row") : "flex-row",
           )}
         >
           <div
             class={mergeCls(
-              "overflow-auto",
+              "overflow-auto bg-surface-400",
               propertiesPanel().visible && propertiesPanel().entry && !isMobile() ? "flex-1" : "flex-1",
             )}
             onContextMenu={handleBackgroundContextMenu}

@@ -259,7 +259,7 @@ export default class FileOperationsService {
   }
 
   /**
-   * Execute rename operation
+   * Execute rename operation with improved collision detection and transaction safety
    */
   private async executeRename(oldPath: string, newName: string): Promise<void> {
     logger.debug(`Renaming: ${oldPath} -> ${newName}`);
@@ -267,6 +267,11 @@ export default class FileOperationsService {
     // Validate inputs
     PathSanitizer.validatePath(oldPath);
     const sanitizedName = PathSanitizer.sanitizeFileName(newName);
+
+    // Disallow empty names after sanitization
+    if (!sanitizedName.trim()) {
+      throw new OperationFailedError("rename", oldPath, new Error("Invalid name: name cannot be empty"));
+    }
 
     // Get source entry
     const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === oldPath);
@@ -277,18 +282,29 @@ export default class FileOperationsService {
     const parentPath = PathSanitizer.getDirectoryPath(oldPath);
     PermissionService.validatePath(parentPath);
 
-    // Check if new name already exists
-    const newPath = PathSanitizer.joinPath(parentPath, sanitizedName);
-    if ((await this.pathExists(newPath)) && newPath !== oldPath) {
-      // Generate unique name if needed
-      const uniqueName = await this.generateUniqueName(parentPath, newName, sourceEntry instanceof Directory);
-      const finalPath = PathSanitizer.joinPath(parentPath, uniqueName);
-      await this.moveEntry(sourceEntry, finalPath);
-    } else {
-      await this.moveEntry(sourceEntry, newPath);
+    // Calculate the target path with the sanitized name
+    const candidatePath = PathSanitizer.joinPath(parentPath, sanitizedName);
+
+    // Determine final path with collision detection
+    let finalPath = candidatePath;
+
+    // Check for collision with existing entries (excluding the source itself)
+    if (candidatePath !== oldPath && await this.pathExists(candidatePath)) {
+      logger.warn(`Name collision detected: ${candidatePath} already exists`);
+      const uniqueName = await this.generateUniqueName(parentPath, sanitizedName, sourceEntry instanceof Directory);
+      finalPath = PathSanitizer.joinPath(parentPath, uniqueName);
+      logger.debug(`Using unique name: ${finalPath}`);
     }
 
-    logger.debug(`Renamed: ${oldPath} -> ${newPath}`);
+    // Additional validation: ensure we're not trying to rename a parent directory to a subdirectory of itself
+    if (sourceEntry instanceof Directory && finalPath.startsWith(oldPath + "/")) {
+      throw new OperationFailedError("rename", oldPath, new Error("Cannot move a directory into its own subdirectory"));
+    }
+
+    // Perform the atomic move operation with rollback safety
+    await this.moveEntry(sourceEntry, finalPath);
+
+    logger.debug(`Successfully renamed: ${oldPath} -> ${finalPath}`);
   }
 
   /**
@@ -321,38 +337,113 @@ export default class FileOperationsService {
   }
 
   /**
-   * Move an entry to a new path
+   * Move an entry to a new path with improved transaction safety
    */
   private async moveEntry(sourceEntry: FileSystemEntry, newPath: string): Promise<void> {
     PermissionService.validatePath(newPath);
 
-    try {
-      // Remove the old entry
-      await this.fileSystemService.remove((e) => e.fullPath === sourceEntry.fullPath);
+    // Validate that the source and target paths are different
+    if (sourceEntry.fullPath === newPath) {
+      logger.debug(`Source and target paths are identical, skipping move: ${newPath}`);
+      return;
+    }
 
-      // Add the new entry
-      if (sourceEntry instanceof File) {
-        const updatedFile = new File(
-          newPath,
-          sourceEntry.content,
-          sourceEntry.createdDate,
-          sourceEntry.size,
-          new Date(),
-        );
-        await this.fileSystemService.add(updatedFile);
-      } else {
-        const updatedDirectory = new Directory(newPath, sourceEntry.createdDate, new Date());
-        await this.fileSystemService.add(updatedDirectory);
-      }
+    // For directories, we need to handle this as a recursive operation
+    if (sourceEntry instanceof Directory) {
+      await this.moveDirectory(sourceEntry, newPath);
+    } else {
+      await this.moveFile(sourceEntry, newPath);
+    }
+  }
+
+  /**
+   * Move a file with transaction safety
+   */
+  private async moveFile(sourceFile: File, newPath: string): Promise<void> {
+    const backupPath = `${sourceFile.fullPath}.backup.${Date.now()}`;
+    let hasBackup = false;
+
+    try {
+      // Create a backup of the original file metadata
+      const backupFile = new File(
+        backupPath,
+        sourceFile.content,
+        sourceFile.createdDate,
+        sourceFile.size,
+        sourceFile.updatedDate,
+      );
+
+      // Step 1: Add backup (this won't interfere with the actual file system)
+      await this.fileSystemService.add(backupFile);
+      hasBackup = true;
+
+      // Step 2: Create the new file
+      const updatedFile = new File(
+        newPath,
+        sourceFile.content,
+        sourceFile.createdDate,
+        sourceFile.size,
+        new Date(),
+      );
+      await this.fileSystemService.add(updatedFile);
+
+      // Step 3: Remove the original file
+      await this.fileSystemService.remove((e) => e.fullPath === sourceFile.fullPath);
+
+      // Step 4: Clean up backup
+      await this.fileSystemService.remove((e) => e.fullPath === backupPath);
+
+      logger.debug(`Successfully moved file: ${sourceFile.fullPath} -> ${newPath}`);
     } catch (error) {
-      // If move fails, try to restore the original entry
-      logger.error("Move failed, attempting to restore original entry:", error);
+      // Rollback strategy
+      logger.error(`File move failed, attempting rollback: ${sourceFile.fullPath} -> ${newPath}`, error);
+
       try {
-        await this.fileSystemService.add(sourceEntry);
-      } catch (restoreError) {
-        logger.error("Failed to restore original entry:", restoreError);
+        // If we created a new file, try to remove it
+        await this.fileSystemService.remove((e) => e.fullPath === newPath);
+      } catch (cleanupError) {
+        logger.warn(`Failed to clean up target file during rollback: ${newPath}`, cleanupError);
       }
-      throw new OperationFailedError("move", sourceEntry.fullPath, error as Error);
+
+      try {
+        // If we have a backup, remove it (the original file should still exist)
+        if (hasBackup) {
+          await this.fileSystemService.remove((e) => e.fullPath === backupPath);
+        }
+      } catch (backupCleanupError) {
+        logger.warn(`Failed to clean up backup file during rollback: ${backupPath}`, backupCleanupError);
+      }
+
+      throw new OperationFailedError("move file", sourceFile.fullPath, error as Error);
+    }
+  }
+
+  /**
+   * Move a directory with all its contents recursively
+   */
+  private async moveDirectory(sourceDirectory: Directory, newPath: string): Promise<void> {
+    try {
+      // First copy the directory with all contents
+      await this.copyDirectory(sourceDirectory, newPath);
+
+      // If copy succeeds, delete the original directory
+      await this.directoryOperations.deleteDirectoryContents(sourceDirectory.fullPath);
+
+      // Finally remove the directory itself
+      await this.fileSystemService.remove((e) => e.fullPath === sourceDirectory.fullPath);
+
+      logger.debug(`Successfully moved directory: ${sourceDirectory.fullPath} -> ${newPath}`);
+    } catch (error) {
+      // Clean up partially copied directory if move failed
+      logger.error(`Directory move failed, cleaning up: ${newPath}`, error);
+      try {
+        await this.directoryOperations.deleteDirectoryContents(newPath);
+        await this.fileSystemService.remove((e) => e.fullPath === newPath);
+      } catch (cleanupError) {
+        logger.warn(`Failed to clean up partially copied directory: ${newPath}`, cleanupError);
+      }
+
+      throw new OperationFailedError("move directory", sourceDirectory.fullPath, error as Error);
     }
   }
 

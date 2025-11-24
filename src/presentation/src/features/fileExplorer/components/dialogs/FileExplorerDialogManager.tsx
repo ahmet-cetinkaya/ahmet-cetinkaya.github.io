@@ -5,14 +5,17 @@ import AddFolderDialog from "./AddFolderDialog";
 import AddFileDialog from "./AddFileDialog";
 import RenameDialog from "./RenameDialog";
 import DeleteDialog from "./DeleteDialog";
+import NoActionDialog from "./NoActionDialog";
 
-export type DialogType = "add-folder" | "add-file" | "rename" | "delete";
+export type DialogType = "add-folder" | "add-file" | "rename" | "delete" | "no-action";
 
 export interface DialogConfig {
   type: DialogType;
   currentPath?: string;
   pathsToDelete?: string[];
   currentName?: string;
+  fileName?: string;
+  fileType?: string;
 }
 
 export type FileExplorerDialogManagerProps = {
@@ -109,6 +112,11 @@ export default function FileExplorerDialogManager(props: FileExplorerDialogManag
           onError={handleError}
           onClose={closeDialog}
         />
+      )}
+
+      {/* No Action Dialog */}
+      {activeDialog()?.type === "no-action" && (
+        <NoActionDialog fileName={activeDialog()!.fileName} fileType={activeDialog()!.fileType} onClose={closeDialog} />
       )}
     </>
   );

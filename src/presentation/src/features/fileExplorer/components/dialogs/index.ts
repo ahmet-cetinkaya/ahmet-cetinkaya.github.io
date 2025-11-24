@@ -3,6 +3,7 @@ export { default as AddFolderDialog } from "./AddFolderDialog";
 export { default as AddFileDialog } from "./AddFileDialog";
 export { default as RenameDialog } from "./RenameDialog";
 export { default as DeleteDialog } from "./DeleteDialog";
+export { default as NoActionDialog } from "./NoActionDialog";
 export { default as FileExplorerDialogManager } from "./FileExplorerDialogManager";
 
 // Types

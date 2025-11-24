@@ -285,11 +285,39 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     } else {
       const service = new FileExplorerService(fileSystemService, windowsService);
 
-      if (service.isGameExecutable(entry)) {
+      // Check if the file has a registered handler
+      if (service.hasRegisteredHandler(entry)) {
         try {
-          await service.launchGame(entry);
+          // Currently only games are supported, but this allows for future extensibility
+          if (service.isGameExecutable(entry)) {
+            await service.launchGame(entry);
+          }
         } catch (error) {
           handleError(error);
+        }
+      } else {
+        // No handler available - show no-action dialog
+        const fileName = entry.name;
+
+        // Enhanced file type detection with fallback to manual extraction
+        let fileType = "unknown";
+
+        if (entry instanceof File && entry.extension) {
+          fileType = entry.extension.toUpperCase();
+        } else {
+          // Manual extraction as fallback
+          const lastDotIndex = fileName.lastIndexOf(".");
+          if (lastDotIndex !== -1 && lastDotIndex < fileName.length - 1) {
+            fileType = fileName.slice(lastDotIndex + 1).toUpperCase();
+          }
+        }
+
+        if (openDialog) {
+          openDialog({
+            type: "no-action",
+            fileName,
+            fileType,
+          });
         }
       }
     }

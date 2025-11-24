@@ -40,6 +40,9 @@ export enum TranslationKeys {
   apps_file_explorer_error_invalid_path = "apps_file_explorer_error_invalid_path",
   apps_file_explorer_error_directory_too_deep = "apps_file_explorer_error_directory_too_deep",
   apps_file_explorer_error_operation_failed = "apps_file_explorer_error_operation_failed",
+  apps_file_explorer_no_action_title = "apps_file_explorer_no_action_title",
+  apps_file_explorer_no_action_description = "apps_file_explorer_no_action_description",
+  apps_file_explorer_no_action_description_with_file = "apps_file_explorer_no_action_description_with_file",
   apps_file_explorer_success_file_copied = "apps_file_explorer_success_file_copied",
   apps_file_explorer_success_files_copied = "apps_file_explorer_success_files_copied",
   apps_file_explorer_success_file_moved = "apps_file_explorer_success_file_moved",
@@ -497,6 +500,18 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_file_explorer_error_operation_failed: {
     en: "The operation failed to complete. Please try again.",
     tr: "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
+  },
+  apps_file_explorer_no_action_title: {
+    en: "No Action Available",
+    tr: "Kullanılabilir Eylem Yok",
+  },
+  apps_file_explorer_no_action_description: {
+    en: "There is no application available to open this type of file.",
+    tr: "Bu dosya türünü açmak için hiçbir uygulama mevcut değil.",
+  },
+  apps_file_explorer_no_action_description_with_file: {
+    en: "There is no application available to open the file '{{fileName}}' of type '{{fileType}}'.",
+    tr: "'{{fileType}}' türündeki '{{fileName}}' dosyasını açmak için hiçbir uygulama mevcut değil.",
   },
   apps_file_explorer_success_file_copied: {
     en: "File copied successfully",

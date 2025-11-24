@@ -267,6 +267,13 @@ export default class FileExplorerService {
     };
   }
 
+  // File handler methods
+  hasRegisteredHandler(entry: FileSystemEntry): boolean {
+    // Currently only games are supported as executable files
+    // This method is designed to be extensible for future file associations
+    return this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
+  }
+
   // Game-related methods
   isGameExecutable(entry: FileSystemEntry): boolean {
     return this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;

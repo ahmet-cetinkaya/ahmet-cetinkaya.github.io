@@ -23,6 +23,7 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
       props.onFileSelect(entry.fullPath, event.ctrlKey || event.metaKey);
     } else if (event.detail === 2) {
       // Double click - open file
+      event.stopPropagation();
       props.onFileOpen(entry);
     }
   }

@@ -1,8 +1,11 @@
+import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
-import { default as Directory, default as File } from "@domain/models/File";
+import Directory from "@domain/models/Directory";
+import File from "@domain/models/File";
 import FileNavigationService from "./FileNavigationService";
 import FileOperationsService from "./FileOperationsService";
+import GameExecutionService from "./GameExecutionService";
 
 import { UI_CONSTANTS } from "../constants";
 import { globalOperationQueue } from "../utils/OperationQueue";
@@ -35,10 +38,15 @@ export { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState, type
 export default class FileExplorerService {
   private readonly operationsService: FileOperationsService;
   private readonly navigationService: FileNavigationService;
+  private readonly gameExecutionService: GameExecutionService;
 
-  constructor(private readonly fileSystemService: IFileSystemService) {
+  constructor(
+    private readonly fileSystemService: IFileSystemService,
+    private readonly windowsService?: IWindowsService,
+  ) {
     this.operationsService = new FileOperationsService(fileSystemService);
     this.navigationService = new FileNavigationService(fileSystemService);
+    this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null!;
   }
 
   async getDirectoryContents(path: string, options: Partial<FileExplorerState> = {}): Promise<FileSystemEntry[]> {
@@ -157,15 +165,15 @@ export default class FileExplorerService {
   }
 
   async createDirectory(parentPath: string, name: string): Promise<{ directory: Directory; actualName: string }> {
-    return this.operationsService.createDirectory(parentPath, name);
+    return await this.operationsService.createDirectory(parentPath, name);
   }
 
   async createFile(parentPath: string, name: string, content?: string): Promise<{ file: File; actualName: string }> {
-    return this.operationsService.createFile(parentPath, name, content);
+    return await this.operationsService.createFile(parentPath, name, content);
   }
 
   async createFolder(parentPath: string, name: string): Promise<{ directory: Directory; actualName: string }> {
-    return this.operationsService.createDirectory(parentPath, name);
+    return await this.operationsService.createDirectory(parentPath, name);
   }
 
   async deleteEntries(paths: string[]): Promise<void> {
@@ -257,5 +265,37 @@ export default class FileExplorerService {
       configCacheSize: 0,
       pathCacheSize: 0,
     };
+  }
+
+  // Game-related methods
+  isGameExecutable(entry: FileSystemEntry): boolean {
+    return this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
+  }
+
+  getGameExecutable(entry: FileSystemEntry) {
+    return this.gameExecutionService ? this.gameExecutionService.getGameExecutable(entry) : null;
+  }
+
+  async launchGame(entry: FileSystemEntry, options?: { maximized?: boolean }): Promise<void> {
+    if (!this.gameExecutionService) {
+      throw new Error("Game execution service not available");
+    }
+    return this.gameExecutionService.launchGame(entry, options);
+  }
+
+  getSupportedGameExtensions(): string[] {
+    return this.gameExecutionService ? this.gameExecutionService.getSupportedGameExtensions() : [];
+  }
+
+  isGamesDirectory(path: string): boolean {
+    return this.gameExecutionService ? this.gameExecutionService.isGamesDirectory(path) : false;
+  }
+
+  getGameLaunchCommand(entry: FileSystemEntry): string | null {
+    return this.gameExecutionService ? this.gameExecutionService.getGameLaunchCommand(entry) : null;
+  }
+
+  getAllGameExecutables() {
+    return this.gameExecutionService ? this.gameExecutionService.getAllGameExecutables() : [];
   }
 }

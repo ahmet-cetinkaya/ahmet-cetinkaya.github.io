@@ -75,12 +75,13 @@ export default function FileContextMenu(props: FileContextMenuProps) {
     let hasContent = false;
 
     if (hasSelection || hasContextTarget) {
+      items.push({
+        label: translate(TranslationKeys.common_open),
+        icon: Icons.open,
+        action: () => props.onFileOperation("open", targetPaths),
+      });
+
       items.push(
-        {
-          label: translate(TranslationKeys.common_open),
-          icon: Icons.open,
-          action: () => props.onFileOperation("open", targetPaths),
-        },
         {
           label: translate(TranslationKeys.common_copy),
           icon: Icons.copy,

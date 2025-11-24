@@ -60,6 +60,9 @@ export enum FileType {
   SH = "sh",
   BAT = "bat",
 
+  JSDOS = "jsdos",
+  GAME = "game",
+
   DEFAULT = "default",
 }
 
@@ -144,6 +147,9 @@ export const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.SH]: { icon: "terminal", color: IconColor.GRAY, isDirectory: false },
   [FileType.BAT]: { icon: "terminal", color: IconColor.GRAY, isDirectory: false },
 
+  [FileType.JSDOS]: { icon: "doom", color: IconColor.RED_400, isDirectory: false },
+  [FileType.GAME]: { icon: "godotEngine", color: IconColor.PURPLE_400, isDirectory: false },
+
   [FileType.DEFAULT]: { icon: "file", color: IconColor.GRAY, isDirectory: false },
 };
 
@@ -175,6 +181,7 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
     dockerfile: FileType.DOCKERFILE,
     ".gitignore": FileType.GITIGNORE,
     ".env": FileType.ENV,
+    "doom.jsdos": FileType.JSDOS,
   };
 
   if (exactFileNameMap[lowerFileName]) {
@@ -242,6 +249,11 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
   }
 
   const extension = lowerFileName.split(".").pop() || "";
+
+  if (extension === "jsdos") {
+    return FILE_TYPE_ICONS[FileType.JSDOS];
+  }
+
   if (Object.values(FileType).includes(extension as FileType) && FILE_TYPE_ICONS[extension as FileType]) {
     return FILE_TYPE_ICONS[extension as FileType];
   }

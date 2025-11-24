@@ -31,7 +31,7 @@ type FileExplorerAppProps = {
 };
 
 export default function FileExplorerApp(props: FileExplorerAppProps) {
-  const { fileSystemService } = Container.instance;
+  const { fileSystemService, windowsService } = Container.instance;
   const translate = useI18n();
 
   const [isMobile, setIsMobile] = createSignal(ScreenHelper.isMobile());
@@ -203,7 +203,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   const [directoryContents] = createResource(refreshTrigger, async () => {
     const currentState = state();
-    const service = new FileExplorerService(fileSystemService);
+    const service = new FileExplorerService(fileSystemService, windowsService);
     return await service.getDirectoryContents(currentState.currentPath, {
       sortBy: currentState.sortBy,
       sortOrder: currentState.sortOrder,
@@ -283,7 +283,15 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     if (entry instanceof Directory) {
       navigateToPath(entry.fullPath);
     } else {
-      // FUTURE: Implement file opening logic based on file type
+      const service = new FileExplorerService(fileSystemService, windowsService);
+
+      if (service.isGameExecutable(entry)) {
+        try {
+          await service.launchGame(entry);
+        } catch (error) {
+          handleError(error);
+        }
+      }
     }
   }
 

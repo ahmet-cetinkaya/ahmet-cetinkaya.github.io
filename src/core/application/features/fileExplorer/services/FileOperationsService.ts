@@ -27,11 +27,7 @@ export default class FileOperationsService {
   async createDirectory(parentPath: string, name: string): Promise<{ directory: Directory; actualName: string }> {
     try {
       // Validate and prepare inputs using consolidated helper
-      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(
-        parentPath,
-        name,
-        "create"
-      );
+      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(parentPath, name, "create");
 
       // Generate unique name if directory already exists
       const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, true);
@@ -64,11 +60,7 @@ export default class FileOperationsService {
   ): Promise<{ file: File; actualName: string }> {
     try {
       // Validate and prepare inputs using consolidated helper
-      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(
-        parentPath,
-        name,
-        "create"
-      );
+      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(parentPath, name, "create");
 
       // Generate unique name if file already exists
       const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, false);
@@ -125,7 +117,7 @@ export default class FileOperationsService {
     // Validate all operation paths using consolidated helper
     const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
       sourcePaths,
-      destinationPath
+      destinationPath,
     );
 
     const allPaths = [...validatedSources, validatedDestination];
@@ -153,7 +145,7 @@ export default class FileOperationsService {
     // Validate all operation paths using consolidated helper
     const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
       sourcePaths,
-      destinationPath
+      destinationPath,
     );
 
     const allPaths = [...validatedSources, validatedDestination];
@@ -303,7 +295,7 @@ export default class FileOperationsService {
     let finalPath = candidatePath;
 
     // Check for collision with existing entries (excluding the source itself)
-    if (candidatePath !== oldPath && await this.pathExists(candidatePath)) {
+    if (candidatePath !== oldPath && (await this.pathExists(candidatePath))) {
       logger.warn(`Name collision detected: ${candidatePath} already exists`);
       const uniqueName = await this.generateUniqueName(parentPath, sanitizedName, sourceEntry instanceof Directory);
       finalPath = PathSanitizer.joinPath(parentPath, uniqueName);
@@ -311,7 +303,7 @@ export default class FileOperationsService {
     }
 
     // Additional validation: ensure we're not trying to rename a parent directory to a subdirectory of itself
-    if (sourceEntry instanceof Directory && finalPath.startsWith(oldPath + "/")) {
+    if (sourceEntry instanceof Directory && finalPath.startsWith(`${oldPath}/`)) {
       throw new OperationFailedError("rename", oldPath, new Error("Cannot move a directory into its own subdirectory"));
     }
 
@@ -392,13 +384,7 @@ export default class FileOperationsService {
       hasBackup = true;
 
       // Step 2: Create the new file
-      const updatedFile = new File(
-        newPath,
-        sourceFile.content,
-        sourceFile.createdDate,
-        sourceFile.size,
-        new Date(),
-      );
+      const updatedFile = new File(newPath, sourceFile.content, sourceFile.createdDate, sourceFile.size, new Date());
       await this.fileSystemService.add(updatedFile);
 
       // Step 3: Remove the original file

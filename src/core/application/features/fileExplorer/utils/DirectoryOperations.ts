@@ -161,7 +161,7 @@ export class DirectoryOperations {
     }
 
     // Prevent copying directory into itself
-    if (destDirPath.startsWith(sourceDirPath + "/") || destDirPath === sourceDirPath) {
+    if (destDirPath.startsWith(`${sourceDirPath}/`) || destDirPath === sourceDirPath) {
       throw new Error(`Cannot copy directory into itself or its subdirectory: ${sourceDirPath} -> ${destDirPath}`);
     }
 
@@ -321,7 +321,7 @@ export class DirectoryOperations {
             logger.error(`Error deleting ${type} ${path}:`, error);
             // Continue with other deletions
           }
-        })
+        }),
       );
     }
 

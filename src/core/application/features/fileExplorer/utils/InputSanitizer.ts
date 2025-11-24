@@ -274,7 +274,10 @@ export class ValidationHelper {
   /**
    * Sanitize filename and validate parent path permissions
    */
-  static sanitizeFileNameAndValidateParent(parentPath: string, fileName: string): {
+  static sanitizeFileNameAndValidateParent(
+    parentPath: string,
+    fileName: string,
+  ): {
     sanitizedName: string;
     fullPath: string;
   } {
@@ -294,7 +297,7 @@ export class ValidationHelper {
   static validateFileOperation(
     parentPath: string,
     name: string,
-    operation: "create" | "rename" | "copy" | "move" = "create"
+    operation: "create" | "rename" | "copy" | "move" = "create",
   ): {
     validatedParentPath: string;
     sanitizedName: string;
@@ -326,7 +329,7 @@ export class ValidationHelper {
    */
   static validateOperationPaths(
     sourcePaths: string[],
-    destinationPath: string
+    destinationPath: string,
   ): {
     validatedSources: string[];
     validatedDestination: string;
@@ -347,10 +350,10 @@ export class ValidationHelper {
    * Check for self-referencing operations (moving directory into itself)
    */
   static validateSelfReference(sourcePath: string, destinationPath: string): void {
-    if (destinationPath.startsWith(sourcePath + "/") || destinationPath === sourcePath) {
+    if (destinationPath.startsWith(`${sourcePath}/`) || destinationPath === sourcePath) {
       throw new InvalidPathError(
         `${sourcePath} -> ${destinationPath}`,
-        "Cannot move directory into itself or its subdirectory"
+        "Cannot move directory into itself or its subdirectory",
       );
     }
   }

@@ -8,7 +8,23 @@ export class PermissionError extends Error {
 }
 
 export default class PermissionService {
-  private static readonly PROTECTED_PATHS = ["/"];
+  private static readonly PROTECTED_PATHS = [
+    "/",
+    "/bin",
+    "/sbin",
+    "/usr/bin",
+    "/usr/sbin",
+    "/etc",
+    "/boot",
+    "/dev",
+    "/proc",
+    "/sys",
+    "/root",
+    "/var",
+    "/tmp",
+    "/opt",
+    "/usr/local",
+  ];
   private static readonly ALLOWED_PATH_PREFIXES = ["/home/ac"];
 
   static canModifyPath(path: string): boolean {
@@ -16,7 +32,13 @@ export default class PermissionService {
   }
 
   static validatePath(path: string): void {
-    if (!this.canModifyPath(path) && !this.PROTECTED_PATHS.includes(path)) {
+    // First check if path is protected - this should always throw error
+    if (this.isProtectedPath(path)) {
+      throw new PermissionError(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
+    }
+
+    // Then check if path is in allowed paths
+    if (!this.canModifyPath(path)) {
       throw new PermissionError(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
     }
   }

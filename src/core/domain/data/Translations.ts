@@ -38,6 +38,7 @@ export enum TranslationKeys {
   apps_file_explorer_error_quota_exceeded = "apps_file_explorer_error_quota_exceeded",
   apps_file_explorer_error_network_error = "apps_file_explorer_error_network_error",
   apps_file_explorer_error_invalid_path = "apps_file_explorer_error_invalid_path",
+  apps_file_explorer_error_system_directory_access = "apps_file_explorer_error_system_directory_access",
   apps_file_explorer_error_directory_too_deep = "apps_file_explorer_error_directory_too_deep",
   apps_file_explorer_error_operation_failed = "apps_file_explorer_error_operation_failed",
   apps_file_explorer_no_action_title = "apps_file_explorer_no_action_title",
@@ -52,7 +53,20 @@ export enum TranslationKeys {
   apps_file_explorer_success_file_renamed = "apps_file_explorer_success_file_renamed",
   apps_file_explorer_success_directory_created = "apps_file_explorer_success_directory_created",
   apps_file_explorer_success_file_created = "apps_file_explorer_success_file_created",
+  apps_file_explorer_dialog_new_folder_title = "apps_file_explorer_dialog_new_folder_title",
+  apps_file_explorer_dialog_new_folder_message = "apps_file_explorer_dialog_new_folder_message",
+  apps_file_explorer_dialog_new_folder_placeholder = "apps_file_explorer_dialog_new_folder_placeholder",
+  apps_file_explorer_dialog_new_file_title = "apps_file_explorer_dialog_new_file_title",
+  apps_file_explorer_dialog_new_file_message = "apps_file_explorer_dialog_new_file_message",
+  apps_file_explorer_dialog_new_file_placeholder = "apps_file_explorer_dialog_new_file_placeholder",
+  apps_file_explorer_dialog_rename_title = "apps_file_explorer_dialog_rename_title",
+  apps_file_explorer_dialog_rename_message = "apps_file_explorer_dialog_rename_message",
+  apps_file_explorer_dialog_rename_placeholder = "apps_file_explorer_dialog_rename_placeholder",
+  apps_file_explorer_dialog_delete_title = "apps_file_explorer_dialog_delete_title",
+  apps_file_explorer_dialog_delete_message_single = "apps_file_explorer_dialog_delete_message_single",
+  apps_file_explorer_dialog_delete_message_multiple = "apps_file_explorer_dialog_delete_message_multiple",
   apps_terminal_common_path_required = "apps_terminal_common_path_required",
+  apps_terminal_permission_denied_basic = "apps_terminal_permission_denied_basic",
   common_file = "common_file",
   common_new_file = "common_new_file",
   common_new_folder = "common_new_folder",
@@ -272,6 +286,8 @@ export enum TranslationKeys {
   common_bold = "common_bold",
   common_clear_format = "common_clear_format",
   common_close = "common_close",
+  common_ok = "common_ok",
+  common_cancel = "common_cancel",
   common_coding = "common_coding",
   common_computer = "common_computer",
   common_contact = "common_contact",
@@ -493,6 +509,10 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     en: "The specified path is invalid. Please check the path and try again.",
     tr: "Belirtilen yol geçersiz. Lütfen yolu kontrol edin ve tekrar deneyin.",
   },
+  apps_file_explorer_error_system_directory_access: {
+    en: "Access to system directory \"{{path}}\" is not allowed",
+    tr: "\"{{path}}\" sistem dizinine erişim izni verilmiyor",
+  },
   apps_file_explorer_error_directory_too_deep: {
     en: "The directory structure is too deep. Please reduce nesting levels.",
     tr: "Dizin yapısı çok derin. Lütfen iç içe geçme seviyelerini azaltın.",
@@ -549,9 +569,61 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     en: "File created successfully",
     tr: "Dosya başarıyla oluşturuldu",
   },
+  apps_file_explorer_dialog_new_folder_title: {
+    en: "New Folder",
+    tr: "Yeni Klasör",
+  },
+  apps_file_explorer_dialog_new_folder_message: {
+    en: "Enter the name for the new folder:",
+    tr: "Yeni klasör için ad girin:",
+  },
+  apps_file_explorer_dialog_new_folder_placeholder: {
+    en: "Folder name",
+    tr: "Klasör adı",
+  },
+  apps_file_explorer_dialog_new_file_title: {
+    en: "New File",
+    tr: "Yeni Dosya",
+  },
+  apps_file_explorer_dialog_new_file_message: {
+    en: "Enter the name for the new file:",
+    tr: "Yeni dosya için ad girin:",
+  },
+  apps_file_explorer_dialog_new_file_placeholder: {
+    en: "File name",
+    tr: "Dosya adı",
+  },
+  apps_file_explorer_dialog_rename_title: {
+    en: "Rename",
+    tr: "Yeniden Adlandır",
+  },
+  apps_file_explorer_dialog_rename_message: {
+    en: "Enter new name:",
+    tr: "Yeni ad girin:",
+  },
+  apps_file_explorer_dialog_rename_placeholder: {
+    en: "New name",
+    tr: "Yeni ad",
+  },
+  apps_file_explorer_dialog_delete_title: {
+    en: "Confirm Delete",
+    tr: "Silme İşlemini Onayla",
+  },
+  apps_file_explorer_dialog_delete_message_single: {
+    en: "Are you sure you want to delete '{{name}}'? This action cannot be undone.",
+    tr: "'{{name}}' öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  },
+  apps_file_explorer_dialog_delete_message_multiple: {
+    en: "Are you sure you want to delete {{count}} selected items? This action cannot be undone.",
+    tr: "Seçili {{count}} öğeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  },
   apps_terminal_common_path_required: {
     en: "Path required",
     tr: "Yol gereklidir",
+  },
+  apps_terminal_permission_denied_basic: {
+    en: "Permission denied: {{path}}",
+    tr: "İzin reddedildi: {{path}}",
   },
   common_file: {
     en: "File",
@@ -1718,6 +1790,14 @@ Currently, I am based in **Antalya** and primarily work with **.NET Core**, **An
   common_close: {
     en: "Close",
     tr: "Kapat",
+  },
+  common_ok: {
+    en: "OK",
+    tr: "Tamam",
+  },
+  common_cancel: {
+    en: "Cancel",
+    tr: "İptal",
   },
   common_coding: {
     en: "Coding",

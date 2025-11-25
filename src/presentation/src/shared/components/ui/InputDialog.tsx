@@ -27,6 +27,29 @@ export default function InputDialog(props: InputDialogProps) {
   const translate = useI18n();
   const [inputValue, setInputValue] = createSignal(props.defaultValue || "");
 
+  // Helper function to translate both string and TranslationKey types
+  const translateText = (text: string | TranslationKeys): string => {
+    return Object.values(TranslationKeys).includes(text as TranslationKeys) ? translate(text as TranslationKeys) : text;
+  };
+
+  // Calculate dynamic size based on content and error state
+  const dialogSize = props.size || (() => {
+    const contentMetrics = DialogSizeCalculator.analyzeContent(
+      translateText(props.message || ""),
+      true, // hasInput
+      true, // hasButtons
+      !!props.errorMessage, // hasError
+      !!props.icon // hasIcon
+    );
+
+    const calculatedSize = DialogSizeCalculator.calculateOptimalSize(
+      contentMetrics,
+      DialogSizeCalculator.createSizeOptions("input")
+    );
+
+    return DialogSizeCalculator.getViewportConstrainedSize(calculatedSize);
+  })();
+
   const handleConfirm = async () => {
     const value = inputValue().trim();
     if (value) {
@@ -67,10 +90,6 @@ export default function InputDialog(props: InputDialogProps) {
     }
   };
 
-  const translateText = (text: string | TranslationKeys): string => {
-    return Object.values(TranslationKeys).includes(text as TranslationKeys) ? translate(text as TranslationKeys) : text;
-  };
-
   return (
     <Dialog
       title={props.title || "Input Required"}
@@ -78,11 +97,11 @@ export default function InputDialog(props: InputDialogProps) {
       icon={props.icon || Icons.filePlus} // Provide fallback icon
       isOpen={props.isOpen}
       onClose={handleClose}
-      size={props.size || new Size(400, 200)}
+      size={dialogSize}
       draggable={false}
       closeAriaLabel="Close input dialog"
       showOkButton={false}
-      enableAutoResize={true}
+      enableAutoResize={false} // We're handling sizing dynamically
       sizingOptions={DialogSizeCalculator.createSizeOptions("input")}
       customButtons={[
         <div class="flex justify-end space-x-2">

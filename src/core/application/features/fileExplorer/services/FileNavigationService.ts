@@ -4,7 +4,7 @@ import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
 import { CACHE_CONFIG, UI_CONSTANTS } from "../constants";
 import { FileSortCriteria, SortOrder } from "../models/FileSelection";
-import { PathSanitizer } from "../utils/InputSanitizer";
+import { ValidationHelper, PathSanitizer } from "../utils/InputSanitizer";
 
 /**
  * Handles file navigation, browsing, and UI state management
@@ -46,8 +46,8 @@ export default class FileNavigationService {
    */
   async getDirectoryContents(path: string, options: NavigationOptions = {}): Promise<DirectoryContents> {
     try {
-      // Validate and sanitize path
-      PathSanitizer.validatePath(path);
+      // Validate and sanitize path for reading
+      ValidationHelper.validatePathForReading(path);
       const normalizedPath = PathSanitizer.normalizePath(path);
 
       // Check cache first
@@ -197,7 +197,7 @@ export default class FileNavigationService {
     const { maxResults = 100, includeContent = false, caseSensitive = false } = options;
 
     try {
-      PathSanitizer.validatePath(basePath);
+      ValidationHelper.validatePathForReading(basePath);
 
       const searchTerm = caseSensitive ? query : query.toLowerCase();
       const results: FileSystemEntry[] = [];
@@ -236,6 +236,7 @@ export default class FileNavigationService {
    * Get breadcrumbs for navigation
    */
   getBreadcrumbs(currentPath: string): Array<{ name: string; path: string }> {
+    // Don't validate permissions for breadcrumbs as it's just UI navigation
     const normalizedPath = PathSanitizer.normalizePath(currentPath);
     const parts = normalizedPath.split("/").filter(Boolean);
 
@@ -263,7 +264,7 @@ export default class FileNavigationService {
     largestFile?: { name: string; size: number; path: string };
   }> {
     try {
-      PathSanitizer.validatePath(path);
+      ValidationHelper.validatePathForReading(path);
 
       const allEntries = await this.getAllEntriesRecursive(path);
       let totalFiles = 0;

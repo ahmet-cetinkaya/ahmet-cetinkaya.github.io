@@ -1,4 +1,4 @@
-import PermissionService from "@application/features/system/services/PermissionService";
+import PermissionService, { PermissionLevel } from "@application/features/system/services/PermissionService";
 import { FILE_OPERATIONS, PATH_CONSTANTS } from "../constants";
 import { InvalidFilenameError, InvalidPathError } from "../errors";
 
@@ -120,7 +120,7 @@ export class PathSanitizer {
         normalizedPath.startsWith(forbiddenPath.toLowerCase() + PATH_CONSTANTS.SEPARATOR) ||
         normalizedPath === forbiddenPath.toLowerCase()
       ) {
-        throw new InvalidPathError(path, `Access to system directory "${forbiddenPath}" is not allowed`);
+        throw new InvalidPathError(path, "SYSTEM_DIRECTORY_ACCESS", forbiddenPath);
       }
     }
   }
@@ -257,17 +257,33 @@ export class ValidationHelper {
   /**
    * Validate both path format and permissions in one call
    */
-  static validatePathWithPermissions(path: string): void {
+  static validatePathWithPermissions(path: string, permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {
     PathSanitizer.validatePath(path);
-    PermissionService.validatePath(path);
+    PermissionService.validatePath(path, permissionLevel);
+  }
+
+  /**
+   * Validate path for read operations (navigation, listing contents)
+   */
+  static validatePathForReading(path: string): void {
+    PathSanitizer.validatePath(path);
+    PermissionService.validatePathRead(path);
+  }
+
+  /**
+   * Validate path for write operations (create, delete, modify)
+   */
+  static validatePathForWriting(path: string): void {
+    PathSanitizer.validatePath(path);
+    PermissionService.validatePathWrite(path);
   }
 
   /**
    * Validate multiple paths at once
    */
-  static validatePathsWithPermissions(paths: string[]): void {
+  static validatePathsWithPermissions(paths: string[], permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {
     for (const path of paths) {
-      this.validatePathWithPermissions(path);
+      this.validatePathWithPermissions(path, permissionLevel);
     }
   }
 
@@ -284,9 +300,9 @@ export class ValidationHelper {
     const sanitizedName = PathSanitizer.sanitizeFileName(fileName);
     const fullPath = PathSanitizer.joinPath(parentPath, sanitizedName);
 
-    // Validate both parent path and resulting full path
-    this.validatePathWithPermissions(parentPath);
-    this.validatePathWithPermissions(fullPath);
+    // Validate both parent path and resulting full path for writing
+    this.validatePathForReading(parentPath);
+    this.validatePathForWriting(fullPath);
 
     return { sanitizedName, fullPath };
   }
@@ -303,8 +319,8 @@ export class ValidationHelper {
     sanitizedName: string;
     fullPath: string;
   } {
-    // Validate parent path and permissions
-    this.validatePathWithPermissions(parentPath);
+    // Validate parent path for reading and full path for writing
+    this.validatePathForReading(parentPath);
 
     // Sanitize the name
     const sanitizedName = PathSanitizer.sanitizeFileName(name);
@@ -334,11 +350,11 @@ export class ValidationHelper {
     validatedSources: string[];
     validatedDestination: string;
   } {
-    // Validate all source paths
-    this.validatePathsWithPermissions(sourcePaths);
+    // Validate all source paths for reading
+    this.validatePathsWithPermissions(sourcePaths, PermissionLevel.READ);
 
-    // Validate destination path
-    this.validatePathWithPermissions(destinationPath);
+    // Validate destination path for writing
+    this.validatePathForWriting(destinationPath);
 
     return {
       validatedSources: [...sourcePaths],

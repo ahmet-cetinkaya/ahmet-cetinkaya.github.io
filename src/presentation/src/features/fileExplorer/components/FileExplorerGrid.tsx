@@ -42,18 +42,20 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
 
   return (
     <div
-      class="grid select-none grid-cols-4 gap-4 p-2 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12"
+      class="grid grid-cols-4 gap-4 p-2 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 file-explorer-grid"
+      style="user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; cursor: default;"
       onContextMenu={handleBackgroundContextMenu}
     >
       <For each={props.entries}>
         {(entry) => (
           <div
             class={mergeCls(
-              "flex select-none flex-col items-center justify-center rounded-lg p-2 transition-colors duration-200",
+              "flex select-none flex-col items-center justify-center rounded-lg p-2 transition-colors duration-200 file-item",
               "hover:bg-surface-300 focus:bg-surface-300 focus:outline-none",
               props.selectedFiles.has(entry.fullPath) ? "bg-surface-300 ring-2 ring-blue-500" : "bg-surface-400/50",
               props.cutFiles.has(entry.fullPath) ? "opacity-50" : "",
             )}
+            style="user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; cursor: pointer;"
             onClick={(e) => handleFileClick(entry, e)}
             onContextMenu={(e) => handleContextMenu(entry, e)}
             tabIndex={0}
@@ -72,7 +74,7 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
 
             {/* File/Folder Name */}
             <div class="flex min-h-[2.5rem] w-full items-center justify-center px-1 text-center">
-              <div class="w-full">
+              <div class="w-full file-name-container" style="user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none;">
                 <WindowsStyleTitle
                   text={entry.name}
                   maxLength={20}

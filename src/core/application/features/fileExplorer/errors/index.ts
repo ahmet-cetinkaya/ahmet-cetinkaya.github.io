@@ -5,6 +5,7 @@ export abstract class FileExplorerError extends Error {
   public readonly statusCode?: number;
   public readonly path?: string;
   public readonly translationKey?: keyof typeof TranslationKeys;
+  public readonly contextPath?: string;
 
   constructor(
     message: string,
@@ -12,6 +13,7 @@ export abstract class FileExplorerError extends Error {
     statusCode?: number,
     path?: string,
     translationKey?: keyof typeof TranslationKeys,
+    contextPath?: string,
   ) {
     super(message);
     this.name = this.constructor.name;
@@ -19,6 +21,7 @@ export abstract class FileExplorerError extends Error {
     this.statusCode = statusCode;
     this.path = path;
     this.translationKey = translationKey;
+    this.contextPath = contextPath;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
@@ -182,13 +185,25 @@ export class NetworkError extends FileExplorerError {
 }
 
 export class InvalidPathError extends FileExplorerError {
-  constructor(path: string, reason: string) {
+  constructor(path: string, reason: string, contextPath?: string) {
+    let translationKey = TranslationKeys.apps_file_explorer_error_invalid_path;
+    let message = reason;
+
+    // Handle specific error types with appropriate translations
+    if (reason === "SYSTEM_DIRECTORY_ACCESS" && contextPath) {
+      translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
+      message = `Access to system directory "${contextPath}" is not allowed`;
+    } else if (reason.startsWith("SYSTEM_DIRECTORY_ACCESS")) {
+      translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
+    }
+
     super(
-      `Invalid path: ${path}. Reason: ${reason}`,
+      `Invalid path: ${path}. Reason: ${message}`,
       "INVALID_PATH",
       400,
       path,
-      TranslationKeys.apps_file_explorer_error_invalid_path,
+      translationKey,
+      contextPath,
     );
   }
 

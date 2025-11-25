@@ -19,7 +19,7 @@ import FileExplorerList from "./FileExplorerList";
 import FileContextMenu from "./FileContextMenu";
 import PropertiesPanel from "./PropertiesPanel";
 import ClipboardService from "../services/ClipboardService";
-import PermissionError from "./PermissionError";
+import PermissionErrorDialog from "./PermissionError";
 import { PermissionError as PermissionErrorType } from "@application/features/system/services/PermissionService";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import { FileExplorerDialogManager } from "./dialogs";
@@ -73,12 +73,13 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   const [cutFiles, setCutFiles] = createSignal<Set<string>>(new Set());
 
-  const [permissionError, setPermissionError] = createSignal<{ message: string; path?: string } | null>(null);
+  const [permissionError, setPermissionError] = createSignal<Error | PermissionErrorType | null>(null);
 
-  const [errorDialog, setErrorDialog] = createSignal<{ isOpen: boolean; message: string; title?: string }>({
+  const [errorDialog, setErrorDialog] = createSignal<{ isOpen: boolean; message: string; title?: string; contextPath?: string }>({
     isOpen: false,
     message: "",
     title: "Error",
+    contextPath: undefined,
   });
 
   // New dialog system
@@ -117,41 +118,55 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     }
   };
 
-  const extractFilePathFromError = (message?: string): string => {
-    if (!message) return "";
-
-    const quotedPathMatch = message.match(/["']([^"']+)["']/);
-    if (quotedPathMatch) return quotedPathMatch[1];
-
-    const operationMatch = message.match(/operation on\s+(\/[^\s]+)/);
-    if (operationMatch) return operationMatch[1];
-
-    const pathMatch = message.match(/(\/[^\s]+)/);
-    if (pathMatch) return pathMatch[1];
-
-    return "";
-  };
-
+  
   const handleError = (error: unknown) => {
     if (error instanceof PermissionErrorType) {
-      const filePath = extractFilePathFromError(error.message);
-      setPermissionError({
-        message: error.message,
-        path: filePath,
-      });
+      setPermissionError(error);
     } else {
-      const message = error instanceof Error ? error.message : "Unknown error";
       logger.error("File operation error:", error);
-      setErrorDialog({
-        isOpen: true,
-        message,
-        title: "Operation Failed",
-      });
+
+      // Check for FileExplorerError with translation support
+      if (error && typeof error === 'object' && 'translationKey' in error) {
+        const fileError = error as { translationKey?: string; contextPath?: string };
+        setErrorDialog({
+          isOpen: true,
+          message: fileError.translationKey || (error instanceof Error ? error.message : "Unknown error"),
+          title: "Operation Failed",
+          contextPath: fileError.contextPath,
+        });
+      } else {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        setErrorDialog({
+          isOpen: true,
+          message,
+          title: "Operation Failed",
+        });
+      }
     }
   };
 
   const clearPermissionError = () => {
     setPermissionError(null);
+  };
+
+  // Helper function to translate error messages with parameters
+  const translateErrorMessage = (message: string, contextPath?: string): string => {
+    // Check if message is a translation key
+    if (message.startsWith('apps_') && Object.values(TranslationKeys).includes(message as TranslationKeys)) {
+      const translation = translate(message as TranslationKeys);
+      let result = translation;
+
+      // Replace {{path}} patterns with provided contextPath
+      if (contextPath) {
+        const pattern = new RegExp(`{{path}}`, "g");
+        result = result.replace(pattern, contextPath);
+      }
+
+      return result;
+    }
+
+    // Return original message if it's not a translation key
+    return message;
   };
 
   const handleResize = () => {
@@ -337,6 +352,14 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   function handleContextMenu(entry: FileSystemEntry | undefined, event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
+
+    // Clear any text selection that might have occurred
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+    }
+
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },
@@ -346,6 +369,14 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   function handleBackgroundContextMenu(event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
+
+    // Clear any text selection that might have occurred
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+    }
+
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },
@@ -574,6 +605,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
               "overflow-auto bg-surface-400",
               propertiesPanel().visible && propertiesPanel().entry && !isMobile() ? "flex-1" : "flex-1",
             )}
+            style="user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;"
             onContextMenu={handleBackgroundContextMenu}
           >
             <Show
@@ -640,19 +672,16 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       </Show>
 
       <Show when={permissionError()}>
-        {(errorData) => (
-          <PermissionError
-            message={errorData()?.message || "Permission denied"}
-            path={errorData()?.path}
-            onClose={clearPermissionError}
-          />
-        )}
+        <PermissionErrorDialog
+          error={permissionError()!}
+          onClose={clearPermissionError}
+        />
       </Show>
 
       <Show when={errorDialog().isOpen}>
         <Dialog
           title={errorDialog().title}
-          description={errorDialog().message}
+          description={translateErrorMessage(errorDialog().message, errorDialog().contextPath)}
           icon={Icons.userForbidden}
           isOpen={errorDialog().isOpen}
           onClose={() => setErrorDialog({ isOpen: false, message: "", title: "Error" })}

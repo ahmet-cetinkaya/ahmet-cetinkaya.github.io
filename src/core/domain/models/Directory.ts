@@ -13,7 +13,12 @@ export default class Directory extends Entity<DirectoryId> {
   }
 
   get parent(): DirectoryId {
-    return this.id.split("/").slice(0, -1).join("/");
+    const parts = this.id.split("/").filter(Boolean);
+    if (parts.length === 0) {
+      // This is the root directory "/", it has no parent
+      return "";
+    }
+    return "/" + parts.slice(0, -1).join("/");
   }
 
   get isRoot(): boolean {

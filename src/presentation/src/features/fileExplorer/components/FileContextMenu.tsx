@@ -40,9 +40,32 @@ export default function FileContextMenu(props: FileContextMenuProps) {
 
   createEffect(() => {
     if (props.visible()) {
-      const handleClickOutside = (e: MouseEvent) => {
+      let menuJustOpened = true;
+      let suppressNextClick = true;
+
+      const handleMouseDownOutside = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
+
+        // Immediately after opening menu, suppress the first mousedown
+        if (menuJustOpened && suppressNextClick) {
+          suppressNextClick = false;
+          // Use a short timeout to reset menuJustOpened flag after event cycle
+          setTimeout(() => {
+            menuJustOpened = false;
+          }, 0);
+          return;
+        }
+
+        // Close if clicking outside the menu (check for context-menu class)
         if (!target.closest(".context-menu")) {
+          props.onClose();
+        }
+      };
+
+      const handleContextMenuGlobal = (e: MouseEvent) => {
+        // Close if another context menu is opened elsewhere
+        const target = e.target as HTMLElement;
+        if (target && !target.closest(".context-menu")) {
           props.onClose();
         }
       };
@@ -53,11 +76,14 @@ export default function FileContextMenu(props: FileContextMenuProps) {
         }
       };
 
-      document.addEventListener("click", handleClickOutside);
+      // Add mousedown listener immediately (no timing delay)
+      document.addEventListener("mousedown", handleMouseDownOutside, true);
+      document.addEventListener("contextmenu", handleContextMenuGlobal, true);
       document.addEventListener("keydown", handleEscapeKey);
 
       onCleanup(() => {
-        document.removeEventListener("click", handleClickOutside);
+        document.removeEventListener("mousedown", handleMouseDownOutside, true);
+        document.removeEventListener("contextmenu", handleContextMenuGlobal, true);
         document.removeEventListener("keydown", handleEscapeKey);
       });
     }

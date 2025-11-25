@@ -1,5 +1,7 @@
 import ConfirmDialog from "@shared/components/ui/ConfirmDialog";
 import Icons from "@domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import { useI18n } from "@shared/utils/i18nTranslate";
 import type { BaseDialogProps } from "./BaseFileExplorerDialog";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
 
@@ -9,33 +11,51 @@ export type DeleteDialogProps = BaseDialogProps & {
 };
 
 export default function DeleteDialog(props: DeleteDialogProps) {
+  const translate = useI18n();
   const itemCount = props.pathsToDelete.length;
   const fileNames = props.pathsToDelete.map((path) => path.split("/").pop() || "unknown");
 
-  const confirmMessage = `Are you sure delete the ${itemCount === 1 ? `"${fileNames[0]}"?` : `these ${itemCount} items?`}`;
+  // Custom translate function that supports parameter replacement
+  const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
+    const translation = translate(key);
+    let result = translation;
 
-  const fileListDisplay =
-    props.pathsToDelete.length <= 5
-      ? fileNames.join(", ")
-      : `${fileNames.slice(0, 3).join(", ")} and ${itemCount - 3} more...`;
+    // Replace {{param}} patterns with provided values
+    Object.entries(params).forEach(([paramName, paramValue]) => {
+      const pattern = new RegExp(`{{${paramName}}}`, "g");
+      result = result.replace(pattern, paramValue);
+    });
+
+    return result;
+  };
+
+  const confirmMessage = itemCount === 1
+    ? translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_single, {
+        name: fileNames[0],
+      })
+    : translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_multiple, {
+        count: itemCount.toString(),
+      });
 
   return (
     <ConfirmDialog
       isOpen={props.isOpen}
-      title="Confirm Delete"
+      title={translate(TranslationKeys.apps_file_explorer_dialog_delete_title)}
       message={confirmMessage}
-      description={fileListDisplay}
       type="danger"
       icon={Icons.trash}
-      confirmButtonText="OK"
-      cancelButtonText="Cancel"
+      confirmButtonText={translate(TranslationKeys.common_ok)}
+      cancelButtonText={translate(TranslationKeys.common_cancel)}
       onConfirm={async () => {
         await props.dialogService.deleteEntries(props.pathsToDelete, {
           onSuccess: () => {
             props.onSuccess?.();
             props.onClose();
           },
-          onError: props.onError,
+          onError: (error) => {
+            props.onError?.(error);
+            props.onClose(); // Close the confirm dialog even when there's an error
+          },
         });
       }}
       onCancel={() => {

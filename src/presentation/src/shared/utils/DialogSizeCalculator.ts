@@ -20,10 +20,10 @@ export interface ContentMetrics {
 
 export default class DialogSizeCalculator {
   private static readonly DEFAULT_OPTIONS: Required<DialogSizingOptions> = {
-    minWidth: 280,
-    maxWidth: 600,
-    minHeight: 120,
-    maxHeight: 500,
+    minWidth: 260,
+    maxWidth: 0, // 0 means no max width limit (only viewport)
+    minHeight: 80,
+    maxHeight: 0, // 0 means no max height limit (only viewport)
     padding: 16,
     enableAutoResize: true,
   };
@@ -70,78 +70,85 @@ export default class DialogSizeCalculator {
 
     // Base width for icon + content
     if (metrics.hasIcon) {
-      width += 40; // Space for icon (24px icon + 16px margin)
+      width += 32; // Space for icon (32px icon + minimal margin)
     }
 
-    // Width based on text length (rough estimation: 8px per character average)
-    const textWidth = Math.min(metrics.textLength * 8, opts.maxWidth - opts.padding * 2);
+    // Width based on text length - dynamic without fixed max
+    const textWidth = metrics.textLength * 7; // Tighter character spacing
     width = Math.max(width, textWidth + opts.padding * 2);
 
-    // Additional width for input fields
+    // Additional width for input fields - better usability
     if (metrics.hasInput) {
-      width = Math.max(width, 320); // Minimum comfortable width for input fields
+      width = Math.max(width, 320); // Better width for input fields
     }
 
-    // Ensure width accommodates buttons
+    // Ensure width accommodates buttons - minimal
     if (metrics.hasButtons) {
-      width = Math.max(width, 280); // Minimum for button layout
+      width = Math.max(width, 260); // Minimum for button layout
     }
 
-    // Apply constraints
-    return Math.max(opts.minWidth, Math.min(width, opts.maxWidth));
+    // Only apply minimum constraint, no maximum (except viewport)
+    return Math.max(opts.minWidth, width);
   }
 
   private static calculateHeight(metrics: ContentMetrics, opts: Required<DialogSizingOptions>): number {
-    // Dialog structure with fixed footer:
-    // 1. Header (fixed: 36px)
-    // 2. Content area (scrollable, starts with reasonable height)
-    // 3. Footer with buttons (fixed: 52px including border)
+    // Dialog structure with fully dynamic sizing:
+    // 1. Header (minimal: 28px)
+    // 2. Content area (completely dynamic)
+    // 3. Footer with buttons (minimal: 40px)
 
-    const headerHeight = 36;
-    const footerHeight = 52; // Button container with border
-    const horizontalPadding = opts.padding * 2;
+    const headerHeight = 28;
+    const footerHeight = 40; // Minimal button container
+    const verticalPadding = opts.padding * 1.5; // Reduced vertical padding
 
-    // Base dialog height
-    let height = headerHeight + footerHeight + horizontalPadding;
+    // Base dialog height (header + footer + minimal padding)
+    let baseHeight = headerHeight + footerHeight + verticalPadding;
 
-    // Content area calculation - determine if scrolling is needed
-    const lineHeight = 16;
-    const maxContentLines = 8; // More lines before scrolling kicks in
-    const contentLines = Math.min(Math.max(1, metrics.lineCount), maxContentLines);
+    // Dynamic content area calculation - no arbitrary limits
+    const lineHeight = 14; // Tight line height
+    const contentLines = Math.max(0, metrics.lineCount);
 
+    // Calculate content height purely based on content
     let contentHeight = contentLines * lineHeight;
 
-    // Additional space for input fields
+    // Additional space for input fields - better usability
     if (metrics.hasInput) {
-      contentHeight += 32; // Input field
+      contentHeight += 36; // Better spacing for input field + label
       if (metrics.hasError) {
-        contentHeight += 18; // Error message
+        contentHeight += 20; // Better spacing for error message
       }
     }
 
-    // Add content padding
-    contentHeight += opts.padding;
+    // Add minimal content padding
+    contentHeight += Math.floor(opts.padding * 0.5);
 
-    height += contentHeight;
+    // Total height calculation - no artificial constraints
+    const totalHeight = baseHeight + contentHeight;
 
-    // Apply constraints - ensure minimum height for usability
-    return Math.max(opts.minHeight, Math.min(height, opts.maxHeight));
+    // Only apply viewport constraint (75% of viewport) and minimum
+    const viewportHeight = window.innerHeight;
+    const maxViewportHeight = viewportHeight * 0.75;
+
+    // Apply only minimum and viewport constraints
+    const finalHeight = Math.max(opts.minHeight, Math.min(totalHeight, maxViewportHeight));
+
+    return finalHeight;
   }
 
   private static estimateLineCount(text?: string): number {
     if (!text) return 0;
 
-    // More conservative estimation: average 60 characters per line for better space utilization
-    const estimatedLines = Math.ceil(text.length / 60);
+    // Fully dynamic estimation - no artificial caps
+    const charsPerLine = 90; // Better line utilization for modern screens
+    const estimatedLines = Math.ceil(text.length / charsPerLine);
 
     // Account for natural line breaks
     const explicitLines = (text.match(/\n/g) || []).length + 1;
 
-    // Cap maximum reasonable lines to prevent excessive height
-    const maxLines = 6;
+    // No artificial line limits - let content determine height
     const calculatedLines = Math.max(estimatedLines, explicitLines);
 
-    return Math.min(calculatedLines, maxLines);
+    return calculatedLines;
   }
 
   /**
@@ -152,8 +159,9 @@ export default class DialogSizeCalculator {
     viewportWidth: number = window.innerWidth,
     viewportHeight: number = window.innerHeight,
   ): Size {
-    const maxDialogWidth = Math.min(600, viewportWidth * 0.9);
-    const maxDialogHeight = Math.min(500, viewportHeight * 0.8);
+    // Only apply viewport constraints, no fixed size limits
+    const maxDialogWidth = viewportWidth * 0.95; // 95% of viewport width
+    const maxDialogHeight = viewportHeight * 0.85; // 85% of viewport height
 
     return new Size(Math.min(size.width, maxDialogWidth), Math.min(size.height, maxDialogHeight));
   }
@@ -163,10 +171,10 @@ export default class DialogSizeCalculator {
    */
   static createSizeOptions(type: "input" | "confirm" | "info" | "error"): DialogSizingOptions {
     const baseOptions = {
-      minWidth: 280,
-      maxWidth: 600,
-      minHeight: 120,
-      maxHeight: 500,
+      minWidth: 260,
+      maxWidth: 0, // No fixed max width - only viewport
+      minHeight: 80,
+      maxHeight: 0, // No fixed max height - only viewport
       padding: 16,
       enableAutoResize: true,
     };
@@ -175,19 +183,20 @@ export default class DialogSizeCalculator {
       case "input":
         return {
           ...baseOptions,
-          minWidth: 320,
-          minHeight: 160, // Slightly taller for input + fixed footer
+          minWidth: 320, // Better width for input usability
+          minHeight: 120, // Better height for input + labels
         };
       case "confirm":
         return {
           ...baseOptions,
-          minHeight: 140, // Minimum for confirm with fixed footer
+          minWidth: 260, // Minimal width for confirm buttons
+          minHeight: 80,  // Minimal height, grows with content
         };
       case "error":
         return {
           ...baseOptions,
-          minWidth: 320,
-          minHeight: 150, // Minimum for error messages with fixed footer
+          minWidth: 260, // Minimal width for error display
+          minHeight: 85,  // Minimal height, grows with content
         };
       default:
         return baseOptions;

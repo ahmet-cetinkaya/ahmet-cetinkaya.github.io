@@ -1,8 +1,10 @@
-import { createSignal } from "solid-js";
 import InputDialog from "@shared/components/ui/InputDialog";
 import Icons from "@domain/data/Icons";
+import { TranslationKeys } from "@domain/data/Translations";
+import { useI18n } from "@shared/utils/i18nTranslate";
 import type { BaseDialogProps } from "./BaseFileExplorerDialog";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
+import { PermissionError } from "@application/features/system/services/PermissionService";
 
 export type RenameDialogProps = BaseDialogProps & {
   currentPath: string;
@@ -11,7 +13,7 @@ export type RenameDialogProps = BaseDialogProps & {
 };
 
 export default function RenameDialog(props: RenameDialogProps) {
-  const [errorMessage, setErrorMessage] = createSignal<string>();
+  const translate = useI18n();
 
   const handleConfirm = async (newName: string): Promise<boolean> => {
     // Only proceed if name is actually different and not empty
@@ -19,16 +21,13 @@ export default function RenameDialog(props: RenameDialogProps) {
       return new Promise<boolean>((resolve) => {
         props.dialogService.renameEntry(props.currentPath, newName, {
           onSuccess: () => {
-            setErrorMessage(undefined);
             props.onSuccess?.();
             props.onClose();
             resolve(true); // Success - allow dialog to close
           },
           onError: (error) => {
-            // Show error inline instead of opening new dialog
-            // Don't close the dialog - let user try again
-            const message = error instanceof Error ? error.message : "Failed to rename";
-            setErrorMessage(message);
+            props.onError?.(error);
+            props.onClose(); // Close the dialog even when there's an error
             resolve(false); // Error - prevent dialog from closing
           },
         });
@@ -41,29 +40,26 @@ export default function RenameDialog(props: RenameDialogProps) {
   };
 
   const handleCancel = () => {
-    setErrorMessage(undefined);
     props.onClose();
   };
 
   const handleClose = () => {
-    setErrorMessage(undefined);
     props.onClose();
   };
 
   return (
     <InputDialog
       isOpen={props.isOpen}
-      title="Rename"
-      message={`Enter new name for "${props.currentName}":`}
-      placeholder="New name"
+      title={translate(TranslationKeys.apps_file_explorer_dialog_rename_title)}
+      message={`${translate(TranslationKeys.apps_file_explorer_dialog_rename_message)} "${props.currentName}":`}
+      placeholder={translate(TranslationKeys.apps_file_explorer_dialog_rename_placeholder)}
       defaultValue={props.currentName}
       icon={Icons.edit}
-      confirmButtonText="OK"
-      cancelButtonText="Cancel"
+      confirmButtonText={translate(TranslationKeys.common_ok)}
+      cancelButtonText={translate(TranslationKeys.common_cancel)}
       onConfirm={handleConfirm}
       onClose={handleClose}
       onCancel={handleCancel}
-      errorMessage={errorMessage()}
     />
   );
 }

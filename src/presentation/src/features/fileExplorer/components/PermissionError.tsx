@@ -3,47 +3,15 @@ import { TranslationKeys } from "@domain/data/Translations";
 import Dialog from "@presentation/src/features/desktop/components/Dialog";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
+import { PermissionError } from "@application/features/system/services/PermissionService";
 
 type PermissionErrorProps = {
-  message: string;
-  path?: string;
+  error: Error | PermissionError;
   onClose?: () => void;
 };
 
-export default function PermissionError({ message, path, onClose }: PermissionErrorProps) {
+export default function PermissionErrorDialog({ error, onClose }: PermissionErrorProps) {
   const translate = useI18n();
-
-  // Create error description using the message for debugging purposes
-  const createErrorDescription = (): string => {
-    if (message) {
-      // Extract path from message if no path prop provided
-      if (!actualPath && message) {
-        // Look for paths in quotes: "/path/to/file"
-        const quotedPathMatch = message.match(/["']([^"']+)["']/);
-        if (quotedPathMatch) {
-          return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, {
-            path: quotedPathMatch[1],
-          });
-        }
-
-        // Look for paths that start with /
-        const pathMatch = message.match(/([/][^\s]+)/);
-        if (pathMatch) {
-          return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, {
-            path: pathMatch[1],
-          });
-        }
-      }
-
-      // If no path found in message, show generic error
-      return translate(TranslationKeys.apps_terminal_permission_denied_description);
-    }
-
-    return translateWithParams(TranslationKeys.apps_terminal_permission_denied_description, { path: actualPath });
-  };
-
-  // Window size for permission error
-  const size = new Size(400, 250);
 
   // Custom translate function that supports parameter replacement
   const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
@@ -59,9 +27,32 @@ export default function PermissionError({ message, path, onClose }: PermissionEr
     return result;
   };
 
-  // Use provided path directly - parent component should extract path from error message
-  // This simplifies the component and centralizes path extraction logic
-  const actualPath = path || "";
+  // Extract path from error and use translation
+  const createErrorDescription = (): string => {
+    let path: string;
+
+    // If it's our PermissionError, use the path property
+    if (error instanceof PermissionError && error.isPermissionError) {
+      path = error.path;
+    } else {
+      // Fallback: extract path from message for other error types or backward compatibility
+      const message = error.message;
+      const pathMatch = message.match(/([/][^\s]+)/);
+      path = pathMatch ? pathMatch[1] : "";
+    }
+
+    if (path) {
+      return translateWithParams(TranslationKeys.apps_terminal_permission_denied_basic, {
+        path: path,
+      });
+    }
+
+    // Fallback to generic permission denied description
+    return translate(TranslationKeys.apps_terminal_permission_denied_description);
+  };
+
+  // Window size for permission error
+  const size = new Size(200, 100);
 
   const finalDescription = createErrorDescription();
 

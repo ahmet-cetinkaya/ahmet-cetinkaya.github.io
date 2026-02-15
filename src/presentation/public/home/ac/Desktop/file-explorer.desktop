@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=File Explorer
+Exec=fileExplorer
+Icon=folder
+Type=Application
+Categories=System;
+Terminal=false
+StartupNotify=true

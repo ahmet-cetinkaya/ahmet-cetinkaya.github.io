@@ -23,4 +23,12 @@ export default class Directory extends Entity<DirectoryId> {
   get fullPath(): string {
     return this.id;
   }
+
+  get isDirectory(): boolean {
+    return true;
+  }
+
+  get isFile(): boolean {
+    return false;
+  }
 }

@@ -42,4 +42,12 @@ export default class File extends Entity<FileId> {
     if (this._size) return this._size;
     return this.content.length * 2; // Assuming each character is 2 bytes (UTF-16 encoding)
   }
+
+  get isDirectory(): boolean {
+    return false;
+  }
+
+  get isFile(): boolean {
+    return true;
+  }
 }

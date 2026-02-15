@@ -1,0 +1,20 @@
+export const PATH_CONSTANTS = {
+  SEPARATOR: "/",
+  ROOT_PATH: "/",
+  PARENT_DIR: "..",
+  CURRENT_DIR: ".",
+  FORBIDDEN_PATHS: [
+    "/etc",
+    "/bin",
+    "/sbin",
+    "/usr/bin",
+    "/usr/sbin",
+    "/proc",
+    "/sys",
+    "/dev",
+    "/boot",
+    "/lib",
+    "/lib64",
+  ],
+  MAX_PATH_LENGTH: 4096,
+} as const;

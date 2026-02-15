@@ -1,10 +1,13 @@
 import Icons from "@domain/data/Icons";
-import Envelope3DModel from "./Envelope3DModel";
-import Computer3DModel from "./Computer3DModel";
-import Terminal3DModel from "./Terminal3DModel";
-import Doom3DModel from "./Doom3DModel";
-import { Show, createSignal, onError } from "solid-js";
+import { lazy, Suspense } from "solid-js";
 import type { Model3DConfig } from "./models";
+
+// Lazy load each 3D model component separately
+const Computer3DModel = lazy(() => import("./Computer3DModel"));
+const Envelope3DModel = lazy(() => import("./Envelope3DModel"));
+const Terminal3DModel = lazy(() => import("./Terminal3DModel"));
+const Doom3DModel = lazy(() => import("./Doom3DModel"));
+const Folder3DModel = lazy(() => import("./Folder3DModel"));
 
 type Props = {
   model: Icons;
@@ -16,32 +19,32 @@ type Props = {
 const MODEL_CLASSES = "flex items-center justify-center";
 
 export default function ThreeDimensionalModel(props: Props) {
-  const [hasError, setHasError] = createSignal(false);
-
-  // Handle errors in 3D model loading
-  onError(() => {
-    setHasError(true);
-    props.onError?.();
-  });
-
-  if (hasError()) {
-    return null; // Let the parent handle fallback
-  }
+  const renderModel = () => {
+    switch (props.model) {
+      case Icons.computer:
+        return <Computer3DModel class={MODEL_CLASSES} config={props.config} />;
+      case Icons.envelope:
+        return <Envelope3DModel class={MODEL_CLASSES} config={props.config} />;
+      case Icons.terminal:
+        return <Terminal3DModel class={MODEL_CLASSES} config={props.config} />;
+      case Icons.doom:
+        return <Doom3DModel class={MODEL_CLASSES} config={props.config} />;
+      case Icons.folder:
+        return <Folder3DModel class={MODEL_CLASSES} config={props.config} />;
+      default:
+        return <div class="h-full w-full animate-pulse rounded-lg bg-gray-200" />;
+    }
+  };
 
   return (
-    <>
-      <Show when={props.model === Icons.computer}>
-        <Computer3DModel class={MODEL_CLASSES} config={props.config} />
-      </Show>
-      <Show when={props.model === Icons.envelope}>
-        <Envelope3DModel class={MODEL_CLASSES} config={props.config} />
-      </Show>
-      <Show when={props.model === Icons.terminal}>
-        <Terminal3DModel class={MODEL_CLASSES} config={props.config} />
-      </Show>
-      <Show when={props.model === Icons.doom}>
-        <Doom3DModel class={MODEL_CLASSES} config={props.config} />
-      </Show>
-    </>
+    <Suspense
+      fallback={
+        <div
+          class={`flex h-full w-full animate-pulse items-center justify-center rounded-lg bg-gray-200 ${props.class || ""}`}
+        />
+      }
+    >
+      {renderModel()}
+    </Suspense>
   );
 }

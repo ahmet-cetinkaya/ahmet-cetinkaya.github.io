@@ -32,8 +32,8 @@ elif command -v npx &>/dev/null; then
 fi
 
 if [[ -n "$ESLINT_CMD" ]]; then
-    # Run ESLint on all TS/JS files excluding node_modules
-    if $ESLINT_CMD . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs 2>/dev/null; then
+    # Run ESLint on all TS/JS files excluding node_modules and Astro files
+    if $ESLINT_CMD . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs --ignore-pattern "**/*.astro" 2>/dev/null; then
         print_success "✅ ESLint checks passed"
     else
         print_error "❌ ESLint found issues"
@@ -45,7 +45,20 @@ else
     LINT_FAILED=1
 fi
 
-# 2. Shell script linting with shellcheck
+# 2. Astro file type checking
+print_info "🚀 Running Astro type checking..."
+if command -v bun &>/dev/null; then
+    if (cd src/presentation && bun run check) 2>/dev/null; then
+        print_success "✅ Astro type checks passed"
+    else
+        print_error "❌ Astro type checking found issues"
+        LINT_FAILED=1
+    fi
+else
+    print_warning "⚠️  Bun not found, skipping Astro type checking"
+fi
+
+# 3. Shell script linting with shellcheck
 print_info "🐚 Running ShellCheck for shell scripts..."
 if command -v shellcheck &>/dev/null; then
     # Run shellcheck from scripts directory to properly resolve source files
@@ -60,7 +73,7 @@ else
     print_info "💡 Install ShellCheck: apt-get install shellcheck or brew install shellcheck"
 fi
 
-# 3. Markdown linting with markdownlint-cli2
+# 4. Markdown linting with markdownlint-cli2
 print_info "📝 Running Markdownlint for Markdown files..."
 # Check for markdownlint-cli2 in PATH or local node_modules/.bin
 MARKDOWNLINT_CMD=""
@@ -87,7 +100,7 @@ else
     print_info "💡 Or install locally: npm install markdownlint-cli2 --save-dev"
 fi
 
-# 4. Prettier format check
+# 5. Prettier format check
 print_info "🎨 Checking code formatting with Prettier..."
 if command -v prettier &>/dev/null; then
     # Check if files are formatted (dry run)
@@ -102,21 +115,8 @@ else
     print_warning "⚠️  Prettier not found, skipping format check"
 fi
 
-# 5. Check for common issues
+# 6. Check for common issues
 print_info "🔎 Checking for common issues..."
-
-# Check for console.log statements (excluding test and dist files)
-CONSOLE_LOGS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
-    grep -v node_modules |
-    grep -v test |
-    grep -v dist |
-    xargs grep -l "console\.log\|console\.warn\|console\.error" 2>/dev/null || true)
-
-if [[ -n "$CONSOLE_LOGS" ]]; then
-    print_warning "⚠️  Found console statements in production code:"
-    echo "$CONSOLE_LOGS" | head -3
-    print_info "💡 Consider removing or replacing with proper logging"
-fi
 
 # Check for TODO/FIXME comments
 TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |

@@ -1,0 +1,35 @@
+---
+import { TranslationKeys } from "@domain/data/Translations";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import { useI18nStatic } from "../../shared/utils/i18nTranslate";
+import SeoConstants from "../../shared/constants/SeoConstants";
+import FileExplorerOGImage from "../_assets/images/file-explorer-og-image.webp";
+
+const translate = useI18nStatic(Astro.url);
+
+const title = `${translate(TranslationKeys.apps_file_explorer)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.apps_file_explorer_description);
+const ogImageAlt = translate(TranslationKeys.apps_welcome_about_me_profile_image_alt);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  image: FileExplorerOGImage.src,
+  applicationCategory: "Utility",
+  operatingSystem: "Web Browser",
+};
+---
+
+<DesktopLayout
+  metadata={{
+    title,
+    description,
+    ogImage: {
+      image: FileExplorerOGImage,
+      alt: ogImageAlt,
+    },
+    structuredData,
+  }}
+/>

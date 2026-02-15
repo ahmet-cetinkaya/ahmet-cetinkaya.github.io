@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Contact
+Exec=email
+Icon=envelope
+Type=Application
+Categories=Application;
+Terminal=false
+StartupNotify=true

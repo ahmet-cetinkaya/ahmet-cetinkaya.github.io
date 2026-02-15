@@ -68,28 +68,60 @@ const FilesData: File[] = [
     `${Paths.USER_DESKTOP}/welcome.desktop`,
     `[Desktop Entry]
 Name=Welcome
-Exec=${Apps.welcome}`,
+Exec=${Apps.welcome}
+Icon=computer
+Type=Application
+Categories=Application;
+Terminal=false
+StartupNotify=true`,
     new Date("2024-12-20 21:19:28"),
   ),
   new File(
     `${Paths.USER_DESKTOP}/contact.desktop`,
     `[Desktop Entry]
 Name=Contact
-Exec=${Apps.email}`,
+Exec=${Apps.email}
+Icon=envelope
+Type=Application
+Categories=Application;
+Terminal=false
+StartupNotify=true`,
+    new Date("2024-12-20 21:19:28"),
+  ),
+  new File(
+    `${Paths.USER_DESKTOP}/file-explorer.desktop`,
+    `[Desktop Entry]
+Name=File Explorer
+Exec=${Apps.fileExplorer}
+Icon=computer
+Type=Application
+Categories=System;
+Terminal=false
+StartupNotify=true`,
     new Date("2024-12-20 21:19:28"),
   ),
   new File(
     `${Paths.USER_DESKTOP}/terminal.desktop`,
     `[Desktop Entry]
 Name=Terminal
-Exec=${Apps.terminal}`,
+Exec=${Apps.terminal}
+Icon=terminal
+Type=Application
+Categories=System;Terminal;
+Terminal=false
+StartupNotify=true`,
     new Date("2024-12-20 21:19:28"),
   ),
   new File(
     `${Paths.USER_DESKTOP}/doom.desktop`,
     `[Desktop Entry]
 Name=Doom
-Exec=${Apps.doom}`,
+Exec=${Apps.doom}
+Icon=doom
+Type=Application
+Categories=Game;
+Terminal=false
+StartupNotify=true`,
     new Date("2024-12-20 21:19:28"),
   ),
 ];

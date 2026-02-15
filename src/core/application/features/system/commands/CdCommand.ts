@@ -26,7 +26,7 @@ export default class CdCommand implements ICIProgram<string | null> {
     if (targetPath !== "/" && !targetPath.startsWith("/home"))
       return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}`);
 
-    const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
+    const entry = await this.fileSystemService.resolvePath(targetPath);
     if (!(entry instanceof Directory))
       return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
 
@@ -48,7 +48,7 @@ export default class CdCommand implements ICIProgram<string | null> {
   private async pathExists(path: string): Promise<boolean> {
     if (path === "/") return true;
 
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
+    const entry = await this.fileSystemService.resolvePath(path);
     return Boolean(entry);
   }
 

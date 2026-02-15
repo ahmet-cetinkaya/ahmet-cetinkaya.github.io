@@ -1,4 +1,5 @@
 import pluginJs from "@eslint/js";
+import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
 
@@ -40,23 +41,20 @@ export default [
     },
   },
   {
-    files: ["**/*.astro"],
-    languageOptions: {
-      parser: tsEslint.parser,
-      parserOptions: {
-        extraFileExtensions: [".astro"],
-      },
-    },
-  },
-  {
-    files: ["src/presentation/**/*.{ts,tsx,astro}"],
+    files: ["src/presentation/**/*.{ts,tsx}"],
+    ...solid,
     languageOptions: {
       globals: {
         ...globals.browser,
       },
+      parser: tsEslint.parser,
+      parserOptions: {
+        project: "src/presentation/tsconfig.json",
+      },
     },
     rules: {
-      // Browser-specific rules can go here
+      // Override any specific rules if needed
+      "no-console": "warn", // Keep console warnings for browser code
     },
   },
   {
@@ -72,8 +70,27 @@ export default [
     },
   },
   {
+    files: ["**/*.astro"],
+    languageOptions: {
+      parser: tsEslint.parser,
+      parserOptions: {
+        extraFileExtensions: [".astro"],
+        project: "src/presentation/tsconfig.json",
+      },
+      globals: globals.browser,
+    },
+    rules: {
+      // Basic rules for Astro files - focus on TypeScript in script blocks
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "no-console": "warn",
+      "no-debugger": "error",
+      "prefer-const": "error",
+      "no-var": "error",
+    },
+  },
+  {
     ignores: [
-      "**/*.astro",
       "src/presentation/public/home",
       "src/presentation/dist",
       "src/presentation/.astro",

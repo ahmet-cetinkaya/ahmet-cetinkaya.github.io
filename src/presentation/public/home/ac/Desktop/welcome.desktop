@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Welcome
+Exec=welcome
+Icon=computer
+Type=Application
+Categories=Application;
+Terminal=false
+StartupNotify=true

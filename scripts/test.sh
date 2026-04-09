@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Source universal logger
+# shellcheck source=../packages/acore-scripts/src/logger.sh
 source "$ROOT_DIR/packages/acore-scripts/src/logger.sh"
 
 acore_log_header "🧪 Running Project Tests"

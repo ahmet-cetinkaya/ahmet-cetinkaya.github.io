@@ -4,7 +4,6 @@ import { TranslationKeys } from "@domain/data/Translations";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import type { BaseDialogProps } from "./BaseFileExplorerDialog";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
-import { PermissionError } from "@application/features/system/services/PermissionService";
 
 export type RenameDialogProps = BaseDialogProps & {
   currentPath: string;

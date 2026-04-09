@@ -33,17 +33,17 @@ export default function PermissionErrorDialog({ error, onClose }: PermissionErro
 
     // If it's our PermissionError, use the path property
     if (error instanceof PermissionError && error.isPermissionError) {
-      path = error.path;
+      ({ path } = error);
     } else {
       // Fallback: extract path from message for other error types or backward compatibility
-      const message = error.message;
+      const { message } = error;
       const pathMatch = message.match(/([/][^\s]+)/);
       path = pathMatch ? pathMatch[1] : "";
     }
 
     if (path) {
       return translateWithParams(TranslationKeys.apps_terminal_permission_denied_basic, {
-        path: path,
+        path,
       });
     }
 

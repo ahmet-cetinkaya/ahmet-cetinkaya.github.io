@@ -97,7 +97,7 @@ export default class DialogSizeCalculator {
     const verticalPadding = opts.padding * 1.5;
 
     // Base dialog height (header + footer + minimal padding)
-    let baseHeight = headerHeight + footerHeight + verticalPadding;
+    const baseHeight = headerHeight + footerHeight + verticalPadding;
 
     // Dynamic content area calculation - no arbitrary limits
     const lineHeight = 14; // Tight line height

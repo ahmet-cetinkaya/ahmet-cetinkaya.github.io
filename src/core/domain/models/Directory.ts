@@ -18,7 +18,7 @@ export default class Directory extends Entity<DirectoryId> {
       // This is the root directory "/", it has no parent
       return "";
     }
-    return "/" + parts.slice(0, -1).join("/");
+    return `/${parts.slice(0, -1).join("/")}`;
   }
 
   get isRoot(): boolean {

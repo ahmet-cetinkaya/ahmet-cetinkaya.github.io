@@ -197,14 +197,7 @@ export class InvalidPathError extends FileExplorerError {
       translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
     }
 
-    super(
-      `Invalid path: ${path}. Reason: ${message}`,
-      "INVALID_PATH",
-      400,
-      path,
-      translationKey,
-      contextPath,
-    );
+    super(`Invalid path: ${path}. Reason: ${message}`, "INVALID_PATH", 400, path, translationKey, contextPath);
   }
 
   isRecoverable(): boolean {

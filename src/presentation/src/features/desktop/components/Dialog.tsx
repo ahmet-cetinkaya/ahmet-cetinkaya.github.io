@@ -132,12 +132,14 @@ export default function Dialog(props: DialogProps) {
           top: "50%",
           transform: "translate(-50%, -50%)", // Center dialog
           margin: 0, // Override auto-margining
-          ...(fitContent ? {
-            width: "fit-content",
-            height: "fit-content",
-            "max-width": sizingOptions?.maxWidth ? `${sizingOptions.maxWidth}px` : "90vw",
-            "max-height": sizingOptions?.maxHeight ? `${sizingOptions.maxHeight}px` : "90vh"
-          } : {}),
+          ...(fitContent
+            ? {
+                width: "fit-content",
+                height: "fit-content",
+                "max-width": sizingOptions?.maxWidth ? `${sizingOptions.maxWidth}px` : "90vw",
+                "max-height": sizingOptions?.maxHeight ? `${sizingOptions.maxHeight}px` : "90vh",
+              }
+            : {}),
           ...style,
         }}
       >

@@ -29,13 +29,14 @@ export default function DeleteDialog(props: DeleteDialogProps) {
     return result;
   };
 
-  const confirmMessage = itemCount === 1
-    ? translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_single, {
-        name: fileNames[0],
-      })
-    : translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_multiple, {
-        count: itemCount.toString(),
-      });
+  const confirmMessage =
+    itemCount === 1
+      ? translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_single, {
+          name: fileNames[0],
+        })
+      : translateWithParams(TranslationKeys.apps_file_explorer_dialog_delete_message_multiple, {
+          count: itemCount.toString(),
+        });
 
   return (
     <ConfirmDialog

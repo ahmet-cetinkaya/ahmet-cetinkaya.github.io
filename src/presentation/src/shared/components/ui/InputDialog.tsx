@@ -33,22 +33,24 @@ export default function InputDialog(props: InputDialogProps) {
   };
 
   // Calculate dynamic size based on content and error state
-  const dialogSize = props.size || (() => {
-    const contentMetrics = DialogSizeCalculator.analyzeContent(
-      translateText(props.message || ""),
-      true, // hasInput
-      true, // hasButtons
-      !!props.errorMessage, // hasError
-      !!props.icon // hasIcon
-    );
+  const dialogSize =
+    props.size ||
+    (() => {
+      const contentMetrics = DialogSizeCalculator.analyzeContent(
+        translateText(props.message || ""),
+        true, // hasInput
+        true, // hasButtons
+        !!props.errorMessage, // hasError
+        !!props.icon, // hasIcon
+      );
 
-    const calculatedSize = DialogSizeCalculator.calculateOptimalSize(
-      contentMetrics,
-      DialogSizeCalculator.createSizeOptions("input")
-    );
+      const calculatedSize = DialogSizeCalculator.calculateOptimalSize(
+        contentMetrics,
+        DialogSizeCalculator.createSizeOptions("input"),
+      );
 
-    return DialogSizeCalculator.getViewportConstrainedSize(calculatedSize);
-  })();
+      return DialogSizeCalculator.getViewportConstrainedSize(calculatedSize);
+    })();
 
   const handleConfirm = async () => {
     const value = inputValue().trim();

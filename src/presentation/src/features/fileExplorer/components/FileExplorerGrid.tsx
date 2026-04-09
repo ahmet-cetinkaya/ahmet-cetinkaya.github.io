@@ -42,14 +42,14 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
 
   return (
     <div
-      class="grid grid-cols-4 gap-4 p-2 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 file-explorer-grid select-none cursor-default"
+      class="file-explorer-grid grid cursor-default select-none grid-cols-4 gap-4 p-2 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12"
       onContextMenu={handleBackgroundContextMenu}
     >
       <For each={props.entries}>
         {(entry) => (
           <div
             class={mergeCls(
-              "flex select-none flex-col items-center justify-center rounded-lg p-2 transition-colors duration-200 file-item cursor-pointer",
+              "file-item flex cursor-pointer select-none flex-col items-center justify-center rounded-lg p-2 transition-colors duration-200",
               "hover:bg-surface-300 focus:bg-surface-300 focus:outline-none",
               props.selectedFiles.has(entry.fullPath) ? "bg-surface-300 ring-2 ring-blue-500" : "bg-surface-400/50",
               props.cutFiles.has(entry.fullPath) ? "opacity-50" : "",
@@ -72,7 +72,7 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
 
             {/* File/Folder Name */}
             <div class="flex min-h-[2.5rem] w-full items-center justify-center px-1 text-center">
-              <div class="w-full file-name-container select-none">
+              <div class="file-name-container w-full select-none">
                 <WindowsStyleTitle
                   text={entry.name}
                   maxLength={20}

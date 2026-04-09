@@ -1,4 +1,3 @@
-import { TranslationKeys } from "@domain/data/Translations";
 import { PathSanitizer } from "@application/features/fileExplorer/utils/InputSanitizer";
 
 export class PermissionError extends Error {

@@ -510,8 +510,8 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     tr: "Belirtilen yol geçersiz. Lütfen yolu kontrol edin ve tekrar deneyin.",
   },
   apps_file_explorer_error_system_directory_access: {
-    en: "Access to system directory \"{{path}}\" is not allowed",
-    tr: "\"{{path}}\" sistem dizinine erişim izni verilmiyor",
+    en: 'Access to system directory "{{path}}" is not allowed',
+    tr: '"{{path}}" sistem dizinine erişim izni verilmiyor',
   },
   apps_file_explorer_error_directory_too_deep: {
     en: "The directory structure is too deep. Please reduce nesting levels.",

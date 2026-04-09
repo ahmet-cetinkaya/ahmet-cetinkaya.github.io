@@ -4,7 +4,7 @@ import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
 import { CACHE_CONFIG, UI_CONSTANTS } from "../constants";
 import { FileSortCriteria, SortOrder } from "../models/FileSelection";
-import { ValidationHelper, PathSanitizer } from "../utils/InputSanitizer";
+import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";
 
 /**
  * Handles file navigation, browsing, and UI state management

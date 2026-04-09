@@ -78,7 +78,7 @@ export default function FileExplorerList(props: FileExplorerListProps) {
   }
 
   return (
-    <div class="min-w-full file-explorer-list select-none cursor-default" onContextMenu={handleBackgroundContextMenu}>
+    <div class="file-explorer-list min-w-full cursor-default select-none" onContextMenu={handleBackgroundContextMenu}>
       {/* Table Header */}
       <div class="grid grid-cols-12 border-b border-surface-300 bg-surface-500 p-2 text-xs font-medium text-gray-400">
         <div class="col-span-6">Name</div>
@@ -93,7 +93,7 @@ export default function FileExplorerList(props: FileExplorerListProps) {
           {(entry) => (
             <div
               class={mergeCls(
-                "grid grid-cols-12 items-center p-2 transition-colors duration-200 file-item cursor-pointer select-none",
+                "file-item grid cursor-pointer select-none grid-cols-12 items-center p-2 transition-colors duration-200",
                 "hover:bg-surface-300 focus:bg-surface-300 focus:outline-none",
                 props.selectedFiles.has(entry.fullPath) ? "bg-surface-300 ring-1 ring-blue-500" : "bg-surface-400/30",
                 props.cutFiles.has(entry.fullPath) ? "opacity-50" : "",
@@ -112,7 +112,7 @@ export default function FileExplorerList(props: FileExplorerListProps) {
               {/* Name */}
               <div class="col-span-6 flex items-center space-x-2">
                 <FileIcon entry={entry} size="small" />
-                <div class="truncate text-sm font-medium text-gray-200 file-name-container select-none min-w-0 flex-1">
+                <div class="file-name-container min-w-0 flex-1 select-none truncate text-sm font-medium text-gray-200">
                   <WindowsStyleTitle text={entry.name} maxLength={40} />
                 </div>
               </div>

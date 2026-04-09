@@ -75,7 +75,12 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   const [permissionError, setPermissionError] = createSignal<Error | PermissionErrorType | null>(null);
 
-  const [errorDialog, setErrorDialog] = createSignal<{ isOpen: boolean; message: string; title?: string; contextPath?: string }>({
+  const [errorDialog, setErrorDialog] = createSignal<{
+    isOpen: boolean;
+    message: string;
+    title?: string;
+    contextPath?: string;
+  }>({
     isOpen: false,
     message: "",
     title: "Error",
@@ -118,7 +123,6 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     }
   };
 
-  
   const handleError = (error: unknown) => {
     if (error instanceof PermissionErrorType) {
       setPermissionError(error);
@@ -126,7 +130,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       logger.error("File operation error:", error);
 
       // Check for FileExplorerError with translation support
-      if (error && typeof error === 'object' && 'translationKey' in error) {
+      if (error && typeof error === "object" && "translationKey" in error) {
         const fileError = error as { translationKey?: string; contextPath?: string };
         setErrorDialog({
           isOpen: true,
@@ -152,7 +156,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
   // Helper function to translate error messages with parameters
   const translateErrorMessage = (message: string, contextPath?: string): string => {
     // Check if message is a translation key
-    if (message.startsWith('apps_') && Object.values(TranslationKeys).includes(message as TranslationKeys)) {
+    if (message.startsWith("apps_") && Object.values(TranslationKeys).includes(message as TranslationKeys)) {
       const translation = translate(message as TranslationKeys);
       let result = translation;
 
@@ -672,10 +676,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       </Show>
 
       <Show when={permissionError()}>
-        <PermissionErrorDialog
-          error={permissionError()!}
-          onClose={clearPermissionError}
-        />
+        <PermissionErrorDialog error={permissionError()!} onClose={clearPermissionError} />
       </Show>
 
       <Show when={errorDialog().isOpen}>

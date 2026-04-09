@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Lint script for ahmetcetinkaya.me project
 # Runs comprehensive linting across all code types

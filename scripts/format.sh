@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Format script for ahmetcetinkaya.me project
 # Formats all code in the project using appropriate formatters

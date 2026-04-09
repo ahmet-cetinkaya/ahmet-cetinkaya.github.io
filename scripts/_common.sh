@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Common output functions for Project One-Hour scripts
 # This file contains shared output functions used across multiple scripts

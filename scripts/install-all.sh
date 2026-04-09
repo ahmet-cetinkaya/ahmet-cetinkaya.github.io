@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install-all script for ahmetcetinkaya.me project
 # Installs dependencies across all workspace packages

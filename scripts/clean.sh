@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Clean script for ahmetcetinkaya.me project
 # Removes all node_modules directories, build outputs, and generated files

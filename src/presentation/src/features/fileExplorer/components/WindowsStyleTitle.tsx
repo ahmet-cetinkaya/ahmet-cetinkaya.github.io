@@ -29,8 +29,8 @@ export default function WindowsStyleTitle(props: WindowsStyleTitleProps) {
       title={props.text}
       style={
         props.wrap
-          ? "overflow: hidden; word-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none; cursor: default;"
-          : "overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important; pointer-events: none; cursor: default;"
+          ? "overflow: hidden; word-wrap: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important;"
+          : "overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: none !important; -webkit-user-select: none !important; -moz-user-select: none !important; -ms-user-select: none !important;"
       }
     >
       {truncatedText()}

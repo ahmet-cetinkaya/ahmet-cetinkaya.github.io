@@ -92,14 +92,9 @@ export default class DialogSizeCalculator {
   }
 
   private static calculateHeight(metrics: ContentMetrics, opts: Required<DialogSizingOptions>): number {
-    // Dialog structure with fully dynamic sizing:
-    // 1. Header (minimal: 28px)
-    // 2. Content area (completely dynamic)
-    // 3. Footer with buttons (minimal: 40px)
-
     const headerHeight = 28;
-    const footerHeight = 40; // Minimal button container
-    const verticalPadding = opts.padding * 1.5; // Reduced vertical padding
+    const footerHeight = 40;
+    const verticalPadding = opts.padding * 1.5;
 
     // Base dialog height (header + footer + minimal padding)
     let baseHeight = headerHeight + footerHeight + verticalPadding;
@@ -113,7 +108,7 @@ export default class DialogSizeCalculator {
 
     // Additional space for input fields - better usability
     if (metrics.hasInput) {
-      contentHeight += 36; // Better spacing for input field + label
+      contentHeight += 44; // Better spacing for input field + label
       if (metrics.hasError) {
         contentHeight += 20; // Better spacing for error message
       }
@@ -151,9 +146,6 @@ export default class DialogSizeCalculator {
     return calculatedLines;
   }
 
-  /**
-   * Get responsive size that fits within viewport
-   */
   static getViewportConstrainedSize(
     size: Size,
     viewportWidth: number = window.innerWidth,
@@ -166,15 +158,12 @@ export default class DialogSizeCalculator {
     return new Size(Math.min(size.width, maxDialogWidth), Math.min(size.height, maxDialogHeight));
   }
 
-  /**
-   * Create size options for different dialog types
-   */
-  static createSizeOptions(type: "input" | "confirm" | "info" | "error"): DialogSizingOptions {
+  static createSizeOptions(type: "input" | "confirm" | "info" | "error" | "notice"): DialogSizingOptions {
     const baseOptions = {
-      minWidth: 260,
-      maxWidth: 0, // No fixed max width - only viewport
-      minHeight: 80,
-      maxHeight: 0, // No fixed max height - only viewport
+      minWidth: 280,
+      maxWidth: 0,
+      minHeight: 120,
+      maxHeight: 0,
       padding: 16,
       enableAutoResize: true,
     };
@@ -183,23 +172,51 @@ export default class DialogSizeCalculator {
       case "input":
         return {
           ...baseOptions,
-          minWidth: 320, // Better width for input usability
-          minHeight: 120, // Better height for input + labels
+          minWidth: 360,
+          minHeight: 150,
+          maxWidth: 500,
         };
       case "confirm":
         return {
           ...baseOptions,
-          minWidth: 260, // Minimal width for confirm buttons
-          minHeight: 80,  // Minimal height, grows with content
+          minWidth: 300,
+          minHeight: 140,
+          maxWidth: 420,
         };
       case "error":
         return {
           ...baseOptions,
-          minWidth: 260, // Minimal width for error display
-          minHeight: 85,  // Minimal height, grows with content
+          minWidth: 320,
+          minHeight: 160,
+          maxWidth: 480,
+        };
+      case "notice":
+        return {
+          ...baseOptions,
+          minWidth: 300,
+          minHeight: 160,
+          maxWidth: 400,
         };
       default:
         return baseOptions;
+    }
+  }
+
+  /**
+   * Get default size for dialog types that prefer fixed sizes
+   */
+  static getDefaultSize(type: "input" | "confirm" | "info" | "error" | "notice"): Size {
+    switch (type) {
+      case "input":
+        return new Size(400, 180);
+      case "confirm":
+        return new Size(320, 160);
+      case "error":
+        return new Size(340, 180);
+      case "notice":
+        return new Size(320, 180);
+      default:
+        return new Size(320, 200);
     }
   }
 }

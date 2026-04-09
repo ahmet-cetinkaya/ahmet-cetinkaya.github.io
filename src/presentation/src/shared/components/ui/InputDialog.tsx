@@ -102,6 +102,7 @@ export default function InputDialog(props: InputDialogProps) {
       closeAriaLabel="Close input dialog"
       showOkButton={false}
       enableAutoResize={false} // We're handling sizing dynamically
+      fitContent={true}
       sizingOptions={DialogSizeCalculator.createSizeOptions("input")}
       customButtons={[
         <div class="flex justify-end space-x-2">

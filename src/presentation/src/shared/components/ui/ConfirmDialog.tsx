@@ -60,11 +60,12 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
       icon={props.icon || getDefaultIcon()}
       isOpen={props.isOpen}
       onClose={handleClose}
-      size={props.size || new Size(400, 160)}
+      size={props.size || DialogSizeCalculator.getDefaultSize("confirm")}
       draggable={false}
       closeAriaLabel="Close confirmation dialog"
       showOkButton={false}
       enableAutoResize={true}
+      fitContent={true}
       sizingOptions={DialogSizeCalculator.createSizeOptions("confirm")}
       customButtons={[
         <div class="flex justify-end space-x-2">

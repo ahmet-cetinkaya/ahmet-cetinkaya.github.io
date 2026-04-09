@@ -1,8 +1,8 @@
 import Icons from "@domain/data/Icons";
 import { TranslationKeys } from "@domain/data/Translations";
 import Dialog from "@presentation/src/features/desktop/components/Dialog";
-import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
+import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
 
 type NoActionDialogProps = {
   fileName?: string;
@@ -13,8 +13,8 @@ type NoActionDialogProps = {
 export default function NoActionDialog({ fileName, fileType, onClose }: NoActionDialogProps) {
   const translate = useI18n();
 
-  // Window size for no action dialog
-  const size = new Size(300, 200);
+  // Use standardized size for notice dialog
+  const size = DialogSizeCalculator.getDefaultSize("notice");
 
   // Custom translate function that supports parameter replacement
   const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
@@ -52,6 +52,7 @@ export default function NoActionDialog({ fileName, fileType, onClose }: NoAction
       onClose={onClose}
       size={size}
       draggable={true}
+      fitContent={true}
       closeAriaLabel="Close no action dialog"
       okButtonText={TranslationKeys.common_close}
       style={{

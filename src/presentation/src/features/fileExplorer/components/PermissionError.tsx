@@ -1,9 +1,9 @@
 import Icons from "@domain/data/Icons";
 import { TranslationKeys } from "@domain/data/Translations";
 import Dialog from "@presentation/src/features/desktop/components/Dialog";
-import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { PermissionError } from "@application/features/system/services/PermissionService";
+import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
 
 type PermissionErrorProps = {
   error: Error | PermissionError;
@@ -51,8 +51,8 @@ export default function PermissionErrorDialog({ error, onClose }: PermissionErro
     return translate(TranslationKeys.apps_terminal_permission_denied_description);
   };
 
-  // Window size for permission error
-  const size = new Size(200, 100);
+  // Use standardized size for error dialog
+  const size = DialogSizeCalculator.getDefaultSize("error");
 
   const finalDescription = createErrorDescription();
 
@@ -64,6 +64,7 @@ export default function PermissionErrorDialog({ error, onClose }: PermissionErro
       onClose={onClose}
       size={size}
       draggable={true}
+      fitContent={true}
       closeAriaLabel="Close permission error dialog"
       okButtonText={TranslationKeys.common_close}
       style={{

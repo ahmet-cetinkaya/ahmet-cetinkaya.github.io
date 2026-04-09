@@ -7,3 +7,6 @@
 [submodule "packages/acore-solidjs"]
 	path = packages/acore-solidjs
 	url = https://github.com/ahmet-cetinkaya/acore-solidjs
+[submodule "packages/acore-scripts"]
+	path = packages/acore-scripts
+	url = git@github.com:ahmet-cetinkaya/acore-scripts.git

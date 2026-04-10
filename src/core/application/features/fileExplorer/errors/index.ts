@@ -2,6 +2,7 @@ import { TranslationKeys } from "@domain/data/Translations";
 
 export abstract class FileExplorerError extends Error {
   public readonly code: string;
+  public readonly errorId: string;
   public readonly statusCode?: number;
   public readonly path?: string;
   public readonly translationKey?: keyof typeof TranslationKeys;
@@ -10,6 +11,7 @@ export abstract class FileExplorerError extends Error {
   constructor(
     message: string,
     code: string,
+    errorId: string,
     statusCode?: number,
     path?: string,
     translationKey?: keyof typeof TranslationKeys,
@@ -18,6 +20,7 @@ export abstract class FileExplorerError extends Error {
     super(message);
     this.name = this.constructor.name;
     this.code = code;
+    this.errorId = errorId;
     this.statusCode = statusCode;
     this.path = path;
     this.translationKey = translationKey;
@@ -45,6 +48,7 @@ export class FileNotFoundError extends FileExplorerError {
     super(
       `File not found: ${path}`,
       "FILE_NOT_FOUND",
+      "FILE_NOT_FOUND",
       404,
       path,
       TranslationKeys.apps_file_explorer_error_file_not_found,
@@ -56,10 +60,11 @@ export class FileNotFoundError extends FileExplorerError {
   }
 }
 
-export class PermissionError extends FileExplorerError {
+export class FileExplorerPermissionError extends FileExplorerError {
   constructor(path: string, operation: string) {
     super(
       `Permission denied for ${operation} on: ${path}`,
+      "PERMISSION_DENIED",
       "PERMISSION_DENIED",
       403,
       path,
@@ -77,6 +82,7 @@ export class InvalidFilenameError extends FileExplorerError {
     super(
       `Invalid filename: ${filename}. Reason: ${reason}`,
       "INVALID_FILENAME",
+      "INVALID_FILENAME",
       400,
       undefined,
       TranslationKeys.apps_file_explorer_error_invalid_filename,
@@ -92,6 +98,7 @@ export class PathTooLongError extends FileExplorerError {
   constructor(path: string, maxLength: number) {
     super(
       `Path too long: ${path.length} > ${maxLength} characters`,
+      "PATH_TOO_LONG",
       "PATH_TOO_LONG",
       414,
       path,
@@ -109,6 +116,7 @@ export class FileExistsError extends FileExplorerError {
     super(
       `File already exists: ${path}`,
       "ALREADY_EXISTS",
+      "ALREADY_EXISTS",
       409,
       path,
       TranslationKeys.apps_file_explorer_error_already_exists,
@@ -124,6 +132,7 @@ export class DirectoryNotEmptyError extends FileExplorerError {
   constructor(path: string) {
     super(
       `Directory not empty: ${path}`,
+      "DIRECTORY_NOT_EMPTY",
       "DIRECTORY_NOT_EMPTY",
       409,
       path,
@@ -141,6 +150,7 @@ export class OperationTimeoutError extends FileExplorerError {
     super(
       `Operation "${operation}" timed out after ${timeoutMs}ms`,
       "OPERATION_TIMEOUT",
+      "OPERATION_TIMEOUT",
       408,
       undefined,
       TranslationKeys.apps_file_explorer_error_operation_timeout,
@@ -156,6 +166,7 @@ export class QuotaExceededError extends FileExplorerError {
   constructor(limit: number) {
     super(
       `Storage quota exceeded: ${limit}`,
+      "QUOTA_EXCEEDED",
       "QUOTA_EXCEEDED",
       507,
       undefined,
@@ -173,6 +184,7 @@ export class NetworkError extends FileExplorerError {
     super(
       `Network error: ${originalError.message}`,
       "NETWORK_ERROR",
+      "NETWORK_ERROR",
       503,
       undefined,
       TranslationKeys.apps_file_explorer_error_network_error,
@@ -189,7 +201,6 @@ export class InvalidPathError extends FileExplorerError {
     let translationKey = TranslationKeys.apps_file_explorer_error_invalid_path;
     let message = reason;
 
-    // Handle specific error types with appropriate translations
     if (reason === "SYSTEM_DIRECTORY_ACCESS" && contextPath) {
       translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
       message = `Access to system directory "${contextPath}" is not allowed`;
@@ -197,7 +208,15 @@ export class InvalidPathError extends FileExplorerError {
       translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
     }
 
-    super(`Invalid path: ${path}. Reason: ${message}`, "INVALID_PATH", 400, path, translationKey, contextPath);
+    super(
+      `Invalid path: ${path}. Reason: ${message}`,
+      "INVALID_PATH",
+      "INVALID_PATH",
+      400,
+      path,
+      translationKey,
+      contextPath,
+    );
   }
 
   isRecoverable(): boolean {
@@ -209,6 +228,7 @@ export class DirectoryTooDeepError extends FileExplorerError {
   constructor(path: string, depth: number, maxDepth: number) {
     super(
       `Directory structure too deep: ${depth} > ${maxDepth} at path: ${path}`,
+      "DIRECTORY_TOO_DEEP",
       "DIRECTORY_TOO_DEEP",
       409,
       path,
@@ -225,6 +245,7 @@ export class OperationFailedError extends FileExplorerError {
   constructor(operation: string, path: string, originalError?: Error) {
     super(
       `Operation "${operation}" failed for path: ${path}${originalError ? `. Original error: ${originalError.message}` : ""}`,
+      "OPERATION_FAILED",
       "OPERATION_FAILED",
       500,
       path,

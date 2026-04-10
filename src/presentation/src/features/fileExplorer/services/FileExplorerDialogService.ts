@@ -16,7 +16,7 @@ export class FileExplorerDialogService {
 
   async createFolder(currentPath: string, folderName: string, callbacks?: DialogCallbacks): Promise<void> {
     try {
-      const service = new FileExplorerService(this.fileSystemService);
+      const service = FileExplorerService.getInstance(this.fileSystemService);
       const result = await service.createFolder(currentPath, folderName.trim());
       this.refresh();
       callbacks?.onSuccess?.(result.actualName);
@@ -27,7 +27,7 @@ export class FileExplorerDialogService {
 
   async createFile(currentPath: string, fileName: string, callbacks?: DialogCallbacks): Promise<void> {
     try {
-      const service = new FileExplorerService(this.fileSystemService);
+      const service = FileExplorerService.getInstance(this.fileSystemService);
       const result = await service.createFile(currentPath, fileName.trim());
       this.refresh();
       callbacks?.onSuccess?.(result.actualName);
@@ -38,7 +38,7 @@ export class FileExplorerDialogService {
 
   async renameEntry(currentPath: string, newName: string, callbacks?: DialogCallbacks): Promise<void> {
     try {
-      const service = new FileExplorerService(this.fileSystemService);
+      const service = FileExplorerService.getInstance(this.fileSystemService);
       await service.renameEntry(currentPath, newName.trim());
       this.refresh();
       callbacks?.onSuccess?.();
@@ -49,7 +49,7 @@ export class FileExplorerDialogService {
 
   async deleteEntries(paths: string[], callbacks?: DialogCallbacks): Promise<void> {
     try {
-      const service = new FileExplorerService(this.fileSystemService);
+      const service = FileExplorerService.getInstance(this.fileSystemService);
       await service.deleteEntries(paths);
       this.refresh();
       callbacks?.onSuccess?.();

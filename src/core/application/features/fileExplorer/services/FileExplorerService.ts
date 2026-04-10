@@ -3,6 +3,7 @@ import type IFileSystemService from "@application/features/system/services/abstr
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
+import { logger } from "@shared/utils/logger";
 import FileNavigationService from "./FileNavigationService";
 import FileOperationsService from "./FileOperationsService";
 import GameExecutionService from "./GameExecutionService";
@@ -36,17 +37,26 @@ export interface DirectoryContents {
 export { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState, type SelectedFile };
 
 export default class FileExplorerService {
+  private static instance: FileExplorerService | null = null;
+
   private readonly operationsService: FileOperationsService;
   private readonly navigationService: FileNavigationService;
   private readonly gameExecutionService: GameExecutionService;
 
-  constructor(
+  private constructor(
     private readonly fileSystemService: IFileSystemService,
     private readonly windowsService?: IWindowsService,
   ) {
     this.operationsService = new FileOperationsService(fileSystemService);
     this.navigationService = new FileNavigationService(fileSystemService);
     this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null!;
+  }
+
+  static getInstance(fileSystemService: IFileSystemService, windowsService?: IWindowsService): FileExplorerService {
+    if (!FileExplorerService.instance || FileExplorerService.instance.fileSystemService !== fileSystemService) {
+      FileExplorerService.instance = new FileExplorerService(fileSystemService, windowsService);
+    }
+    return FileExplorerService.instance;
   }
 
   async getDirectoryContents(path: string, options: Partial<FileExplorerState> = {}): Promise<FileSystemEntry[]> {
@@ -198,7 +208,8 @@ export default class FileExplorerService {
     try {
       const entry = await this.fileSystemService.get((e) => e.fullPath === path);
       return Boolean(entry);
-    } catch {
+    } catch (error) {
+      logger.debug(`pathExists: Error checking path ${path}`, error);
       return false;
     }
   }
@@ -208,7 +219,8 @@ export default class FileExplorerService {
       const entry = await this.fileSystemService.get((e) => e.fullPath === path);
       if (!entry) return null;
       return entry instanceof Directory ? "directory" : "file";
-    } catch {
+    } catch (error) {
+      logger.debug(`getEntryType: Error getting entry type for ${path}`, error);
       return null;
     }
   }
@@ -255,7 +267,8 @@ export default class FileExplorerService {
       }
 
       return result;
-    } catch {
+    } catch (error) {
+      logger.debug(`getFilesInSubdirectories: Error for ${path}`, error);
       return new Map();
     }
   }

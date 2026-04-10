@@ -335,8 +335,8 @@ export class DirectoryOperations {
     try {
       const children = await this.getImmediateChildren(dirPath);
       return children.length === 0;
-    } catch {
-      // If we can't access the directory, consider it not empty for safety
+    } catch (error) {
+      logger.debug(`isDirectoryEmpty: Error checking ${dirPath}`, error);
       return false;
     }
   }

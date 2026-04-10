@@ -74,15 +74,7 @@ export default class LsCommand implements ICIProgram {
       let entries: (Directory | File)[] = [];
 
       if (flags.recursive) {
-        // For recursive, we need to traverse. This might be slow for remote repos.
-        // For now, let's just get immediate children and if any are directories, we could fetch them too?
-        // Or better, just use getAll but ensure we fetch the root first.
-        // Fetching root ensures we have the repo list or the repo contents.
         await this.fileSystemService.getChildren(targetPath);
-
-        // If we are in a repo, we might need to fetch subdirs recursively?
-        // That's too heavy for a simple ls -R on a remote repo.
-        // Let's stick to what we have in cache + what we just fetched.
         entries = (await this.fileSystemService.getAll((e) => {
           if (targetPath === "/") {
             const pathParts = e.fullPath.split("/");

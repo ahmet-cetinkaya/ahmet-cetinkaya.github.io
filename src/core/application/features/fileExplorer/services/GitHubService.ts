@@ -74,9 +74,7 @@ export default class GitHubService {
     try {
       const cleanPath = path.startsWith("/") ? path.substring(1) : path;
 
-      // Try master first, but we might need to check default branch if it fails
-      // For simplicity in this MVP, we'll try to get the default branch from the repo info if possible,
-      // but for now let's try to fetch the content metadata first to get the download_url
+      // Try to get content metadata first to get the download_url
 
       try {
         const content = await this.getContents(repoName, path);
@@ -85,9 +83,8 @@ export default class GitHubService {
           if (!fileResponse.ok) throw new Error("Failed to download file");
           return await fileResponse.text();
         }
-      } catch {
-        // If getContents fails, it might be a rate limit or other issue.
-        // Fallback to raw.githubusercontent.com if we can guess the branch (usually master or main)
+      } catch (error) {
+        logger.debug(`getFileContent: Primary fetch failed, falling back to raw.githubusercontent.com`, error);
       }
 
       // Fallback attempts

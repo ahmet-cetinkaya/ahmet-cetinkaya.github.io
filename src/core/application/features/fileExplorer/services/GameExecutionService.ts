@@ -116,14 +116,14 @@ export default class GameExecutionService {
         // Window already being active is not an error - game launched successfully
         const errorMessage = activationError instanceof Error ? activationError.message : String(activationError);
         if (errorMessage.includes("already activated") || errorMessage.includes("already active")) {
-          console.log(`Game ${gameExecutable.displayName} launched successfully (window was already active)`);
+          logger.info(`Game ${gameExecutable.displayName} launched successfully (window was already active)`);
           return; // Silently succeed for "already active" cases
         }
         // Re-throw real activation errors
         throw activationError;
       }
     } catch (error) {
-      console.error("Game launch error:", error);
+      logger.error("Game launch error:", error);
       const errorMessage = error instanceof Error ? error.message : String(error);
       // Only show error dialog for real errors, not activation-related messages
       if (errorMessage.includes("already activated") || errorMessage.includes("already active")) {

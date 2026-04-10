@@ -184,12 +184,12 @@ export default class FileOperationsService {
   private async executeDelete(paths: string[]): Promise<void> {
     logger.debug(`Deleting ${paths.length} items`);
 
+    const failedPaths: Array<{ path: string; error: Error }> = [];
+
     for (const path of paths) {
-      // Validate path and permissions
       PathSanitizer.validatePath(path);
       PermissionService.validatePath(path);
 
-      // Check if path exists
       if (!(await this.pathExists(path))) {
         logger.warn(`Path not found for deletion: ${path}`);
         continue;
@@ -200,18 +200,21 @@ export default class FileOperationsService {
         if (!entry) continue;
 
         if (entry instanceof Directory) {
-          // Delete directory recursively
           await this.directoryOperations.deleteDirectoryContents(path);
         } else {
-          // Delete file directly
           await this.fileSystemService.remove((e) => e.fullPath === path);
         }
 
         logger.debug(`Deleted: ${path}`);
       } catch (error) {
         logger.error(`Failed to delete ${path}:`, error);
-        throw new OperationFailedError("delete", path, error as Error);
+        failedPaths.push({ path, error: error as Error });
       }
+    }
+
+    if (failedPaths.length > 0) {
+      const errorMessages = failedPaths.map((f) => `${f.path}: ${f.error.message}`).join("; ");
+      throw new OperationFailedError(`delete: ${errorMessages}`, failedPaths[0].path, failedPaths[0].error);
     }
   }
 

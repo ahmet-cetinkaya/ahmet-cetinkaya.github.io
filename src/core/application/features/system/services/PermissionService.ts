@@ -48,16 +48,20 @@ export default class PermissionService {
   }
 
   static validatePath(path: string, permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {
-    // Normalize the path to fix double slashes and other path issues
     const normalizedPath = PathSanitizer.normalizePath(path);
 
-    // For write operations, check if path is in allowed paths
-    if (permissionLevel === PermissionLevel.WRITE && !this.canModifyPath(normalizedPath)) {
-      throw PermissionError.denied(normalizedPath);
+    if (permissionLevel === PermissionLevel.WRITE) {
+      if (!this.canModifyPath(normalizedPath)) {
+        throw PermissionError.denied(normalizedPath);
+      }
+      if (this.isProtectedPath(normalizedPath)) {
+        throw PermissionError.denied(normalizedPath, "write to protected path");
+      }
     }
 
-    // For read operations, allow access to all paths including protected ones
-    // This allows users to browse system directories like /bin, /etc, /usr, etc.
+    if (permissionLevel === PermissionLevel.READ && this.isProtectedPath(normalizedPath)) {
+      throw PermissionError.denied(normalizedPath, "read protected path");
+    }
   }
 
   static validatePaths(paths: string[], permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {

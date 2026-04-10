@@ -222,7 +222,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   const [directoryContents] = createResource(refreshTrigger, async () => {
     const currentState = state();
-    const service = new FileExplorerService(fileSystemService, windowsService);
+    const service = FileExplorerService.getInstance(fileSystemService, windowsService);
     return await service.getDirectoryContents(currentState.currentPath, {
       sortBy: currentState.sortBy,
       sortOrder: currentState.sortOrder,
@@ -302,7 +302,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     if (entry instanceof Directory) {
       navigateToPath(entry.fullPath);
     } else {
-      const service = new FileExplorerService(fileSystemService, windowsService);
+      const service = FileExplorerService.getInstance(fileSystemService, windowsService);
 
       // Check if the file has a registered handler
       if (service.hasRegisteredHandler(entry)) {
@@ -447,7 +447,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     }
 
     try {
-      const service = new FileExplorerService(fileSystemService);
+      const service = FileExplorerService.getInstance(fileSystemService);
 
       if (ClipboardService.isCutOperation()) {
         await service.moveEntries(

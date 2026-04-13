@@ -11,6 +11,8 @@ import Container from "@presentation/Container";
 import Icons from "@domain/data/Icons";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
+import { Paths } from "@domain/data/Directories";
+import Icon from "@shared/components/Icon";
 import ScreenHelper from "@shared/utils/ScreenHelper";
 import { logger } from "@shared/utils/logger";
 import FileExplorerToolbar from "./FileExplorerToolbar";
@@ -57,7 +59,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     currentPath: props.initialPath,
     files: [],
     selectedFiles: new Set(),
-    viewMode: isMobile() ? FileViewMode.LIST : FileViewMode.GRID,
+    viewMode: FileViewMode.LIST,
     sortBy: FileSortCriteria.NAME,
     sortOrder: SortOrder.ASC,
     isLoading: true,
@@ -67,6 +69,10 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   // Separate signal for breadcrumb path to prevent unnecessary re-renders
   const [breadcrumbPath, setBreadcrumbPath] = createSignal(props.initialPath);
+
+  const isRemotePath = createMemo(() => {
+    return state().currentPath.startsWith(`${Paths.USER_HOME}/Code`);
+  });
 
   const [navigationHistory, setNavigationHistory] = createSignal<string[]>([props.initialPath]);
   const [historyIndex, setHistoryIndex] = createSignal(0);
@@ -87,13 +93,15 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     contextPath: undefined,
   });
 
-  // New dialog system
-  let openDialog: (config: DialogConfig) => void;
+  // Initialized null until FileExplorerDialogManager provides the open function
+  let openDialog: ((config: DialogConfig) => void) | null = null;
 
   const createFolder = () => {
     const { currentPath } = state();
     if (openDialog) {
       openDialog({ type: "add-folder", currentPath });
+    } else {
+      handleError(new Error("Dialog system not initialized"));
     }
   };
 
@@ -101,6 +109,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     const { currentPath } = state();
     if (openDialog) {
       openDialog({ type: "add-file", currentPath });
+    } else {
+      handleError(new Error("Dialog system not initialized"));
     }
   };
 
@@ -112,6 +122,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
     if (openDialog) {
       openDialog({ type: "rename", currentPath, currentName });
+    } else {
+      handleError(new Error("Dialog system not initialized"));
     }
   };
 
@@ -120,6 +132,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
     if (openDialog) {
       openDialog({ type: "delete", pathsToDelete: paths });
+    } else {
+      handleError(new Error("Dialog system not initialized"));
     }
   };
 
@@ -205,13 +219,11 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
     window.addEventListener("keydown", handleKeyDown);
 
+    // Nest cleanup within mount to prevent memory leaks
     onCleanup(() => {
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("keydown", handleKeyDown);
     });
-  });
-
-  onCleanup(() => {
-    window.removeEventListener("resize", handleResize);
   });
 
   // Create a derived signal that only includes the properties that should trigger refresh
@@ -337,6 +349,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
             fileName,
             fileType,
           });
+        } else {
+          handleError(new Error(`No application available to open ${fileType} files`));
         }
       }
     }
@@ -407,22 +421,46 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       originalPath: path,
     }));
 
+    const failedPaths: string[] = [];
+
     for (const item of clipboardItems) {
-      const entry = await fileSystemService.get((e) => e.fullPath === item.path);
-      if (entry) {
-        item.isDirectory = entry instanceof Directory;
+      try {
+        const entry = await fileSystemService.get((e) => e.fullPath === item.path);
+        if (entry) {
+          item.isDirectory = entry instanceof Directory;
+        } else {
+          failedPaths.push(item.path);
+        }
+      } catch {
+        failedPaths.push(item.path);
       }
+    }
+
+    if (failedPaths.length > 0) {
+      throw new Error(`Failed to create clipboard items for paths: ${failedPaths.join(", ")}`);
     }
 
     return clipboardItems;
   }
 
   async function handleOpenOperation(paths: string[]) {
+    const failedPaths: string[] = [];
+
     for (const path of paths) {
-      const entry = await fileSystemService.get((e) => e.fullPath === path);
-      if (entry) {
-        await openFile(entry);
+      try {
+        const entry = await fileSystemService.get((e) => e.fullPath === path);
+        if (entry) {
+          await openFile(entry);
+        } else {
+          failedPaths.push(path);
+        }
+      } catch {
+        failedPaths.push(path);
       }
+    }
+
+    if (failedPaths.length > 0) {
+      throw new Error(`Failed to open paths: ${failedPaths.join(", ")}`);
     }
   }
 
@@ -505,12 +543,18 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   async function handlePropertiesOperation(paths: string[]) {
     if (paths.length === 1) {
-      const entry = await fileSystemService.get((e) => e.fullPath === paths[0]);
-      if (entry) {
-        setPropertiesPanel({
-          visible: true,
-          entry,
-        });
+      try {
+        const entry = await fileSystemService.get((e) => e.fullPath === paths[0]);
+        if (entry) {
+          setPropertiesPanel({
+            visible: true,
+            entry,
+          });
+        } else {
+          handleError(new Error(`File not found: ${paths[0]}`));
+        }
+      } catch (error) {
+        handleError(error);
       }
     }
   }
@@ -650,10 +694,19 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
         </div>
 
         <div class="border-t border-surface-300 bg-surface-500 p-2 text-xs text-gray-300">
-          <div class="flex justify-between">
-            <span>
-              {directoryContents()?.length || 0} {translate(TranslationKeys.common_items)}
-            </span>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span>
+                {directoryContents()?.length || 0} {translate(TranslationKeys.common_items)}
+              </span>
+
+              <Show when={directoryContents.loading && isRemotePath()}>
+                <div class="flex animate-pulse items-center gap-1.5 text-primary-400">
+                  <Icon icon={Icons.spinner} isSpin={true} class="h-3 w-3" />
+                  <span>{translate(TranslationKeys.apps_file_explorer_fetching_remote)}</span>
+                </div>
+              </Show>
+            </div>
             <span>
               {state().selectedFiles.size > 0 &&
                 `${state().selectedFiles.size} ${translate(TranslationKeys.common_selected)}`}

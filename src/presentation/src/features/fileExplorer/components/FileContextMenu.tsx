@@ -1,4 +1,4 @@
-import { For, Show, createEffect, onCleanup } from "solid-js";
+import { For, Show, createEffect, createMemo, onCleanup } from "solid-js";
 import { Portal } from "solid-js/web";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import Icon from "@shared/components/Icon";
@@ -89,7 +89,8 @@ export default function FileContextMenu(props: FileContextMenuProps) {
     }
   });
 
-  const menuItems = () => {
+  // Use createMemo to prevent regeneration on every render
+  const menuItems = createMemo(() => {
     const items: ContextMenuItem[] = [];
     const selectedFiles = props.selectedFiles();
     const entry = props.entry?.();
@@ -206,7 +207,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
     }
 
     return items;
-  };
+  });
 
   if (!props.visible()) return null;
 

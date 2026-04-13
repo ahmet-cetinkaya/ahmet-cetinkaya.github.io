@@ -188,20 +188,17 @@ export default class FileSystemService implements IFileSystemService {
         if (this.data!.some((e) => e.fullPath === itemPath)) continue;
 
         if (item.type === "dir") {
-          this.data!.push(new Directory(itemPath, new Date()));
+          // For directories, use current date as we don't have specific directory modification dates
+          // In the future, could track commits within the directory
+          const now = new Date();
+          this.data!.push(new Directory(itemPath, now, now));
         } else {
-          // For files, we might want to lazy load content, but File model expects content.
-          // We can store empty content or a placeholder, and fetch on read.
-          // But File model is synchronous.
-          // For now, let's store a placeholder or try to fetch small files?
-          // Or better, update File model to support lazy loading?
-          // Given the constraints, I'll put a placeholder and handle "cat" separately or update File.
-          // Actually, the File model has content in constructor.
-          // Let's put a special marker or empty string.
-          // Real content fetching should happen when opening the file.
-          // But the current system assumes content is in the File object.
-          // I will modify CatCommand later to fetch if needed.
-          this.data!.push(new File(itemPath, "", new Date(), item.size));
+          // Fetch the last modified date from GitHub commits
+          const modifiedDate = await this.gitHubService.getLastModifiedDate(repoName, item.name);
+          const createdDate = modifiedDate || new Date();
+          const updatedDate = modifiedDate || new Date();
+
+          this.data!.push(new File(itemPath, "", createdDate, item.size, updatedDate));
         }
       }
     } catch {

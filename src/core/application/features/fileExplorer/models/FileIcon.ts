@@ -95,6 +95,28 @@ export interface FileIconConfig {
   isDirectory: boolean;
 }
 
+/**
+ * Factory for creating FileIconConfig with validation
+ */
+export function createFileIconConfig(data: {
+  icon: Icons | string;
+  color: IconColor;
+  model?: string;
+  isDirectory: boolean;
+}): FileIconConfig {
+  // Validate icon is a valid Icons value or non-empty string
+  if (!data.icon || (typeof data.icon === "string" && !data.icon.trim())) {
+    throw new Error("Invalid FileIconConfig: icon must be a non-empty string");
+  }
+
+  // Validate color is a valid IconColor value
+  if (!Object.values(IconColor).includes(data.color)) {
+    throw new Error(`Invalid FileIconConfig: color must be a valid IconColor, got "${data.color}"`);
+  }
+
+  return data;
+}
+
 export const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.DIRECTORY]: {
     icon: Icons.folder,

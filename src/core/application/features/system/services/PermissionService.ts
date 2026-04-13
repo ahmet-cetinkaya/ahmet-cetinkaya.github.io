@@ -1,4 +1,5 @@
 import { PathSanitizer } from "@application/features/fileExplorer/utils/InputSanitizer";
+import { Paths } from "@domain/data/Directories";
 
 export class PermissionError extends Error {
   public readonly path: string;
@@ -41,10 +42,13 @@ export default class PermissionService {
     "/usr/local",
   ];
   private static readonly READ_ONLY_PATHS = ["/"];
-  private static readonly ALLOWED_PATH_PREFIXES = ["/home/ac"];
+  private static readonly READ_ONLY_PREFIXES = [`${Paths.USER_HOME}/Code` as string];
+  private static readonly ALLOWED_PATH_PREFIXES = [Paths.USER_HOME as string];
 
   static canModifyPath(path: string): boolean {
-    return this.ALLOWED_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
+    const isAllowed = this.ALLOWED_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
+    const isReadOnly = this.READ_ONLY_PREFIXES.some((prefix) => path.startsWith(prefix));
+    return isAllowed && !isReadOnly;
   }
 
   static validatePath(path: string, permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {

@@ -82,18 +82,7 @@ export default class FileExplorerService {
 
     const navigationResult = await this.navigationService.getDirectoryContents(path, navigationOptions);
 
-    return {
-      entries: navigationResult.entries.map((entry) => ({
-        name: entry.name,
-        path: entry.fullPath,
-        type: entry instanceof File ? "file" : "directory",
-        size: entry instanceof File ? entry.size : undefined,
-        modified: entry instanceof File ? entry.updatedDate : undefined,
-      })),
-      totalCount: navigationResult.totalCount,
-      path: navigationResult.currentPath,
-      isLoading: false,
-    };
+    return this.mapToDirectoryContents(navigationResult);
   }
 
   async navigateTo(path: string, options: Partial<FileExplorerState> = {}): Promise<DirectoryContents> {
@@ -105,18 +94,7 @@ export default class FileExplorerService {
 
     const navigationResult = await this.navigationService.navigateTo(path, navigationOptions);
 
-    return {
-      entries: navigationResult.entries.map((entry) => ({
-        name: entry.name,
-        path: entry.fullPath,
-        type: entry instanceof File ? "file" : "directory",
-        size: entry instanceof File ? entry.size : undefined,
-        modified: entry instanceof File ? entry.updatedDate : undefined,
-      })),
-      totalCount: navigationResult.totalCount,
-      path: navigationResult.currentPath,
-      isLoading: false,
-    };
+    return this.mapToDirectoryContents(navigationResult);
   }
 
   async navigateToParent(
@@ -135,6 +113,17 @@ export default class FileExplorerService {
       return null;
     }
 
+    return this.mapToDirectoryContents(navigationResult);
+  }
+
+  /**
+   * Map navigation result entries to DirectoryContents format
+   */
+  private mapToDirectoryContents(navigationResult: {
+    entries: FileSystemEntry[];
+    totalCount: number;
+    currentPath: string;
+  }): DirectoryContents {
     return {
       entries: navigationResult.entries.map((entry) => ({
         name: entry.name,
@@ -209,8 +198,9 @@ export default class FileExplorerService {
       const entry = await this.fileSystemService.get((e) => e.fullPath === path);
       return Boolean(entry);
     } catch (error) {
-      logger.debug(`pathExists: Error checking path ${path}`, error);
-      return false;
+      // Only catch expected error types, re-throw unexpected errors
+      logger.error(`pathExists: Unexpected error checking path ${path}`, error);
+      throw error;
     }
   }
 
@@ -220,8 +210,9 @@ export default class FileExplorerService {
       if (!entry) return null;
       return entry instanceof Directory ? "directory" : "file";
     } catch (error) {
-      logger.debug(`getEntryType: Error getting entry type for ${path}`, error);
-      return null;
+      // Only catch expected error types (FileNotFoundError), re-throw unexpected errors
+      logger.error(`getEntryType: Unexpected error getting entry type for ${path}`, error);
+      throw error;
     }
   }
 
@@ -268,8 +259,9 @@ export default class FileExplorerService {
 
       return result;
     } catch (error) {
-      logger.debug(`getFilesInSubdirectories: Error for ${path}`, error);
-      return new Map();
+      // Only catch expected error types, re-throw unexpected errors
+      logger.error(`getFilesInSubdirectories: Unexpected error for ${path}`, error);
+      throw error;
     }
   }
 

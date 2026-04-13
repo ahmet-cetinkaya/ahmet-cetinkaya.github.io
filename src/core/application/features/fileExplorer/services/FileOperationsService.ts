@@ -5,10 +5,13 @@ import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
 import { PERFORMANCE_LIMITS } from "../constants";
-import { FileNotFoundError, OperationFailedError } from "../errors";
+import { FileNotFoundError, InvalidFilenameError, OperationFailedError } from "../errors";
 import { DirectoryOperations } from "../utils/DirectoryOperations";
 import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";
 import { globalOperationQueue, OperationType } from "../utils/OperationQueue";
+
+// Maximum suffix generation attempts to prevent infinite loops
+const MAX_GENERATION_SUFFIX = 999;
 
 /**
  * Handles file system operations (create, copy, move, delete, rename)
@@ -91,7 +94,7 @@ export default class FileOperationsService {
    */
   async deleteEntries(paths: string[]): Promise<void> {
     if (paths.length === 0) {
-      return;
+      throw new InvalidFilenameError("", "Cannot delete empty path array");
     }
 
     return new Promise((resolve, reject) => {
@@ -398,14 +401,16 @@ export default class FileOperationsService {
 
       logger.debug(`Successfully moved file: ${sourceFile.fullPath} -> ${newPath}`);
     } catch (error) {
-      // Rollback strategy
-      logger.error(`File move failed, attempting rollback: ${sourceFile.fullPath} -> ${newPath}`, error);
+      // Rollback strategy with aggregated cleanup errors
+      const cleanupErrors: string[] = [];
 
       try {
         // If we created a new file, try to remove it
         await this.fileSystemService.remove((e) => e.fullPath === newPath);
       } catch (cleanupError) {
-        logger.warn(`Failed to clean up target file during rollback: ${newPath}`, cleanupError);
+        const errorMsg = `Failed to clean up target file during rollback: ${newPath}`;
+        cleanupErrors.push(errorMsg);
+        logger.warn(errorMsg, cleanupError);
       }
 
       try {
@@ -414,10 +419,16 @@ export default class FileOperationsService {
           await this.fileSystemService.remove((e) => e.fullPath === backupPath);
         }
       } catch (backupCleanupError) {
-        logger.warn(`Failed to clean up backup file during rollback: ${backupPath}`, backupCleanupError);
+        const errorMsg = `Failed to clean up backup file during rollback: ${backupPath}`;
+        cleanupErrors.push(errorMsg);
+        logger.warn(errorMsg, backupCleanupError);
       }
 
-      throw new OperationFailedError("move file", sourceFile.fullPath, error as Error);
+      // Include cleanup errors in the final error message
+      const errorMessage =
+        cleanupErrors.length > 0 ? `move failed. Cleanup errors: ${cleanupErrors.join("; ")}` : "move file failed";
+
+      throw new OperationFailedError(errorMessage, sourceFile.fullPath, error as Error);
     }
   }
 
@@ -487,7 +498,7 @@ export default class FileOperationsService {
       }
 
       suffix++;
-    } while (suffix <= 999); // Prevent infinite loops
+    } while (suffix <= MAX_GENERATION_SUFFIX); // Prevent infinite loops
 
     // Fallback: use timestamp
     const timestamp = Date.now();

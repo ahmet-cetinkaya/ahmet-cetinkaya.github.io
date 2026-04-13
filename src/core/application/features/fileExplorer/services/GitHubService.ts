@@ -23,6 +23,23 @@ export interface GitHubContent {
   encoding?: string;
 }
 
+export interface GitHubCommit {
+  sha: string;
+  commit: {
+    author: {
+      name: string;
+      email: string;
+      date: string;
+    };
+    committer: {
+      name: string;
+      email: string;
+      date: string;
+    };
+    message: string;
+  };
+}
+
 export default class GitHubService {
   private readonly baseUrl = "https://api.github.com";
   private readonly username = "ahmet-cetinkaya";
@@ -64,6 +81,33 @@ export default class GitHubService {
     } catch (error) {
       logger.error(`Failed to fetch GitHub contents for ${repoName}/${path}:`, error);
       throw error;
+    }
+  }
+
+  /**
+   * Fetch the last commit date for a specific file path
+   */
+  async getLastModifiedDate(repoName: string, filePath: string): Promise<Date | null> {
+    try {
+      const cleanPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+      const response = await fetch(
+        `${this.baseUrl}/repos/${this.username}/${repoName}/commits?path=${encodeURIComponent(cleanPath)}&per_page=1`,
+      );
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const commits = (await response.json()) as GitHubCommit[];
+      if (!commits || commits.length === 0) {
+        return null;
+      }
+
+      const lastCommit = commits[0];
+      return new Date(lastCommit.commit.committer.date);
+    } catch (error) {
+      logger.error(`Failed to fetch last modified date for ${repoName}/${filePath}:`, error);
+      return null;
     }
   }
 

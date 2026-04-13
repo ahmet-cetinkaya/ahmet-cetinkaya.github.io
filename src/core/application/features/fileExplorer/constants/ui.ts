@@ -1,7 +1,7 @@
 import { FileSortCriteria, FileViewMode, SortOrder } from "../models/FileSelection";
 
 export const UI_CONSTANTS = {
-  DEFAULT_VIEW_MODE: FileViewMode.GRID,
+  DEFAULT_VIEW_MODE: FileViewMode.LIST,
   DEFAULT_SORT_BY: FileSortCriteria.NAME,
   DEFAULT_SORT_ORDER: SortOrder.ASC,
   GRID_ITEM_SIZE: 120,

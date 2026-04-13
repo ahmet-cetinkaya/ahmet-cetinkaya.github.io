@@ -41,6 +41,7 @@ export enum TranslationKeys {
   apps_file_explorer_error_system_directory_access = "apps_file_explorer_error_system_directory_access",
   apps_file_explorer_error_directory_too_deep = "apps_file_explorer_error_directory_too_deep",
   apps_file_explorer_error_operation_failed = "apps_file_explorer_error_operation_failed",
+  apps_file_explorer_fetching_remote = "apps_file_explorer_fetching_remote",
   apps_file_explorer_no_action_title = "apps_file_explorer_no_action_title",
   apps_file_explorer_no_action_description = "apps_file_explorer_no_action_description",
   apps_file_explorer_no_action_description_with_file = "apps_file_explorer_no_action_description_with_file",
@@ -520,6 +521,10 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_file_explorer_error_operation_failed: {
     en: "The operation failed to complete. Please try again.",
     tr: "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
+  },
+  apps_file_explorer_fetching_remote: {
+    en: "Fetching from remote...",
+    tr: "Uzak sunucudan getiriliyor...",
   },
   apps_file_explorer_no_action_title: {
     en: "No Action Available",

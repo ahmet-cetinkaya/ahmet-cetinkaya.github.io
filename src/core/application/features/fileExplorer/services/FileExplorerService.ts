@@ -21,7 +21,7 @@ import {
 
 import type { NavigationOptions } from "./FileNavigationService";
 
-export interface DirectoryContents {
+export interface FileExplorerContents {
   entries: Array<{
     name: string;
     path: string;
@@ -33,6 +33,8 @@ export interface DirectoryContents {
   path: string;
   isLoading: boolean;
 }
+
+export type DirectoryContents = FileExplorerContents;
 
 export { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState, type SelectedFile };
 
@@ -53,7 +55,12 @@ export default class FileExplorerService {
   }
 
   static getInstance(fileSystemService: IFileSystemService, windowsService?: IWindowsService): FileExplorerService {
+    const needsWindowsService = windowsService !== undefined;
+    const hasExistingWindowsService = FileExplorerService.instance?.gameExecutionService != null;
+
     if (!FileExplorerService.instance || FileExplorerService.instance.fileSystemService !== fileSystemService) {
+      FileExplorerService.instance = new FileExplorerService(fileSystemService, windowsService);
+    } else if (needsWindowsService && !hasExistingWindowsService) {
       FileExplorerService.instance = new FileExplorerService(fileSystemService, windowsService);
     }
     return FileExplorerService.instance;
@@ -73,7 +80,7 @@ export default class FileExplorerService {
   async getDetailedDirectoryContents(
     path: string,
     options: Partial<FileExplorerState> = {},
-  ): Promise<DirectoryContents> {
+  ): Promise<FileExplorerContents> {
     const navigationOptions: NavigationOptions = {
       sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
       sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
@@ -85,7 +92,7 @@ export default class FileExplorerService {
     return this.mapToDirectoryContents(navigationResult);
   }
 
-  async navigateTo(path: string, options: Partial<FileExplorerState> = {}): Promise<DirectoryContents> {
+  async navigateTo(path: string, options: Partial<FileExplorerState> = {}): Promise<FileExplorerContents> {
     const navigationOptions: NavigationOptions = {
       sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
       sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
@@ -123,7 +130,7 @@ export default class FileExplorerService {
     entries: FileSystemEntry[];
     totalCount: number;
     currentPath: string;
-  }): DirectoryContents {
+  }): FileExplorerContents {
     return {
       entries: navigationResult.entries.map((entry) => ({
         name: entry.name,
@@ -198,8 +205,7 @@ export default class FileExplorerService {
       const entry = await this.fileSystemService.get((e) => e.fullPath === path);
       return Boolean(entry);
     } catch (error) {
-      // Only catch expected error types, re-throw unexpected errors
-      logger.error(`pathExists: Unexpected error checking path ${path}`, error);
+      logger.error(`pathExists: Error checking path ${path}`, error);
       throw error;
     }
   }
@@ -210,8 +216,7 @@ export default class FileExplorerService {
       if (!entry) return null;
       return entry instanceof Directory ? "directory" : "file";
     } catch (error) {
-      // Only catch expected error types (FileNotFoundError), re-throw unexpected errors
-      logger.error(`getEntryType: Unexpected error getting entry type for ${path}`, error);
+      logger.error(`getEntryType: Error getting entry type for ${path}`, error);
       throw error;
     }
   }
@@ -259,8 +264,7 @@ export default class FileExplorerService {
 
       return result;
     } catch (error) {
-      // Only catch expected error types, re-throw unexpected errors
-      logger.error(`getFilesInSubdirectories: Unexpected error for ${path}`, error);
+      logger.error(`getFilesInSubdirectories: Error for ${path}`, error);
       throw error;
     }
   }

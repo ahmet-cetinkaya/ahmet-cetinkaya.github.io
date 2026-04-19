@@ -37,6 +37,8 @@ export interface QueuedOperation {
   timeout?: number;
   retryCount?: number;
   maxRetries?: number;
+  conflictRetryCount?: number;
+  maxConflictRetries?: number;
   paths?: string[]; // Paths involved in the operation for conflict detection
 }
 
@@ -73,6 +75,8 @@ export class OperationQueue {
       status: OperationStatus.PENDING,
       createdAt: new Date(),
       maxRetries: operation.maxRetries || PERFORMANCE_LIMITS.MAX_OPERATION_RETRIES,
+      maxConflictRetries: operation.maxConflictRetries ?? 5,
+      conflictRetryCount: 0,
       retryCount: 0,
       timeout: operation.timeout || PERFORMANCE_LIMITS.OPERATION_TIMEOUT_MS,
     };
@@ -207,10 +211,22 @@ export class OperationQueue {
   private async executeOperation(operation: QueuedOperation): Promise<void> {
     // Check for conflicts with running operations
     if (this.hasConflicts(operation)) {
+      const maxRetries = operation.maxConflictRetries ?? 5;
+      if ((operation.conflictRetryCount ?? 0) >= maxRetries) {
+        logger.warn(`Operation ${operation.id} exceeded max conflict retries (${maxRetries}), failing`);
+        operation.status = OperationStatus.FAILED;
+        operation.completedAt = new Date();
+        operation.onError?.(new Error(`Operation failed: too many conflicts (max ${maxRetries})`));
+        return;
+      }
+
       // Re-queue the operation with higher priority
+      operation.conflictRetryCount = (operation.conflictRetryCount ?? 0) + 1;
       operation.priority -= 1;
       this.insertByPriority(operation);
-      logger.debug(`Re-queued operation ${operation.id} due to conflicts`);
+      logger.debug(
+        `Re-queued operation ${operation.id} due to conflicts (attempt ${operation.conflictRetryCount}/${maxRetries})`,
+      );
       return;
     }
 

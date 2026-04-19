@@ -22,12 +22,11 @@ export default function RenameDialog(props: RenameDialogProps) {
           onSuccess: () => {
             props.onSuccess?.();
             props.onClose();
-            resolve(true); // Success - allow dialog to close
+            resolve(true);
           },
           onError: (error) => {
             props.onError?.(error);
-            props.onClose(); // Close the dialog even when there's an error
-            resolve(false); // Error - prevent dialog from closing
+            resolve(false);
           },
         });
       });

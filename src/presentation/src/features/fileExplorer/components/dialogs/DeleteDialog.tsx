@@ -55,7 +55,6 @@ export default function DeleteDialog(props: DeleteDialogProps) {
           },
           onError: (error) => {
             props.onError?.(error);
-            props.onClose(); // Close the confirm dialog even when there's an error
           },
         });
       }}

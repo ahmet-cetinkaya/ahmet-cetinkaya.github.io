@@ -27,7 +27,6 @@ export default function AddFolderDialog(props: AddFolderDialogProps) {
         },
         onError: (error) => {
           props.onError?.(error);
-          props.onClose(); // Close the dialog even when there's an error
           resolve(false);
         },
       });

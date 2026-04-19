@@ -152,7 +152,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
           action: () => props.onFileOperation("delete", targetPaths),
         },
         {
-          label: "Properties",
+          label: translate(TranslationKeys.common_properties),
           icon: Icons.properties,
           action: () => props.onFileOperation("properties", targetPaths),
           disabled: targetPaths.length !== 1,

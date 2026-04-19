@@ -80,6 +80,7 @@ export enum TranslationKeys {
   common_paste = "common_paste",
   common_rename = "common_rename",
   common_delete = "common_delete",
+  common_properties = "common_properties",
   common_refresh = "common_refresh",
   common_loading = "common_loading",
   common_no_results = "common_no_results",
@@ -677,6 +678,10 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   common_delete: {
     en: "Delete",
     tr: "Sil",
+  },
+  common_properties: {
+    en: "Properties",
+    tr: "Özellikler",
   },
   common_refresh: {
     en: "Refresh",

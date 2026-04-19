@@ -248,6 +248,19 @@ export class PathSanitizer {
 
     return this.joinPath(basePath, relativePath);
   }
+
+  /**
+   * Create a pathExists function bound to a specific file system service
+   */
+  static createPathExists(fileSystemService: {
+    get: (predicate: (entry: unknown) => boolean) => Promise<unknown>;
+  }): (path: string) => Promise<boolean> {
+    return async (path: string): Promise<boolean> => {
+      if (path === "/") return true;
+      const entry = await fileSystemService.get((e) => (e as { fullPath?: string }).fullPath === path);
+      return Boolean(entry);
+    };
+  }
 }
 
 /**

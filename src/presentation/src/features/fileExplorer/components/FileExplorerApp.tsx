@@ -431,7 +431,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
         } else {
           failedPaths.push(item.path);
         }
-      } catch {
+      } catch (error) {
+        logger.error("Error creating clipboard item:", error);
         failedPaths.push(item.path);
       }
     }
@@ -454,7 +455,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
         } else {
           failedPaths.push(path);
         }
-      } catch {
+      } catch (error) {
+        logger.error("Error opening file:", error);
         failedPaths.push(path);
       }
     }

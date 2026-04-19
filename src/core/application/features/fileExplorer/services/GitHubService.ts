@@ -48,18 +48,15 @@ export default class GitHubService {
    * Fetch all public repositories for the user
    */
   async getRepositories(): Promise<GitHubRepository[]> {
-    try {
-      const response = await fetch(`${this.baseUrl}/users/${this.username}/repos?sort=updated&per_page=100`);
+    const response = await fetch(`${this.baseUrl}/users/${this.username}/repos?sort=updated&per_page=100`);
 
-      if (!response.ok) {
-        throw new Error(`GitHub API error: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
+    if (!response.ok) {
+      const error = new Error(`GitHub API error: ${response.status} ${response.statusText}`);
       logger.error("Failed to fetch GitHub repositories:", error);
-      return [];
+      throw error;
     }
+
+    return await response.json();
   }
 
   /**
@@ -88,27 +85,23 @@ export default class GitHubService {
    * Fetch the last commit date for a specific file path
    */
   async getLastModifiedDate(repoName: string, filePath: string): Promise<Date | null> {
-    try {
-      const cleanPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
-      const response = await fetch(
-        `${this.baseUrl}/repos/${this.username}/${repoName}/commits?path=${encodeURIComponent(cleanPath)}&per_page=1`,
-      );
+    const cleanPath = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+    const response = await fetch(
+      `${this.baseUrl}/repos/${this.username}/${repoName}/commits?path=${encodeURIComponent(cleanPath)}&per_page=1`,
+    );
 
-      if (!response.ok) {
-        return null;
-      }
-
-      const commits = (await response.json()) as GitHubCommit[];
-      if (!commits || commits.length === 0) {
-        return null;
-      }
-
-      const lastCommit = commits[0];
-      return new Date(lastCommit.commit.committer.date);
-    } catch (error) {
-      logger.error(`Failed to fetch last modified date for ${repoName}/${filePath}:`, error);
+    if (!response.ok) {
+      logger.warn(`Failed to fetch last modified date for ${repoName}/${filePath}: HTTP ${response.status}`);
       return null;
     }
+
+    const commits = (await response.json()) as GitHubCommit[];
+    if (!commits || commits.length === 0) {
+      return null;
+    }
+
+    const lastCommit = commits[0];
+    return new Date(lastCommit.commit.committer.date);
   }
 
   /**
@@ -132,11 +125,13 @@ export default class GitHubService {
       }
 
       // Fallback attempts
+      logger.debug(`getFileContent: Trying fallback URLs for ${repoName}/${cleanPath}`);
       const branches = ["main", "master"];
       for (const branch of branches) {
         const rawUrl = `https://raw.githubusercontent.com/${this.username}/${repoName}/${branch}/${cleanPath}`;
         const response = await fetch(rawUrl);
         if (response.ok) {
+          logger.debug(`getFileContent: Fallback successful via ${branch} branch`);
           return await response.text();
         }
       }

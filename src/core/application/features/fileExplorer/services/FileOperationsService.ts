@@ -188,6 +188,7 @@ export default class FileOperationsService {
     logger.debug(`Deleting ${paths.length} items`);
 
     const failedPaths: Array<{ path: string; error: Error }> = [];
+    const notFoundPaths: string[] = [];
 
     for (const path of paths) {
       PathSanitizer.validatePath(path);
@@ -195,6 +196,7 @@ export default class FileOperationsService {
 
       if (!(await this.pathExists(path))) {
         logger.warn(`Path not found for deletion: ${path}`);
+        notFoundPaths.push(path);
         continue;
       }
 
@@ -215,9 +217,20 @@ export default class FileOperationsService {
       }
     }
 
-    if (failedPaths.length > 0) {
-      const errorMessages = failedPaths.map((f) => `${f.path}: ${f.error.message}`).join("; ");
-      throw new OperationFailedError(`delete: ${errorMessages}`, failedPaths[0].path, failedPaths[0].error);
+    const totalFailed = failedPaths.length + notFoundPaths.length;
+    if (totalFailed > 0) {
+      const errorParts: string[] = [];
+      if (notFoundPaths.length > 0) {
+        errorParts.push(`Not found: ${notFoundPaths.join(", ")}`);
+      }
+      if (failedPaths.length > 0) {
+        errorParts.push(`Failed: ${failedPaths.map((f) => `${f.path}: ${f.error.message}`).join("; ")}`);
+      }
+      throw new OperationFailedError(
+        `delete: ${errorParts.join("; ")}`,
+        failedPaths[0]?.path || notFoundPaths[0],
+        failedPaths[0]?.error,
+      );
     }
   }
 

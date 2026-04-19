@@ -145,7 +145,12 @@ export default class GameExecutionService {
    */
   public isGamesDirectory(path: string): boolean {
     const normalizedPath = path.toLowerCase();
-    return normalizedPath.includes("/games") || normalizedPath.endsWith("games");
+    const pathWithoutTrailingSlash = normalizedPath.replace(/\/$/, "");
+    return (
+      pathWithoutTrailingSlash.endsWith("/games") ||
+      pathWithoutTrailingSlash === "games" ||
+      pathWithoutTrailingSlash.match(/^\/games$/) !== null
+    );
   }
 
   /**

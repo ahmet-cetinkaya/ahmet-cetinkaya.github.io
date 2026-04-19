@@ -4,7 +4,7 @@ import { PermissionError } from "@application/features/system/services/Permissio
 
 export interface DialogCallbacks {
   onSuccess?: (actualName?: string) => void;
-  onError?: (error: PermissionError) => void;
+  onError?: (error: Error) => void;
   onClose?: () => void;
 }
 
@@ -21,7 +21,9 @@ export class FileExplorerDialogService {
       this.refresh();
       callbacks?.onSuccess?.(result.actualName);
     } catch (error) {
-      callbacks?.onError?.(error as PermissionError);
+      const actualError =
+        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
+      callbacks?.onError?.(actualError);
     }
   }
 
@@ -32,7 +34,9 @@ export class FileExplorerDialogService {
       this.refresh();
       callbacks?.onSuccess?.(result.actualName);
     } catch (error) {
-      callbacks?.onError?.(error as PermissionError);
+      const actualError =
+        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
+      callbacks?.onError?.(actualError);
     }
   }
 
@@ -43,7 +47,9 @@ export class FileExplorerDialogService {
       this.refresh();
       callbacks?.onSuccess?.();
     } catch (error) {
-      callbacks?.onError?.(error as PermissionError);
+      const actualError =
+        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
+      callbacks?.onError?.(actualError);
     }
   }
 
@@ -54,7 +60,9 @@ export class FileExplorerDialogService {
       this.refresh();
       callbacks?.onSuccess?.();
     } catch (error) {
-      callbacks?.onError?.(error as PermissionError);
+      const actualError =
+        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
+      callbacks?.onError?.(actualError);
     }
   }
 }

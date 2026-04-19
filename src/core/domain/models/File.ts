@@ -4,14 +4,27 @@ type FileId = Path;
 export type Path = string;
 
 export default class File extends Entity<FileId> {
+  private _content: string;
+
   constructor(
     id: Path,
-    public content: string,
+    content: string,
     createdDate: Date,
     private _size?: number,
     updatedDate?: Date,
   ) {
     super(id, createdDate, updatedDate);
+    this._content = content;
+  }
+
+  get content(): string {
+    return this._content;
+  }
+
+  set content(value: string) {
+    this._content = value;
+    // Clear cached size when content changes to force recalculation
+    this._size = undefined;
   }
 
   get name(): string {
@@ -40,7 +53,7 @@ export default class File extends Entity<FileId> {
 
   get size(): number {
     if (this._size) return this._size;
-    return this.content.length * 2; // Assuming each character is 2 bytes (UTF-16 encoding)
+    return this._content.length * 2; // Assuming each character is 2 bytes (UTF-16 encoding)
   }
 
   get isDirectory(): boolean {

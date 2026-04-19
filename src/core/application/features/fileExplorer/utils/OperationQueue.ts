@@ -213,7 +213,7 @@ export class OperationQueue {
     if (this.hasConflicts(operation)) {
       const maxRetries = operation.maxConflictRetries ?? 5;
       if ((operation.conflictRetryCount ?? 0) >= maxRetries) {
-        logger.warn(`Operation ${operation.id} exceeded max conflict retries (${maxRetries}), failing`);
+        logger.error(`Operation ${operation.id} exceeded max conflict retries (${maxRetries}), failing permanently`);
         operation.status = OperationStatus.FAILED;
         operation.completedAt = new Date();
         operation.onError?.(new Error(`Operation failed: too many conflicts (max ${maxRetries})`));

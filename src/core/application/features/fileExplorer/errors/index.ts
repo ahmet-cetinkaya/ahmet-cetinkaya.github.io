@@ -270,7 +270,7 @@ export class FileExplorerErrorFactory {
     }
 
     if (message.includes("permission") || message.includes("denied") || message.includes("forbidden")) {
-      return new PermissionError(path || "unknown", operation || "unknown");
+      return new FileExplorerPermissionError(path || "unknown", operation || "unknown");
     }
 
     if (message.includes("timeout") || message.includes("timed out")) {
@@ -310,7 +310,7 @@ export class ErrorClassifier {
     if (error instanceof FileNotFoundError) return ErrorSeverity.LOW;
     if (error instanceof InvalidFilenameError) return ErrorSeverity.LOW;
     if (error instanceof FileExistsError) return ErrorSeverity.MEDIUM;
-    if (error instanceof PermissionError) return ErrorSeverity.MEDIUM;
+    if (error instanceof FileExplorerPermissionError) return ErrorSeverity.MEDIUM;
     if (error instanceof OperationTimeoutError) return ErrorSeverity.HIGH;
     if (error instanceof NetworkError) return ErrorSeverity.HIGH;
     if (error instanceof QuotaExceededError) return ErrorSeverity.HIGH;

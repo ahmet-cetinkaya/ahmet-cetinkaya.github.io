@@ -27,6 +27,7 @@ export interface TraversalResult {
   maxDepthReached: number;
   directoriesFound: number;
   filesFound: number;
+  errors: Array<{ path: string; error: string }>;
 }
 
 /**
@@ -61,6 +62,7 @@ export class DirectoryOperations {
       maxDepthReached: 0,
       directoriesFound: 0,
       filesFound: 0,
+      errors: [],
     };
 
     // Use queue for BFS traversal
@@ -117,7 +119,7 @@ export class DirectoryOperations {
         }
       } catch (error) {
         logger.warn(`Error accessing directory ${path}:`, error);
-        // Continue with other directories
+        result.errors.push({ path, error: error instanceof Error ? error.message : String(error) });
       }
     }
 
@@ -313,16 +315,19 @@ export class DirectoryOperations {
       const batch = reversedPaths.slice(i, i + batchSize);
 
       // Delete batch in parallel for better performance
-      await Promise.allSettled(
+      const results = await Promise.allSettled(
         batch.map(async ({ path, type }) => {
-          try {
-            await this.fileSystemService.remove((entry) => entry.fullPath === path);
-          } catch (error) {
-            logger.error(`Error deleting ${type} ${path}:`, error);
-            // Continue with other deletions
-          }
+          await this.fileSystemService.remove((entry) => entry.fullPath === path);
+          return { path, type, success: true };
         }),
       );
+
+      // Check for failures
+      const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+      if (failures.length > 0) {
+        logger.error(`Batch deletion failed for ${failures.length} items`);
+        throw new Error(`Failed to delete ${failures.length} items`);
+      }
     }
 
     logger.debug(`Directory deletion completed: ${pathsToDelete.length} items deleted from ${dirPath}`);

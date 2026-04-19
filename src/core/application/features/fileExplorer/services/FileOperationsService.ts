@@ -7,7 +7,7 @@ import { logger } from "@shared/utils/logger";
 import { PERFORMANCE_LIMITS } from "../constants";
 import { FileNotFoundError, InvalidFilenameError, OperationFailedError } from "../errors";
 import { DirectoryOperations } from "../utils/DirectoryOperations";
-import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";
+import { PathSanitizer, StringSanitizer, ValidationHelper } from "../utils/InputSanitizer";
 import { globalOperationQueue, OperationType } from "../utils/OperationQueue";
 
 // Maximum suffix generation attempts to prevent infinite loops
@@ -72,7 +72,7 @@ export default class FileOperationsService {
       // Validate the final path
       ValidationHelper.validatePathWithPermissions(fullPath);
 
-      const sanitizedContent = this.sanitizeFileContent(content);
+      const sanitizedContent = StringSanitizer.forFileContent(content);
       const contentBytes = new TextEncoder().encode(sanitizedContent).length;
 
       const newFile = new File(fullPath, sanitizedContent, new Date(), contentBytes, new Date());
@@ -526,15 +526,5 @@ export default class FileOperationsService {
 
     const entry = await this.fileSystemService.get((e) => e.fullPath === path);
     return Boolean(entry);
-  }
-
-  /**
-   * Sanitize file content to prevent issues
-   */
-  private sanitizeFileContent(content: string): string {
-    // Remove null bytes and control characters except newlines and tabs
-    /* eslint-disable-next-line no-control-regex */
-    const controlChars = new RegExp("[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]", "g");
-    return content.replace(controlChars, "");
   }
 }

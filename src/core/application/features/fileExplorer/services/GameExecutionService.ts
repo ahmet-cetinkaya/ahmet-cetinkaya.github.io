@@ -16,6 +16,37 @@ export interface GameExecutable {
   icon?: string;
 }
 
+/**
+ * Factory function to create a validated GameExecutable
+ */
+export function createGameExecutable(
+  fileName: string,
+  appId: Apps,
+  displayName: string,
+  translationKey: TranslationKey,
+  supportedExtensions: string[],
+  icon?: string,
+): GameExecutable {
+  if (!fileName || fileName.trim() === "") {
+    throw new Error("GameExecutable fileName is required");
+  }
+  if (!Apps[appId]) {
+    throw new Error(`Invalid appId: ${appId}`);
+  }
+  if (!supportedExtensions || supportedExtensions.length === 0) {
+    throw new Error("At least one supported extension is required");
+  }
+
+  return {
+    fileName: fileName.trim(),
+    appId,
+    displayName: displayName.trim(),
+    translationKey,
+    supportedExtensions: supportedExtensions.map((ext) => ext.toLowerCase()),
+    icon,
+  };
+}
+
 export interface GameLaunchOptions {
   maximized?: boolean;
   fullPath?: string;

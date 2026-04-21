@@ -43,7 +43,7 @@ export default class FileExplorerService {
 
   private readonly operationsService: FileOperationsService;
   private readonly navigationService: FileNavigationService;
-  private readonly gameExecutionService: GameExecutionService;
+  private readonly gameExecutionService: GameExecutionService | null;
 
   private constructor(
     private readonly fileSystemService: IFileSystemService,
@@ -51,7 +51,7 @@ export default class FileExplorerService {
   ) {
     this.operationsService = new FileOperationsService(fileSystemService);
     this.navigationService = new FileNavigationService(fileSystemService);
-    this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null!;
+    this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null;
   }
 
   static getInstance(fileSystemService: IFileSystemService, windowsService?: IWindowsService): FileExplorerService {
@@ -235,7 +235,7 @@ export default class FileExplorerService {
 
   getCacheStats(): {
     navigation: { size: number; totalEntries: number };
-    operations: { configCacheSize: number; pathCacheSize: number };
+    operations: { pending: number; running: number; total: number };
   } {
     return {
       navigation: this.navigationService.getCacheStats(),
@@ -269,10 +269,12 @@ export default class FileExplorerService {
     }
   }
 
-  private getOperationCacheStats(): { configCacheSize: number; pathCacheSize: number } {
+  private getOperationCacheStats(): { pending: number; running: number; total: number } {
+    const queueInfo = globalOperationQueue.getQueueInfo();
     return {
-      configCacheSize: 0,
-      pathCacheSize: 0,
+      pending: queueInfo.pending,
+      running: queueInfo.running,
+      total: queueInfo.total,
     };
   }
 

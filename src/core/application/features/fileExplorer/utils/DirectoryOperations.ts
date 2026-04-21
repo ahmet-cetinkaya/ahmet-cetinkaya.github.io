@@ -325,7 +325,9 @@ export class DirectoryOperations {
       // Check for failures
       const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
       if (failures.length > 0) {
-        logger.error(`Batch deletion failed for ${failures.length} items`);
+        const firstError =
+          failures[0]?.reason instanceof Error ? failures[0].reason : new Error(String(failures[0]?.reason));
+        logger.error(`Batch deletion failed for ${failures.length} items`, firstError);
         throw new Error(`Failed to delete ${failures.length} items`);
       }
     }

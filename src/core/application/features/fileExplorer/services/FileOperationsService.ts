@@ -49,7 +49,8 @@ export default class FileOperationsService {
         logger.error(`Failed to create directory ${name} in ${parentPath}:`, error);
         throw error;
       }
-      throw new OperationFailedError("create directory", parentPath, error as Error);
+      const convertedError = error instanceof Error ? error : new Error(String(error));
+      throw new OperationFailedError("create directory", parentPath, convertedError);
     }
   }
 
@@ -85,7 +86,8 @@ export default class FileOperationsService {
         logger.error(`Failed to create file ${name} in ${parentPath}:`, error);
         throw error;
       }
-      throw new OperationFailedError("create file", parentPath, error as Error);
+      const convertedError = error instanceof Error ? error : new Error(String(error));
+      throw new OperationFailedError("create file", parentPath, convertedError);
     }
   }
 
@@ -213,7 +215,7 @@ export default class FileOperationsService {
         logger.debug(`Deleted: ${path}`);
       } catch (error) {
         logger.error(`Failed to delete ${path}:`, error);
-        failedPaths.push({ path, error: error as Error });
+        failedPaths.push({ path, error: error instanceof Error ? error : new Error(String(error)) });
       }
     }
 
@@ -440,8 +442,8 @@ export default class FileOperationsService {
       // Include cleanup errors in the final error message
       const errorMessage =
         cleanupErrors.length > 0 ? `move failed. Cleanup errors: ${cleanupErrors.join("; ")}` : "move file failed";
-
-      throw new OperationFailedError(errorMessage, sourceFile.fullPath, error as Error);
+      const convertedError = error instanceof Error ? error : new Error(String(error));
+      throw new OperationFailedError(errorMessage, sourceFile.fullPath, convertedError);
     }
   }
 
@@ -469,8 +471,8 @@ export default class FileOperationsService {
       } catch (cleanupError) {
         logger.warn(`Failed to clean up partially copied directory: ${newPath}`, cleanupError);
       }
-
-      throw new OperationFailedError("move directory", sourceDirectory.fullPath, error as Error);
+      const convertedError = error instanceof Error ? error : new Error(String(error));
+      throw new OperationFailedError("move directory", sourceDirectory.fullPath, convertedError);
     }
   }
 

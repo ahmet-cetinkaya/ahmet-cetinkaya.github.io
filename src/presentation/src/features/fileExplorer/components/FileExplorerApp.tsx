@@ -169,22 +169,30 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   // Helper function to translate error messages with parameters
   const translateErrorMessage = (message: string, contextPath?: string): string => {
-    // Check if message is a translation key
-    if (message.startsWith("apps_") && Object.values(TranslationKeys).includes(message as TranslationKeys)) {
-      const translation = translate(message as TranslationKeys);
-      let result = translation;
+    // Default fallback message for user-facing errors
+    const defaultFallback = "An error occurred. Please try again.";
 
-      // Replace {{path}} patterns with provided contextPath
-      if (contextPath) {
-        const pattern = new RegExp(`{{path}}`, "g");
-        result = result.replace(pattern, contextPath);
+    try {
+      // Check if message is a translation key
+      if (message.startsWith("apps_") && Object.values(TranslationKeys).includes(message as TranslationKeys)) {
+        const translation = translate(message as TranslationKeys);
+        let result = translation;
+
+        // Replace {{path}} patterns with provided contextPath
+        if (contextPath) {
+          const pattern = new RegExp(`{{path}}`, "g");
+          result = result.replace(pattern, contextPath);
+        }
+
+        return result;
       }
 
-      return result;
+      // Return original message if it's not a translation key
+      return message;
+    } catch {
+      // Return user-friendly fallback for any translation failures
+      return defaultFallback;
     }
-
-    // Return original message if it's not a translation key
-    return message;
   };
 
   const handleResize = () => {

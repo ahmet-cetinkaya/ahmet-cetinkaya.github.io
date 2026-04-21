@@ -364,13 +364,20 @@ export class OperationQueue {
       return false;
     }
 
-    // Retry on timeout and certain network errors
-    return (
-      error instanceof OperationTimeoutError ||
-      error.message.toLowerCase().includes("network") ||
-      error.message.toLowerCase().includes("timeout") ||
-      error.message.toLowerCase().includes("connection")
-    );
+    // Check for specific error types that should trigger retry
+    if (error instanceof OperationTimeoutError) {
+      return true;
+    }
+
+    // Check for FileExplorerError with isRecoverable flag
+    const fileExplorerError = error as { isRecoverable?: () => boolean };
+    if (typeof fileExplorerError.isRecoverable === "function" && fileExplorerError.isRecoverable()) {
+      return true;
+    }
+
+    // Fallback: retry on generic connection/timeout errors (string matching as last resort)
+    const messageLower = error.message.toLowerCase();
+    return messageLower.includes("network") || messageLower.includes("timeout") || messageLower.includes("connection");
   }
 
   /**

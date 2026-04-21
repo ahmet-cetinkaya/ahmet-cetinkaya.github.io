@@ -1,6 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import type FileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
+import { logger } from "@shared/utils/logger";
 import AddFolderDialog from "./AddFolderDialog";
 import AddFileDialog from "./AddFileDialog";
 import RenameDialog from "./RenameDialog";
@@ -56,6 +57,8 @@ export default function FileExplorerDialogManager(props: FileExplorerDialogManag
   };
 
   const handleError = (error: unknown) => {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error(`Dialog error: ${errorMessage}`, error);
     props.onError?.(error);
   };
 

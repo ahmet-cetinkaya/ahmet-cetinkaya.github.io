@@ -12,6 +12,24 @@ function cleanupCache<T>(cache: Map<string, T>, maxSize: number): void {
   }
 }
 
+/**
+ * Clear all icon caches (useful for testing and memory management)
+ */
+export function clearIconCaches(): void {
+  iconConfigCache.clear();
+  iconPathCache.clear();
+}
+
+/**
+ * Get cache statistics for monitoring
+ */
+export function getIconCacheStats(): { configCacheSize: number; pathCacheSize: number } {
+  return {
+    configCacheSize: iconConfigCache.size,
+    pathCacheSize: iconPathCache.size,
+  };
+}
+
 export enum FileType {
   DIRECTORY = "directory",
 

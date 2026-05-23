@@ -15,6 +15,13 @@ export const PATH_CONSTANTS = {
     "/boot",
     "/lib",
     "/lib64",
+    "/root",
+    "/var",
+    "/tmp",
+    "/opt",
+    "/usr/local",
   ],
+  PROTECTED_PATHS: ["/"],
+  READ_ONLY_PATHS: ["/"],
   MAX_PATH_LENGTH: 4096,
 } as const;

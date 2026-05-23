@@ -5,7 +5,6 @@ import { OperationTimeoutError } from "../errors";
 /**
  * Operation queue to prevent race conditions and manage concurrent file operations
  */
-
 export enum OperationType {
   COPY = "copy",
   MOVE = "move",
@@ -22,24 +21,144 @@ export enum OperationStatus {
   CANCELLED = "cancelled",
 }
 
-export interface QueuedOperation {
-  id: string;
-  type: OperationType;
+/**
+ * Discriminated union for operation states with enforced invariants
+ */
+export type QueuedOperation =
+  | PendingOperation
+  | RunningOperation
+  | CompletedOperation
+  | FailedOperation
+  | CancelledOperation;
+
+interface BaseOperation {
+  readonly id: string;
+  readonly type: OperationType;
   priority: number; // Lower number = higher priority
-  status: OperationStatus;
-  createdAt: Date;
+  readonly createdAt: Date;
+  readonly execute: () => Promise<void>;
+  readonly onProgress?: (progress: number) => void;
+  readonly onComplete?: () => void;
+  readonly onError?: (error: Error) => void;
+  readonly timeout: number;
+  readonly retryCount: number;
+  readonly maxRetries: number;
+  conflictRetryCount: number;
+  readonly maxConflictRetries: number;
+  readonly paths?: string[]; // Paths involved in the operation for conflict detection
+}
+
+/**
+ * Pending operation - not yet started
+ */
+export interface PendingOperation extends BaseOperation {
+  readonly status: OperationStatus.PENDING;
+  startedAt?: never;
+  completedAt?: never;
+}
+
+/**
+ * Running operation - currently being executed
+ */
+export interface RunningOperation extends BaseOperation {
+  readonly status: OperationStatus.RUNNING;
+  readonly startedAt: Date;
+  completedAt?: never;
+}
+
+/**
+ * Completed operation - finished successfully
+ */
+export interface CompletedOperation extends BaseOperation {
+  readonly status: OperationStatus.COMPLETED;
+  readonly startedAt: Date;
+  readonly completedAt: Date;
+}
+
+/**
+ * Failed operation - terminated with error
+ */
+export interface FailedOperation extends BaseOperation {
+  readonly status: OperationStatus.FAILED;
+  readonly startedAt: Date;
+  readonly completedAt: Date;
+}
+
+/**
+ * Cancelled operation - terminated before completion
+ */
+export interface CancelledOperation extends BaseOperation {
+  readonly status: OperationStatus.CANCELLED;
   startedAt?: Date;
   completedAt?: Date;
-  execute: () => Promise<void>;
-  onProgress?: (progress: number) => void;
-  onComplete?: () => void;
-  onError?: (error: Error) => void;
-  timeout?: number;
-  retryCount?: number;
-  maxRetries?: number;
-  conflictRetryCount?: number;
-  maxConflictRetries?: number;
-  paths?: string[]; // Paths involved in the operation for conflict detection
+}
+
+/**
+ * Type guard to check operation status
+ */
+export function isPendingOperation(op: QueuedOperation): op is PendingOperation {
+  return op.status === OperationStatus.PENDING;
+}
+
+export function isRunningOperation(op: QueuedOperation): op is RunningOperation {
+  return op.status === OperationStatus.RUNNING;
+}
+
+export function isCompletedOperation(op: QueuedOperation): op is CompletedOperation {
+  return op.status === OperationStatus.COMPLETED;
+}
+
+export function isFailedOperation(op: QueuedOperation): op is FailedOperation {
+  return op.status === OperationStatus.FAILED;
+}
+
+export function isCancelledOperation(op: QueuedOperation): op is CancelledOperation {
+  return op.status === OperationStatus.CANCELLED;
+}
+
+/**
+ * State transition helpers that enforce valid transitions at compile time
+ */
+export function startOperation(op: PendingOperation): RunningOperation {
+  return {
+    ...op,
+    status: OperationStatus.RUNNING,
+    startedAt: new Date(),
+  };
+}
+
+export function completeOperation(op: RunningOperation): CompletedOperation {
+  return {
+    ...op,
+    status: OperationStatus.COMPLETED,
+    completedAt: new Date(),
+  };
+}
+
+export function failOperation(op: RunningOperation | PendingOperation): FailedOperation {
+  const startedAt = isRunningOperation(op) ? op.startedAt : new Date();
+  return {
+    ...op,
+    status: OperationStatus.FAILED,
+    startedAt,
+    completedAt: new Date(),
+  };
+}
+
+export function cancelOperation(op: QueuedOperation): CancelledOperation {
+  if (isRunningOperation(op) || isCompletedOperation(op) || isFailedOperation(op)) {
+    return {
+      ...op,
+      status: OperationStatus.CANCELLED as const,
+      startedAt: op.startedAt,
+      completedAt: new Date(),
+    };
+  }
+
+  return {
+    ...op,
+    status: OperationStatus.CANCELLED as const,
+  };
 }
 
 export interface OperationResult {
@@ -50,9 +169,6 @@ export interface OperationResult {
   duration?: number;
 }
 
-/**
- * Manages a queue of file operations with conflict detection and retry logic
- */
 export class OperationQueue {
   private queue: QueuedOperation[] = [];
   private runningOperations = new Map<string, QueuedOperation>();
@@ -63,13 +179,10 @@ export class OperationQueue {
     this.maxConcurrentOperations = maxConcurrent;
   }
 
-  /**
-   * Add an operation to the queue
-   */
-  add(operation: Omit<QueuedOperation, "id" | "createdAt" | "status">): string {
+  add(operation: Omit<QueuedOperation, "id" | "createdAt" | "status" | "startedAt" | "completedAt">): string {
     const id = this.generateOperationId();
 
-    const queuedOp: QueuedOperation = {
+    const pendingOp: PendingOperation = {
       ...operation,
       id,
       status: OperationStatus.PENDING,
@@ -81,35 +194,28 @@ export class OperationQueue {
       timeout: operation.timeout || PERFORMANCE_LIMITS.OPERATION_TIMEOUT_MS,
     };
 
-    // Insert operation in priority order
-    this.insertByPriority(queuedOp);
+    this.insertByPriority(pendingOp);
 
     logger.debug(`Added operation ${id} of type ${operation.type} to queue`);
 
-    // Start processing if not already running
     this.processQueue();
 
     return id;
   }
 
-  /**
-   * Cancel an operation
-   */
   cancel(operationId: string): boolean {
-    // Check if it's running
     const runningOp = this.runningOperations.get(operationId);
     if (runningOp) {
-      runningOp.status = OperationStatus.CANCELLED;
+      cancelOperation(runningOp);
       this.runningOperations.delete(operationId);
       logger.debug(`Cancelled running operation ${operationId}`);
       return true;
     }
 
-    // Check if it's in the queue
     const queueIndex = this.queue.findIndex((op) => op.id === operationId);
     if (queueIndex !== -1) {
-      const [cancelledOp] = this.queue.splice(queueIndex, 1);
-      cancelledOp.status = OperationStatus.CANCELLED;
+      const [opToCancel] = this.queue.splice(queueIndex, 1);
+      cancelOperation(opToCancel);
       logger.debug(`Cancelled queued operation ${operationId}`);
       return true;
     }
@@ -117,9 +223,6 @@ export class OperationQueue {
     return false;
   }
 
-  /**
-   * Get operation status
-   */
   getStatus(operationId: string): OperationStatus | null {
     const runningOp = this.runningOperations.get(operationId);
     if (runningOp) {
@@ -134,9 +237,6 @@ export class OperationQueue {
     return null;
   }
 
-  /**
-   * Get queue information
-   */
   getQueueInfo(): {
     pending: number;
     running: number;
@@ -164,28 +264,18 @@ export class OperationQueue {
     };
   }
 
-  /**
-   * Clear all operations (emergency use only)
-   */
   clear(): void {
-    // Cancel all running operations
-    for (const [, operation] of this.runningOperations) {
-      operation.status = OperationStatus.CANCELLED;
+    const runningOps = Array.from(this.runningOperations.values());
+    for (const op of runningOps) {
+      cancelOperation(op);
     }
     this.runningOperations.clear();
 
-    // Cancel all queued operations
-    this.queue.forEach((op) => {
-      op.status = OperationStatus.CANCELLED;
-    });
     this.queue = [];
 
     logger.info("Cleared all operations in queue");
   }
 
-  /**
-   * Process the queue
-   */
   private async processQueue(): Promise<void> {
     if (this.isProcessing) {
       return;
@@ -205,23 +295,22 @@ export class OperationQueue {
     }
   }
 
-  /**
-   * Execute a single operation
-   */
   private async executeOperation(operation: QueuedOperation): Promise<void> {
-    // Check for conflicts with running operations
+    if (!isPendingOperation(operation)) {
+      logger.warn(`Operation ${operation.id} is not pending, skipping execution`);
+      return;
+    }
+
     if (this.hasConflicts(operation)) {
       const maxRetries = operation.maxConflictRetries ?? 5;
-      if ((operation.conflictRetryCount ?? 0) >= maxRetries) {
+      if (operation.conflictRetryCount >= maxRetries) {
         logger.error(`Operation ${operation.id} exceeded max conflict retries (${maxRetries}), failing permanently`);
-        operation.status = OperationStatus.FAILED;
-        operation.completedAt = new Date();
-        operation.onError?.(new Error(`Operation failed: too many conflicts (max ${maxRetries})`));
+        const failedOp = failOperation(operation);
+        failedOp.onError?.(new Error(`Operation failed: too many conflicts (max ${maxRetries})`));
         return;
       }
 
-      // Re-queue the operation with higher priority
-      operation.conflictRetryCount = (operation.conflictRetryCount ?? 0) + 1;
+      operation.conflictRetryCount += 1;
       operation.priority -= 1;
       this.insertByPriority(operation);
       logger.debug(
@@ -230,60 +319,49 @@ export class OperationQueue {
       return;
     }
 
-    operation.status = OperationStatus.RUNNING;
-    operation.startedAt = new Date();
-    this.runningOperations.set(operation.id, operation);
+    const runningOp = startOperation(operation);
+    this.runningOperations.set(operation.id, runningOp);
 
     logger.debug(`Executing operation ${operation.id} of type ${operation.type}`);
 
     try {
-      // Execute with timeout
-      await this.executeWithTimeout(operation);
+      await this.executeWithTimeout(runningOp);
 
-      operation.status = OperationStatus.COMPLETED;
-      operation.completedAt = new Date();
-
-      operation.onComplete?.();
+      const completedOp = completeOperation(runningOp);
+      completedOp.onComplete?.();
       logger.debug(`Completed operation ${operation.id}`);
     } catch (error) {
       const operationError = error instanceof Error ? error : new Error(String(error));
 
-      // Check if we should retry
       if (this.shouldRetry(operation, operationError)) {
-        operation.retryCount!++;
-        operation.status = OperationStatus.PENDING;
+        const retryOp: PendingOperation = {
+          ...operation,
+          retryCount: operation.retryCount + 1,
+          status: OperationStatus.PENDING,
+        };
 
-        // Re-queue with exponential backoff priority penalty
-        const backoffPenalty = Math.pow(2, operation.retryCount!) - 1;
-        operation.priority += backoffPenalty;
+        const backoffPenalty = Math.pow(2, retryOp.retryCount) - 1;
+        retryOp.priority += backoffPenalty;
 
-        this.insertByPriority(operation);
-        logger.debug(`Retrying operation ${operation.id} (attempt ${operation.retryCount})`);
+        this.insertByPriority(retryOp);
+        logger.debug(`Retrying operation ${operation.id} (attempt ${retryOp.retryCount})`);
       } else {
-        operation.status = OperationStatus.FAILED;
-        operation.completedAt = new Date();
-
-        operation.onError?.(operationError);
+        const failedOp = failOperation(runningOp);
+        failedOp.onError?.(operationError);
         logger.error(`Failed operation ${operation.id}:`, operationError);
       }
     } finally {
       this.runningOperations.delete(operation.id);
 
-      // Continue processing queue
       this.processQueue();
     }
   }
 
-  /**
-   * Execute operation with timeout
-   */
-  private async executeWithTimeout(operation: QueuedOperation): Promise<void> {
-    const timeout = operation.timeout || PERFORMANCE_LIMITS.OPERATION_TIMEOUT_MS;
-
+  private async executeWithTimeout(operation: RunningOperation): Promise<void> {
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
-        reject(new OperationTimeoutError(operation.type, timeout));
-      }, timeout);
+        reject(new OperationTimeoutError(operation.type, operation.timeout));
+      }, operation.timeout);
     });
 
     const executionPromise = operation.execute();
@@ -291,21 +369,16 @@ export class OperationQueue {
     await Promise.race([executionPromise, timeoutPromise]);
   }
 
-  /**
-   * Check if operation has conflicts with running operations
-   */
   private hasConflicts(operation: QueuedOperation): boolean {
     if (!operation.paths || operation.paths.length === 0) {
       return false;
     }
 
-    // Check each running operation for path conflicts
     for (const runningOp of this.runningOperations.values()) {
       if (!runningOp.paths || runningOp.paths.length === 0) {
         continue;
       }
 
-      // Check for any overlapping paths
       for (const opPath of operation.paths) {
         for (const runningPath of runningOp.paths) {
           if (this.pathsConflict(opPath, runningPath, operation.type, runningOp.type)) {
@@ -318,20 +391,14 @@ export class OperationQueue {
     return false;
   }
 
-  /**
-   * Check if two paths conflict based on operation types
-   */
   private pathsConflict(path1: string, path2: string, type1: OperationType, type2: OperationType): boolean {
-    // Exact match
     if (path1 === path2) {
       return true;
     }
 
-    // Parent-child relationships
     const path1IsParent = path2.startsWith(`${path1}/`);
     const path2IsParent = path1.startsWith(`${path2}/`);
 
-    // Conflicting operations
     const conflictingOps = new Set([
       `${OperationType.DELETE}-${OperationType.COPY}`,
       `${OperationType.DELETE}-${OperationType.MOVE}`,
@@ -350,39 +417,24 @@ export class OperationQueue {
     return (path1IsParent || path2IsParent) && (conflictingOps.has(opKey) || conflictingOps.has(reverseOpKey));
   }
 
-  /**
-   * Determine if operation should be retried
-   */
-  private shouldRetry(operation: QueuedOperation, error: Error): boolean {
-    // Don't retry if cancelled
-    if (operation.status === OperationStatus.CANCELLED) {
+  private shouldRetry(operation: PendingOperation | RunningOperation, error: Error): boolean {
+    if (operation.retryCount >= operation.maxRetries) {
       return false;
     }
 
-    // Check retry count
-    if (operation.retryCount! >= operation.maxRetries!) {
-      return false;
-    }
-
-    // Check for specific error types that should trigger retry
     if (error instanceof OperationTimeoutError) {
       return true;
     }
 
-    // Check for FileExplorerError with isRecoverable flag
     const fileExplorerError = error as { isRecoverable?: () => boolean };
     if (typeof fileExplorerError.isRecoverable === "function" && fileExplorerError.isRecoverable()) {
       return true;
     }
 
-    // Fallback: retry on generic connection/timeout errors (string matching as last resort)
     const messageLower = error.message.toLowerCase();
     return messageLower.includes("network") || messageLower.includes("timeout") || messageLower.includes("connection");
   }
 
-  /**
-   * Insert operation in priority order
-   */
   private insertByPriority(operation: QueuedOperation): void {
     let insertIndex = this.queue.length;
 
@@ -396,13 +448,9 @@ export class OperationQueue {
     this.queue.splice(insertIndex, 0, operation);
   }
 
-  /**
-   * Generate unique operation ID
-   */
   private generateOperationId(): string {
     return `op_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 }
 
-// Global operation queue instance
 export const globalOperationQueue = new OperationQueue();

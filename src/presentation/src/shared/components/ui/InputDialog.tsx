@@ -64,9 +64,9 @@ export default function InputDialog(props: InputDialogProps) {
         if (shouldClose !== false) {
           setInputValue("");
         }
-      } catch {
-        // Don't let errors propagate - they should be handled by the dialog component
-        // The dialog should stay open and show the error message
+      } catch (error) {
+        console.error("Input dialog confirmation error:", error);
+        // Dialog should stay open and show the error message via props.errorMessage
       }
     }
   };

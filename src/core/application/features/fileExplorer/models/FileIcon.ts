@@ -324,15 +324,3 @@ export function getFileIconPath(fileName: string, isDirectory: boolean): string 
 
   return iconPath;
 }
-
-export function clearIconCaches(): void {
-  iconConfigCache.clear();
-  iconPathCache.clear();
-}
-
-export function getIconCacheStats(): { configCacheSize: number; pathCacheSize: number } {
-  return {
-    configCacheSize: iconConfigCache.size,
-    pathCacheSize: iconPathCache.size,
-  };
-}

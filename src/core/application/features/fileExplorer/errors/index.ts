@@ -1,5 +1,15 @@
 import { TranslationKeys } from "@domain/data/Translations";
 
+export interface FileExplorerErrorOptions {
+  message: string;
+  code: string;
+  errorId: string;
+  statusCode?: number;
+  path?: string;
+  translationKey?: keyof typeof TranslationKeys;
+  contextPath?: string;
+}
+
 export abstract class FileExplorerError extends Error {
   public readonly code: string;
   public readonly errorId: string;
@@ -8,23 +18,15 @@ export abstract class FileExplorerError extends Error {
   public readonly translationKey?: keyof typeof TranslationKeys;
   public readonly contextPath?: string;
 
-  constructor(
-    message: string,
-    code: string,
-    errorId: string,
-    statusCode?: number,
-    path?: string,
-    translationKey?: keyof typeof TranslationKeys,
-    contextPath?: string,
-  ) {
-    super(message);
+  constructor(options: FileExplorerErrorOptions) {
+    super(options.message);
     this.name = this.constructor.name;
-    this.code = code;
-    this.errorId = errorId;
-    this.statusCode = statusCode;
-    this.path = path;
-    this.translationKey = translationKey;
-    this.contextPath = contextPath;
+    this.code = options.code;
+    this.errorId = options.errorId;
+    this.statusCode = options.statusCode;
+    this.path = options.path;
+    this.translationKey = options.translationKey;
+    this.contextPath = options.contextPath;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
@@ -45,14 +47,14 @@ export abstract class FileExplorerError extends Error {
 }
 export class FileNotFoundError extends FileExplorerError {
   constructor(path: string) {
-    super(
-      `File not found: ${path}`,
-      "FILE_NOT_FOUND",
-      "FILE_NOT_FOUND",
-      404,
+    super({
+      message: `File not found: ${path}`,
+      code: "FILE_NOT_FOUND",
+      errorId: "FILE_NOT_FOUND",
+      statusCode: 404,
       path,
-      TranslationKeys.apps_file_explorer_error_file_not_found,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_file_not_found,
+    });
   }
 
   isRecoverable(): boolean {
@@ -62,14 +64,14 @@ export class FileNotFoundError extends FileExplorerError {
 
 export class FileExplorerPermissionError extends FileExplorerError {
   constructor(path: string, operation: string) {
-    super(
-      `Permission denied for ${operation} on: ${path}`,
-      "PERMISSION_DENIED",
-      "PERMISSION_DENIED",
-      403,
+    super({
+      message: `Permission denied for ${operation} on: ${path}`,
+      code: "PERMISSION_DENIED",
+      errorId: "PERMISSION_DENIED",
+      statusCode: 403,
       path,
-      TranslationKeys.apps_file_explorer_error_permission_denied,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_permission_denied,
+    });
   }
 
   isRecoverable(): boolean {
@@ -79,14 +81,14 @@ export class FileExplorerPermissionError extends FileExplorerError {
 
 export class InvalidFilenameError extends FileExplorerError {
   constructor(filename: string, reason: string) {
-    super(
-      `Invalid filename: ${filename}. Reason: ${reason}`,
-      "INVALID_FILENAME",
-      "INVALID_FILENAME",
-      400,
-      undefined,
-      TranslationKeys.apps_file_explorer_error_invalid_filename,
-    );
+    super({
+      message: `Invalid filename: ${filename}. Reason: ${reason}`,
+      code: "INVALID_FILENAME",
+      errorId: "INVALID_FILENAME",
+      statusCode: 400,
+      path: undefined,
+      translationKey: TranslationKeys.apps_file_explorer_error_invalid_filename,
+    });
   }
 
   isRecoverable(): boolean {
@@ -96,14 +98,14 @@ export class InvalidFilenameError extends FileExplorerError {
 
 export class PathTooLongError extends FileExplorerError {
   constructor(path: string, maxLength: number) {
-    super(
-      `Path too long: ${path.length} > ${maxLength} characters`,
-      "PATH_TOO_LONG",
-      "PATH_TOO_LONG",
-      414,
+    super({
+      message: `Path too long: ${path.length} > ${maxLength} characters`,
+      code: "PATH_TOO_LONG",
+      errorId: "PATH_TOO_LONG",
+      statusCode: 414,
       path,
-      TranslationKeys.apps_file_explorer_error_path_too_long,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_path_too_long,
+    });
   }
 
   isRecoverable(): boolean {
@@ -113,14 +115,14 @@ export class PathTooLongError extends FileExplorerError {
 
 export class FileExistsError extends FileExplorerError {
   constructor(path: string) {
-    super(
-      `File already exists: ${path}`,
-      "ALREADY_EXISTS",
-      "ALREADY_EXISTS",
-      409,
+    super({
+      message: `File already exists: ${path}`,
+      code: "ALREADY_EXISTS",
+      errorId: "ALREADY_EXISTS",
+      statusCode: 409,
       path,
-      TranslationKeys.apps_file_explorer_error_already_exists,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_already_exists,
+    });
   }
 
   isRecoverable(): boolean {
@@ -130,14 +132,14 @@ export class FileExistsError extends FileExplorerError {
 
 export class DirectoryNotEmptyError extends FileExplorerError {
   constructor(path: string) {
-    super(
-      `Directory not empty: ${path}`,
-      "DIRECTORY_NOT_EMPTY",
-      "DIRECTORY_NOT_EMPTY",
-      409,
+    super({
+      message: `Directory not empty: ${path}`,
+      code: "DIRECTORY_NOT_EMPTY",
+      errorId: "DIRECTORY_NOT_EMPTY",
+      statusCode: 409,
       path,
-      TranslationKeys.apps_file_explorer_error_directory_not_empty,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_directory_not_empty,
+    });
   }
 
   isRecoverable(): boolean {
@@ -147,14 +149,14 @@ export class DirectoryNotEmptyError extends FileExplorerError {
 
 export class OperationTimeoutError extends FileExplorerError {
   constructor(operation: string, timeoutMs: number) {
-    super(
-      `Operation "${operation}" timed out after ${timeoutMs}ms`,
-      "OPERATION_TIMEOUT",
-      "OPERATION_TIMEOUT",
-      408,
-      undefined,
-      TranslationKeys.apps_file_explorer_error_operation_timeout,
-    );
+    super({
+      message: `Operation "${operation}" timed out after ${timeoutMs}ms`,
+      code: "OPERATION_TIMEOUT",
+      errorId: "OPERATION_TIMEOUT",
+      statusCode: 408,
+      path: undefined,
+      translationKey: TranslationKeys.apps_file_explorer_error_operation_timeout,
+    });
   }
 
   isRecoverable(): boolean {
@@ -164,14 +166,14 @@ export class OperationTimeoutError extends FileExplorerError {
 
 export class QuotaExceededError extends FileExplorerError {
   constructor(limit: number) {
-    super(
-      `Storage quota exceeded: ${limit}`,
-      "QUOTA_EXCEEDED",
-      "QUOTA_EXCEEDED",
-      507,
-      undefined,
-      TranslationKeys.apps_file_explorer_error_quota_exceeded,
-    );
+    super({
+      message: `Storage quota exceeded: ${limit}`,
+      code: "QUOTA_EXCEEDED",
+      errorId: "QUOTA_EXCEEDED",
+      statusCode: 507,
+      path: undefined,
+      translationKey: TranslationKeys.apps_file_explorer_error_quota_exceeded,
+    });
   }
 
   isRecoverable(): boolean {
@@ -181,14 +183,14 @@ export class QuotaExceededError extends FileExplorerError {
 
 export class NetworkError extends FileExplorerError {
   constructor(originalError: Error) {
-    super(
-      `Network error: ${originalError.message}`,
-      "NETWORK_ERROR",
-      "NETWORK_ERROR",
-      503,
-      undefined,
-      TranslationKeys.apps_file_explorer_error_network_error,
-    );
+    super({
+      message: `Network error: ${originalError.message}`,
+      code: "NETWORK_ERROR",
+      errorId: "NETWORK_ERROR",
+      statusCode: 503,
+      path: undefined,
+      translationKey: TranslationKeys.apps_file_explorer_error_network_error,
+    });
   }
 
   isRecoverable(): boolean {
@@ -208,15 +210,15 @@ export class InvalidPathError extends FileExplorerError {
       translationKey = TranslationKeys.apps_file_explorer_error_system_directory_access;
     }
 
-    super(
-      `Invalid path: ${path}. Reason: ${message}`,
-      "INVALID_PATH",
-      "INVALID_PATH",
-      400,
+    super({
+      message: `Invalid path: ${path}. Reason: ${message}`,
+      code: "INVALID_PATH",
+      errorId: "INVALID_PATH",
+      statusCode: 400,
       path,
       translationKey,
       contextPath,
-    );
+    });
   }
 
   isRecoverable(): boolean {
@@ -226,14 +228,14 @@ export class InvalidPathError extends FileExplorerError {
 
 export class DirectoryTooDeepError extends FileExplorerError {
   constructor(path: string, depth: number, maxDepth: number) {
-    super(
-      `Directory structure too deep: ${depth} > ${maxDepth} at path: ${path}`,
-      "DIRECTORY_TOO_DEEP",
-      "DIRECTORY_TOO_DEEP",
-      409,
+    super({
+      message: `Directory structure too deep: ${depth} > ${maxDepth} at path: ${path}`,
+      code: "DIRECTORY_TOO_DEEP",
+      errorId: "DIRECTORY_TOO_DEEP",
+      statusCode: 409,
       path,
-      TranslationKeys.apps_file_explorer_error_directory_too_deep,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_directory_too_deep,
+    });
   }
 
   isRecoverable(): boolean {
@@ -243,14 +245,14 @@ export class DirectoryTooDeepError extends FileExplorerError {
 
 export class OperationFailedError extends FileExplorerError {
   constructor(operation: string, path: string, originalError?: Error) {
-    super(
-      `Operation "${operation}" failed for path: ${path}${originalError ? `. Original error: ${originalError.message}` : ""}`,
-      "OPERATION_FAILED",
-      "OPERATION_FAILED",
-      500,
+    super({
+      message: `Operation "${operation}" failed for path: ${path}${originalError ? `. Original error: ${originalError.message}` : ""}`,
+      code: "OPERATION_FAILED",
+      errorId: "OPERATION_FAILED",
+      statusCode: 500,
       path,
-      TranslationKeys.apps_file_explorer_error_operation_failed,
-    );
+      translationKey: TranslationKeys.apps_file_explorer_error_operation_failed,
+    });
   }
 
   isRecoverable(): boolean {

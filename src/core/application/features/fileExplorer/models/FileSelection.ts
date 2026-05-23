@@ -1,3 +1,15 @@
+/**
+ * Branded type to distinguish validated SelectedFile instances
+ */
+export interface ValidatedSelectedFile {
+  readonly __brand: unique symbol;
+  readonly path: string;
+  readonly name: string;
+  readonly type: "file" | "directory";
+  readonly size?: number;
+  readonly extension?: string;
+}
+
 export interface SelectedFile {
   path: string;
   name: string;
@@ -7,7 +19,14 @@ export interface SelectedFile {
 }
 
 /**
- * Factory for creating SelectedFile with validation
+ * Type guard to check if a SelectedFile is validated
+ */
+export function isValidatedSelectedFile(obj: unknown): obj is ValidatedSelectedFile {
+  return typeof obj === "object" && obj !== null && "__brand" in obj && "path" in obj && "name" in obj && "type" in obj;
+}
+
+/**
+ * Factory for creating validated SelectedFile with compile-time and runtime safety
  */
 export function createSelectedFile(data: {
   path: string;
@@ -15,14 +34,31 @@ export function createSelectedFile(data: {
   type: "file" | "directory";
   size?: number;
   extension?: string;
-}): SelectedFile {
+}): ValidatedSelectedFile {
   // Validate path and name consistency - name should be the last path segment
   const expectedName = data.path.split("/").pop() || "";
   if (data.name !== expectedName) {
     throw new Error(`Invalid SelectedFile: name "${data.name}" does not match path "${data.path}"`);
   }
 
-  return data;
+  // Return as branded validated type
+  return Object.freeze({
+    __brand: Symbol("validated"),
+    path: data.path,
+    name: data.name,
+    type: data.type,
+    size: data.size,
+    extension: data.extension,
+  }) as ValidatedSelectedFile;
+}
+
+/**
+ * Branded type to distinguish validated FileSelection instances
+ */
+export interface ValidatedFileSelection {
+  readonly __brand: unique symbol;
+  readonly files: ReadonlyArray<ValidatedSelectedFile>;
+  readonly primary?: ValidatedSelectedFile;
 }
 
 export interface FileSelection {
@@ -31,18 +67,53 @@ export interface FileSelection {
 }
 
 /**
- * Factory for creating FileSelection with validation
+ * Type guard to check if a FileSelection is validated
  */
-export function createFileSelection(data: { files: SelectedFile[]; primary?: SelectedFile }): FileSelection {
-  // Validate primary is in files array if provided
-  if (data.primary) {
-    const filePaths = new Set(data.files.map((f) => f.path));
-    if (!filePaths.has(data.primary.path)) {
-      throw new Error(`Invalid FileSelection: primary file "${data.primary.path}" not in files array`);
+export function isValidatedFileSelection(obj: unknown): obj is ValidatedFileSelection {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "__brand" in obj &&
+    "files" in obj &&
+    Array.isArray((obj as { files: unknown[] }).files) &&
+    (obj as { files: ValidatedSelectedFile[] }).files.every(isValidatedSelectedFile)
+  );
+}
+
+/**
+ * Factory for creating validated FileSelection with compile-time and runtime safety
+ */
+export function createFileSelection(data: {
+  files: Array<SelectedFile | ValidatedSelectedFile>;
+  primary?: SelectedFile | ValidatedSelectedFile;
+}): ValidatedFileSelection {
+  // Validate and convert all files to validated instances
+  const validatedFiles = data.files.map((file) => {
+    if (isValidatedSelectedFile(file)) {
+      return file;
     }
+    return createSelectedFile(file);
+  });
+
+  // Validate primary is in files array if provided
+  let validatedPrimary: ValidatedSelectedFile | undefined;
+  if (data.primary) {
+    const filePaths = new Set(validatedFiles.map((f) => f.path));
+    const primaryPath = data.primary.path;
+
+    if (!filePaths.has(primaryPath)) {
+      throw new Error(`Invalid FileSelection: primary file "${primaryPath}" not in files array`);
+    }
+
+    validatedPrimary = validatedFiles.find((f) => f.path === primaryPath);
   }
 
-  return data;
+  // Return as branded validated type
+  return Object.freeze({
+    __brand: Symbol("validated"),
+    files: Object.freeze(validatedFiles),
+    primary: validatedPrimary,
+  }) as ValidatedFileSelection;
 }
 
 export interface FileClipboard {

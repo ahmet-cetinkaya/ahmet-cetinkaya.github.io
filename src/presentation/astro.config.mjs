@@ -56,56 +56,29 @@ export default defineConfig({
         output: {
           manualChunks: (id) => {
             // Split Three.js core and examples separately
-            if (id.includes("node_modules/three") && !id.includes("examples/jsm")) {
-              return "three-core";
-            }
+            if (id.includes("node_modules/three") && !id.includes("examples/jsm")) return "three-core";
 
             // Split Three.js controls
-            if (id.includes("three/examples/jsm/controls")) {
-              return "three-controls";
-            }
+            if (id.includes("three/examples/jsm/controls")) return "three-controls";
 
             // Split Three.js loaders
-            if (id.includes("three/examples/jsm/loaders")) {
-              return "three-loaders";
-            }
+            if (id.includes("three/examples/jsm/loaders")) return "three-loaders";
 
             // Split 3D model components individually
-            if (id.includes("ThreeDimensionalModel/Computer3DModel")) {
-              return "3d-model-computer";
-            }
-            if (id.includes("ThreeDimensionalModel/Terminal3DModel")) {
-              return "3d-model-terminal";
-            }
-            if (id.includes("ThreeDimensionalModel/Doom3DModel")) {
-              return "3d-model-doom";
-            }
-            if (id.includes("ThreeDimensionalModel/Folder3DModel")) {
-              return "3d-model-folder";
-            }
-            if (id.includes("ThreeDimensionalModel/Envelope3DModel")) {
-              return "3d-model-envelope";
-            }
-
-            // Split acore packages
-            if (id.includes("/packages/acore-")) {
-              return "shared-utils";
-            }
+            if (id.includes("ThreeDimensionalModel/Computer3DModel")) return "3d-model-computer";
+            if (id.includes("ThreeDimensionalModel/Terminal3DModel")) return "3d-model-terminal";
+            if (id.includes("ThreeDimensionalModel/Doom3DModel")) return "3d-model-doom";
+            if (id.includes("ThreeDimensionalModel/Folder3DModel")) return "3d-model-folder";
+            if (id.includes("ThreeDimensionalModel/Envelope3DModel")) return "3d-model-envelope";
 
             // Split WindowManager
-            if (id.includes("WindowManager")) {
-              return "window-management";
-            }
+            if (id.includes("WindowManager")) return "window-management";
 
             // Split SolidJS vendor
-            if (id.includes("solid-js") && !id.includes("/packages/")) {
-              return "solid-js-vendor";
-            }
+            if (id.includes("solid-js") && !id.includes("/packages/")) return "solid-js-vendor";
 
             // Default vendor chunk for other node_modules
-            if (id.includes("node_modules")) {
-              return "vendor";
-            }
+            if (id.includes("node_modules")) return "vendor";
 
             return undefined;
           },

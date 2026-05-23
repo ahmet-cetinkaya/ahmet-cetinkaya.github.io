@@ -189,7 +189,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
       // Return original message if it's not a translation key
       return message;
-    } catch {
+    } catch (error) {
+      console.warn("Translation error:", error);
       // Return user-friendly fallback for any translation failures
       return defaultFallback;
     }
@@ -522,15 +523,17 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       const directoryPath = paths[0];
 
       try {
-        const { Apps } = await import("@domain/data/Apps");
-        const appCommands = (await import("@shared/constants/AppCommands")).default;
+        const [{ Apps }, appCommands] = await Promise.all([
+          import("@domain/data/Apps"),
+          import("@shared/constants/AppCommands"),
+        ]);
 
         const existingWindow = await Container.instance.windowsService.get((window) => window.appId === Apps.terminal);
 
         if (existingWindow) {
           await Container.instance.windowsService.active(existingWindow);
         } else {
-          const terminalCommand = appCommands[Apps.terminal]();
+          const terminalCommand = appCommands.default[Apps.terminal]();
           await terminalCommand.execute(directoryPath);
         }
       } catch (error) {

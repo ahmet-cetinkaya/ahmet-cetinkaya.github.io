@@ -25,30 +25,44 @@ export default function WindowManager() {
   });
 
   async function openInitialApp() {
-    const appInfo = parseAppPathFromLocation(window.location.pathname);
-    if (ScreenHelper.isMobile()) {
-      if (!appInfo.args) appInfo.args = [];
-      appInfo.args.push("--maximized");
+    try {
+      const appInfo = parseAppPathFromLocation(window.location.pathname);
+      if (ScreenHelper.isMobile()) {
+        if (!appInfo.args) appInfo.args = [];
+        appInfo.args.push("--maximized");
+      }
+
+      const app = await appsService.get((app) => app.path === appInfo.appPath);
+      if (!app) {
+        console.warn("App not found for path:", appInfo.appPath);
+        return;
+      }
+
+      await openWindow(app.id, appInfo.args);
+    } catch (error) {
+      console.error("Failed to open initial app:", error);
     }
-
-    const app = await appsService.get((app) => app.path === appInfo.appPath);
-    if (!app) return;
-
-    await openWindow(app.id, appInfo.args);
   }
 
   async function openWindow(appId: Apps, args?: string[]) {
-    const existingWindow = await windowService.get((window) => window.appId === appId);
-    if (existingWindow) {
-      await windowService.active(existingWindow);
-      return;
+    try {
+      const existingWindow = await windowService.get((window) => window.appId === appId);
+      if (existingWindow) {
+        await windowService.active(existingWindow);
+        return;
+      }
+
+      const appCommand = appCommands[appId];
+      if (!appCommand) {
+        console.warn("No command found for app:", appId);
+        return;
+      }
+
+      const command = appCommand();
+      await command.execute(...(args ?? []));
+    } catch (error) {
+      console.error("Failed to open window for app:", appId, error);
     }
-
-    const appCommand = appCommands[appId];
-    if (!appCommand) return;
-
-    const command = appCommand();
-    await command.execute(...(args ?? []));
   }
 
   let checkMobileScreenTimeout: NodeJS.Timeout | null = null;

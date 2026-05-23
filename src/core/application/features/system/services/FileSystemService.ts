@@ -1,3 +1,5 @@
+import { logger } from "@shared/utils/logger";
+
 import GitHubService from "@application/features/fileExplorer/services/GitHubService";
 import DirectoryData, { Paths } from "@domain/data/Directories";
 import FilesData from "@domain/data/Files";
@@ -129,7 +131,8 @@ export default class FileSystemService implements IFileSystemService {
         await this.getChildren(parentPath);
 
         return this.data!.find((e) => e.fullPath === path) ?? null;
-      } catch {
+      } catch (error) {
+        logger.error(`Failed to resolve path ${path}:`, error);
         return null;
       }
     }
@@ -201,8 +204,8 @@ export default class FileSystemService implements IFileSystemService {
           this.data!.push(new File(itemPath, "", createdDate, item.size, updatedDate));
         }
       }
-    } catch {
-      // Ignore errors (e.g. empty repo or network issue)
+    } catch (error) {
+      logger.error(`Failed to fetch repo contents from ${path}:`, error);
     }
   }
 
@@ -225,8 +228,8 @@ export default class FileSystemService implements IFileSystemService {
         const content = await this.gitHubService.getFileContent(repoName, repoPath);
         entry.content = content;
         return content;
-      } catch {
-        // Fallback to existing content if fetch fails
+      } catch (error) {
+        logger.error(`Failed to read file content from ${repoPath}:`, error);
         return entry.content;
       }
     }

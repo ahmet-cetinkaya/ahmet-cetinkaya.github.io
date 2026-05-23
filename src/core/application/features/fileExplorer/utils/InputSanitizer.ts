@@ -1,5 +1,6 @@
 import PermissionService, { PermissionLevel } from "@application/features/system/services/PermissionService";
 import { FILE_OPERATIONS, PATH_CONSTANTS } from "../constants";
+import { PERFORMANCE_LIMITS } from "../constants/performance";
 import { InvalidFilenameError, InvalidPathError } from "../errors";
 
 /**
@@ -142,7 +143,7 @@ export class PathSanitizer {
 
     // Look for excessive directory depth
     const depth = path.split(PATH_CONSTANTS.SEPARATOR).filter(Boolean).length;
-    if (depth > 100) {
+    if (depth > PERFORMANCE_LIMITS.MAX_RECURSION_DEPTH) {
       // Reasonable limit
       throw new InvalidPathError(path, `Path depth (${depth}) exceeds maximum allowed depth`);
     }

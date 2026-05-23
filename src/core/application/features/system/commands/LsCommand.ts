@@ -67,7 +67,9 @@ export default class LsCommand implements ICIProgram {
       const path = files[0] || this.currentPath;
       const targetPath = PathUtils.normalize(this.currentPath, path);
       if (!(await this.pathExists(targetPath)))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
+        return this.createErrorOutput(
+          `{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path} (resolved: ${targetPath})`,
+        );
       if (targetPath !== "/" && !targetPath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
 
@@ -98,6 +100,7 @@ export default class LsCommand implements ICIProgram {
         exitCode: ExitCodes.SUCCESS,
       };
     } catch (error) {
+      console.error("ls command error:", { error, path: files[0] || this.currentPath, args });
       return this.createErrorOutput(
         error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}}`,
       );

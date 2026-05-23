@@ -55,6 +55,13 @@ export interface GameLaunchOptions {
 export default class GameExecutionService {
   private readonly gameExecutables: Map<string, GameExecutable> = new Map();
 
+  // Error patterns for window activation - extracted as constants for maintainability
+  private static readonly ERROR_PATTERNS = {
+    ALREADY_ACTIVE: /\b(already\s+activ(at(ed)?|ate))|window\s+(is\s+)?active\b/i,
+    PERMISSION_DENIED: /\bpermission\s+denied\b/i,
+    NOT_FOUND: /\b(not\s+found|cannot\s+find)\b/i,
+  } as const;
+
   constructor(private readonly windowsService: IWindowsService) {
     this.initializeGameMappings();
   }
@@ -111,6 +118,26 @@ export default class GameExecutionService {
     return Array.from(extensions);
   }
 
+  /**
+   * Classify errors into categories for better error handling
+   * Returns 'already_active', 'permission_denied', 'not_found', or 'unknown'
+   */
+  private classifyError(error: unknown): "already_active" | "permission_denied" | "not_found" | "unknown" {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    if (GameExecutionService.ERROR_PATTERNS.ALREADY_ACTIVE.test(errorMessage)) {
+      return "already_active";
+    }
+    if (GameExecutionService.ERROR_PATTERNS.PERMISSION_DENIED.test(errorMessage)) {
+      return "permission_denied";
+    }
+    if (GameExecutionService.ERROR_PATTERNS.NOT_FOUND.test(errorMessage)) {
+      return "not_found";
+    }
+
+    return "unknown";
+  }
+
   public async launchGame(entry: FileSystemEntry, options: GameLaunchOptions = {}): Promise<void> {
     if (!(entry instanceof File)) {
       throw new Error("Only files can be launched as games");
@@ -145,9 +172,8 @@ export default class GameExecutionService {
       try {
         await this.windowsService.active(appWindow);
       } catch (activationError) {
-        // Window already being active is not an error - game launched successfully
-        const errorMessage = activationError instanceof Error ? activationError.message : String(activationError);
-        if (errorMessage.includes("already activated") || errorMessage.includes("already active")) {
+        const errorClassification = this.classifyError(activationError);
+        if (errorClassification === "already_active") {
           logger.info(`Game ${gameExecutable.displayName} launched successfully (window was already active)`);
           return; // Silently succeed for "already active" cases
         }
@@ -156,11 +182,11 @@ export default class GameExecutionService {
       }
     } catch (error) {
       logger.error("Game launch error:", error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      // Only show error dialog for real errors, not activation-related messages
-      if (errorMessage.includes("already activated") || errorMessage.includes("already active")) {
+      const errorClassification = this.classifyError(error);
+      if (errorClassification === "already_active") {
         return; // Silently succeed for "already active" cases
       }
+      const errorMessage = error instanceof Error ? error.message : String(error);
       throw new Error(`Failed to launch game ${gameExecutable.displayName}: ${errorMessage}`);
     }
   }

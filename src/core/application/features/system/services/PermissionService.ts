@@ -1,3 +1,4 @@
+import { PATH_CONSTANTS } from "@application/features/fileExplorer/constants/paths";
 import { PathSanitizer } from "@application/features/fileExplorer/utils/InputSanitizer";
 import { Paths } from "@domain/data/Directories";
 
@@ -25,23 +26,8 @@ export enum PermissionLevel {
 }
 
 export default class PermissionService {
-  private static readonly PROTECTED_PATHS = [
-    "/bin",
-    "/sbin",
-    "/usr/bin",
-    "/usr/sbin",
-    "/etc",
-    "/boot",
-    "/dev",
-    "/proc",
-    "/sys",
-    "/root",
-    "/var",
-    "/tmp",
-    "/opt",
-    "/usr/local",
-  ];
-  private static readonly READ_ONLY_PATHS = ["/"];
+  private static readonly PROTECTED_PATHS = PATH_CONSTANTS.FORBIDDEN_PATHS;
+  private static readonly READ_ONLY_PATHS = PATH_CONSTANTS.READ_ONLY_PATHS;
   private static readonly READ_ONLY_PREFIXES = [`${Paths.USER_HOME}/Code` as string];
   private static readonly ALLOWED_PATH_PREFIXES = [Paths.USER_HOME as string];
 

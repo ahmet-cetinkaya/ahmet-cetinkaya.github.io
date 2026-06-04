@@ -228,11 +228,10 @@ export default class FileOperationsService {
       if (failedPaths.length > 0) {
         errorParts.push(`Failed: ${failedPaths.map((f) => `${f.path}: ${f.error.message}`).join("; ")}`);
       }
-      throw new OperationFailedError(
-        `delete: ${errorParts.join("; ")}`,
-        failedPaths[0]?.path || notFoundPaths[0],
-        failedPaths[0]?.error,
-      );
+      const errorMessage = errorParts.join("; ");
+      const firstPath = failedPaths[0]?.path || notFoundPaths[0] || "";
+      const firstError = failedPaths[0]?.error;
+      throw new OperationFailedError(errorMessage, firstPath, firstError);
     }
   }
 
@@ -387,63 +386,25 @@ export default class FileOperationsService {
    * Move a file with transaction safety
    */
   private async moveFile(sourceFile: File, newPath: string): Promise<void> {
-    const backupPath = `${sourceFile.fullPath}.backup.${Date.now()}`;
-    let hasBackup = false;
-
     try {
-      // Create a backup of the original file metadata
-      const backupFile = new File(
-        backupPath,
-        sourceFile.content,
-        sourceFile.createdDate,
-        sourceFile.size,
-        sourceFile.updatedDate,
-      );
-
-      // Step 1: Add backup (this won't interfere with the actual file system)
-      await this.fileSystemService.add(backupFile);
-      hasBackup = true;
-
-      // Step 2: Create the new file
+      // Create the new file (original is kept until this succeeds - natural rollback)
       const updatedFile = new File(newPath, sourceFile.content, sourceFile.createdDate, sourceFile.size, new Date());
       await this.fileSystemService.add(updatedFile);
 
-      // Step 3: Remove the original file
+      // Remove the original file
       await this.fileSystemService.remove((e) => e.fullPath === sourceFile.fullPath);
-
-      // Step 4: Clean up backup
-      await this.fileSystemService.remove((e) => e.fullPath === backupPath);
 
       logger.debug(`Successfully moved file: ${sourceFile.fullPath} -> ${newPath}`);
     } catch (error) {
-      // Rollback strategy with aggregated cleanup errors
-      const cleanupErrors: string[] = [];
-
+      // Rollback: remove the new file if it was created
       try {
-        // If we created a new file, try to remove it
         await this.fileSystemService.remove((e) => e.fullPath === newPath);
       } catch (cleanupError) {
-        const errorMsg = `Failed to clean up target file during rollback: ${newPath}`;
-        cleanupErrors.push(errorMsg);
-        logger.warn(errorMsg, cleanupError);
+        logger.warn(`Failed to clean up target file during rollback: ${newPath}`, cleanupError);
       }
 
-      try {
-        // If we have a backup, remove it (the original file should still exist)
-        if (hasBackup) {
-          await this.fileSystemService.remove((e) => e.fullPath === backupPath);
-        }
-      } catch (backupCleanupError) {
-        const errorMsg = `Failed to clean up backup file during rollback: ${backupPath}`;
-        cleanupErrors.push(errorMsg);
-        logger.warn(errorMsg, backupCleanupError);
-      }
-
-      // Include cleanup errors in the final error message
-      const errorMessage =
-        cleanupErrors.length > 0 ? `move failed. Cleanup errors: ${cleanupErrors.join("; ")}` : "move file failed";
       const convertedError = error instanceof Error ? error : new Error(String(error));
-      throw new OperationFailedError(errorMessage, sourceFile.fullPath, convertedError);
+      throw new OperationFailedError("move file failed", sourceFile.fullPath, convertedError);
     }
   }
 

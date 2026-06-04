@@ -4,6 +4,7 @@ import Button from "@shared/components/ui/Button";
 import Icons from "@domain/data/Icons";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
+import { logger } from "@shared/utils/logger";
 import { TranslationKeys } from "@domain/data/Translations";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
 
@@ -65,7 +66,7 @@ export default function InputDialog(props: InputDialogProps) {
           setInputValue("");
         }
       } catch (error) {
-        console.error("Input dialog confirmation error:", error);
+        logger.error("Input dialog confirmation error:", error);
         // Dialog should stay open and show the error message via props.errorMessage
       }
     }

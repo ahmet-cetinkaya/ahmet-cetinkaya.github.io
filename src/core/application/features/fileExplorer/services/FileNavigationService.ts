@@ -2,7 +2,7 @@ import type IFileSystemService from "@application/features/system/services/abstr
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
-import { CACHE_CONFIG, UI_CONSTANTS } from "../constants";
+import { CACHE_CONFIG, PERFORMANCE_LIMITS, UI_CONSTANTS } from "../constants";
 import { FileSortCriteria, SortOrder } from "../models/FileSelection";
 import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";
 
@@ -407,9 +407,13 @@ export default class FileNavigationService {
   }
 
   /**
-   * Get all entries recursively (with depth limit)
+   * Get all entries recursively (with depth and entry count limits)
    */
-  private async getAllEntriesRecursive(path: string, maxDepth: number = 10): Promise<FileSystemEntry[]> {
+  private async getAllEntriesRecursive(
+    path: string,
+    maxDepth: number = 10,
+    maxEntries: number = PERFORMANCE_LIMITS.MAX_DIRECTORY_ENTRIES,
+  ): Promise<FileSystemEntry[]> {
     const allEntries: FileSystemEntry[] = [];
     const queue: Array<{ path: string; depth: number }> = [{ path, depth: 0 }];
     const visited = new Set<string>();
@@ -425,6 +429,15 @@ export default class FileNavigationService {
 
       try {
         const children = await this.getImmediateChildren(currentPath);
+
+        // Check if adding children would exceed max entries
+        if (allEntries.length + children.length > maxEntries) {
+          const remainingSlots = maxEntries - allEntries.length;
+          allEntries.push(...children.slice(0, remainingSlots));
+          logger.warn(`Reached MAX_DIRECTORY_ENTRIES limit (${maxEntries}) at ${currentPath}`);
+          break;
+        }
+
         allEntries.push(...children);
 
         // Add directories to queue for further traversal

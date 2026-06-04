@@ -190,7 +190,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       // Return original message if it's not a translation key
       return message;
     } catch (error) {
-      console.warn("Translation error:", error);
+      logger.warn("Translation error:", error);
       // Return user-friendly fallback for any translation failures
       return defaultFallback;
     }

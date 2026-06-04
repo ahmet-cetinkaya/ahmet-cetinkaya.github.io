@@ -4,6 +4,7 @@ import Key from "@packages/acore-solidjs/ui/components/Key";
 import Window from "@presentation/src/features/desktop/components/Window";
 import WindowModel from "@domain/models/Window";
 import ScreenHelper from "@shared/utils/ScreenHelper";
+import { logger } from "@shared/utils/logger";
 import appCommands from "@shared/constants/AppCommands";
 import type { Apps } from "@domain/data/Apps";
 import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
@@ -34,13 +35,13 @@ export default function WindowManager() {
 
       const app = await appsService.get((app) => app.path === appInfo.appPath);
       if (!app) {
-        console.warn("App not found for path:", appInfo.appPath);
+        logger.warn("App not found for path:", appInfo.appPath);
         return;
       }
 
       await openWindow(app.id, appInfo.args);
     } catch (error) {
-      console.error("Failed to open initial app:", error);
+      logger.error("Failed to open initial app:", error);
     }
   }
 
@@ -54,14 +55,14 @@ export default function WindowManager() {
 
       const appCommand = appCommands[appId];
       if (!appCommand) {
-        console.warn("No command found for app:", appId);
+        logger.warn("No command found for app:", appId);
         return;
       }
 
       const command = appCommand();
       await command.execute(...(args ?? []));
     } catch (error) {
-      console.error("Failed to open window for app:", appId, error);
+      logger.error("Failed to open window for app:", appId, error);
     }
   }
 

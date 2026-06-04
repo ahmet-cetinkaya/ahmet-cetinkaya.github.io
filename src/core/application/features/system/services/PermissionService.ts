@@ -32,25 +32,33 @@ export default class PermissionService {
   private static readonly ALLOWED_PATH_PREFIXES = [Paths.USER_HOME as string];
 
   static canModifyPath(path: string): boolean {
-    const isAllowed = this.ALLOWED_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
-    const isReadOnly = this.READ_ONLY_PREFIXES.some((prefix) => path.startsWith(prefix));
+    const normalizedPath = PathSanitizer.normalizePath(path);
+    const isAllowed = this.ALLOWED_PATH_PREFIXES.some(
+      (prefix) => normalizedPath === prefix || normalizedPath.startsWith(`${prefix}/`),
+    );
+    const isReadOnly = this.READ_ONLY_PREFIXES.some(
+      (prefix) => normalizedPath === prefix || normalizedPath.startsWith(`${prefix}/`),
+    );
     return isAllowed && !isReadOnly;
   }
 
   static validatePath(path: string, permissionLevel: PermissionLevel = PermissionLevel.WRITE): void {
-    const normalizedPath = PathSanitizer.normalizePath(path);
-
     if (permissionLevel === PermissionLevel.WRITE) {
-      if (!this.canModifyPath(normalizedPath)) {
+      if (!this.canModifyPath(path)) {
+        const normalizedPath = PathSanitizer.normalizePath(path);
         throw PermissionError.denied(normalizedPath);
       }
+      const normalizedPath = PathSanitizer.normalizePath(path);
       if (this.isProtectedPath(normalizedPath)) {
         throw PermissionError.denied(normalizedPath, "write to protected path");
       }
     }
 
-    if (permissionLevel === PermissionLevel.READ && this.isProtectedPath(normalizedPath)) {
-      throw PermissionError.denied(normalizedPath, "read protected path");
+    if (permissionLevel === PermissionLevel.READ) {
+      const normalizedPath = PathSanitizer.normalizePath(path);
+      if (this.isProtectedPath(normalizedPath)) {
+        throw PermissionError.denied(normalizedPath, "read protected path");
+      }
     }
   }
 
@@ -62,14 +70,10 @@ export default class PermissionService {
 
   static validatePathOperation(operation: string, path: string): void {
     try {
-      // Normalize path first to fix any path issues
-      const normalizedPath = PathSanitizer.normalizePath(path);
-
       // Path operations (like create, delete, rename) require write permissions
-      this.validatePath(normalizedPath, PermissionLevel.WRITE);
+      this.validatePath(path, PermissionLevel.WRITE);
     } catch (error) {
       if (error instanceof PermissionError) {
-        // Normalize path for the error message too
         const normalizedPath = PathSanitizer.normalizePath(path);
         throw PermissionError.denied(normalizedPath, operation);
       }

@@ -172,7 +172,6 @@ export interface OperationResult {
 export class OperationQueue {
   private queue: QueuedOperation[] = [];
   private runningOperations = new Map<string, QueuedOperation>();
-  private isProcessing = false;
   private maxConcurrentOperations = 3;
 
   constructor(maxConcurrent: number = 3) {
@@ -206,7 +205,9 @@ export class OperationQueue {
   cancel(operationId: string): boolean {
     const runningOp = this.runningOperations.get(operationId);
     if (runningOp) {
-      cancelOperation(runningOp);
+      // Persist cancelled state before deletion
+      const cancelled = cancelOperation(runningOp);
+      this.runningOperations.set(operationId, cancelled);
       this.runningOperations.delete(operationId);
       logger.debug(`Cancelled running operation ${operationId}`);
       return true;
@@ -267,7 +268,8 @@ export class OperationQueue {
   clear(): void {
     const runningOps = Array.from(this.runningOperations.values());
     for (const op of runningOps) {
-      cancelOperation(op);
+      const cancelled = cancelOperation(op);
+      this.runningOperations.set(op.id, cancelled);
     }
     this.runningOperations.clear();
 
@@ -276,22 +278,10 @@ export class OperationQueue {
     logger.info("Cleared all operations in queue");
   }
 
-  private async processQueue(): Promise<void> {
-    if (this.isProcessing) {
-      return;
-    }
-
-    this.isProcessing = true;
-
-    try {
-      while (this.queue.length > 0 && this.runningOperations.size < this.maxConcurrentOperations) {
-        const operation = this.queue.shift()!;
-        await this.executeOperation(operation);
-      }
-    } catch (error) {
-      logger.error("Error processing operation queue:", error);
-    } finally {
-      this.isProcessing = false;
+  private processQueue(): void {
+    while (this.queue.length > 0 && this.runningOperations.size < this.maxConcurrentOperations) {
+      const operation = this.queue.shift()!;
+      this.executeOperation(operation);
     }
   }
 

@@ -1,8 +1,14 @@
 /**
+ * Module-level brand symbol for runtime validation
+ */
+const VALIDATED_FILE_BRAND = Symbol("validated");
+const VALIDATED_SELECTION_BRAND = Symbol("validated_selection");
+
+/**
  * Branded type to distinguish validated SelectedFile instances
  */
 export interface ValidatedSelectedFile {
-  readonly __brand: unique symbol;
+  readonly __brand: typeof VALIDATED_FILE_BRAND;
   readonly path: string;
   readonly name: string;
   readonly type: "file" | "directory";
@@ -22,7 +28,17 @@ export interface SelectedFile {
  * Type guard to check if a SelectedFile is validated
  */
 export function isValidatedSelectedFile(obj: unknown): obj is ValidatedSelectedFile {
-  return typeof obj === "object" && obj !== null && "__brand" in obj && "path" in obj && "name" in obj && "type" in obj;
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+  const candidate = obj as Record<string, unknown>;
+  return (
+    "__brand" in candidate &&
+    candidate.__brand === VALIDATED_FILE_BRAND &&
+    "path" in candidate &&
+    "name" in candidate &&
+    "type" in candidate
+  );
 }
 
 /**
@@ -41,9 +57,9 @@ export function createSelectedFile(data: {
     throw new Error(`Invalid SelectedFile: name "${data.name}" does not match path "${data.path}"`);
   }
 
-  // Return as branded validated type
+  // Return as branded validated type with module-level symbol
   return Object.freeze({
-    __brand: Symbol("validated"),
+    __brand: VALIDATED_FILE_BRAND,
     path: data.path,
     name: data.name,
     type: data.type,
@@ -56,7 +72,7 @@ export function createSelectedFile(data: {
  * Branded type to distinguish validated FileSelection instances
  */
 export interface ValidatedFileSelection {
-  readonly __brand: unique symbol;
+  readonly __brand: typeof VALIDATED_SELECTION_BRAND;
   readonly files: ReadonlyArray<ValidatedSelectedFile>;
   readonly primary?: ValidatedSelectedFile;
 }
@@ -70,13 +86,15 @@ export interface FileSelection {
  * Type guard to check if a FileSelection is validated
  */
 export function isValidatedFileSelection(obj: unknown): obj is ValidatedFileSelection {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+  const candidate = obj as Record<string, unknown>;
   return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "__brand" in obj &&
-    "files" in obj &&
-    Array.isArray((obj as { files: unknown[] }).files) &&
-    (obj as { files: ValidatedSelectedFile[] }).files.every(isValidatedSelectedFile)
+    "__brand" in candidate &&
+    candidate.__brand === VALIDATED_SELECTION_BRAND &&
+    "files" in candidate &&
+    Array.isArray(candidate.files)
   );
 }
 
@@ -108,9 +126,9 @@ export function createFileSelection(data: {
     validatedPrimary = validatedFiles.find((f) => f.path === primaryPath);
   }
 
-  // Return as branded validated type
+  // Return as branded validated type with module-level symbol
   return Object.freeze({
-    __brand: Symbol("validated"),
+    __brand: VALIDATED_SELECTION_BRAND,
     files: Object.freeze(validatedFiles),
     primary: validatedPrimary,
   }) as ValidatedFileSelection;

@@ -109,23 +109,32 @@ export default class WindowsService implements IWindowsService {
     const windows = this._windowsStore.get();
     const windowIndexToActive = windows.findIndex((w) => w.id === window.id);
     if (windowIndexToActive === -1) return Promise.reject("Window not found.");
-    if (this.isActivated(windows[windowIndexToActive])) return Promise.reject("Window already activated.");
+
+    const targetWindow = windows[windowIndexToActive];
+
+    // If window is already active and not minimized, just resolve - this is not an error
+    if (this.isActivated(targetWindow) && !targetWindow.isMinimized) {
+      return Promise.resolve();
+    }
 
     const maxLayer = Math.max(
       ArrayExtensions.max(windows, (w) => w.layer!),
       1,
     );
+
+    // Deactivate other windows by reducing their layer
     for (let i = 0; i < windows.length; i++) {
       if (windows[i].isMinimized) continue;
-      if (windows[i].layer! < windows[windowIndexToActive].layer!) continue;
+      if (windows[i].layer! <= targetWindow.layer!) continue;
 
       windows[i].layer!--;
       windows[i].updatedDate = new Date();
     }
 
-    window.layer = maxLayer;
-    window.isMinimized = false;
-    window.updatedDate = new Date();
+    // Activate the target window
+    targetWindow.layer = maxLayer;
+    targetWindow.isMinimized = false;
+    targetWindow.updatedDate = new Date();
     this._windowsStore.set([...windows.map((w) => ({ ...w }))]);
 
     return Promise.resolve();

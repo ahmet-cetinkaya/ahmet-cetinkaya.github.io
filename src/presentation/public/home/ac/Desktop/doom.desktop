@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Doom
+Exec=doom
+Icon=doom
+Type=Application
+Categories=Game;
+Terminal=false
+StartupNotify=true

@@ -46,6 +46,7 @@ const PROMPT_PREFIX = {
 
 type Props = {
   class?: string;
+  args?: string[];
 };
 
 export default function Terminal(props: Props) {
@@ -55,7 +56,9 @@ export default function Terminal(props: Props) {
   const [history, setHistory] = createSignal<CommandEntry[]>([]);
   const [currentInput, setCurrentInput] = createSignal("");
   const [historyIndex, setHistoryIndex] = createSignal(-1);
-  const [currentPath, setCurrentPath] = createSignal<string>(Paths.USER_HOME);
+  const [currentPath, setCurrentPath] = createSignal<string>(
+    props.args && props.args.length > 0 && !props.args[0].startsWith("--") ? props.args[0] : Paths.USER_HOME,
+  );
 
   const commandHistory = createMemo(() =>
     history()

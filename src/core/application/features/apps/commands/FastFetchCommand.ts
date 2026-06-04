@@ -76,7 +76,8 @@ export default class FastFetchCommand implements ICIProgram {
       if (!match) return renderer;
 
       return match[1].trim();
-    } catch {
+    } catch (error) {
+      console.warn("GPU detection failed:", error);
       return `{{${TranslationKeys.apps_terminal_fastfetch_unknown_gpu}}}`;
     }
   }

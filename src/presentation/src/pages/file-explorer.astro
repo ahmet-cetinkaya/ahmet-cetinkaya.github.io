@@ -1,0 +1,28 @@
+---
+import { TranslationKeys } from "@domain/data/Translations";
+import { useI18nStatic } from "@shared/utils/i18nTranslate";
+import SeoConstants from "@shared/constants/SeoConstants";
+import FileExplorerPage from "./_components/file-explorer-page.astro";
+
+const translate = useI18nStatic(Astro.url);
+
+const title = `${translate(TranslationKeys.apps_file_explorer)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.apps_file_explorer_description);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  applicationCategory: "Utility",
+  operatingSystem: "Web Browser",
+};
+---
+
+<FileExplorerPage
+  metadata={{
+    title,
+    description,
+    structuredData,
+  }}
+/>

@@ -1,4 +1,4 @@
-import { createResource, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { createResource, createSignal, onCleanup, onMount, Show, lazy, Suspense } from "solid-js";
 import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 import { Apps } from "@domain/data/Apps";
 import Icons from "@domain/data/Icons";
@@ -7,10 +7,12 @@ import Window from "@domain/models/Window";
 import Container from "@presentation/Container";
 import AppShortcut from "@shared/components/AppShortcut";
 import Icon from "@shared/components/Icon";
-import ThreeDimensionalModel from "@shared/components/ThreeDimensionalModel";
 import Title from "@shared/components/ui/Title";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import ScreenHelper from "@shared/utils/ScreenHelper";
+
+// Lazy load the heavy ThreeDimensionalModel component
+const ThreeDimensionalModel = lazy(() => import("@shared/components/ThreeDimensionalModel/ThreeDimensionalModel"));
 
 export default function Completed() {
   const { appsService, windowsService, i18n } = Container.instance;
@@ -63,7 +65,11 @@ export default function Completed() {
             label={contactApp()!.name}
             href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${contactApp()!.path}`}
             onClick={onContactClick}
-            icon={<ThreeDimensionalModel model={contactApp()!.icon} />}
+            icon={
+              <Suspense fallback={<div class="h-full w-full animate-pulse rounded-lg bg-gray-200" />}>
+                <ThreeDimensionalModel model={contactApp()!.icon} />
+              </Suspense>
+            }
             class="mt-2 size-32"
           />
         </Show>

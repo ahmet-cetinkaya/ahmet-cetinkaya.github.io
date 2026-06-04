@@ -22,13 +22,17 @@ export default class CdCommand implements ICIProgram<string | null> {
 
     const targetPath = PathUtils.normalize(this.currentPath, path);
     if (!(await this.pathExists(targetPath)))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
+      return this.createErrorOutput(
+        `{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path} (resolved: ${targetPath})`,
+      );
     if (targetPath !== "/" && !targetPath.startsWith("/home"))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}`);
+      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
 
-    const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
+    const entry = await this.fileSystemService.resolvePath(targetPath);
     if (!(entry instanceof Directory))
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
+      return this.createErrorOutput(
+        `{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path} is not a directory`,
+      );
 
     this.currentPath = targetPath;
     return { output: "", exitCode: ExitCodes.SUCCESS, data: this.currentPath };
@@ -48,7 +52,7 @@ export default class CdCommand implements ICIProgram<string | null> {
   private async pathExists(path: string): Promise<boolean> {
     if (path === "/") return true;
 
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
+    const entry = await this.fileSystemService.resolvePath(path);
     return Boolean(entry);
   }
 

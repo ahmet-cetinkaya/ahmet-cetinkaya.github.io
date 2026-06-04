@@ -67,21 +67,26 @@ export default class LsCommand implements ICIProgram {
       const path = files[0] || this.currentPath;
       const targetPath = PathUtils.normalize(this.currentPath, path);
       if (!(await this.pathExists(targetPath)))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
+        return this.createErrorOutput(
+          `{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path} (resolved: ${targetPath})`,
+        );
       if (targetPath !== "/" && !targetPath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
 
-      let entries = await this.fileSystemService.getAll((e) => {
-        if (targetPath === "/") {
-          const pathParts = e.fullPath.split("/");
-          return pathParts.length === 2; // Direct children of root
-        }
-        const pathParts = e.fullPath.split("/");
-        return (
-          e.fullPath.startsWith(targetPath) &&
-          (flags.recursive ? true : pathParts.length === targetPath.split("/").length + 1)
-        );
-      });
+      let entries: (Directory | File)[] = [];
+
+      if (flags.recursive) {
+        await this.fileSystemService.getChildren(targetPath);
+        entries = (await this.fileSystemService.getAll((e) => {
+          if (targetPath === "/") {
+            const pathParts = e.fullPath.split("/");
+            return pathParts.length === 2;
+          }
+          return e.fullPath.startsWith(targetPath);
+        })) as (Directory | File)[];
+      } else {
+        entries = await this.fileSystemService.getChildren(targetPath);
+      }
 
       entries = this.sortEntries(entries, flags);
 
@@ -95,6 +100,7 @@ export default class LsCommand implements ICIProgram {
         exitCode: ExitCodes.SUCCESS,
       };
     } catch (error) {
+      console.error("ls command error:", { error, path: files[0] || this.currentPath, args });
       return this.createErrorOutput(
         error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}}`,
       );

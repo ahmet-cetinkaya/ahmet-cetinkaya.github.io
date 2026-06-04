@@ -4,6 +4,7 @@ import Key from "@packages/acore-solidjs/ui/components/Key";
 import Window from "@presentation/src/features/desktop/components/Window";
 import WindowModel from "@domain/models/Window";
 import ScreenHelper from "@shared/utils/ScreenHelper";
+import { logger } from "@shared/utils/logger";
 import appCommands from "@shared/constants/AppCommands";
 import type { Apps } from "@domain/data/Apps";
 import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
@@ -25,30 +26,44 @@ export default function WindowManager() {
   });
 
   async function openInitialApp() {
-    const appInfo = parseAppPathFromLocation(window.location.pathname);
-    if (ScreenHelper.isMobile()) {
-      if (!appInfo.args) appInfo.args = [];
-      appInfo.args.push("--maximized");
+    try {
+      const appInfo = parseAppPathFromLocation(window.location.pathname);
+      if (ScreenHelper.isMobile()) {
+        if (!appInfo.args) appInfo.args = [];
+        appInfo.args.push("--maximized");
+      }
+
+      const app = await appsService.get((app) => app.path === appInfo.appPath);
+      if (!app) {
+        logger.warn("App not found for path:", appInfo.appPath);
+        return;
+      }
+
+      await openWindow(app.id, appInfo.args);
+    } catch (error) {
+      logger.error("Failed to open initial app:", error);
     }
-
-    const app = await appsService.get((app) => app.path === appInfo.appPath);
-    if (!app) return;
-
-    await openWindow(app.id, appInfo.args);
   }
 
   async function openWindow(appId: Apps, args?: string[]) {
-    const existingWindow = await windowService.get((window) => window.appId === appId);
-    if (existingWindow) {
-      await windowService.active(existingWindow);
-      return;
+    try {
+      const existingWindow = await windowService.get((window) => window.appId === appId);
+      if (existingWindow) {
+        await windowService.active(existingWindow);
+        return;
+      }
+
+      const appCommand = appCommands[appId];
+      if (!appCommand) {
+        logger.warn("No command found for app:", appId);
+        return;
+      }
+
+      const command = appCommand();
+      await command.execute(...(args ?? []));
+    } catch (error) {
+      logger.error("Failed to open window for app:", appId, error);
     }
-
-    const appCommand = appCommands[appId];
-    if (!appCommand) return;
-
-    const command = appCommand();
-    await command.execute(...(args ?? []));
   }
 
   let checkMobileScreenTimeout: NodeJS.Timeout | null = null;

@@ -22,5 +22,9 @@ export default class Window extends Entity<WindowId> {
   ) {
     super(id, createdDate, updatedDate);
     this.layer = layer;
+    // Prevent conflicting states: if maximized, cannot also be minimized
+    if (this.isMaximized && this.isMinimized) {
+      this.isMinimized = false;
+    }
   }
 }

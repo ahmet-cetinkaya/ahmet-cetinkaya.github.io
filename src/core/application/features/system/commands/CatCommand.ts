@@ -80,11 +80,12 @@ export default class CatCommand implements ICIProgram {
       if (targetPath !== "/" && !targetPath.startsWith("/home"))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
 
-      const [entry] = await this.fileSystemService.getAll((e) => e.fullPath === targetPath);
-      if (!(entry instanceof File))
+      const entry = await this.fileSystemService.resolvePath(targetPath);
+      if (!entry || !(entry instanceof File))
         return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cat_is_a_directory}}}: ${path}`);
 
-      outputs.push(this.processContent(entry.content, flags));
+      const content = await this.fileSystemService.readFileContent(targetPath);
+      outputs.push(this.processContent(content, flags));
     }
 
     return {

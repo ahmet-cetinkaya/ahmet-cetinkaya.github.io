@@ -16,16 +16,15 @@ type FileExplorerGridProps = {
 
 export default function FileExplorerGrid(props: FileExplorerGridProps) {
   function handleFileClick(entry: FileSystemEntry, event: MouseEvent) {
-    event.preventDefault();
+    // Single click - select file
+    props.onFileSelect(entry.fullPath, event.ctrlKey || event.metaKey);
+  }
 
-    if (event.detail === 1) {
-      // Single click - select file
-      props.onFileSelect(entry.fullPath, event.ctrlKey || event.metaKey);
-    } else if (event.detail === 2) {
-      // Double click - open file
-      event.stopPropagation();
-      props.onFileOpen(entry);
-    }
+  function handleFileDoubleClick(entry: FileSystemEntry, event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    // Double click - open file or directory
+    props.onFileOpen(entry);
   }
 
   function handleContextMenu(entry: FileSystemEntry, event: MouseEvent) {
@@ -55,6 +54,7 @@ export default function FileExplorerGrid(props: FileExplorerGridProps) {
               props.cutFiles.has(entry.fullPath) ? "opacity-50" : "",
             )}
             onClick={(e) => handleFileClick(entry, e)}
+            onDblClick={(e) => handleFileDoubleClick(entry, e)}
             onContextMenu={(e) => handleContextMenu(entry, e)}
             tabIndex={0}
             role="button"

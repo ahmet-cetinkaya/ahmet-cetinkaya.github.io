@@ -10,6 +10,7 @@ type Props = {
   onClick?: () => void;
   class?: string;
   fillColor?: string;
+  preserveFill?: boolean;
 };
 
 // Function to fetch SVG content from file path
@@ -65,6 +66,7 @@ export default function Icon(props: Props) {
           svg={content()}
           alt={props.icon}
           isSpin={props.isSpin}
+          preserveFill={props.preserveFill}
           onClick={props.onClick}
           class={props.class}
           fillColor={props.fillColor}

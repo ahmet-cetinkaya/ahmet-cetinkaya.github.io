@@ -105,10 +105,17 @@ export default function Menu() {
         id="menuDropdown"
         menuItems={menuItems()}
         ariaLabel={translate(TranslationKeys.common_menu)}
-        renderIcon={(icon) => <Icon icon={icon as Icons} class="size-3" />}
-        buttonClass="shadow-primary bg-surface-400 hover:bg-surface-300 transition-colors duration-200 ease-in-out"
+        renderIcon={(icon) => <Icon icon={icon as Icons} class="size-3" preserveFill={true} />}
+        styles={{
+          wrapper: "inline-block text-left",
+          button: "rounded px-4 py-2 shadow-primary bg-surface-400 hover:bg-surface-300 transition-colors duration-200 ease-in-out",
+          menu: "absolute left-0 z-50 mt-2 w-56 origin-top-right rounded-md shadow-lg ring-1 ring-black ring-opacity-5 bg-surface-500 shadow-secondary",
+          menuContainer: "py-1",
+          categoryHeader: "border-b px-4 py-2 text-xs text-gray-300",
+          menuItem: "block px-4 py-2 text-sm w-full text-start border-none shadow-none rounded transition-colors duration-200 ease-in-out text-gray-200 hover:bg-surface-300 hover:text-gray-900",
+        }}
       >
-        <Icon icon={Icons.ahmetcetinkaya} class="size-4" />
+        <Icon icon={Icons.ahmetcetinkaya} class="size-4 text-primary-500" />
       </Dropdown>
     </Show>
   );

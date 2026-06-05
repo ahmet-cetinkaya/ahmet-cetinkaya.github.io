@@ -90,7 +90,7 @@ export default function Dropdown(props: Props) {
 
   function MenuItem(props: { item: DropdownItem }) {
     const classes =
-      "block px-4 py-2 text-sm text-gray-200 hover:bg-gray-100 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer rounded transition-colors duration-200 ease-in-out";
+      "block px-4 py-2 text-sm text-gray-200 hover:bg-surface-300 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer rounded transition-colors duration-200 ease-in-out";
 
     function onClick() {
       setIsOpen(false);
@@ -120,7 +120,7 @@ export default function Dropdown(props: Props) {
       return (
         <span class="flex items-center gap-2">
           <Show when={item.icon}>
-            <Icon icon={item.icon!} class="size-3" />
+            <Icon icon={item.icon!} class="size-3" preserveFill={true} />
           </Show>
           {translate(item.text)}
         </span>

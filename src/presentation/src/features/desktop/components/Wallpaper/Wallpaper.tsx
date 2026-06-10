@@ -21,6 +21,8 @@ export default function Wallpaper(props: Props) {
   let throttleTimeout: ReturnType<typeof setTimeout> | null = null;
   const THROTTLE_DELAY = 16; // ~60fps
 
+  let _isSelecting = false;
+
   function throttle(callback: () => void) {
     if (throttleTimeout) return;
     throttleTimeout = setTimeout(() => {
@@ -30,6 +32,8 @@ export default function Wallpaper(props: Props) {
   }
 
   function handleMouseMove(event: MouseEvent) {
+    if (_isSelecting) return;
+
     throttle(() => {
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
@@ -54,13 +58,28 @@ export default function Wallpaper(props: Props) {
     setTransform2({ x: 0, y: 0 });
   }
 
+  function handleSelectStart(event: Event) {
+    const target = event.target;
+    if (target instanceof HTMLElement && (target.isContentEditable || target.closest("[contenteditable]"))) {
+      _isSelecting = true;
+    }
+  }
+
+  function handleMouseUp() {
+    _isSelecting = false;
+  }
+
   onMount(() => {
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("selectstart", handleSelectStart);
+    window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("mouseleave", handleMouseLeave);
   });
 
   onCleanup(() => {
     window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("selectstart", handleSelectStart);
+    window.removeEventListener("mouseup", handleMouseUp);
     window.removeEventListener("mouseleave", handleMouseLeave);
     if (throttleTimeout) {
       clearTimeout(throttleTimeout);
@@ -87,7 +106,8 @@ export default function Wallpaper(props: Props) {
         }}
       />
 
-      {/* Responsive styles handled in a style tag */}
+      {/* Static responsive background images — no reactive expressions to avoid
+          triggering stylesheet recalculation that collapses Firefox selections */}
       <style>{`
         @media (max-width: 720px) {
           .wallpaper-bg-1 {
@@ -95,9 +115,6 @@ export default function Wallpaper(props: Props) {
           }
           .wallpaper-bg-2 {
             background-image: url("${layer2.small}") !important;
-          }
-          /* Disable parallax on mobile for performance */
-          .wallpaper-bg-2 {
             transform: none !important;
           }
         }
@@ -108,13 +125,7 @@ export default function Wallpaper(props: Props) {
           .wallpaper-bg-2 {
             background-image: url("${layer2.medium}") !important;
           }
-          /* Reduce parallax intensity on tablet */
-          .wallpaper-bg-2 {
-            transform: translate(calc(${transform2().x}px * 0.5), calc(${transform2().y}px * 0.5)) !important;
-          }
         }
-
-        /* Smooth transitions for better UX */
         .wallpaper-bg-2 {
           will-change: transform;
         }

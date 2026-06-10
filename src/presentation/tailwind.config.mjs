@@ -38,10 +38,7 @@ export const colors = {
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./src/**/*.{astro,md,mdx,ts,tsx}",
-    "../../packages/acore-solidjs/**/*.{ts,tsx}"
-  ],
+  content: ["./src/**/*.{astro,md,mdx,ts,tsx}", "../../packages/acore-solidjs/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {
       sans: ["Oxanium", "monospace"],

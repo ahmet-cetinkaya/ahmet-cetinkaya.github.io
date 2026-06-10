@@ -68,7 +68,7 @@ export default function Icon(props: Props) {
           isSpin={props.isSpin}
           preserveFill={props.preserveFill}
           onClick={props.onClick}
-          class={props.class}
+          styles={{ wrapper: props.class }}
           fillColor={props.fillColor}
         />
       )}

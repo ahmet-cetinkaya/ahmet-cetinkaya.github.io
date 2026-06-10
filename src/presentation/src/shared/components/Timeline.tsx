@@ -34,7 +34,7 @@ export default function Timeline(props: Props) {
           <section class="relative mb-8 flex gap-4">
             <div class="size-12">
               <div class="flex size-12 items-center justify-center overflow-hidden rounded-full border-2 border-gray-200">
-                <Icon icon={activity().logo} class="size-12" />
+                <Icon icon={activity().logo} class="size-12" preserveFill={true} />
               </div>
             </div>
             <div>
@@ -70,7 +70,7 @@ export default function Timeline(props: Props) {
                       {props.children}
                     </Button>
                   )}
-                  hidingClass="from-surface-500"
+                  styles={{ gradientFade: "from-surface-500" }}
                 >
                   <MarkdownParagraph content={translate(activity().descriptionMarkdown!)} class="text-sm" />
                 </LessViewContent>

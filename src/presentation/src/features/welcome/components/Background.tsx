@@ -11,15 +11,13 @@ import Title from "@shared/components/ui/Title";
 import { useI18n } from "@shared/utils/i18nTranslate";
 
 export default function Background() {
-  const { curriculumVitaeService, certificationsService, educationsService, organizationsService, linksService } =
-    Container.instance;
+  const { curriculumVitaeService, educationsService, organizationsService, linksService } = Container.instance;
 
   const translate = useI18n();
 
   const [linkedInLink] = createResource(getLinkedInLink);
   const [experienceActivities] = createResource(getCurriculumVitaeActivities);
   const [educationActivities] = createResource(getEducationActivities);
-  const [certificationActivities] = createResource(getCertificationActivities);
 
   async function getLinkedInLink() {
     const linkedInLink = await linksService.get((x) => x.id === Links.linkedin);
@@ -41,24 +39,6 @@ export default function Background() {
           descriptionMarkdown: cv.descriptionMarkdown,
           startDate: cv.startDate,
           endDate: cv.endDate,
-        } as Activity;
-      }),
-    );
-  }
-
-  async function getCertificationActivities() {
-    const certifications = await certificationsService.getAll();
-
-    return await Promise.all(
-      certifications.map(async (certification) => {
-        const organization = await getOrganization(certification.organizationId);
-        return {
-          id: certification.id,
-          title: certification.name,
-          subtitle: organization.name,
-          logo: organization.icon,
-          descriptionMarkdown: certification.descriptionMarkdown,
-          startDate: certification.date,
         } as Activity;
       }),
     );
@@ -101,11 +81,6 @@ export default function Background() {
       <Show when={educationActivities()} fallback={<Loading />}>
         <Title level={3}>{translate(TranslationKeys.apps_welcome_educations)}</Title>
         <Timeline activities={educationActivities()!} />
-      </Show>
-
-      <Show when={certificationActivities()} fallback={<Loading />}>
-        <Title level={3}>{translate(TranslationKeys.apps_welcome_certifications)}</Title>
-        <Timeline activities={certificationActivities()!} />
       </Show>
 
       <Show when={linkedInLink()}>

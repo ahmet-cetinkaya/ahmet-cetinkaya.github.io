@@ -66,7 +66,7 @@ export default function Dropdown(props: Props) {
 
   function Menu() {
     return (
-      <div class="shadow-md absolute right-0 top-full z-[9999] mt-1 max-h-96 w-56 origin-top-right overflow-y-auto rounded-md bg-surface-500 shadow-secondary ring-1 ring-black ring-opacity-5">
+      <div class="absolute right-0 top-full z-[9999] mt-1 max-h-96 w-56 origin-top-right overflow-y-auto rounded-md bg-surface-500 shadow-md shadow-secondary ring-1 ring-black ring-opacity-5">
         <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
           <Index each={props.menuItems}>
             {(item) => {

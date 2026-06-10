@@ -214,7 +214,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
   return (
     <Portal mount={document.body}>
       <div
-        class="context-menu shadow-md fixed z-[9999] min-w-48 rounded-lg border border-surface-300 bg-surface-500 shadow-secondary"
+        class="context-menu fixed z-[9999] min-w-48 rounded-lg border border-surface-300 bg-surface-500 shadow-md shadow-secondary"
         style={{
           left: `${props.position().x}px`,
           top: `${props.position().y}px`,

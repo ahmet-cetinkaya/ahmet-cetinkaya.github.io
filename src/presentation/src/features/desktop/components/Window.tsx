@@ -31,21 +31,28 @@ export default function Window(props: Props) {
     return app.path;
   }
 
-  async function onMinimize() {
+  async function onMinimize(event: MouseEvent) {
+    event.stopPropagation();
     await windowsService.minimize(props.window);
   }
 
   async function onClick() {
     if (!path()) return;
 
-    await windowsService.active(props.window);
-    navigateToLocalizedAppPath();
+    if (!windowsService.isActivated(props.window)) {
+      await windowsService.active(props.window);
+    }
+
+    navigateToAppPath();
   }
 
-  function navigateToLocalizedAppPath() {
+  function navigateToAppPath() {
     const currentLocale = i18n.currentLocale.get();
     const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
-    navigate(`${localePathPrefix}/${path()!}`);
+    const targetPath = `${localePathPrefix}/${path()!}`;
+    if (window.location.pathname !== targetPath) {
+      navigate(targetPath);
+    }
   }
 
   function onClose() {
@@ -58,7 +65,7 @@ export default function Window(props: Props) {
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigateToLocalizedAppPath();
+    navigateToAppPath();
   }
 
   function onDragEnd(_: MouseEvent, position: Position) {
@@ -76,7 +83,7 @@ export default function Window(props: Props) {
     const activatedWindow = windowsService.getActivatedWindow();
     const maxLayer = activatedWindow ? activatedWindow.layer : 1;
     setOverrideLayer(maxLayer + 1);
-    navigateToLocalizedAppPath();
+    navigateToAppPath();
   }
 
   function onResizeEnd(_: Event, size: Size, position: Position) {
@@ -113,6 +120,7 @@ export default function Window(props: Props) {
       }
       maximizeOffset={{ top: 88, left: 16, right: 16, bottom: 16 }}
       dragOffset={{ top: 88 }}
+      maximizable={true}
       onClick={onClick}
       onClose={onClose}
       onDragStart={onDragStart}
@@ -120,13 +128,20 @@ export default function Window(props: Props) {
       onResizeStart={onResizeStart}
       onResizeEnd={onResizeEnd}
       onToggleMaximize={onToggleMaximize}
-      class={mergeCls(
-        "shadow-md fixed min-h-52 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary",
-        {
-          hidden: props.window.isMinimized,
-        },
-      )}
-      headerClass="bg-surface-400"
+      styles={{
+        wrapper: mergeCls(
+          "shadow-md min-h-52 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary",
+          {
+            hidden: props.window.isMinimized,
+          },
+        ),
+        header: "bg-surface-400",
+        title: "text-xl font-semibold",
+        headerButtons: "ml-auto flex items-center gap-2",
+        maximizeButton: "text-gray-300 transition-colors duration-200 ease-in-out hover:bg-surface-300",
+        closeButton: "text-gray-300 transition-colors duration-200 ease-in-out hover:bg-surface-300 hover:text-white",
+        icon: "size-4",
+      }}
       style={{
         "z-index": overrideLayer() ?? props.window.layer,
       }}

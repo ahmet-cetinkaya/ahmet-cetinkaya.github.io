@@ -15,7 +15,6 @@ interface DialogProps {
   isOpen?: boolean;
   size?: Size;
   draggable?: boolean;
-  class?: string;
   showOkButton?: boolean;
   okButtonText?: string | TranslationKeys;
   customButtons?: JSX.Element[];
@@ -46,7 +45,6 @@ export default function Dialog(props: DialogProps) {
     isOpen = true,
     size = new Size(320, 200),
     draggable = true,
-    class: customClass = "",
     showOkButton = true,
     okButtonText = "OK",
     customButtons,
@@ -121,9 +119,15 @@ export default function Dialog(props: DialogProps) {
         maximizable={false}
         onClose={handleClose}
         closeAriaLabel={closeAriaLabel}
-        // Use Window-style classes with higher z-index for dialogs
-        class={`shadow-md fixed min-h-40 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary ${customClass}`}
-        headerClass="bg-surface-400 border-b border-black"
+        styles={{
+          wrapper:
+            "shadow-md min-h-40 min-w-60 transform rounded-lg border border-black bg-surface-500 text-white shadow-secondary",
+          header: "bg-surface-400 border-b border-black",
+          title: "text-xl font-semibold",
+          headerButtons: "ml-auto flex items-center gap-2",
+          closeButton: "text-gray-300 transition-colors duration-200 ease-in-out hover:bg-surface-300 hover:text-white",
+          icon: "size-4",
+        }}
         customHeaderButtons={customButtons}
         style={{
           "z-index": 101, // Above the backdrop overlay (z-[99])

@@ -9,6 +9,8 @@ import appCommands from "@shared/constants/AppCommands";
 import type { Apps } from "@domain/data/Apps";
 import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
 
+const TASKBAR_HEIGHT: number = 70;
+
 export default function WindowManager() {
   const windowService = Container.instance.windowsService;
   const { appsService } = Container.instance;
@@ -80,7 +82,7 @@ export default function WindowManager() {
 
   return (
     <Key each={windows()} by={(item) => item.id}>
-      {(item) => <Window window={item()} />}
+      {(item) => <Window window={item()} topOffset={TASKBAR_HEIGHT} />}
     </Key>
   );
 }

@@ -15,7 +15,10 @@ import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 
 type Props = {
   window: WindowModel;
+  topOffset?: number;
 };
+
+const WINDOW_EDGE_OFFSET: number = 16;
 
 export default function Window(props: Props) {
   const { windowsService, appsService, i18n } = Container.instance;
@@ -118,8 +121,13 @@ export default function Window(props: Props) {
           <Icon icon={Icons.minimize} class="size-4" />
         </Button>
       }
-      maximizeOffset={{ top: 88, left: 16, right: 16, bottom: 16 }}
-      dragOffset={{ top: 88 }}
+      maximizeOffset={{
+        top: 70 + WINDOW_EDGE_OFFSET,
+        left: WINDOW_EDGE_OFFSET,
+        right: WINDOW_EDGE_OFFSET,
+        bottom: WINDOW_EDGE_OFFSET,
+      }}
+      dragOffset={{ top: (props.topOffset ?? 0) + WINDOW_EDGE_OFFSET }}
       maximizable={true}
       onClick={onClick}
       onClose={onClose}

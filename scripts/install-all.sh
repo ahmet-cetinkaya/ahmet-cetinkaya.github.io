@@ -5,48 +5,16 @@
 
 set -e
 
-# Source universal logger
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../packages/acore-scripts/src/logger.sh"
 
 acore_log_header "📦 Installing dependencies for ahmetcetinkaya.me project"
 
-# Check if bun is available
-if ! command -v bun &>/dev/null; then
-	acore_log_error "bun is not installed or not in PATH"
-	acore_log_info "Please install bun: curl -fsSL https://bun.sh/install | bash"
-	exit 1
-fi
-
-acore_log_info "🔍 Finding all package.json files..."
-PACKAGE_FILES=$(find . -name "package.json" ! -path "*/node_modules/*")
-
-PACKAGE_COUNT=$(echo "$PACKAGE_FILES" | wc -l)
-acore_log_info "📋 Found $PACKAGE_COUNT package.json files"
-
 # Install dependencies in each package
-echo "$PACKAGE_FILES" | while read -r package_file; do
-	if [[ -n "$package_file" ]]; then
-		package_dir=$(dirname "$package_file")
-		package_name=$(basename "$package_dir")
-
-		if [[ "$package_name" == "." ]]; then
-			package_name="root"
-		fi
-
-		acore_log_info "📦 Installing dependencies for: $package_name"
-		cd "$package_dir"
-
-		if bun install; then
-			acore_log_success "✅ $package_name dependencies installed"
-		else
-			acore_log_error "❌ Failed to install dependencies for $package_name"
-			exit 1
-		fi
-
-		cd - >/dev/null
-	fi
+find . -name "package.json" ! -path "*/node_modules/*" | while read -r package_file; do
+	package_dir=$(dirname "$package_file")
+	acore_log_section "📦 Installing dependencies for: $package_dir"
+	(cd "$package_dir" && bun install)
 done
 
 acore_log_success "🎉 All dependencies installed successfully!"
-acore_log_info "💡 You can now run 'bun start' to begin development"

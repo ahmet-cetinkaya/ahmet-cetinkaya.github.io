@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "ignorePatterns": ["**/.git/**", "**/dist/**", "**/node_modules/**", "**/public/**", "packages/**"],
+  "entry": ["src/presentation/src/**/*.tsx", "src/presentation/src/**/*.ts", "src/presentation/src/**/*.astro"],
+  "ignoreExports": [],
+  "usedClassMembers": []
+}

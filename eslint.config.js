@@ -1,15 +1,20 @@
 import pluginJs from "@eslint/js";
+import eslintPluginAstro from "eslint-plugin-astro";
 import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 import tsEslint from "typescript-eslint";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts,tsx}"] },
-  { languageOptions: { globals: globals.browser } },
+  {
+    ignores: ["packages/**", "**/dist/**", "src/presentation/public/**", "src/presentation/.astro/**"],
+  },
   pluginJs.configs.recommended,
   ...tsEslint.configs.recommended,
+  ...eslintPluginAstro.configs.recommended,
   {
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    languageOptions: { globals: globals.browser },
     rules: {
       "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-empty-object-type": "off",
@@ -41,6 +46,16 @@ export default [
     },
   },
   {
+    files: ["**/*.astro"],
+    languageOptions: {
+      parser: eslintPluginAstro.parser,
+      parserOptions: {
+        parser: tsEslint.parser,
+        extraFileExtensions: [".astro"],
+      },
+    },
+  },
+  {
     files: ["src/presentation/**/*.{ts,tsx}"],
     ...solid,
     languageOptions: {
@@ -53,8 +68,7 @@ export default [
       },
     },
     rules: {
-      // Override any specific rules if needed
-      "no-console": "warn", // Keep console warnings for browser code
+      "no-console": "warn",
     },
   },
   {
@@ -65,40 +79,7 @@ export default [
       },
     },
     rules: {
-      // Node.js specific rules - allow console in build scripts
       "no-console": "off",
     },
-  },
-  {
-    files: ["**/*.astro"],
-    languageOptions: {
-      parser: tsEslint.parser,
-      parserOptions: {
-        extraFileExtensions: [".astro"],
-        project: "src/presentation/tsconfig.json",
-      },
-      globals: globals.browser,
-    },
-    rules: {
-      // Basic rules for Astro files - focus on TypeScript in script blocks
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-      "@typescript-eslint/no-explicit-any": "warn",
-      "no-console": "warn",
-      "no-debugger": "error",
-      "prefer-const": "error",
-      "no-var": "error",
-    },
-  },
-  {
-    ignores: [
-      "src/presentation/public/home",
-      "src/presentation/dist",
-      "src/presentation/.astro",
-      "dist/**",
-      "node_modules/**",
-      "src/presentation/node_modules/**",
-      "*.min.js",
-      "*.d.ts",
-    ],
   },
 ];

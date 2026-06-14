@@ -2,7 +2,7 @@ import type IFileSystemService from "@application/features/system/services/abstr
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import type ICIProgram from "./abstraction/ICIProgram";
+import BaseCommand from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
 type RmdirFlags = {
@@ -13,14 +13,16 @@ type RmdirFlags = {
   version: boolean;
 };
 
-export default class RmdirCommand implements ICIProgram {
+export default class RmdirCommand extends BaseCommand {
   name = "rmdir";
   description = TranslationKeys.apps_terminal_commands_rmdir_description;
 
   constructor(
-    private readonly fileSystemService: IFileSystemService,
+    fileSystemService: IFileSystemService,
     private currentPath: string,
-  ) {}
+  ) {
+    super(fileSystemService);
+  }
 
   private parseArgs(args: string[]): { flags: RmdirFlags; directories: string[] } {
     const flags: RmdirFlags = {
@@ -134,13 +136,6 @@ export default class RmdirCommand implements ICIProgram {
       --help                      {{${TranslationKeys.apps_terminal_rmdir_help_option_help}}}
       --version                   {{${TranslationKeys.apps_terminal_rmdir_help_option_version}}}`,
       exitCode: ExitCodes.SUCCESS,
-    };
-  }
-
-  private createErrorOutput(message: string): CommandOutput {
-    return {
-      output: `${this.name}: ${message}`,
-      exitCode: ExitCodes.GENERAL_ERROR,
     };
   }
 }

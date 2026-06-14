@@ -3,6 +3,7 @@ import { TranslationKeys } from "@domain/data/Translations";
 import Dialog from "@presentation/src/features/desktop/components/Dialog";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
+import { createTranslateWithParams } from "@shared/utils/translateWithParams";
 
 type NoActionDialogProps = {
   fileName?: string;
@@ -12,23 +13,10 @@ type NoActionDialogProps = {
 
 export default function NoActionDialog({ fileName, fileType, onClose }: NoActionDialogProps) {
   const translate = useI18n();
+  const translateWithParams = createTranslateWithParams(translate);
 
   // Use standardized size for notice dialog
   const size = DialogSizeCalculator.getDefaultSize("notice");
-
-  // Custom translate function that supports parameter replacement
-  const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
-    const translation = translate(key);
-    let result = translation;
-
-    // Replace {{param}} patterns with provided values
-    Object.entries(params).forEach(([paramName, paramValue]) => {
-      const pattern = new RegExp(`{{${paramName}}}`, "g");
-      result = result.replace(pattern, paramValue);
-    });
-
-    return result;
-  };
 
   // Create dialog description with file information
   const createDescription = (): string => {

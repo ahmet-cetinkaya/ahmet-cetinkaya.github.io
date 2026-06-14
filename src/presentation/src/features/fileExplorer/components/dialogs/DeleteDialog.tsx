@@ -4,6 +4,7 @@ import { TranslationKeys } from "@domain/data/Translations";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import type { BaseDialogProps } from "./BaseFileExplorerDialog";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
+import { createTranslateWithParams } from "@shared/utils/translateWithParams";
 
 export type DeleteDialogProps = BaseDialogProps & {
   pathsToDelete: string[];
@@ -12,22 +13,9 @@ export type DeleteDialogProps = BaseDialogProps & {
 
 export default function DeleteDialog(props: DeleteDialogProps) {
   const translate = useI18n();
+  const translateWithParams = createTranslateWithParams(translate);
   const itemCount = props.pathsToDelete.length;
   const fileNames = props.pathsToDelete.map((path) => path.split("/").pop() || "unknown");
-
-  // Custom translate function that supports parameter replacement
-  const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
-    const translation = translate(key);
-    let result = translation;
-
-    // Replace {{param}} patterns with provided values
-    Object.entries(params).forEach(([paramName, paramValue]) => {
-      const pattern = new RegExp(`{{${paramName}}}`, "g");
-      result = result.replace(pattern, paramValue);
-    });
-
-    return result;
-  };
 
   const confirmMessage =
     itemCount === 1

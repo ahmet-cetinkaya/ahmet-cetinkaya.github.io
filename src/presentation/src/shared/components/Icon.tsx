@@ -3,6 +3,7 @@ import IconSvgs from "@shared/constants/IconSvgs";
 import { createMemo, createResource, Show } from "solid-js";
 import SvgIcon from "@packages/acore-solidjs/ui/components/SvgIcon";
 import { logger } from "@shared/utils/logger";
+import { fetchSvgContent } from "@shared/utils/fetchSvgContent";
 
 type Props = {
   icon: Icons;
@@ -12,24 +13,6 @@ type Props = {
   fillColor?: string;
   preserveFill?: boolean;
 };
-
-// Function to fetch SVG content from file path
-async function fetchSvgContent(filePath: string): Promise<string> {
-  try {
-    const response = await fetch(filePath);
-    if (!response.ok) {
-      logger.warn(`Failed to load SVG: ${filePath} (${response.status})`);
-      return "";
-    }
-    const text = await response.text();
-    // Extract SVG content from the response
-    const match = text.match(/<svg[^>]*>[\s\S]*?<\/svg>/);
-    return match ? match[0] : "";
-  } catch (error) {
-    logger.error(`Error loading SVG ${filePath}:`, error);
-    return "";
-  }
-}
 
 export default function Icon(props: Props) {
   const iconData = createMemo(() => {

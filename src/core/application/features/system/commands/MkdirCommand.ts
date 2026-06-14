@@ -2,7 +2,7 @@ import type IFileSystemService from "@application/features/system/services/abstr
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import type ICIProgram from "./abstraction/ICIProgram";
+import BaseCommand from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
 type MkdirFlags = {
@@ -13,14 +13,16 @@ type MkdirFlags = {
   version: boolean;
 };
 
-export default class MkdirCommand implements ICIProgram {
+export default class MkdirCommand extends BaseCommand {
   name = "mkdir";
   description = TranslationKeys.apps_terminal_commands_mkdir_description;
 
   constructor(
-    private readonly fileSystemService: IFileSystemService,
+    fileSystemService: IFileSystemService,
     private currentPath: string,
-  ) {}
+  ) {
+    super(fileSystemService);
+  }
 
   private parseArgs(args: string[]): { flags: MkdirFlags; directories: string[] } {
     const flags: MkdirFlags = {
@@ -127,20 +129,6 @@ export default class MkdirCommand implements ICIProgram {
       --help       {{${TranslationKeys.apps_terminal_mkdir_help_option_help}}}
       --version    {{${TranslationKeys.apps_terminal_mkdir_help_option_version}}}`,
       exitCode: ExitCodes.SUCCESS,
-    };
-  }
-
-  private async pathExists(path: string): Promise<boolean> {
-    if (path === "/") return true;
-
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
-    return Boolean(entry);
-  }
-
-  private createErrorOutput(message: string): CommandOutput {
-    return {
-      output: `${this.name}: ${message}`,
-      exitCode: ExitCodes.GENERAL_ERROR,
     };
   }
 }

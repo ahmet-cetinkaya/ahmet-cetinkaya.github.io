@@ -8,26 +8,7 @@ import Title from "@shared/components/ui/Title";
 import IconSvgs from "@shared/constants/IconSvgs";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { logger } from "@shared/utils/logger";
-
-const SVG_BLOB_TYPE = "image/svg+xml;charset=utf-8";
-
-// Function to fetch SVG content from file path (borrowed from Icon component)
-async function fetchSvgContent(filePath: string): Promise<string> {
-  try {
-    const response = await fetch(filePath);
-    if (!response.ok) {
-      logger.warn(`Failed to load SVG: ${filePath} (${response.status})`);
-      return "";
-    }
-    const text = await response.text();
-    // Extract SVG content from the response
-    const match = text.match(/<svg[^>]*>[\s\S]*?<\/svg>/);
-    return match ? match[0] : "";
-  } catch (error) {
-    logger.error(`Error loading SVG ${filePath}:`, error);
-    return "";
-  }
-}
+import { fetchSvgContent, createSvgImage } from "@shared/utils/fetchSvgContent";
 
 export default function Technologies() {
   const { technologiesService } = Container.instance;
@@ -157,34 +138,9 @@ export default function Technologies() {
         svgContent = iconSvg;
       }
 
-      // Create image from SVG content
-      const image = new Image();
-      const svg = new Blob([svgContent], { type: SVG_BLOB_TYPE });
-      const url = URL.createObjectURL(svg);
-
-      return new Promise<HTMLImageElement>((resolve, reject) => {
-        // Set up timeout to handle hanging image loads
-        const timeout = setTimeout(() => {
-          URL.revokeObjectURL(url);
-          reject(new Error(`Timeout loading icon "${icon}"`));
-        }, 10000); // 10 second timeout
-
-        image.onload = () => {
-          clearTimeout(timeout);
-          URL.revokeObjectURL(url);
-          technologySvgIcons.set(nodeId, image);
-          resolve(image);
-        };
-
-        image.onerror = () => {
-          clearTimeout(timeout);
-          URL.revokeObjectURL(url);
-          logger.error(`Failed to load image for icon "${icon}"`);
-          reject(new Error(`Failed to load image for icon "${icon}"`));
-        };
-
-        image.src = url;
-      });
+      const image = await createSvgImage(svgContent);
+      technologySvgIcons.set(nodeId, image);
+      return image;
     } catch (error) {
       logger.error(`Error processing SVG icon "${icon}":`, error);
       return null;

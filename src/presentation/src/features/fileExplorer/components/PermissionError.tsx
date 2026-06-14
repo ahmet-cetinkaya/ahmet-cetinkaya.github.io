@@ -4,6 +4,7 @@ import Dialog from "@presentation/src/features/desktop/components/Dialog";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { PermissionError } from "@application/features/system/services/PermissionService";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
+import { createTranslateWithParams } from "@shared/utils/translateWithParams";
 
 type PermissionErrorProps = {
   error: Error | PermissionError;
@@ -12,20 +13,7 @@ type PermissionErrorProps = {
 
 export default function PermissionErrorDialog({ error, onClose }: PermissionErrorProps) {
   const translate = useI18n();
-
-  // Custom translate function that supports parameter replacement
-  const translateWithParams = (key: TranslationKeys, params: Record<string, string> = {}): string => {
-    const translation = translate(key);
-    let result = translation;
-
-    // Replace {{param}} patterns with provided values
-    Object.entries(params).forEach(([paramName, paramValue]) => {
-      const pattern = new RegExp(`{{${paramName}}}`, "g");
-      result = result.replace(pattern, paramValue);
-    });
-
-    return result;
-  };
+  const translateWithParams = createTranslateWithParams(translate);
 
   // Extract path from error and use translation
   const createErrorDescription = (): string => {

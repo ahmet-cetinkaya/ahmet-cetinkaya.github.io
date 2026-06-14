@@ -1,58 +1,39 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
-import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "@application/features/system/commands/abstraction/ICIProgram";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys } from "@domain/data/Translations";
-import Window from "@domain/models/Window";
-import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
+import BaseAppCommand from "./BaseAppCommand";
 
-export default class WelcomeWizardCommand implements ICIProgram {
+export default class WelcomeWizardCommand extends BaseAppCommand {
   name = "welcome";
   description = TranslationKeys.apps_terminal_commands_welcome_description;
 
-  constructor(private windowService: IWindowsService) {}
+  constructor(windowService: IWindowsService) {
+    super(windowService);
+  }
 
   async execute(...args: string[]): Promise<CommandOutput> {
     if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
-    const flags = this.parseFlags(args);
-
-    const appWindow = new Window(
-      CryptoExtensions.generateNanoId(),
-      Apps.welcome,
-      TranslationKeys.apps_welcome_wizard,
-      undefined,
-      undefined,
-      flags.maximized,
-      undefined,
-      undefined,
-      undefined,
-      args,
-    );
-    await this.windowService.add(appWindow);
-
-    return {
-      output: `{{${TranslationKeys.apps_terminal_commands_welcome_started}}}`,
-      exitCode: ExitCodes.SUCCESS,
-    };
+    return this.launchApp(args, {
+      name: this.name,
+      description: this.description,
+      appId: Apps.welcome,
+      translationKey: TranslationKeys.apps_welcome_wizard,
+      startedMessageKey: TranslationKeys.apps_terminal_commands_welcome_started,
+    });
   }
 
-  private createHelpOutput(): CommandOutput {
+  protected override createHelpOutput(): CommandOutput {
     return {
       output: `${this.name}: {{${this.description}}}
 
-{{${TranslationKeys.common_usage}}}: 
+{{${TranslationKeys.common_usage}}}:
   ${this.name} [{{${TranslationKeys.common_options}}}]
 
 {{${TranslationKeys.common_options}}}:
   --maximized: {{${TranslationKeys.apps_terminal_commands_apps_maximized}}}
   --part: {{${TranslationKeys.apps_terminal_commands_welcome_part}}}`,
       exitCode: ExitCodes.SUCCESS,
-    };
-  }
-
-  private parseFlags(args: string[]) {
-    return {
-      maximized: args.includes("--maximized"),
     };
   }
 }

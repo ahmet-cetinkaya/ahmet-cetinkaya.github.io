@@ -2,7 +2,16 @@
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
   "ignorePatterns": ["**/.git/**", "**/dist/**", "**/node_modules/**", "**/public/**", "packages/**"],
   "entry": ["src/presentation/src/**/*.tsx", "src/presentation/src/**/*.ts", "src/presentation/src/**/*.astro"],
-  "ignoreExports": [],
+  "ignoreExports": [
+    {
+      "file": "src/core/application/features/fileExplorer/services/FileExplorerService.ts",
+      "exports": ["*"]
+    },
+    {
+      "file": "src/core/application/features/fileExplorer/services/FileNavigationService.ts",
+      "exports": ["*"]
+    }
+  ],
   "usedClassMembers": [],
   "rules": {
     "unused-class-members": "off"

@@ -1,8 +1,7 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import File from "@domain/models/File";
-import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import type ICIProgram from "./abstraction/ICIProgram";
+import BaseCommand from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
 type CpFlags = {
@@ -15,14 +14,16 @@ type CpFlags = {
   version: boolean;
 };
 
-export default class CpCommand implements ICIProgram {
+export default class CpCommand extends BaseCommand {
   name = "cp";
   description = TranslationKeys.apps_terminal_commands_cp_description;
 
   constructor(
-    private readonly fileSystemService: IFileSystemService,
+    fileSystemService: IFileSystemService,
     private currentPath: string,
-  ) {}
+  ) {
+    super(fileSystemService);
+  }
 
   private parseArgs(args: string[]): { flags: CpFlags; sources: string[]; destination: string } {
     const flags: CpFlags = {
@@ -98,19 +99,14 @@ export default class CpCommand implements ICIProgram {
       return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_cp_missing_operand}}}`);
 
     for (const source of sources) {
-      const sourcePath = PathUtils.normalize(this.currentPath, source);
-      const destPath = PathUtils.normalize(this.currentPath, destination);
+      const { sourcePath, destPath, error } = await this.validateSourceAndDestination(
+        source,
+        destination,
+        this.currentPath,
+      );
+      if (error) return error;
 
       const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === sourcePath);
-      if (!sourceEntry)
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}: '${source}'`);
-
-      if (sourcePath !== "/" && !sourcePath.startsWith("/home"))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${source}`);
-
-      if (destPath !== "/" && !destPath.startsWith("/home"))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${destination}`);
-
       if (sourceEntry instanceof File) {
         const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size);
         await this.fileSystemService.add(newFile);
@@ -143,13 +139,6 @@ export default class CpCommand implements ICIProgram {
       --help                 {{${TranslationKeys.apps_terminal_cp_help_option_help}}}
       --version              {{${TranslationKeys.apps_terminal_cp_help_option_version}}}`,
       exitCode: ExitCodes.SUCCESS,
-    };
-  }
-
-  private createErrorOutput(message: string): CommandOutput {
-    return {
-      output: `${this.name}: ${message}`,
-      exitCode: ExitCodes.GENERAL_ERROR,
     };
   }
 }

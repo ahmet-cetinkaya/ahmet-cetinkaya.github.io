@@ -2,19 +2,6 @@ import type { Path } from "./File";
 
 type DirectoryId = Path;
 
-/**
- * Factory function for creating a Directory with validation
- */
-export function createDirectory(id: Path, createdDate: Date, updatedDate?: Date): Directory {
-  if (!id || typeof id !== "string") {
-    throw new Error("Directory id must be a non-empty string");
-  }
-  if (!id.startsWith("/")) {
-    throw new Error(`Directory id must be an absolute path starting with "/", got "${id}"`);
-  }
-  return new Directory(id, createdDate, updatedDate);
-}
-
 export default class Directory {
   constructor(id: Path, createdDate: Date, updatedDate?: Date) {
     // Validate path format in constructor

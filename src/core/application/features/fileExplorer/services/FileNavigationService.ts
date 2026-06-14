@@ -28,7 +28,7 @@ export interface DirectoryContents {
   navigationHistory: string[];
 }
 
-export interface NavigationCache {
+interface NavigationCache {
   contents: DirectoryContents;
   timestamp: number;
   path: string;

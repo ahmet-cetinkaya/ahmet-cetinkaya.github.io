@@ -2,7 +2,6 @@ import Icons from "@domain/data/Icons";
 import { CACHE_CONFIG, FILE_TYPE_PATTERNS } from "../constants";
 
 const iconConfigCache = new Map<string, FileIconConfig>();
-const iconPathCache = new Map<string, string>();
 
 function cleanupCache<T>(cache: Map<string, T>, maxSize: number): void {
   if (cache.size > maxSize) {
@@ -12,25 +11,7 @@ function cleanupCache<T>(cache: Map<string, T>, maxSize: number): void {
   }
 }
 
-/**
- * Clear all icon caches (useful for testing and memory management)
- */
-export function clearIconCaches(): void {
-  iconConfigCache.clear();
-  iconPathCache.clear();
-}
-
-/**
- * Get cache statistics for monitoring
- */
-export function getIconCacheStats(): { configCacheSize: number; pathCacheSize: number } {
-  return {
-    configCacheSize: iconConfigCache.size,
-    pathCacheSize: iconPathCache.size,
-  };
-}
-
-export enum FileType {
+enum FileType {
   DIRECTORY = "directory",
 
   TEXT = "txt",
@@ -84,7 +65,7 @@ export enum FileType {
   DEFAULT = "default",
 }
 
-export enum IconColor {
+enum IconColor {
   YELLOW = "text-yellow-500",
   GRAY = "text-gray-400",
   BLUE = "text-blue-400",
@@ -113,29 +94,7 @@ export interface FileIconConfig {
   isDirectory: boolean;
 }
 
-/**
- * Factory for creating FileIconConfig with validation
- */
-export function createFileIconConfig(data: {
-  icon: Icons | string;
-  color: IconColor;
-  model?: string;
-  isDirectory: boolean;
-}): FileIconConfig {
-  // Validate icon is a valid Icons value or non-empty string
-  if (!data.icon || (typeof data.icon === "string" && !data.icon.trim())) {
-    throw new Error("Invalid FileIconConfig: icon must be a non-empty string");
-  }
-
-  // Validate color is a valid IconColor value
-  if (!Object.values(IconColor).includes(data.color)) {
-    throw new Error(`Invalid FileIconConfig: color must be a valid IconColor, got "${data.color}"`);
-  }
-
-  return data;
-}
-
-export const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
+const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.DIRECTORY]: {
     icon: Icons.folder,
     color: IconColor.YELLOW,
@@ -299,28 +258,4 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
   }
 
   return FILE_TYPE_ICONS[FileType.DEFAULT];
-}
-
-export function getFileIconPath(fileName: string, isDirectory: boolean): string {
-  const cacheKey = `${fileName}:${isDirectory}:path`;
-
-  if (iconPathCache.has(cacheKey)) {
-    return iconPathCache.get(cacheKey)!;
-  }
-
-  const config = getFileIconConfig(fileName, isDirectory);
-  let iconPath: string;
-
-  if (config.model) {
-    iconPath = config.model;
-  } else if (isDirectory) {
-    iconPath = "/models/icons/folder.glb";
-  } else {
-    iconPath = "/models/icons/file.glb";
-  }
-
-  iconPathCache.set(cacheKey, iconPath);
-  cleanupCache(iconPathCache, CACHE_CONFIG.ICON_CACHE_SIZE);
-
-  return iconPath;
 }

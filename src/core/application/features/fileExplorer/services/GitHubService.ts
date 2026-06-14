@@ -23,7 +23,7 @@ export interface GitHubContent {
   encoding?: string;
 }
 
-export interface GitHubCommit {
+interface GitHubCommit {
   sha: string;
   commit: {
     author: {

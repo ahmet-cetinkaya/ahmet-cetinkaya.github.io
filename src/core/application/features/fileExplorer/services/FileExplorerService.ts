@@ -11,13 +11,7 @@ import GameExecutionService from "./GameExecutionService";
 import { UI_CONSTANTS } from "../constants";
 import { globalOperationQueue } from "../utils/OperationQueue";
 
-import {
-  FileSortCriteria,
-  FileViewMode,
-  SortOrder,
-  type FileExplorerState,
-  type SelectedFile,
-} from "../models/FileSelection";
+import { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState } from "../models/FileSelection";
 
 import type { NavigationOptions } from "./FileNavigationService";
 
@@ -36,7 +30,7 @@ export interface FileExplorerContents {
 
 export type DirectoryContents = FileExplorerContents;
 
-export { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState, type SelectedFile };
+export { FileSortCriteria, FileViewMode, SortOrder, type FileExplorerState };
 
 export default class FileExplorerService {
   private static instance: FileExplorerService | null = null;

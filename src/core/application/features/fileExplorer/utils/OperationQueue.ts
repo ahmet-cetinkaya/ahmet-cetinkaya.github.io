@@ -9,11 +9,10 @@ export enum OperationType {
   COPY = "copy",
   MOVE = "move",
   DELETE = "delete",
-  CREATE = "create",
   RENAME = "rename",
 }
 
-export enum OperationStatus {
+enum OperationStatus {
   PENDING = "pending",
   RUNNING = "running",
   COMPLETED = "completed",
@@ -24,12 +23,7 @@ export enum OperationStatus {
 /**
  * Discriminated union for operation states with enforced invariants
  */
-export type QueuedOperation =
-  | PendingOperation
-  | RunningOperation
-  | CompletedOperation
-  | FailedOperation
-  | CancelledOperation;
+type QueuedOperation = PendingOperation | RunningOperation | CompletedOperation | FailedOperation | CancelledOperation;
 
 interface BaseOperation {
   readonly id: string;
@@ -51,7 +45,7 @@ interface BaseOperation {
 /**
  * Pending operation - not yet started
  */
-export interface PendingOperation extends BaseOperation {
+interface PendingOperation extends BaseOperation {
   readonly status: OperationStatus.PENDING;
   startedAt?: never;
   completedAt?: never;
@@ -60,7 +54,7 @@ export interface PendingOperation extends BaseOperation {
 /**
  * Running operation - currently being executed
  */
-export interface RunningOperation extends BaseOperation {
+interface RunningOperation extends BaseOperation {
   readonly status: OperationStatus.RUNNING;
   readonly startedAt: Date;
   completedAt?: never;
@@ -69,7 +63,7 @@ export interface RunningOperation extends BaseOperation {
 /**
  * Completed operation - finished successfully
  */
-export interface CompletedOperation extends BaseOperation {
+interface CompletedOperation extends BaseOperation {
   readonly status: OperationStatus.COMPLETED;
   readonly startedAt: Date;
   readonly completedAt: Date;
@@ -78,7 +72,7 @@ export interface CompletedOperation extends BaseOperation {
 /**
  * Failed operation - terminated with error
  */
-export interface FailedOperation extends BaseOperation {
+interface FailedOperation extends BaseOperation {
   readonly status: OperationStatus.FAILED;
   readonly startedAt: Date;
   readonly completedAt: Date;
@@ -87,7 +81,7 @@ export interface FailedOperation extends BaseOperation {
 /**
  * Cancelled operation - terminated before completion
  */
-export interface CancelledOperation extends BaseOperation {
+interface CancelledOperation extends BaseOperation {
   readonly status: OperationStatus.CANCELLED;
   startedAt?: Date;
   completedAt?: Date;
@@ -96,30 +90,26 @@ export interface CancelledOperation extends BaseOperation {
 /**
  * Type guard to check operation status
  */
-export function isPendingOperation(op: QueuedOperation): op is PendingOperation {
+function isPendingOperation(op: QueuedOperation): op is PendingOperation {
   return op.status === OperationStatus.PENDING;
 }
 
-export function isRunningOperation(op: QueuedOperation): op is RunningOperation {
+function isRunningOperation(op: QueuedOperation): op is RunningOperation {
   return op.status === OperationStatus.RUNNING;
 }
 
-export function isCompletedOperation(op: QueuedOperation): op is CompletedOperation {
+function isCompletedOperation(op: QueuedOperation): op is CompletedOperation {
   return op.status === OperationStatus.COMPLETED;
 }
 
-export function isFailedOperation(op: QueuedOperation): op is FailedOperation {
+function isFailedOperation(op: QueuedOperation): op is FailedOperation {
   return op.status === OperationStatus.FAILED;
-}
-
-export function isCancelledOperation(op: QueuedOperation): op is CancelledOperation {
-  return op.status === OperationStatus.CANCELLED;
 }
 
 /**
  * State transition helpers that enforce valid transitions at compile time
  */
-export function startOperation(op: PendingOperation): RunningOperation {
+function startOperation(op: PendingOperation): RunningOperation {
   return {
     ...op,
     status: OperationStatus.RUNNING,
@@ -127,7 +117,7 @@ export function startOperation(op: PendingOperation): RunningOperation {
   };
 }
 
-export function completeOperation(op: RunningOperation): CompletedOperation {
+function completeOperation(op: RunningOperation): CompletedOperation {
   return {
     ...op,
     status: OperationStatus.COMPLETED,
@@ -135,7 +125,7 @@ export function completeOperation(op: RunningOperation): CompletedOperation {
   };
 }
 
-export function failOperation(op: RunningOperation | PendingOperation): FailedOperation {
+function failOperation(op: RunningOperation | PendingOperation): FailedOperation {
   const startedAt = isRunningOperation(op) ? op.startedAt : new Date();
   return {
     ...op,
@@ -145,7 +135,7 @@ export function failOperation(op: RunningOperation | PendingOperation): FailedOp
   };
 }
 
-export function cancelOperation(op: QueuedOperation): CancelledOperation {
+function cancelOperation(op: QueuedOperation): CancelledOperation {
   if (isRunningOperation(op) || isCompletedOperation(op) || isFailedOperation(op)) {
     return {
       ...op,
@@ -161,15 +151,7 @@ export function cancelOperation(op: QueuedOperation): CancelledOperation {
   };
 }
 
-export interface OperationResult {
-  id: string;
-  status: OperationStatus;
-  success: boolean;
-  error?: Error;
-  duration?: number;
-}
-
-export class OperationQueue {
+class OperationQueue {
   private queue: QueuedOperation[] = [];
   private runningOperations = new Map<string, QueuedOperation>();
   private maxConcurrentOperations = 3;

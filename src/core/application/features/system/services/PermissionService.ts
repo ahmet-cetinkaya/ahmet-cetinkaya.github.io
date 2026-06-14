@@ -1,5 +1,5 @@
 import { PATH_CONSTANTS } from "@application/features/fileExplorer/constants/paths";
-import { PathSanitizer } from "@application/features/fileExplorer/utils/InputSanitizer";
+import { PathSanitizer } from "@application/features/fileExplorer/utils/PathSanitizer";
 import { Paths } from "@domain/data/Directories";
 
 export class PermissionError extends Error {

@@ -24,6 +24,9 @@ export default function Window(props: Props) {
   const { windowsService, appsService, i18n } = Container.instance;
   const translate = useI18n();
 
+  const appId = props.window.appId;
+  const appArgs = props.window.args;
+
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
   const [path] = createResource<string>(getAppPath);
 
@@ -165,7 +168,7 @@ export default function Window(props: Props) {
         </Button>
       )}
     >
-      <AppContent appId={props.window.appId} args={props.window.args} />
+      <AppContent appId={appId} args={appArgs} />
     </Modal>
   );
 }

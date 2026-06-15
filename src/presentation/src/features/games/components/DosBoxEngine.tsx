@@ -7,19 +7,31 @@ type Props = {
   appId: Apps;
 };
 
+let activeDos: JSDosWrapper | undefined;
+
 export default function DosBoxEngine(props: Props) {
   let dos: JSDosWrapper;
+  let initialized = false;
 
   async function onContainerMount(element: HTMLDivElement) {
+    if (initialized) return;
+    initialized = true;
+
+    if (activeDos) {
+      await activeDos.dispose();
+    }
+
     dos = new JSDosWrapper(element, {
       url: getAppImagePath(),
       autoStart: true,
       volume: 0.3,
     });
+    activeDos = dos;
   }
 
   onCleanup(() => {
-    dos.dispose()!;
+    dos?.dispose().catch(() => {});
+    if (activeDos === dos) activeDos = undefined;
     dos = null!;
   });
 

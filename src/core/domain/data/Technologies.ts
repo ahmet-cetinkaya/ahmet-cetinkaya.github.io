@@ -1,7 +1,7 @@
 import Technology from "@domain/models/Technology";
 import Icons from "./Icons";
 
-export enum Technologies {
+enum Technologies {
   csharp,
   dotNetCore,
   javascript,

@@ -59,7 +59,7 @@ export default function Wallpaper(props: Props) {
   }
 
   function handleSelectStart(event: Event) {
-    const target = event.target;
+    const { target } = event;
     if (target instanceof HTMLElement && (target.isContentEditable || target.closest("[contenteditable]"))) {
       _isSelecting = true;
     }

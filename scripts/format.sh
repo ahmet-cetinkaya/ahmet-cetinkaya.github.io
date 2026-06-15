@@ -10,11 +10,7 @@ source "$SCRIPT_DIR/../packages/acore-scripts/src/logger.sh"
 
 acore_log_header "🎨 Formatting ahmetcetinkaya.me project"
 
-acore_log_section "🐚 Formatting shell scripts with shfmt"
-shfmt -w .
-acore_log_success "✅ Shell scripts formatted"
-
-acore_log_section "🔧 Running ESLint auto-fix on root project files"
+acore_log_section " Running ESLint auto-fix on root project files"
 bunx eslint --fix .
 acore_log_success "✅ ESLint auto-fix completed"
 
@@ -32,5 +28,9 @@ acore_log_section "🎯 Formatting presentation layer"
 	bun format
 )
 acore_log_success "✅ Presentation layer formatted"
+
+acore_log_section "🐚 Formatting shell scripts with shfmt"
+shfmt -w .
+acore_log_success "✅ Shell scripts formatted"
 
 acore_log_success "✅ Formatting completed successfully!"

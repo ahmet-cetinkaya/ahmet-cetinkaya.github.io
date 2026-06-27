@@ -1,4 +1,4 @@
-import { Scene, AmbientLight, DirectionalLight } from "three";
+import type { Scene } from "three";
 import type { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { TranslationKeys } from "@domain/data/Translations";
 import LoadingModelPreview from "./Loading3DModelPreview";
@@ -9,6 +9,7 @@ import type { Model3DConfig } from "./models";
 import { DefaultConfigs } from "./constants/defaultConfigs";
 import ThumbnailPaths from "@shared/constants/ThumbnailPaths";
 import { configureControls as applyControls } from "./configureControls";
+import { configureSceneLighting } from "./configureSceneLighting";
 
 type Props = {
   class?: string;
@@ -21,11 +22,7 @@ export default function Envelope3DModel(props: Props) {
   const config = props.config || DefaultConfigs.full;
 
   function configureScene(scene: Scene) {
-    const ambientLight = new AmbientLight("#fff", 1);
-    scene.add(ambientLight);
-
-    const pointLight = new DirectionalLight("#fff", 10);
-    scene.add(pointLight);
+    configureSceneLighting(scene, { intensity: 10 });
   }
 
   function configureControlsLocal(controls: OrbitControls) {

@@ -1,10 +1,10 @@
 import Dialog from "../../../features/desktop/components/Dialog";
-import Button from "@shared/components/ui/Button";
 import Icons from "@domain/data/Icons";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
+import DialogButtons from "./DialogButtons";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -68,20 +68,12 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
       fitContent={true}
       sizingOptions={DialogSizeCalculator.createSizeOptions("confirm")}
       customButtons={[
-        <div class="flex justify-end space-x-2">
-          <Button onClick={handleCancel} variant="text" size="small" class="px-4 py-2 text-sm" ariaLabel="Cancel">
-            {props.cancelButtonText &&
-            Object.values(TranslationKeys).includes(props.cancelButtonText as TranslationKeys)
-              ? translate(props.cancelButtonText as TranslationKeys)
-              : props.cancelButtonText || "Cancel"}
-          </Button>
-          <Button onClick={handleConfirm} variant="primary" size="small" class="px-4 py-2 text-sm" ariaLabel="Confirm">
-            {props.confirmButtonText &&
-            Object.values(TranslationKeys).includes(props.confirmButtonText as TranslationKeys)
-              ? translate(props.confirmButtonText as TranslationKeys)
-              : props.confirmButtonText || "OK"}
-          </Button>
-        </div>,
+        <DialogButtons
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+          cancelButtonText={props.cancelButtonText}
+          confirmButtonText={props.confirmButtonText}
+        />,
       ]}
     />
   );

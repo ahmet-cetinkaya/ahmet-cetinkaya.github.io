@@ -6,6 +6,7 @@ import Icon from "@shared/components/Icon";
 import Icons from "@domain/data/Icons";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import ScreenHelper from "@shared/utils/ScreenHelper";
+import { formatFileSize, formatDate } from "../utils/formatters";
 
 type PropertiesPanelProps = {
   entry: FileSystemEntry | null;
@@ -15,29 +16,6 @@ type PropertiesPanelProps = {
 
 export default function PropertiesPanel(props: PropertiesPanelProps) {
   const [panelPosition, setPanelPosition] = createSignal<"right" | "bottom">("right");
-
-  function formatDate(date: Date): string {
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
-
-  function formatFileSize(size: number): string {
-    const units = ["B", "KB", "MB", "GB"];
-    let unitIndex = 0;
-    let value = size;
-
-    while (value >= 1024 && unitIndex < units.length - 1) {
-      value /= 1024;
-      unitIndex++;
-    }
-
-    return `${value.toFixed(1)} ${units[unitIndex]}`;
-  }
 
   function getFileType(entry: File): string {
     if (entry.extension) {

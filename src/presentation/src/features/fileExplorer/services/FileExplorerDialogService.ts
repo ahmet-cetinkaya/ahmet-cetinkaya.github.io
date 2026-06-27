@@ -14,55 +14,54 @@ export class FileExplorerDialogService {
     private refresh: () => void,
   ) {}
 
-  async createFolder(currentPath: string, folderName: string, callbacks?: DialogCallbacks): Promise<void> {
+  private normalizeError(error: unknown): Error {
+    return error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
+  }
+
+  private async executeOperation<T>(
+    operation: (service: FileExplorerService) => Promise<T>,
+    callbacks?: DialogCallbacks,
+    onSuccess?: (result: T) => void,
+  ): Promise<void> {
     try {
       const service = FileExplorerService.getInstance(this.fileSystemService);
-      const result = await service.createFolder(currentPath, folderName.trim());
+      const result = await operation(service);
       this.refresh();
-      callbacks?.onSuccess?.(result.actualName);
+      onSuccess?.(result);
     } catch (error) {
-      const actualError =
-        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
-      callbacks?.onError?.(actualError);
+      callbacks?.onError?.(this.normalizeError(error));
     }
+  }
+
+  async createFolder(currentPath: string, folderName: string, callbacks?: DialogCallbacks): Promise<void> {
+    await this.executeOperation(
+      (service) => service.createFolder(currentPath, folderName.trim()),
+      callbacks,
+      (result) => callbacks?.onSuccess?.(result.actualName),
+    );
   }
 
   async createFile(currentPath: string, fileName: string, callbacks?: DialogCallbacks): Promise<void> {
-    try {
-      const service = FileExplorerService.getInstance(this.fileSystemService);
-      const result = await service.createFile(currentPath, fileName.trim());
-      this.refresh();
-      callbacks?.onSuccess?.(result.actualName);
-    } catch (error) {
-      const actualError =
-        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
-      callbacks?.onError?.(actualError);
-    }
+    await this.executeOperation(
+      (service) => service.createFile(currentPath, fileName.trim()),
+      callbacks,
+      (result) => callbacks?.onSuccess?.(result.actualName),
+    );
   }
 
   async renameEntry(currentPath: string, newName: string, callbacks?: DialogCallbacks): Promise<void> {
-    try {
-      const service = FileExplorerService.getInstance(this.fileSystemService);
-      await service.renameEntry(currentPath, newName.trim());
-      this.refresh();
-      callbacks?.onSuccess?.();
-    } catch (error) {
-      const actualError =
-        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
-      callbacks?.onError?.(actualError);
-    }
+    await this.executeOperation(
+      (service) => service.renameEntry(currentPath, newName.trim()),
+      callbacks,
+      () => callbacks?.onSuccess?.(),
+    );
   }
 
   async deleteEntries(paths: string[], callbacks?: DialogCallbacks): Promise<void> {
-    try {
-      const service = FileExplorerService.getInstance(this.fileSystemService);
-      await service.deleteEntries(paths);
-      this.refresh();
-      callbacks?.onSuccess?.();
-    } catch (error) {
-      const actualError =
-        error instanceof PermissionError ? error : new Error(error instanceof Error ? error.message : String(error));
-      callbacks?.onError?.(actualError);
-    }
+    await this.executeOperation(
+      (service) => service.deleteEntries(paths),
+      callbacks,
+      () => callbacks?.onSuccess?.(),
+    );
   }
 }

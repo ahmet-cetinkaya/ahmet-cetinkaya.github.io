@@ -377,16 +377,18 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     refresh();
   }
 
-  function handleContextMenu(entry: FileSystemEntry | undefined, event: MouseEvent) {
+  function prepareContextMenuEvent(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    // Clear any text selection that might have occurred
     const selection = window.getSelection();
     if (selection) {
       selection.removeAllRanges();
     }
+  }
 
+  function handleContextMenu(entry: FileSystemEntry | undefined, event: MouseEvent) {
+    prepareContextMenuEvent(event);
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },
@@ -395,15 +397,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
   }
 
   function handleBackgroundContextMenu(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Clear any text selection that might have occurred
-    const selection = window.getSelection();
-    if (selection) {
-      selection.removeAllRanges();
-    }
-
+    prepareContextMenuEvent(event);
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },

@@ -12,12 +12,10 @@ export type Props = LayoutProps;
   <div class="w-svh flex h-svh flex-col overflow-hidden">
     <Taskbar />
 
-    <main class="flex-grow">
-      <span transition:persist>
-        <Wallpaper class="absolute top-0 -z-50 size-full" client:only="solid-js" transition:persist />
-        <Desktop client:only="solid-js" transition:persist />
-        <WindowManager client:only="solid-js" transition:persist />
-      </span>
+    <main class="relative flex-grow">
+      <Wallpaper class="absolute top-0 -z-50 size-full" client:only="solid-js" transition:persist />
+      <Desktop client:only="solid-js" transition:persist />
+      <WindowManager client:only="solid-js" transition:persist />
     </main>
   </div>
 </Layout>

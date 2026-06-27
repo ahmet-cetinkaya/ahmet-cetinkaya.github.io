@@ -13,7 +13,7 @@ import appCommands from "@shared/constants/AppCommands";
 import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
 import { Locales } from "@domain/data/Translations";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 
 // Lazy load the heavy ThreeDimensionalModel component
 const ThreeDimensionalModel = lazy(() => import("@shared/components/ThreeDimensionalModel/ThreeDimensionalModel"));
@@ -23,7 +23,11 @@ type DesktopShortcutMatrix = DesktopShortcut[][];
 
 const EXEC_REGEX = /Exec=(.+)/;
 
-export default function Desktop() {
+interface DesktopProps {
+  class?: string;
+}
+
+export default function Desktop(props: DesktopProps) {
   const { appsService, fileSystemService, i18n } = Container.instance;
 
   let containerRef: HTMLDivElement | undefined;
@@ -158,7 +162,7 @@ export default function Desktop() {
     setDraggedShortcut(null);
   }
 
-  function onShortcutClick(shortcut: DesktopShortcut) {
+  async function onShortcutClick(shortcut: DesktopShortcut) {
     if (!shortcut) return;
 
     const appCommand = appCommands[shortcut.id];
@@ -167,7 +171,11 @@ export default function Desktop() {
     const appCommandArgs = [];
     if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");
 
-    appCommand().execute(...appCommandArgs);
+    try {
+      await appCommand().execute(...appCommandArgs);
+    } catch (error) {
+      logger.debug("App window already exists or activation failed:", error);
+    }
   }
 
   let resizeDebounceTimeout: Timer | null = null;
@@ -180,7 +188,7 @@ export default function Desktop() {
   }
 
   return (
-    <div ref={onContainerMount} class="flex size-full flex-row gap-6">
+    <div ref={onContainerMount} class={`relative z-10 flex size-full flex-row gap-6 ${props.class ?? ""}`}>
       <For each={matrix()}>
         {(row, x) => (
           <div class="flex flex-col gap-6">

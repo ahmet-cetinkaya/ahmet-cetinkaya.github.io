@@ -1,7 +1,6 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
-import PathUtils from "@packages/acore-ts/data/path/PathUtils";
 import BaseCommand from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
@@ -66,26 +65,17 @@ export default class MkdirCommand extends BaseCommand {
   }
 
   async execute(...args: string[]): Promise<CommandOutput> {
-    const { flags, directories } = this.parseArgs(args);
+    return this.runDirectoryCommand(args, this.parseArgs, this.createHelpOutput(), (flags) =>
+      this.createMkdirHandler(flags),
+    );
+  }
 
-    if (flags.help) return this.createHelpOutput();
-    if (flags.version) return { output: "mkdir version 1.0.0", exitCode: ExitCodes.SUCCESS };
-
-    if (directories.length === 0)
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
-
-    const messages: string[] = [];
-
-    for (const path of directories) {
-      const targetPath = PathUtils.normalize(this.currentPath, path);
-
-      if (targetPath !== "/" && !targetPath.startsWith("/home"))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
-
+  private createMkdirHandler(flags: MkdirFlags) {
+    return async (path: string, targetPath: string, messages: string[]): Promise<CommandOutput | null> => {
       if (await this.pathExists(targetPath)) {
         if (!flags.parents)
           return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_mkdir_dir_exists}}}: ${path}`);
-        continue;
+        return null;
       }
 
       if (flags.parents) {
@@ -107,11 +97,8 @@ export default class MkdirCommand extends BaseCommand {
         if (flags.verbose)
           messages.push(`mkdir: {{${TranslationKeys.apps_terminal_mkdir_created_directory}}} '${targetPath}'`);
       }
-    }
 
-    return {
-      output: messages.join("\n"),
-      exitCode: ExitCodes.SUCCESS,
+      return null;
     };
   }
 

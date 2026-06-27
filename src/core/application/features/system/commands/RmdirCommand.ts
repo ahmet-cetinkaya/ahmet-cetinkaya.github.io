@@ -1,8 +1,7 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
-import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import BaseCommand from "./abstraction/BaseCommand";
+import BaseCommand, { filterPositionalArgs, parseBooleanFlags } from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
 type RmdirFlags = {
@@ -25,62 +24,25 @@ export default class RmdirCommand extends BaseCommand {
   }
 
   private parseArgs(args: string[]): { flags: RmdirFlags; directories: string[] } {
-    const flags: RmdirFlags = {
-      ignoreFailOnNonEmpty: false,
-      parents: false,
-      verbose: false,
-      help: false,
-      version: false,
-    };
-    const directories: string[] = [];
+    const flags = parseBooleanFlags(args, {
+      ignoreFailOnNonEmpty: ["--ignore-fail-on-non-empty"],
+      parents: ["-p", "--parents"],
+      verbose: ["-v", "--verbose"],
+      help: ["--help"],
+      version: ["--version"],
+    }) as RmdirFlags;
 
-    for (let i = 0; i < args.length; i++) {
-      const arg = args[i];
-      if (arg.startsWith("-")) {
-        switch (arg) {
-          case "--ignore-fail-on-non-empty":
-            flags.ignoreFailOnNonEmpty = true;
-            break;
-          case "-p":
-          case "--parents":
-            flags.parents = true;
-            break;
-          case "-v":
-          case "--verbose":
-            flags.verbose = true;
-            break;
-          case "--help":
-            flags.help = true;
-            break;
-          case "--version":
-            flags.version = true;
-            break;
-        }
-      } else {
-        directories.push(arg);
-      }
-    }
-
-    return { flags, directories };
+    return { flags, directories: filterPositionalArgs(args) };
   }
 
   async execute(...args: string[]): Promise<CommandOutput> {
-    const { flags, directories } = this.parseArgs(args);
+    return this.runDirectoryCommand(args, this.parseArgs, this.createHelpOutput(), (flags) =>
+      this.createRmdirHandler(flags),
+    );
+  }
 
-    if (flags.help) return this.createHelpOutput();
-    if (flags.version) return { output: "rmdir version 1.0.0", exitCode: ExitCodes.SUCCESS };
-
-    if (directories.length === 0)
-      return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
-
-    const messages: string[] = [];
-
-    for (const path of directories) {
-      const targetPath = PathUtils.normalize(this.currentPath, path);
-
-      if (targetPath !== "/" && !targetPath.startsWith("/home"))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
-
+  private createRmdirHandler(flags: RmdirFlags) {
+    return async (path: string, targetPath: string, messages: string[]): Promise<CommandOutput | null> => {
       const entry = await this.fileSystemService.get((e) => e.fullPath === targetPath);
 
       if (!entry) return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_common_path_required}}}`);
@@ -114,11 +76,8 @@ export default class RmdirCommand extends BaseCommand {
         if (flags.verbose)
           messages.push(`${this.name}: {{${TranslationKeys.apps_terminal_rmdir_removing_directory}}} '${targetPath}'`);
       }
-    }
 
-    return {
-      output: messages.join("\n"),
-      exitCode: ExitCodes.SUCCESS,
+      return null;
     };
   }
 

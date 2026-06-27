@@ -3,8 +3,7 @@ import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import OutputHelper from "@packages/acore-ts/data/output/OutputHelper";
-import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import type ICIProgram from "./abstraction/ICIProgram";
+import BaseCommand, { filterPositionalArgs, parseBooleanFlags } from "./abstraction/BaseCommand";
 import { ExitCodes, type CommandOutput } from "./abstraction/ICIProgram";
 
 type LsFlags = {
@@ -20,17 +19,19 @@ type LsFlags = {
   version: boolean;
 };
 
-export default class LsCommand implements ICIProgram {
+export default class LsCommand extends BaseCommand {
   name = "ls";
   description = TranslationKeys.apps_terminal_commands_ls_description;
 
-  constructor(
-    private readonly fileSystemService: IFileSystemService,
-    private currentPath: string,
-  ) {}
+  constructor(fileSystemService: IFileSystemService, currentPath: string) {
+    super(fileSystemService);
+    this.currentPath = currentPath;
+  }
+
+  private currentPath: string;
 
   private parseArgs(args: string[]): { flags: LsFlags; files: string[] } {
-    const flagMap = {
+    const flags = parseBooleanFlags(args, {
       all: ["-a", "--all"],
       almostAll: ["-A", "--almost-all"],
       recursive: ["-R", "--recursive"],
@@ -41,37 +42,27 @@ export default class LsCommand implements ICIProgram {
       humanReadable: ["-h", "--human-readable"],
       help: ["--help"],
       version: ["--version"],
-    };
+    }) as LsFlags;
 
-    const flags = Object.entries(flagMap).reduce(
-      (acc, [key, values]) => ({
-        ...acc,
-        [key]: args.some((arg) => values.includes(arg)),
-      }),
-      {} as LsFlags,
-    );
-
-    return {
-      flags,
-      files: args.filter((arg) => !arg.startsWith("-")),
-    };
+    return { flags, files: filterPositionalArgs(args) };
   }
 
   async execute(...args: string[]): Promise<CommandOutput> {
-    const { flags, files } = this.parseArgs(args);
+    return this.runFileCommand(args, this.parseArgs, this.createHelpOutput(), (flags, files) =>
+      this.listDirectory(flags, files),
+    );
+  }
 
-    if (flags.help) return this.createHelpOutput();
-    if (flags.version) return { output: "ls 1.0.0", exitCode: ExitCodes.SUCCESS };
-
+  private async listDirectory(flags: LsFlags, files: string[]): Promise<CommandOutput> {
     try {
       const path = files[0] || this.currentPath;
-      const targetPath = PathUtils.normalize(this.currentPath, path);
+      const targetPath = this.normalizePath(this.currentPath, path);
       if (!(await this.pathExists(targetPath)))
         return this.createErrorOutput(
           `{{${TranslationKeys.apps_terminal_common_path_required}}}: ${path} (resolved: ${targetPath})`,
         );
-      if (targetPath !== "/" && !targetPath.startsWith("/home"))
-        return this.createErrorOutput(`{{${TranslationKeys.apps_terminal_user_permission_denied}}}: ${path}`);
+      const ownershipError = this.validatePathOwnership(targetPath);
+      if (ownershipError) return ownershipError;
 
       let entries: (Directory | File)[] = [];
 
@@ -124,20 +115,6 @@ export default class LsCommand implements ICIProgram {
   --help                {{${TranslationKeys.apps_terminal_ls_help_option_help}}}
   --version             {{${TranslationKeys.apps_terminal_ls_help_option_version}}}`,
       exitCode: ExitCodes.SUCCESS,
-    };
-  }
-
-  private async pathExists(path: string): Promise<boolean> {
-    if (path === "/") return true;
-
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
-    return Boolean(entry);
-  }
-
-  private createErrorOutput(message: string): CommandOutput {
-    return {
-      output: `${this.name}: ${message}`,
-      exitCode: ExitCodes.GENERAL_ERROR,
     };
   }
 

@@ -45,24 +45,7 @@ export default class GameExecutionService {
     });
   }
 
-  public isGameExecutable(entry: FileSystemEntry): boolean {
-    if (!(entry instanceof File)) {
-      return false;
-    }
-
-    const fileName = entry.name.toLowerCase();
-    const fileExtension = this.getFileExtension(fileName);
-
-    for (const game of this.gameExecutables.values()) {
-      if (game.fileName.toLowerCase() === fileName || game.supportedExtensions.includes(fileExtension)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public getGameExecutable(entry: FileSystemEntry): GameExecutable | null {
+  private findGameForEntry(entry: FileSystemEntry): GameExecutable | null {
     if (!(entry instanceof File)) {
       return null;
     }
@@ -77,6 +60,14 @@ export default class GameExecutionService {
     }
 
     return null;
+  }
+
+  public isGameExecutable(entry: FileSystemEntry): boolean {
+    return this.findGameForEntry(entry) !== null;
+  }
+
+  public getGameExecutable(entry: FileSystemEntry): GameExecutable | null {
+    return this.findGameForEntry(entry);
   }
 
   public getSupportedGameExtensions(): string[] {

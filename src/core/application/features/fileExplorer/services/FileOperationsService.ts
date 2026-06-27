@@ -1,6 +1,7 @@
 import PermissionService from "@application/features/system/services/PermissionService";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import { pathExists as checkPathExists } from "@application/shared/pathExists";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import { logger } from "@shared/utils/logger";
@@ -24,33 +25,34 @@ export default class FileOperationsService {
     this.directoryOperations = new DirectoryOperations(fileSystemService);
   }
 
+  private async prepareCreateOperation(parentPath: string, name: string, isDirectory: boolean) {
+    const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(parentPath, name, "create");
+    const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, isDirectory);
+    const fullPath = PathSanitizer.joinPath(validatedParentPath, actualName);
+    ValidationHelper.validatePathWithPermissions(fullPath);
+    return { validatedParentPath, actualName, fullPath };
+  }
+
+  private wrapCreateError(operation: string, parentPath: string, name: string, error: unknown): never {
+    if (error instanceof Error) {
+      logger.error(`Failed to ${operation} ${name} in ${parentPath}:`, error);
+      throw error;
+    }
+    throw new OperationFailedError(operation, parentPath, new Error(String(error)));
+  }
+
   /**
    * Create a new directory
    */
   async createDirectory(parentPath: string, name: string): Promise<{ directory: Directory; actualName: string }> {
     try {
-      // Validate and prepare inputs using consolidated helper
-      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(parentPath, name, "create");
-
-      // Generate unique name if directory already exists
-      const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, true);
-      const fullPath = PathSanitizer.joinPath(validatedParentPath, actualName);
-
-      // Validate the final path
-      ValidationHelper.validatePathWithPermissions(fullPath);
-
+      const { actualName, fullPath } = await this.prepareCreateOperation(parentPath, name, true);
       const newDirectory = new Directory(fullPath, new Date());
       await this.fileSystemService.add(newDirectory);
-
       logger.info(`Created directory: ${fullPath}`);
       return { directory: newDirectory, actualName };
     } catch (error) {
-      if (error instanceof Error) {
-        logger.error(`Failed to create directory ${name} in ${parentPath}:`, error);
-        throw error;
-      }
-      const convertedError = error instanceof Error ? error : new Error(String(error));
-      throw new OperationFailedError("create directory", parentPath, convertedError);
+      this.wrapCreateError("create directory", parentPath, name, error);
     }
   }
 
@@ -63,31 +65,15 @@ export default class FileOperationsService {
     content: string = "",
   ): Promise<{ file: File; actualName: string }> {
     try {
-      // Validate and prepare inputs using consolidated helper
-      const { validatedParentPath, sanitizedName } = ValidationHelper.validateFileOperation(parentPath, name, "create");
-
-      // Generate unique name if file already exists
-      const actualName = await this.generateUniqueName(validatedParentPath, sanitizedName, false);
-      const fullPath = PathSanitizer.joinPath(validatedParentPath, actualName);
-
-      // Validate the final path
-      ValidationHelper.validatePathWithPermissions(fullPath);
-
+      const { actualName, fullPath } = await this.prepareCreateOperation(parentPath, name, false);
       const sanitizedContent = StringSanitizer.forFileContent(content);
       const contentBytes = new TextEncoder().encode(sanitizedContent).length;
-
       const newFile = new File(fullPath, sanitizedContent, new Date(), contentBytes, new Date());
       await this.fileSystemService.add(newFile);
-
       logger.info(`Created file: ${fullPath} (${contentBytes} bytes)`);
       return { file: newFile, actualName };
     } catch (error) {
-      if (error instanceof Error) {
-        logger.error(`Failed to create file ${name} in ${parentPath}:`, error);
-        throw error;
-      }
-      const convertedError = error instanceof Error ? error : new Error(String(error));
-      throw new OperationFailedError("create file", parentPath, convertedError);
+      this.wrapCreateError("create file", parentPath, name, error);
     }
   }
 
@@ -115,52 +101,40 @@ export default class FileOperationsService {
    * Copy files and directories
    */
   async copyEntries(sourcePaths: string[], destinationPath: string): Promise<void> {
-    if (sourcePaths.length === 0) {
-      return;
-    }
-
-    // Validate all operation paths using consolidated helper
-    const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
-      sourcePaths,
-      destinationPath,
+    return this.queueTransferEntries(sourcePaths, destinationPath, OperationType.COPY, 5, (sources, dest) =>
+      this.executeCopy(sources, dest),
     );
-
-    const allPaths = [...validatedSources, validatedDestination];
-
-    return new Promise((resolve, reject) => {
-      globalOperationQueue.add({
-        type: OperationType.COPY,
-        priority: 5, // Medium priority for copy operations
-        paths: allPaths,
-        execute: () => this.executeCopy(validatedSources, validatedDestination),
-        onComplete: () => resolve(),
-        onError: reject,
-      });
-    });
   }
 
   /**
    * Move files and directories
    */
   async moveEntries(sourcePaths: string[], destinationPath: string): Promise<void> {
-    if (sourcePaths.length === 0) {
-      return;
-    }
+    return this.queueTransferEntries(sourcePaths, destinationPath, OperationType.MOVE, 7, (sources, dest) =>
+      this.executeMove(sources, dest),
+    );
+  }
 
-    // Validate all operation paths using consolidated helper
+  private async queueTransferEntries(
+    sourcePaths: string[],
+    destinationPath: string,
+    type: OperationType,
+    priority: number,
+    execute: (sources: string[], dest: string) => Promise<void>,
+  ): Promise<void> {
+    if (sourcePaths.length === 0) return;
+
     const { validatedSources, validatedDestination } = ValidationHelper.validateOperationPaths(
       sourcePaths,
       destinationPath,
     );
 
-    const allPaths = [...validatedSources, validatedDestination];
-
     return new Promise((resolve, reject) => {
       globalOperationQueue.add({
-        type: OperationType.MOVE,
-        priority: 7, // High-medium priority for move operations
-        paths: allPaths,
-        execute: () => this.executeMove(validatedSources, validatedDestination),
+        type,
+        priority,
+        paths: [...validatedSources, validatedDestination],
+        execute: () => execute(validatedSources, validatedDestination),
         onComplete: () => resolve(),
         onError: reject,
       });
@@ -382,29 +356,35 @@ export default class FileOperationsService {
     }
   }
 
+  private async cleanupAndThrow(
+    error: unknown,
+    sourcePath: string,
+    newPath: string,
+    operation: string,
+    cleanupFn: () => Promise<void>,
+  ): Promise<never> {
+    try {
+      await cleanupFn();
+    } catch (cleanupError) {
+      logger.warn(`Failed to clean up ${newPath} during ${operation} rollback`, cleanupError);
+    }
+    const convertedError = error instanceof Error ? error : new Error(String(error));
+    throw new OperationFailedError(operation, sourcePath, convertedError);
+  }
+
   /**
    * Move a file with transaction safety
    */
   private async moveFile(sourceFile: File, newPath: string): Promise<void> {
     try {
-      // Create the new file (original is kept until this succeeds - natural rollback)
       const updatedFile = new File(newPath, sourceFile.content, sourceFile.createdDate, sourceFile.size, new Date());
       await this.fileSystemService.add(updatedFile);
-
-      // Remove the original file
       await this.fileSystemService.remove((e) => e.fullPath === sourceFile.fullPath);
-
       logger.debug(`Successfully moved file: ${sourceFile.fullPath} -> ${newPath}`);
     } catch (error) {
-      // Rollback: remove the new file if it was created
-      try {
-        await this.fileSystemService.remove((e) => e.fullPath === newPath);
-      } catch (cleanupError) {
-        logger.warn(`Failed to clean up target file during rollback: ${newPath}`, cleanupError);
-      }
-
-      const convertedError = error instanceof Error ? error : new Error(String(error));
-      throw new OperationFailedError("move file failed", sourceFile.fullPath, convertedError);
+      await this.cleanupAndThrow(error, sourceFile.fullPath, newPath, "move file", () =>
+        this.fileSystemService.remove((e) => e.fullPath === newPath),
+      );
     }
   }
 
@@ -413,27 +393,15 @@ export default class FileOperationsService {
    */
   private async moveDirectory(sourceDirectory: Directory, newPath: string): Promise<void> {
     try {
-      // First copy the directory with all contents
       await this.copyDirectory(sourceDirectory, newPath);
-
-      // If copy succeeds, delete the original directory
       await this.directoryOperations.deleteDirectoryContents(sourceDirectory.fullPath);
-
-      // Finally remove the directory itself
       await this.fileSystemService.remove((e) => e.fullPath === sourceDirectory.fullPath);
-
       logger.debug(`Successfully moved directory: ${sourceDirectory.fullPath} -> ${newPath}`);
     } catch (error) {
-      // Clean up partially copied directory if move failed
-      logger.error(`Directory move failed, cleaning up: ${newPath}`, error);
-      try {
+      await this.cleanupAndThrow(error, sourceDirectory.fullPath, newPath, "move directory", async () => {
         await this.directoryOperations.deleteDirectoryContents(newPath);
         await this.fileSystemService.remove((e) => e.fullPath === newPath);
-      } catch (cleanupError) {
-        logger.warn(`Failed to clean up partially copied directory: ${newPath}`, cleanupError);
-      }
-      const convertedError = error instanceof Error ? error : new Error(String(error));
-      throw new OperationFailedError("move directory", sourceDirectory.fullPath, convertedError);
+      });
     }
   }
 
@@ -485,9 +453,6 @@ export default class FileOperationsService {
    * Check if path exists
    */
   private async pathExists(path: string): Promise<boolean> {
-    if (path === "/") return true;
-
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
-    return Boolean(entry);
+    return checkPathExists(this.fileSystemService, path);
   }
 }

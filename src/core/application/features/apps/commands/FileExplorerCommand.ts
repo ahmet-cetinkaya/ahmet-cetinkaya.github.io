@@ -21,7 +21,9 @@ export default class FileExplorerCommand implements ICIProgram {
 
   async execute(...args: string[]): Promise<CommandOutput> {
     try {
-      const targetPath = args[0] || "/home/ac";
+      // Filter out flag arguments (--maximized, etc.) to find the actual path argument
+      const pathArgs = args.filter((arg) => !arg.startsWith("--"));
+      const targetPath = pathArgs[0] || "/home/ac";
 
       const exists = await checkPathExists(this.fileSystemService, targetPath);
       if (!exists) {
@@ -41,8 +43,8 @@ export default class FileExplorerCommand implements ICIProgram {
         Apps.fileExplorer,
         i18n.translate(currentLocale, TranslationKeys.apps_file_explorer_title),
         undefined,
-        false,
-        false,
+        undefined,
+        args.includes("--maximized"),
         undefined,
         undefined,
         undefined,

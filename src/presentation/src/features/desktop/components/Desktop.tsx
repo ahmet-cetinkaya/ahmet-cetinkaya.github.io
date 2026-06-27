@@ -162,7 +162,10 @@ export default function Desktop(props: DesktopProps) {
     setDraggedShortcut(null);
   }
 
-  async function onShortcutClick(shortcut: DesktopShortcut) {
+  async function onShortcutClick(shortcut: DesktopShortcut, event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     if (!shortcut) return;
 
     const appCommand = appCommands[shortcut.id];
@@ -174,7 +177,8 @@ export default function Desktop(props: DesktopProps) {
     try {
       await appCommand().execute(...appCommandArgs);
     } catch (error) {
-      logger.debug("App window already exists or activation failed:", error);
+      // Window already exists is not a fatal error - it's already activated by WindowsService
+      logger.debug("App window handling:", error);
     }
   }
 
@@ -207,8 +211,12 @@ export default function Desktop(props: DesktopProps) {
                           <ThreeDimensionalModel model={col.icon} config={DefaultConfigs.desktopIcon} />
                         </Suspense>
                       }
-                      href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`}
-                      onClick={() => onShortcutClick(col)}
+                      href={
+                        ScreenHelper.isMobile()
+                          ? undefined
+                          : `${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`
+                      }
+                      onClick={(event) => onShortcutClick(col, event)}
                       onDragStart={() => onShortcutDragStart(col)}
                     />
                   ) : (

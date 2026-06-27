@@ -19,10 +19,7 @@
     "@fontsource/oxanium": "^5.2.6",
     "astro": "^5.11.1",
     "astro-compressor": "^1.0.0",
-    "astro-seo": "^0.8.4",
-    "js-dos": "^8.3.20",
     "solid-js": "^1.9.7",
-    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^3.4.17",
     "three": "^0.181.2"
   },

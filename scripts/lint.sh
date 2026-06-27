@@ -20,7 +20,7 @@ acore_log_section "🚀 Type checking Astro"
 (cd src/presentation && bun run check)
 acore_log_success "✅ Astro check passed"
 
-# Fallow
+# Fallow - All layers
 acore_log_section "🍂 Checking for dead code"
 bunx fallow dead-code --root . 2>/dev/null || true
 acore_log_success "✅ Dead code check passed"

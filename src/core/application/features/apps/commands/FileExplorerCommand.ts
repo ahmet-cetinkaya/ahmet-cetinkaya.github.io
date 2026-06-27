@@ -2,6 +2,7 @@ import type IWindowsService from "@application/features/desktop/services/abstrac
 import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
 import { ExitCodes, type CommandOutput } from "@application/features/system/commands/abstraction/ICIProgram";
 import type { IFileSystemService } from "@application/features/system/services/abstraction/IFileSystemService";
+import { pathExists as checkPathExists } from "@application/shared/pathExists";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys } from "@domain/data/Translations";
 import Window from "@domain/models/Window";
@@ -22,8 +23,8 @@ export default class FileExplorerCommand implements ICIProgram {
     try {
       const targetPath = args[0] || "/home/ac";
 
-      const pathExists = await this.pathExists(targetPath);
-      if (!pathExists) {
+      const exists = await checkPathExists(this.fileSystemService, targetPath);
+      if (!exists) {
         const { i18n } = this.container;
         const currentLocale = i18n.currentLocale.value || i18n.getBrowserLocale() || i18n.locales[0] || "en";
         return {
@@ -63,12 +64,5 @@ export default class FileExplorerCommand implements ICIProgram {
         exitCode: ExitCodes.GENERAL_ERROR,
       };
     }
-  }
-
-  private async pathExists(path: string): Promise<boolean> {
-    if (path === "/") return true;
-
-    const entry = await this.fileSystemService.get((e) => e.fullPath === path);
-    return Boolean(entry);
   }
 }

@@ -21,8 +21,14 @@ export interface AppCommandConfig {
 export default abstract class BaseAppCommand implements ICIProgram {
   abstract name: string;
   abstract description: string;
+  protected abstract readonly appConfig: AppCommandConfig;
 
   constructor(protected readonly windowService: IWindowsService) {}
+
+  async execute(...args: string[]): Promise<CommandOutput> {
+    if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
+    return this.launchApp(args, this.appConfig);
+  }
 
   protected async launchApp(args: string[], config: AppCommandConfig): Promise<CommandOutput> {
     const flags = this.parseFlags(args);

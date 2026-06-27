@@ -61,13 +61,7 @@ export default class FileExplorerService {
   }
 
   async getDirectoryContents(path: string, options: Partial<FileExplorerState> = {}): Promise<FileSystemEntry[]> {
-    const navigationOptions: NavigationOptions = {
-      sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
-      sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
-      showHidden: options.showHidden || false,
-    };
-
-    const result = await this.navigationService.getDirectoryContents(path, navigationOptions);
+    const result = await this.navigationService.getDirectoryContents(path, this.buildNavigationOptions(options));
     return result.entries;
   }
 
@@ -75,26 +69,15 @@ export default class FileExplorerService {
     path: string,
     options: Partial<FileExplorerState> = {},
   ): Promise<FileExplorerContents> {
-    const navigationOptions: NavigationOptions = {
-      sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
-      sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
-      showHidden: options.showHidden || false,
-    };
-
-    const navigationResult = await this.navigationService.getDirectoryContents(path, navigationOptions);
-
+    const navigationResult = await this.navigationService.getDirectoryContents(
+      path,
+      this.buildNavigationOptions(options),
+    );
     return this.mapToDirectoryContents(navigationResult);
   }
 
   async navigateTo(path: string, options: Partial<FileExplorerState> = {}): Promise<FileExplorerContents> {
-    const navigationOptions: NavigationOptions = {
-      sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
-      sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
-      showHidden: options.showHidden || false,
-    };
-
-    const navigationResult = await this.navigationService.navigateTo(path, navigationOptions);
-
+    const navigationResult = await this.navigationService.navigateTo(path, this.buildNavigationOptions(options));
     return this.mapToDirectoryContents(navigationResult);
   }
 
@@ -102,11 +85,10 @@ export default class FileExplorerService {
     currentPath: string,
     options: Partial<FileExplorerState> = {},
   ): Promise<DirectoryContents | null> {
-    const navigationOptions: NavigationOptions = {
-      sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
-      sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
-      showHidden: options.showHidden || false,
-    };
+    const navigationResult = await this.navigationService.navigateToParent(
+      currentPath,
+      this.buildNavigationOptions(options),
+    );
 
     const navigationResult = await this.navigationService.navigateToParent(currentPath, navigationOptions);
 
@@ -136,6 +118,14 @@ export default class FileExplorerService {
       totalCount: navigationResult.totalCount,
       path: navigationResult.currentPath,
       isLoading: false,
+    };
+  }
+
+  private buildNavigationOptions(options: Partial<FileExplorerState>): NavigationOptions {
+    return {
+      sortBy: options.sortBy || UI_CONSTANTS.DEFAULT_SORT_BY,
+      sortOrder: options.sortOrder || UI_CONSTANTS.DEFAULT_SORT_ORDER,
+      showHidden: options.showHidden || false,
     };
   }
 

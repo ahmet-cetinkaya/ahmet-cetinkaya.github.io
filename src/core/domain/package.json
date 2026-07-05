@@ -7,6 +7,6 @@
     "acore-ts": "workspace:*"
   },
   "peerDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^6.0.3"
   }
 }

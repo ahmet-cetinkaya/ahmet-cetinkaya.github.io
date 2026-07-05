@@ -257,7 +257,7 @@ export default function Terminal(props: Props) {
     return isRelativePath ? PathUtils.relative(currentPath(), matchingPath) : matchingPath.split("/").pop()!;
   }
 
-  let scrollTimeout: Timer;
+  let scrollTimeout: ReturnType<typeof setTimeout>;
   function scrollToBottom() {
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
@@ -282,14 +282,14 @@ export default function Terminal(props: Props) {
   return (
     <div
       ref={(el) => (containerElement = el)}
-      class={mergeCls("font-mono flex size-full flex-col overflow-y-auto rounded-lg bg-black p-4", props.class)}
+      class={mergeCls("flex size-full flex-col overflow-y-auto rounded-lg bg-black p-4 font-mono", props.class)}
       onClick={onClick}
     >
       <For each={history()}>
         {(entry) => (
           <>
             <pre class="whitespace-pre-wrap">
-              <span class="font-bold text-primary-500">
+              <span class="text-primary-500 font-bold">
                 {PROMPT_PREFIX.user}@{entry.path}
                 {PROMPT_PREFIX.separator}
               </span>
@@ -334,7 +334,7 @@ export default function Terminal(props: Props) {
 
   function CommandLineUserPrefix() {
     return (
-      <span class="font-bold text-primary-500">
+      <span class="text-primary-500 font-bold">
         {PROMPT_PREFIX.user}@{currentPath()}
         {PROMPT_PREFIX.separator}
       </span>

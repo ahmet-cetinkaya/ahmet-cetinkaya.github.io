@@ -182,7 +182,7 @@ export default function Desktop(props: DesktopProps) {
       });
   }
 
-  let resizeDebounceTimeout: Timer | null = null;
+  let resizeDebounceTimeout: ReturnType<typeof setTimeout> | null = null;
   function onResize() {
     if (resizeDebounceTimeout) clearTimeout(resizeDebounceTimeout);
     resizeDebounceTimeout = setTimeout(() => {

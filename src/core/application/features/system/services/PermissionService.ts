@@ -90,11 +90,11 @@ export default class PermissionService {
   }
 
   static isProtectedPath(path: string): boolean {
-    return this.PROTECTED_PATHS.includes(path);
+    return this.PROTECTED_PATHS.includes(path as (typeof this.PROTECTED_PATHS)[number]);
   }
 
   static isReadOnlyPath(path: string): boolean {
-    return this.READ_ONLY_PATHS.includes(path);
+    return this.READ_ONLY_PATHS.includes(path as (typeof this.READ_ONLY_PATHS)[number]);
   }
 
   static getAllowedPaths(): string[] {

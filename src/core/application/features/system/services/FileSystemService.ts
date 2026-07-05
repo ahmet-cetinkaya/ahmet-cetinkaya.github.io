@@ -1,4 +1,4 @@
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 
 import GitHubService from "@application/features/fileExplorer/services/GitHubService";
 import DataService from "@application/shared/DataService";
@@ -53,8 +53,8 @@ export default class FileSystemService extends DataService<FileSystemEntry> impl
     const index = this.data!.findIndex((x) => x.id === item.id);
     if (index === -1) throw new Error("File system entry not found");
 
-    item.updatedDate = new Date();
-    this.data![index] = item;
+    const updatedItem = { ...item, updatedDate: new Date() } as FileSystemEntry;
+    this.data![index] = updatedItem;
 
     if (this.isDesktopFile(item)) {
       this.notifyListeners("update", item);

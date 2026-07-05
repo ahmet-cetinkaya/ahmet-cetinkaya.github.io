@@ -1,4 +1,4 @@
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import { PERFORMANCE_LIMITS } from "../constants";
 import { OperationTimeoutError } from "../errors";
 
@@ -33,7 +33,7 @@ interface BaseOperation {
   readonly execute: () => Promise<void>;
   readonly onProgress?: (progress: number) => void;
   readonly onComplete?: () => void;
-  readonly onError?: (error: Error) => void;
+  readonly onError?: (error?: unknown) => void;
   readonly timeout: number;
   readonly retryCount: number;
   readonly maxRetries: number;
@@ -86,6 +86,18 @@ interface CancelledOperation extends BaseOperation {
   startedAt?: Date;
   completedAt?: Date;
 }
+
+/**
+ * Input type for adding operations to the queue
+ */
+export type OperationInput = Omit<
+  PendingOperation,
+  "id" | "createdAt" | "status" | "retryCount" | "maxRetries" | "conflictRetryCount" | "maxConflictRetries" | "timeout"
+> & {
+  timeout?: number;
+  maxRetries?: number;
+  maxConflictRetries?: number;
+};
 
 /**
  * Type guard to check operation status
@@ -160,7 +172,7 @@ class OperationQueue {
     this.maxConcurrentOperations = maxConcurrent;
   }
 
-  add(operation: Omit<QueuedOperation, "id" | "createdAt" | "status" | "startedAt" | "completedAt">): string {
+  add(operation: OperationInput): string {
     const id = this.generateOperationId();
 
     const pendingOp: PendingOperation = {

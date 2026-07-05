@@ -1,7 +1,7 @@
 // @ts-check
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import compressor from "astro-compressor";
 import path from "path";
@@ -9,8 +9,9 @@ import path from "path";
 // https://astro.build/config
 export default defineConfig({
   site: "https://ahmetcetinkaya.me/",
-  integrations: [sitemap(), solidJs(), tailwind(), compressor()],
+  integrations: [sitemap(), solidJs(), compressor()],
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         "@": path.resolve("./src"),
@@ -21,17 +22,6 @@ export default defineConfig({
         "@presentation/src": path.resolve("./src"),
         "@presentation/Container": path.resolve("./Container.ts"),
         "@shared": path.resolve("./src/shared"),
-        "solid-js/web": path.resolve("./node_modules/solid-js/web"),
-        "solid-js": path.resolve("./node_modules/solid-js"),
-        "three/examples/jsm/controls/OrbitControls": path.resolve(
-          "./node_modules/three/examples/jsm/controls/OrbitControls.js",
-        ),
-        "three/examples/jsm/loaders/DRACOLoader": path.resolve(
-          "./node_modules/three/examples/jsm/loaders/DRACOLoader.js",
-        ),
-        "three/examples/jsm/loaders/GLTFLoader": path.resolve(
-          "./node_modules/three/examples/jsm/loaders/GLTFLoader.js",
-        ),
       },
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".astro"],
     },

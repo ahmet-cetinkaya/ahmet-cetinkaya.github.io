@@ -28,12 +28,14 @@ export default function ChangeLocale() {
   function saveLocale(nextLocale: string) {
     i18n.currentLocale.set(nextLocale);
 
-    const currentUrl = new URL(window.location.href);
-    const navigateUrl = i18n.getLocaleUrl(currentUrl, nextLocale, locales[0]);
-    navigate(navigateUrl.toString());
-
     localStorage.setItem("locale", nextLocale);
     setCurrentLocale(nextLocale as Locales);
+
+    const currentUrl = new URL(window.location.href);
+    const navigateUrl = i18n.getLocaleUrl(currentUrl, nextLocale, locales[0]);
+    if (navigateUrl.pathname !== currentUrl.pathname) {
+      navigate(navigateUrl.toString());
+    }
   }
 
   function onChanged() {
@@ -45,7 +47,7 @@ export default function ChangeLocale() {
 
   return (
     <Show when={currentLanguage()}>
-      <Button ref={initLocale} onClick={onChanged} variant="text" ariaLabel={`Change Locale: ${currentLanguage()}`}>
+      <Button onClick={onChanged} variant="text" ariaLabel={`Change Locale: ${currentLanguage()}`}>
         {currentLanguage()!.toUpperCase()}
       </Button>
     </Show>

@@ -116,7 +116,7 @@ export default function WelcomeWizardApp(props: Props) {
 
   return (
     <div class="flex h-full flex-row gap-4">
-      <header class="hidden basis-48 border-r border-surface-300 p-4 md:block">
+      <header class="border-surface-300 hidden basis-48 border-r p-4 md:block">
         <Title class="text-xl">{translate(TranslationKeys.common_steps)}</Title>
         <NavMenu />
       </header>
@@ -125,7 +125,7 @@ export default function WelcomeWizardApp(props: Props) {
           <main class="flex-grow overflow-auto">{getPartContent(currentPart())}</main>
         </Show>
 
-        <footer class="mb-4 me-4 flex flex-row-reverse justify-start gap-2 pt-4">
+        <footer class="me-4 mb-4 flex flex-row-reverse justify-start gap-2 pt-4">
           <Button
             onClick={onNextPart}
             class="w-16"
@@ -172,7 +172,7 @@ export default function WelcomeWizardApp(props: Props) {
               <Button
                 variant="text"
                 class={mergeCls(
-                  "duration-3000 w-full rounded text-left transition-colors duration-200 ease-in-out hover:bg-white hover:text-surface-500",
+                  "hover:text-surface-500 w-full rounded text-left transition-colors duration-200 duration-3000 ease-in-out hover:bg-white",
                   {
                     "bg-surface-400 font-bold": currentPart() === index,
                   },

@@ -30,19 +30,19 @@ export default function FileExplorerList(props: FileExplorerListProps) {
       class="file-explorer-list min-w-full cursor-default select-none"
       onContextMenu={handlers.handleBackgroundContextMenu}
     >
-      <div class="grid grid-cols-12 border-b border-surface-300 bg-surface-500 p-2 text-xs font-medium text-gray-400">
+      <div class="border-surface-300 bg-surface-500 grid grid-cols-12 border-b p-2 text-xs font-medium text-gray-400">
         <div class="col-span-6">Name</div>
         <div class="col-span-2 text-right">Size</div>
         <div class="col-span-2 text-right">Type</div>
         <div class="col-span-2 text-right">Modified</div>
       </div>
 
-      <div class="divide-y divide-surface-300">
+      <div class="divide-surface-300 divide-y">
         <For each={props.entries}>
           {(entry) => (
             <div
               class={mergeCls(
-                "file-item grid cursor-pointer select-none grid-cols-12 items-center p-2 transition-colors duration-200",
+                "file-item grid cursor-pointer grid-cols-12 items-center p-2 transition-colors duration-200 select-none",
                 "hover:bg-surface-300 focus:bg-surface-300 focus:outline-none",
                 props.selectedFiles.has(entry.fullPath) ? "bg-surface-300 ring-1 ring-blue-500" : "bg-surface-400/30",
                 props.cutFiles.has(entry.fullPath) ? "opacity-50" : "",
@@ -51,7 +51,7 @@ export default function FileExplorerList(props: FileExplorerListProps) {
             >
               <div class="col-span-6 flex items-center space-x-2">
                 <FileIcon entry={entry} size="small" />
-                <div class="file-name-container min-w-0 flex-1 select-none truncate text-sm font-medium text-gray-200">
+                <div class="file-name-container min-w-0 flex-1 truncate text-sm font-medium text-gray-200 select-none">
                   <WindowsStyleTitle text={entry.name} maxLength={40} />
                 </div>
               </div>

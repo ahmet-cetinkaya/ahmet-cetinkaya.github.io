@@ -32,7 +32,7 @@ export default function AppShortcut(props: Props) {
       <figure class="size-full max-h-20">
         <picture class="size-full">{props.icon}</picture>
         <figcaption class="flex justify-center px-6">
-          <div class="w-full truncate text-wrap rounded-lg bg-surface-500 text-center shadow-primary">
+          <div class="bg-surface-500 shadow-primary w-full truncate rounded-lg text-center text-wrap">
             {translate(props.label)}
           </div>
         </figcaption>

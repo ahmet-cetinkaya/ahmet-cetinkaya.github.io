@@ -55,7 +55,7 @@ export default function PropertiesPanel(props: PropertiesPanelProps) {
   return (
     <div class={panelClasses()}>
       {/* Header */}
-      <div class="flex items-center justify-between bg-surface-600 p-3">
+      <div class="bg-surface-600 flex items-center justify-between p-3">
         <div class="flex items-center space-x-2">
           <Icon icon={Icons.properties} class="h-4 w-4 text-gray-300" />
           <h3 class="text-sm font-medium text-gray-200">Properties</h3>
@@ -73,9 +73,9 @@ export default function PropertiesPanel(props: PropertiesPanelProps) {
       <div class="space-y-4 overflow-y-auto p-4" style="max-height: calc(100% - 60px)">
         {/* File/Folder Icon and Name */}
         <div class="flex items-center space-x-3">
-          <div class="rounded-lg bg-surface-400 p-3">
-            {isDirectory && <Icon icon={Icons.folder} class="h-8 w-8 text-primary-500" />}
-            {isFile && <Icon icon={Icons.file} class="h-8 w-8 text-primary-500" />}
+          <div class="bg-surface-400 rounded-lg p-3">
+            {isDirectory && <Icon icon={Icons.folder} class="text-primary-500 h-8 w-8" />}
+            {isFile && <Icon icon={Icons.file} class="text-primary-500 h-8 w-8" />}
           </div>
           <div class="min-w-0 flex-1">
             <h4 class="truncate text-sm font-medium text-gray-200">{entry.name}</h4>

@@ -654,7 +654,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
         >
           <div
             class={mergeCls(
-              "overflow-auto bg-surface-400",
+              "bg-surface-400 overflow-auto",
               propertiesPanel().visible && propertiesPanel().entry && !isMobile() ? "flex-1" : "flex-1",
             )}
             style="user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;"
@@ -697,7 +697,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
           </Show>
         </div>
 
-        <div class="border-t border-surface-300 bg-surface-500 p-2 text-xs text-gray-300">
+        <div class="border-surface-300 bg-surface-500 border-t p-2 text-xs text-gray-300">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span>
@@ -705,7 +705,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
               </span>
 
               <Show when={directoryContents.loading && isRemotePath()}>
-                <div class="flex animate-pulse items-center gap-1.5 text-primary-400">
+                <div class="text-primary-400 flex animate-pulse items-center gap-1.5">
                   <Icon icon={Icons.spinner} isSpin={true} class="h-3 w-3" />
                   <span>{translate(TranslationKeys.apps_file_explorer_fetching_remote)}</span>
                 </div>

@@ -49,7 +49,7 @@ export default function FileIcon(props: FileIconProps) {
         <Show when={isGitHubEntry()}>
           <div
             class={mergeCls(
-              "absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full bg-white p-0.5 shadow-sm",
+              "absolute -right-0.5 -bottom-0.5 flex items-center justify-center rounded-full bg-white p-0.5 shadow-sm",
               props.size === "small" ? "h-2.5 w-2.5" : props.size === "large" ? "h-5 w-5" : "h-3.5 w-3.5",
             )}
           >

@@ -123,7 +123,7 @@ export default function InputDialog(props: InputDialogProps) {
           onInput={(e) => setInputValue(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
           placeholder={props.placeholder || translate(TranslationKeys.common_path)}
-          class={`w-full rounded border px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-1 ${
+          class={`w-full rounded border px-3 py-2 text-sm text-white placeholder-gray-400 focus:ring-1 focus:outline-none ${
             props.errorMessage
               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
               : "border-surface-300 focus:border-blue-500 focus:ring-blue-500"

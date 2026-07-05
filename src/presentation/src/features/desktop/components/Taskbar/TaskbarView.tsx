@@ -45,17 +45,17 @@ export default function TaskbarView() {
   return (
     <Show when={windows().length > 0}>
       {/* Desktop */}
-      <span class="hidden select-none items-center gap-2 sm:flex">
+      <span class="hidden items-center gap-2 select-none sm:flex">
         <For each={windows()}>{(window) => <TaskViewButton window={window} />}</For>
       </span>
 
       {/* Tablet */}
-      <span class="hidden select-none items-center gap-2 xs:flex sm:hidden">
+      <span class="xs:flex hidden items-center gap-2 select-none sm:hidden">
         <MiniTaskView />
       </span>
 
       {/* Mobile */}
-      <span class="flex select-none items-center gap-2 xs:hidden">
+      <span class="xs:hidden flex items-center gap-2 select-none">
         <TaskViewDropdown />
       </span>
     </Show>
@@ -112,7 +112,7 @@ export default function TaskbarView() {
       <Button
         onClick={() => onClickTaskView(props.window)}
         class={mergeCls("h-8 w-fit min-w-16 truncate text-xs", {
-          "bg-surface-300 transition-colors duration-200 ease-in-out hover:bg-surface-200": windowsService.isActivated(
+          "bg-surface-300 hover:bg-surface-200 transition-colors duration-200 ease-in-out": windowsService.isActivated(
             props.window,
           ),
         })}

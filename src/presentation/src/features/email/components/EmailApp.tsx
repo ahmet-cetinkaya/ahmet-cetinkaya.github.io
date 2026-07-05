@@ -41,7 +41,7 @@ export default function EmailApp() {
 
   return (
     <div class="flex size-full">
-      <div class="hidden basis-48 border-r border-surface-300 p-4 md:block">
+      <div class="border-surface-300 hidden basis-48 border-r p-4 md:block">
         <Title level={2} class="mb-2 text-xl">
           {translate(TranslationKeys.apps_email_folders)}
         </Title>
@@ -101,7 +101,7 @@ export default function EmailApp() {
             <li>
               <Button
                 variant="text"
-                class="duration-3000 w-full rounded text-left transition-all transition-colors duration-200 ease-in-out ease-linear hover:bg-white hover:text-surface-500"
+                class="hover:text-surface-500 w-full rounded text-left transition-all transition-colors duration-200 duration-3000 ease-in-out ease-linear hover:bg-white"
                 ariaLabel={translate(folder().label)}
               >
                 <span class="flex items-center gap-2">

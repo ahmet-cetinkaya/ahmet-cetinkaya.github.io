@@ -214,7 +214,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
   return (
     <Portal mount={document.body}>
       <div
-        class="context-menu fixed z-[9999] min-w-48 rounded-lg border border-surface-300 bg-surface-500 shadow-md shadow-secondary"
+        class="context-menu border-surface-300 bg-surface-500 shadow-secondary fixed z-[9999] min-w-48 rounded-lg border shadow-md"
         style={{
           left: `${props.position().x}px`,
           top: `${props.position().y}px`,
@@ -224,7 +224,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
       >
         <For each={menuItems()}>
           {(item) => (
-            <Show when={!item.separator} fallback={<div class="my-1 border-t border-surface-300" />}>
+            <Show when={!item.separator} fallback={<div class="border-surface-300 my-1 border-t" />}>
               <button
                 type="button"
                 class={mergeCls(

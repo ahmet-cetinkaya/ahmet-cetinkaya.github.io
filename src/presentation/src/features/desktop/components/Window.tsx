@@ -116,7 +116,7 @@ export default function Window(props: Props) {
       customHeaderButtons={
         <Button
           onClick={onMinimize}
-          class="rounded p-1 transition-colors duration-200 ease-in-out hover:bg-surface-300"
+          class="hover:bg-surface-300 rounded p-1 transition-colors duration-200 ease-in-out"
           variant="text"
           size="small"
           ariaLabel={translate(TranslationKeys.desktop_minimize)}
@@ -158,7 +158,7 @@ export default function Window(props: Props) {
       }}
       customButton={(props) => (
         <Button
-          class="rounded p-1 transition-colors duration-200 ease-in-out hover:bg-surface-300"
+          class="hover:bg-surface-300 rounded p-1 transition-colors duration-200 ease-in-out"
           onClick={props.onClick}
           variant="text"
           size="small"

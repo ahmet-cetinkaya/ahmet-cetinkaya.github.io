@@ -3,7 +3,7 @@ import Dialog from "../../../features/desktop/components/Dialog";
 import Icons from "@domain/data/Icons";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import { TranslationKeys } from "@domain/data/Translations";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
 import DialogButtons from "./DialogButtons";

@@ -1,11 +1,11 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import { logger } from "@application/shared/logger";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
 import File from "@domain/models/File";
 import Window from "@domain/models/Window";
 import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
-import { logger } from "@shared/utils/logger";
 
 export interface GameExecutable {
   fileName: string;

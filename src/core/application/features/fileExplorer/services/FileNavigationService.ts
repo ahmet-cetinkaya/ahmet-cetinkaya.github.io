@@ -1,7 +1,7 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import { logger } from "@application/shared/logger";
 import File from "@domain/models/File";
-import { logger } from "@shared/utils/logger";
 import { CACHE_CONFIG, PERFORMANCE_LIMITS, UI_CONSTANTS } from "../constants";
 import { FileSortCriteria, SortOrder } from "../models/FileSelection";
 import { PathSanitizer, ValidationHelper } from "../utils/InputSanitizer";

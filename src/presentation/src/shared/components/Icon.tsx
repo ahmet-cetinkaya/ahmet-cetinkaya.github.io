@@ -2,7 +2,7 @@ import Icons from "@domain/data/Icons";
 import IconSvgs from "@shared/constants/IconSvgs";
 import { createMemo, createResource, Show } from "solid-js";
 import SvgIcon from "@packages/acore-solidjs/ui/components/SvgIcon";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import { fetchSvgContent } from "@shared/utils/fetchSvgContent";
 
 type Props = {

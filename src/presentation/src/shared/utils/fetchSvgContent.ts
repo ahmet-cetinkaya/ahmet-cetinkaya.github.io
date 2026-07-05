@@ -1,4 +1,4 @@
-import { logger } from "./logger";
+import { logger } from "@application/shared/logger";
 
 const SVG_BLOB_TYPE = "image/svg+xml;charset=utf-8";
 

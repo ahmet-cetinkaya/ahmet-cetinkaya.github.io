@@ -1,11 +1,11 @@
 import PermissionService from "@application/features/system/services/PermissionService";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import { logger } from "@application/shared/logger";
 import { pathExists as checkPathExists } from "@application/shared/pathExists";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import PathUtils from "@packages/acore-ts/data/path/PathUtils";
-import { logger } from "@shared/utils/logger";
 import { PERFORMANCE_LIMITS } from "../constants";
 import { DirectoryTooDeepError, OperationTimeoutError } from "../errors";
 

@@ -4,7 +4,7 @@ import type { FileSystemEntry } from "@application/features/system/services/abst
 import Icon from "@shared/components/Icon";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import ClipboardService from "../services/ClipboardService";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import Icons from "@domain/data/Icons";

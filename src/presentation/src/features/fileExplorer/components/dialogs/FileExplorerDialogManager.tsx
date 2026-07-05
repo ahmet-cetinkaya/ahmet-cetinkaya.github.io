@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from "solid-js";
 import type FileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import AddFolderDialog from "./AddFolderDialog";
 import AddFileDialog from "./AddFileDialog";
 import RenameDialog from "./RenameDialog";

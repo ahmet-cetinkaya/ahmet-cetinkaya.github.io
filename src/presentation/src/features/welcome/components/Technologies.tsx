@@ -7,7 +7,7 @@ import NetworkGraph, { type Node } from "@packages/acore-solidjs/ui/components/N
 import Title from "@shared/components/ui/Title";
 import IconSvgs from "@shared/constants/IconSvgs";
 import { useI18n } from "@shared/utils/i18nTranslate";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import { fetchSvgContent, createSvgImage } from "@shared/utils/fetchSvgContent";
 
 export default function Technologies() {

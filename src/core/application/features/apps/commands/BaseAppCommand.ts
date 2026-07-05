@@ -20,7 +20,7 @@ export interface AppCommandConfig {
  */
 export default abstract class BaseAppCommand implements ICIProgram {
   abstract name: string;
-  abstract description: string;
+  abstract description: TranslationKey;
   protected abstract readonly appConfig: AppCommandConfig;
 
   constructor(protected readonly windowService: IWindowsService) {}

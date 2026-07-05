@@ -1,4 +1,3 @@
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import BaseCommand, { filterPositionalArgs, parseBooleanFlags } from "./abstraction/BaseCommand";
@@ -15,13 +14,6 @@ type RmdirFlags = {
 export default class RmdirCommand extends BaseCommand {
   name = "rmdir";
   description = TranslationKeys.apps_terminal_commands_rmdir_description;
-
-  constructor(
-    fileSystemService: IFileSystemService,
-    private currentPath: string,
-  ) {
-    super(fileSystemService);
-  }
 
   private parseArgs(args: string[]): { flags: RmdirFlags; directories: string[] } {
     const flags = parseBooleanFlags(args, {

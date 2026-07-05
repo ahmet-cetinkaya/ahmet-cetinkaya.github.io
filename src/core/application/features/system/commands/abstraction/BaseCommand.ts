@@ -1,6 +1,6 @@
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { pathExists as checkPathExists } from "@application/shared/pathExists";
-import { TranslationKeys } from "@domain/data/Translations";
+import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
 import File from "@domain/models/File";
 import PathUtils from "@packages/acore-ts/data/path/PathUtils";
 import type ICIProgram from "./ICIProgram";
@@ -27,9 +27,16 @@ export function filterPositionalArgs(args: string[]): string[] {
  */
 export default abstract class BaseCommand implements ICIProgram {
   abstract name: string;
-  abstract description: string;
+  abstract description: TranslationKey;
 
-  constructor(protected readonly fileSystemService: IFileSystemService) {}
+  protected currentPath: string;
+
+  constructor(
+    protected readonly fileSystemService: IFileSystemService,
+    currentPath?: string,
+  ) {
+    this.currentPath = currentPath ?? "/";
+  }
 
   abstract execute(...args: string[]): Promise<CommandOutput>;
 

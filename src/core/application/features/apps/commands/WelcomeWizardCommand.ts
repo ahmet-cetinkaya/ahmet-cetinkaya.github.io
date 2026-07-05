@@ -2,11 +2,19 @@ import type IWindowsService from "@application/features/desktop/services/abstrac
 import { ExitCodes, type CommandOutput } from "@application/features/system/commands/abstraction/ICIProgram";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys } from "@domain/data/Translations";
-import BaseAppCommand from "./BaseAppCommand";
+import BaseAppCommand, { type AppCommandConfig } from "./BaseAppCommand";
 
 export default class WelcomeWizardCommand extends BaseAppCommand {
   name = "welcome";
   description = TranslationKeys.apps_terminal_commands_welcome_description;
+
+  protected readonly appConfig: AppCommandConfig = {
+    name: this.name,
+    description: this.description,
+    appId: Apps.welcome,
+    translationKey: TranslationKeys.apps_welcome_wizard,
+    startedMessageKey: TranslationKeys.apps_terminal_commands_welcome_started,
+  };
 
   constructor(windowService: IWindowsService) {
     super(windowService);

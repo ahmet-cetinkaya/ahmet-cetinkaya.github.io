@@ -1,4 +1,3 @@
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import File from "@domain/models/File";
 import BaseCommand from "./abstraction/BaseCommand";
@@ -20,13 +19,6 @@ type TouchFlags = {
 export default class TouchCommand extends BaseCommand {
   name = "touch";
   description = TranslationKeys.apps_terminal_commands_touch_description;
-
-  constructor(fileSystemService: IFileSystemService, currentPath: string) {
-    super(fileSystemService);
-    this.currentPath = currentPath;
-  }
-
-  private currentPath: string;
 
   private parseArgs(args: string[]): { flags: TouchFlags; files: string[] } {
     const flags: TouchFlags = {

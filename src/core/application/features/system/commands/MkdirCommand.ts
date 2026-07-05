@@ -1,4 +1,3 @@
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import BaseCommand from "./abstraction/BaseCommand";
@@ -15,13 +14,6 @@ type MkdirFlags = {
 export default class MkdirCommand extends BaseCommand {
   name = "mkdir";
   description = TranslationKeys.apps_terminal_commands_mkdir_description;
-
-  constructor(
-    fileSystemService: IFileSystemService,
-    private currentPath: string,
-  ) {
-    super(fileSystemService);
-  }
 
   private parseArgs(args: string[]): { flags: MkdirFlags; directories: string[] } {
     const flags: MkdirFlags = {

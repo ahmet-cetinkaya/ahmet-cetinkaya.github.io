@@ -1,4 +1,3 @@
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
@@ -22,13 +21,6 @@ type LsFlags = {
 export default class LsCommand extends BaseCommand {
   name = "ls";
   description = TranslationKeys.apps_terminal_commands_ls_description;
-
-  constructor(fileSystemService: IFileSystemService, currentPath: string) {
-    super(fileSystemService);
-    this.currentPath = currentPath;
-  }
-
-  private currentPath: string;
 
   private parseArgs(args: string[]): { flags: LsFlags; files: string[] } {
     const flags = parseBooleanFlags(args, {
@@ -91,9 +83,9 @@ export default class LsCommand extends BaseCommand {
         exitCode: ExitCodes.SUCCESS,
       };
     } catch (error) {
-      console.error("ls command error:", { error, path: files[0] || this.currentPath, args });
+      console.error("ls command error:", { error, path: files[0] || this.currentPath });
       return this.createErrorOutput(
-        error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}}`,
+        error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}`,
       );
     }
   }

@@ -1,4 +1,3 @@
-import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import { TranslationKeys } from "@domain/data/Translations";
 import File from "@domain/models/File";
 import BaseCommand, { filterPositionalArgs, parseBooleanFlags } from "./abstraction/BaseCommand";
@@ -19,13 +18,6 @@ type CatFlags = {
 export default class CatCommand extends BaseCommand {
   name = "cat";
   description = TranslationKeys.apps_terminal_commands_cat_description;
-
-  constructor(fileSystemService: IFileSystemService, currentPath: string) {
-    super(fileSystemService);
-    this.currentPath = currentPath;
-  }
-
-  private currentPath: string;
 
   private parseArgs(args: string[]): { flags: CatFlags; files: string[] } {
     const flags = parseBooleanFlags(args, {

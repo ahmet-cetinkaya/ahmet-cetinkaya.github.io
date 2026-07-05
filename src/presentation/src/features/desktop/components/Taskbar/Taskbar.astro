@@ -9,15 +9,15 @@ import ChangeLocale from "./ChangeLocale";
   class="bg-surface-500 shadow-secondary relative z-50 m-4 flex items-center justify-between rounded-xl border border-black p-2 px-6"
 >
   <div class="flex w-full items-center justify-start">
-    <Menu client:only="solid-js" transition:persist />
+    <Menu client:only="solid-js" />
 
-    <span class="ms-5 size-full text-white" transition:persist>
-      <TaskbarView client:only="solid-js" transition:persist />
+    <span class="ms-5 size-full text-white">
+      <TaskbarView client:only="solid-js" />
     </span>
   </div>
 
   <div class="flex items-center justify-center gap-2">
-    <ChangeLocale client:idle transition:persist />
+    <ChangeLocale client:idle />
     <Clock />
   </div>
 </header>

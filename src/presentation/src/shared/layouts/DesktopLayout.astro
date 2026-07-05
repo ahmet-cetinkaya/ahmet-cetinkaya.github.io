@@ -9,13 +9,13 @@ export type Props = LayoutProps;
 ---
 
 <Layout metadata={Astro.props.metadata}>
-  <div class="flex h-svh w-svh flex-col overflow-hidden">
+  <div class="flex h-svh w-svw flex-col overflow-hidden">
     <Taskbar />
 
     <main class="relative flex-grow">
-      <Wallpaper class="absolute top-0 -z-50 size-full" client:only="solid-js" transition:persist />
-      <Desktop client:only="solid-js" transition:persist />
-      <WindowManager client:only="solid-js" transition:persist />
+      <Wallpaper class="absolute top-0 -z-50 size-full" client:only="solid-js" />
+      <Desktop client:only="solid-js" />
+      <WindowManager client:only="solid-js" />
     </main>
   </div>
 </Layout>

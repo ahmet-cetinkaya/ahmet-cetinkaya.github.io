@@ -9,8 +9,8 @@ type Props = {
   href: string;
   icon: JSX.Element;
   label: TranslationKey;
-  onClick?: () => void;
-  onDragStart?: () => void;
+  onClick?: (e: MouseEvent) => void;
+  onDragStart?: (e: DragEvent) => void;
 };
 
 export default function AppShortcut(props: Props) {

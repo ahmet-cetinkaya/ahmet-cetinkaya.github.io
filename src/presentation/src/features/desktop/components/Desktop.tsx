@@ -130,7 +130,8 @@ export default function Desktop(props: DesktopProps) {
     return null;
   }
 
-  function onShortcutDragStart(shortcut: DesktopShortcut) {
+  function onShortcutDragStart(event: DragEvent, shortcut: DesktopShortcut) {
+    event.stopPropagation();
     setDraggedShortcut(shortcut);
   }
 
@@ -162,7 +163,7 @@ export default function Desktop(props: DesktopProps) {
     setDraggedShortcut(null);
   }
 
-  async function onShortcutClick(shortcut: DesktopShortcut, event: MouseEvent) {
+  function onShortcutClick(shortcut: DesktopShortcut, event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -174,12 +175,11 @@ export default function Desktop(props: DesktopProps) {
     const appCommandArgs = [];
     if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");
 
-    try {
-      await appCommand().execute(...appCommandArgs);
-    } catch (error) {
-      // Window already exists is not a fatal error - it's already activated by WindowsService
-      logger.debug("App window handling:", error);
-    }
+    appCommand()
+      .execute(...appCommandArgs)
+      .catch((error) => {
+        logger.debug("App window handling:", error);
+      });
   }
 
   let resizeDebounceTimeout: Timer | null = null;
@@ -213,11 +213,11 @@ export default function Desktop(props: DesktopProps) {
                       }
                       href={
                         ScreenHelper.isMobile()
-                          ? undefined
+                          ? `/${col.path}`
                           : `${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`
                       }
                       onClick={(event) => onShortcutClick(col, event)}
-                      onDragStart={() => onShortcutDragStart(col)}
+                      onDragStart={(event) => onShortcutDragStart(event, col)}
                     />
                   ) : (
                     <DesktopEmptyGrid />

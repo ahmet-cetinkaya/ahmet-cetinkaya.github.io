@@ -9,12 +9,14 @@ import FileExplorerService, {
 import Directory from "@domain/models/Directory";
 import Container from "@presentation/Container";
 import Icons from "@domain/data/Icons";
+import { Apps } from "@domain/data/Apps";
+import appCommands from "@shared/constants/AppCommands";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
 import { Paths } from "@domain/data/Directories";
 import Icon from "@shared/components/Icon";
 import ScreenHelper from "@shared/utils/ScreenHelper";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import FileExplorerToolbar from "./FileExplorerToolbar";
 import FileExplorerGrid from "./FileExplorerGrid";
 import FileExplorerList from "./FileExplorerList";
@@ -517,17 +519,12 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       const directoryPath = paths[0];
 
       try {
-        const [{ Apps }, appCommands] = await Promise.all([
-          import("@domain/data/Apps"),
-          import("@shared/constants/AppCommands"),
-        ]);
-
         const existingWindow = await Container.instance.windowsService.get((window) => window.appId === Apps.terminal);
 
         if (existingWindow) {
           await Container.instance.windowsService.active(existingWindow);
         } else {
-          const terminalCommand = appCommands.default[Apps.terminal]();
+          const terminalCommand = appCommands[Apps.terminal]();
           await terminalCommand.execute(directoryPath);
         }
       } catch (error) {

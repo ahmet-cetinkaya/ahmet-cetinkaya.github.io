@@ -1,4 +1,3 @@
-import { navigate } from "astro:transitions/client";
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import ArrayExtensions from "@packages/acore-ts/data/array/ArrayExtensions";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
@@ -38,7 +37,11 @@ export default function TaskbarView() {
 
       const currentLocale = i18n.currentLocale.get();
       const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
-      navigate(`${localePathPrefix}/${app.path}`);
+      const targetPath = `${localePathPrefix}/${app.path}`;
+      // Sync the address bar without a ClientRouter transition, which would
+      // remount every island and reload all open windows. Use globalThis
+      // because `window` here is the Window model parameter, not the browser.
+      if (globalThis.location.pathname !== targetPath) globalThis.history.pushState({}, "", targetPath);
     }
   }
 

@@ -1,4 +1,3 @@
-import { navigate } from "astro:transitions/client";
 import { createResource, createSignal } from "solid-js";
 import Position from "@packages/acore-ts/ui/models/Position";
 import type Size from "@packages/acore-ts/ui/models/Size";
@@ -57,7 +56,10 @@ export default function Window(props: Props) {
     const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
     const targetPath = `${localePathPrefix}/${path()!}`;
     if (window.location.pathname !== targetPath) {
-      navigate(targetPath);
+      // Sync the address bar to the focused window without triggering a
+      // ClientRouter transition, which would remount every island (and thus
+      // reload all open windows) on focus/drag/resize.
+      window.history.pushState({}, "", targetPath);
     }
   }
 

@@ -4,15 +4,19 @@
   "type": "module",
   "workspaces": [
     "packages/*",
+    "src/core/domain",
+    "src/core/application",
     "src/presentation"
   ],
   "scripts": {
-    "build": "cd src/presentation && bun run build",
+    "build": "./scripts/build.sh",
     "clean": "./scripts/clean.sh",
+    "dev": "./scripts/dev.sh",
     "format": "./scripts/format.sh",
     "install-all": "./scripts/install-all.sh",
     "lint": "./scripts/lint.sh",
-    "start": "cd src/presentation && bun start",
+    "preview": "./scripts/preview.sh",
+    "start": "./scripts/dev.sh",
     "test": "./scripts/test.sh"
   },
   "devDependencies": {

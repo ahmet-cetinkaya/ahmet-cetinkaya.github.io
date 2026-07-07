@@ -2,10 +2,6 @@
 import Times from "@packages/acore-ts/data/date/constants/Times";
 import Container from "../../../../../Container";
 
-const i18n = Container.instance.i18n;
-const locale = i18n.getLocaleFromUrl(Astro.url, "en");
----
-
 <div class="flex items-center justify-end gap-6 text-nowrap text-white select-none">
   <span id="clock"> 09:05:00 </span>
   <span id="date" class="hidden sm:block">
@@ -13,12 +9,24 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
   </span>
 </div>
 
-<script is:inline define:vars={{ Times, locale }}>
-  document.addEventListener("astro:after-swap", onMount);
+<script>
+  import Times from "@packages/acore-ts/data/date/constants/Times";
+  import Container from "../../../../../Container";
 
+  let clockInterval = null;
+  
   function onMount() {
+    // Clear previous clock if exists
+    if (clockInterval) {
+      clearTimeout(clockInterval);
+      clockInterval = null;
+    }
+    
     const clockContainer = document.querySelector("#clock");
     const dateContainer = document.querySelector("#date");
+
+    const i18n = Container.instance.i18n;
+    const locale = i18n.getLocaleFromUrl(window.location.href, "en");
 
     const now = new Date();
     updateClock(now);
@@ -41,14 +49,19 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
     }
 
     function scheduleNextUpdate(nextTimeout) {
-      if (!nextTimeout) nextTimeout = Times.MILLIS_IN_SECOND - now.getMilliseconds();
-      setTimeout(() => {
+      if (!nextTimeout) nextTimeout = Times.MILLIS_IN_SECOND - new Date().getMilliseconds();
+      clockInterval = setTimeout(() => {
         const now = new Date();
         updateClock(now);
-        if (now.getHours() === 0) updateDate(now);
+        // Update date every minute when seconds roll over to 00
+        if (now.getSeconds() === 0) updateDate(now);
 
         scheduleNextUpdate(Times.MILLIS_IN_SECOND);
       }, nextTimeout);
     }
   }
+
+  // Run immediately on initial load AND after Astro view transitions
+  onMount();
+  document.addEventListener("astro:after-swap", onMount);
 </script>

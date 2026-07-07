@@ -132,7 +132,18 @@ export default function Window(props: Props) {
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
-      dragOffset={{ top: (props.topOffset ?? 0) + WINDOW_EDGE_OFFSET }}
+      dragOffset={{
+        top: 70 + WINDOW_EDGE_OFFSET,
+        left: WINDOW_EDGE_OFFSET,
+        right: WINDOW_EDGE_OFFSET,
+        bottom: WINDOW_EDGE_OFFSET,
+      }}
+      resizeOffset={{
+        top: 70 + WINDOW_EDGE_OFFSET,
+        left: WINDOW_EDGE_OFFSET,
+        right: WINDOW_EDGE_OFFSET,
+        bottom: WINDOW_EDGE_OFFSET,
+      }}
       maximizable={true}
       onClick={onClick}
       onClose={onClose}

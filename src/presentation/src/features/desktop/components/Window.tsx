@@ -17,6 +17,7 @@ type Props = {
   topOffset?: number;
 };
 
+const TASKBAR_HEIGHT: number = 70;
 const WINDOW_EDGE_OFFSET: number = 16;
 
 export default function Window(props: Props) {
@@ -127,19 +128,19 @@ export default function Window(props: Props) {
         </Button>
       }
       maximizeOffset={{
-        top: 70 + WINDOW_EDGE_OFFSET,
+        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
       dragOffset={{
-        top: 70 + WINDOW_EDGE_OFFSET,
+        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
       resizeOffset={{
-        top: 70 + WINDOW_EDGE_OFFSET,
+        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,

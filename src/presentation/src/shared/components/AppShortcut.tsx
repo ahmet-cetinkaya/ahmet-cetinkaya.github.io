@@ -6,7 +6,7 @@ import Link from "@shared/components/ui/Link";
 
 type Props = {
   class?: string;
-  href: string;
+  href?: string;
   icon: JSX.Element;
   label: TranslationKey;
   onClick?: (e: MouseEvent) => void;
@@ -15,6 +15,34 @@ type Props = {
 
 export default function AppShortcut(props: Props) {
   const translate = useI18n();
+
+  const content = (
+    <figure class="size-full max-h-20">
+      <picture class="size-full">{props.icon}</picture>
+      <figcaption class="flex justify-center px-6">
+        <div class="bg-surface-500 shadow-primary w-full truncate rounded-lg text-center text-wrap">
+          {translate(props.label)}
+        </div>
+      </figcaption>
+    </figure>
+  );
+
+  if (!props.href) {
+    return (
+      <div
+        draggable={true}
+        onClick={props.onClick}
+        onDragStart={props.onDragStart}
+        class={mergeCls(
+          "flex size-full flex-col items-center justify-center transition-colors duration-200 ease-in-out hover:text-gray-400",
+          props.class,
+        )}
+        aria-label={translate(props.label)}
+      >
+        {content}
+      </div>
+    );
+  }
 
   return (
     <Link
@@ -29,14 +57,7 @@ export default function AppShortcut(props: Props) {
       variant="text"
       ariaLabel={translate(props.label)}
     >
-      <figure class="size-full max-h-20">
-        <picture class="size-full">{props.icon}</picture>
-        <figcaption class="flex justify-center px-6">
-          <div class="bg-surface-500 shadow-primary w-full truncate rounded-lg text-center text-wrap">
-            {translate(props.label)}
-          </div>
-        </figcaption>
-      </figure>
+      {content}
     </Link>
   );
 }

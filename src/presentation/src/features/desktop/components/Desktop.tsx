@@ -12,7 +12,6 @@ import ScreenHelper from "@shared/utils/ScreenHelper";
 import appCommands from "@shared/constants/AppCommands";
 import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
-import { Locales } from "@domain/data/Translations";
 import { logger } from "@application/shared/logger";
 
 // Lazy load the heavy ThreeDimensionalModel component
@@ -28,20 +27,18 @@ interface DesktopProps {
 }
 
 export default function Desktop(props: DesktopProps) {
-  const { appsService, fileSystemService, i18n } = Container.instance;
+  const { appsService, fileSystemService } = Container.instance;
 
   let containerRef: HTMLDivElement | undefined;
   let matrixDimensions: { dimension1: number; dimension2: number } | undefined;
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
-  const [currentLocale, setCurrentLocale] = createSignal<string>(Locales.en);
 
   let fileChangeListener: FileChangeListener | undefined;
 
   onMount(() => {
     window.addEventListener("resize", onResize);
-    i18n.currentLocale.subscribe(setCurrentLocale);
 
     // Listen for desktop file changes
     fileChangeListener = (change: { type: FileChangeType; entry: FileSystemEntry }) => {
@@ -56,7 +53,6 @@ export default function Desktop(props: DesktopProps) {
 
   onCleanup(() => {
     window.removeEventListener("resize", () => onResize);
-    i18n.currentLocale.unsubscribe(setCurrentLocale);
 
     // Clean up file system listener
     if (fileChangeListener) {
@@ -211,11 +207,7 @@ export default function Desktop(props: DesktopProps) {
                           <ThreeDimensionalModel model={col.icon} config={DefaultConfigs.desktopIcon} />
                         </Suspense>
                       }
-                      href={
-                        ScreenHelper.isMobile()
-                          ? `/${col.path}`
-                          : `${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`
-                      }
+                      href={ScreenHelper.isMobile() ? `/${col.path}` : undefined}
                       onClick={(event) => onShortcutClick(col, event)}
                       onDragStart={(event) => onShortcutDragStart(event, col)}
                     />

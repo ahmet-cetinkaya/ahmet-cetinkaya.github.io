@@ -17,12 +17,13 @@ type Props = {
   topOffset?: number;
 };
 
-const TASKBAR_HEIGHT: number = 70;
 const WINDOW_EDGE_OFFSET: number = 16;
 
 export default function Window(props: Props) {
   const { windowsService, appsService, i18n } = Container.instance;
   const translate = useI18n();
+
+  const topOffset = (): number => props.topOffset ?? 0;
 
   const { appId } = props.window;
   const { args: appArgs } = props.window;
@@ -79,8 +80,9 @@ export default function Window(props: Props) {
 
   function onDragEnd(_: MouseEvent, position: Position) {
     props.window.position = position;
-    if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+    const layerOverride = overrideLayer();
+    if (layerOverride !== null) {
+      props.window.layer = layerOverride;
       setOverrideLayer(null);
     }
     windowsService.update(props.window);
@@ -98,8 +100,9 @@ export default function Window(props: Props) {
   function onResizeEnd(_: Event, size: Size, position: Position) {
     props.window.size = size;
     props.window.position = position;
-    if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+    const layerOverride = overrideLayer();
+    if (layerOverride !== null) {
+      props.window.layer = layerOverride;
       setOverrideLayer(null);
     }
     windowsService.update(props.window);
@@ -128,19 +131,19 @@ export default function Window(props: Props) {
         </Button>
       }
       maximizeOffset={{
-        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
+        top: topOffset() + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
       dragOffset={{
-        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
+        top: topOffset() + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
       resizeOffset={{
-        top: TASKBAR_HEIGHT + WINDOW_EDGE_OFFSET,
+        top: topOffset() + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,

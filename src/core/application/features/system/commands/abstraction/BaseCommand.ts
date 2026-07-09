@@ -141,14 +141,15 @@ export default abstract class BaseCommand implements ICIProgram {
 
     const sources: string[] = [];
     let destination = "";
-    for (let i = 0; i < positionalArgs.length; i++) {
-      if (i === positionalArgs.length - 1) destination = positionalArgs[i];
-      else sources.push(positionalArgs[i]);
-    }
 
-    if (targetDirectory && sources.length === 0 && destination) {
-      sources.push(destination);
+    if (targetDirectory) {
+      sources.push(...positionalArgs);
       destination = targetDirectory;
+    } else {
+      for (let i = 0; i < positionalArgs.length; i++) {
+        if (i === positionalArgs.length - 1) destination = positionalArgs[i];
+        else sources.push(positionalArgs[i]);
+      }
     }
 
     if (flags.help) return { error: this.createHelpFromFlags() };
@@ -170,17 +171,24 @@ export default abstract class BaseCommand implements ICIProgram {
     currentPath: string,
     handler: (sourceEntry: File, destPath: string) => Promise<boolean>,
   ): Promise<CommandOutput | null> {
+    const messages: string[] = [];
+
     for (const source of sources) {
       const { sourcePath, destPath, error } = await this.validateSourceAndDestination(source, destination, currentPath);
       if (error) return error;
 
       const sourceEntry = await this.fileSystemService.get((e) => e.fullPath === sourcePath);
-      if (sourceEntry instanceof File) {
-        const shouldReturn = await handler(sourceEntry, destPath);
-        if (shouldReturn) return { output: `'${source}' -> '${destination}'`, exitCode: ExitCodes.SUCCESS };
+      if (!(sourceEntry instanceof File)) continue;
+
+      const isVerbose = await handler(sourceEntry, destPath);
+      if (isVerbose) {
+        messages.push(`'${source}' -> '${destination}'`);
       }
     }
-    return null;
+
+    if (messages.length === 0) return null;
+
+    return { output: messages.join("\n"), exitCode: ExitCodes.SUCCESS };
   }
 
   protected async executeDirectoryCommand(

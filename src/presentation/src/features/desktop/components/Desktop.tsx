@@ -12,8 +12,7 @@ import ScreenHelper from "@shared/utils/ScreenHelper";
 import appCommands from "@shared/constants/AppCommands";
 import File from "@domain/models/File";
 import Extensions from "@application/features/system/constants/Extensions";
-import { Locales } from "@domain/data/Translations";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 
 // Lazy load the heavy ThreeDimensionalModel component
 const ThreeDimensionalModel = lazy(() => import("@shared/components/ThreeDimensionalModel/ThreeDimensionalModel"));
@@ -23,21 +22,23 @@ type DesktopShortcutMatrix = DesktopShortcut[][];
 
 const EXEC_REGEX = /Exec=(.+)/;
 
-export default function Desktop() {
-  const { appsService, fileSystemService, i18n } = Container.instance;
+interface DesktopProps {
+  class?: string;
+}
+
+export default function Desktop(props: DesktopProps) {
+  const { appsService, fileSystemService } = Container.instance;
 
   let containerRef: HTMLDivElement | undefined;
   let matrixDimensions: { dimension1: number; dimension2: number } | undefined;
 
   const [matrix, setMatrix] = createSignal<DesktopShortcutMatrix>([]);
   const [draggedShortcut, setDraggedShortcut] = createSignal<DesktopShortcut>(null);
-  const [currentLocale, setCurrentLocale] = createSignal<string>(Locales.en);
 
   let fileChangeListener: FileChangeListener | undefined;
 
   onMount(() => {
     window.addEventListener("resize", onResize);
-    i18n.currentLocale.subscribe(setCurrentLocale);
 
     // Listen for desktop file changes
     fileChangeListener = (change: { type: FileChangeType; entry: FileSystemEntry }) => {
@@ -52,7 +53,6 @@ export default function Desktop() {
 
   onCleanup(() => {
     window.removeEventListener("resize", () => onResize);
-    i18n.currentLocale.unsubscribe(setCurrentLocale);
 
     // Clean up file system listener
     if (fileChangeListener) {
@@ -126,7 +126,8 @@ export default function Desktop() {
     return null;
   }
 
-  function onShortcutDragStart(shortcut: DesktopShortcut) {
+  function onShortcutDragStart(event: DragEvent, shortcut: DesktopShortcut) {
+    event.stopPropagation();
     setDraggedShortcut(shortcut);
   }
 
@@ -158,19 +159,29 @@ export default function Desktop() {
     setDraggedShortcut(null);
   }
 
-  function onShortcutClick(shortcut: DesktopShortcut) {
+  function onShortcutClick(shortcut: DesktopShortcut, event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
     if (!shortcut) return;
 
     const appCommand = appCommands[shortcut.id];
-    if (!appCommand) throw new Error(`No command found for app with id: ${shortcut.id}`);
+    if (!appCommand) {
+      logger.warn("No command found for app:", shortcut.id);
+      return;
+    }
 
     const appCommandArgs = [];
     if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");
 
-    appCommand().execute(...appCommandArgs);
+    appCommand()
+      .execute(...appCommandArgs)
+      .catch((error) => {
+        logger.debug("App window handling:", error);
+      });
   }
 
-  let resizeDebounceTimeout: Timer | null = null;
+  let resizeDebounceTimeout: ReturnType<typeof setTimeout> | null = null;
   function onResize() {
     if (resizeDebounceTimeout) clearTimeout(resizeDebounceTimeout);
     resizeDebounceTimeout = setTimeout(() => {
@@ -180,7 +191,7 @@ export default function Desktop() {
   }
 
   return (
-    <div ref={onContainerMount} class="flex size-full flex-row gap-6">
+    <div ref={onContainerMount} class={`relative z-10 flex size-full flex-row gap-6 ${props.class ?? ""}`}>
       <For each={matrix()}>
         {(row, x) => (
           <div class="flex flex-col gap-6">
@@ -199,9 +210,9 @@ export default function Desktop() {
                           <ThreeDimensionalModel model={col.icon} config={DefaultConfigs.desktopIcon} />
                         </Suspense>
                       }
-                      href={`${currentLocale() === Locales.en ? "" : `/${currentLocale()}`}/${col.path}`}
-                      onClick={() => onShortcutClick(col)}
-                      onDragStart={() => onShortcutDragStart(col)}
+                      href={ScreenHelper.isMobile() ? `/${col.path}` : undefined}
+                      onClick={(event) => onShortcutClick(col, event)}
+                      onDragStart={(event) => onShortcutDragStart(event, col)}
                     />
                   ) : (
                     <DesktopEmptyGrid />

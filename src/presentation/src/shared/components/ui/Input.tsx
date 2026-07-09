@@ -27,7 +27,7 @@ export default function Input(props: Props) {
       value={props.value}
       onInput={onInput}
       class={mergeCls(
-        "w-full rounded-md border border-black bg-surface-400 p-2 shadow-primary focus:outline-none focus:ring-2 focus:ring-blue-500",
+        "bg-surface-400 shadow-primary w-full rounded-md border border-black p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none",
         props.class,
       )}
       disabled={props.disabled}

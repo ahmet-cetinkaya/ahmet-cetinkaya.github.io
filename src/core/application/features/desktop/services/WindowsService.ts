@@ -156,12 +156,12 @@ export default class WindowsService implements IWindowsService {
   isActivated(window: Window): boolean {
     if (window?.isMinimized) return false;
 
-    const activeWindowLayer = ArrayExtensions.max(this._windowsStore.get(), (w) => w.layer!);
+    const activeWindowLayer = ArrayExtensions.max(this._windowsStore.get(), (w) => w.layer);
     return window?.layer === activeWindowLayer;
   }
 
   getActivatedWindow(): Window | null {
-    const activatedWindow = ArrayExtensions.maxBy(this._windowsStore.get(), (w) => w.layer!);
+    const activatedWindow = ArrayExtensions.maxBy(this._windowsStore.get(), (w) => w.layer);
     if (!activatedWindow) return null;
 
     return activatedWindow;

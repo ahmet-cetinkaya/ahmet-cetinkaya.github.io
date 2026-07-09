@@ -44,6 +44,13 @@ ehthumbs.db
 *.bak
 *.backup
 
+# Agent files and configurations
+.claude/
+.serena/
+AGENTS.md
+CLAUDE.md
+graphify-out/
+
 # TypeScript cache
 *.tsbuildinfo
 
@@ -57,13 +64,3 @@ ehthumbs.db
 coverage/
 .nyc_output/
 *.lcov
-
-# Git submodules (if any)
-# Uncomment if you have submodules you want to ignore
-# */git/
-
-# Agent files and configurations
-CLAUDE.md
-AGENTS.md
-.serena/
-.claude/

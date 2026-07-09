@@ -9,12 +9,14 @@ import FileExplorerService, {
 import Directory from "@domain/models/Directory";
 import Container from "@presentation/Container";
 import Icons from "@domain/data/Icons";
+import { Apps } from "@domain/data/Apps";
+import appCommands from "@shared/constants/AppCommands";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
 import { Paths } from "@domain/data/Directories";
 import Icon from "@shared/components/Icon";
 import ScreenHelper from "@shared/utils/ScreenHelper";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import FileExplorerToolbar from "./FileExplorerToolbar";
 import FileExplorerGrid from "./FileExplorerGrid";
 import FileExplorerList from "./FileExplorerList";
@@ -377,16 +379,18 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
     refresh();
   }
 
-  function handleContextMenu(entry: FileSystemEntry | undefined, event: MouseEvent) {
+  function prepareContextMenuEvent(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    // Clear any text selection that might have occurred
     const selection = window.getSelection();
     if (selection) {
       selection.removeAllRanges();
     }
+  }
 
+  function handleContextMenu(entry: FileSystemEntry | undefined, event: MouseEvent) {
+    prepareContextMenuEvent(event);
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },
@@ -395,15 +399,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
   }
 
   function handleBackgroundContextMenu(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    // Clear any text selection that might have occurred
-    const selection = window.getSelection();
-    if (selection) {
-      selection.removeAllRanges();
-    }
-
+    prepareContextMenuEvent(event);
     setContextMenu({
       visible: true,
       position: { x: event.clientX, y: event.clientY },
@@ -523,17 +519,12 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       const directoryPath = paths[0];
 
       try {
-        const [{ Apps }, appCommands] = await Promise.all([
-          import("@domain/data/Apps"),
-          import("@shared/constants/AppCommands"),
-        ]);
-
         const existingWindow = await Container.instance.windowsService.get((window) => window.appId === Apps.terminal);
 
         if (existingWindow) {
           await Container.instance.windowsService.active(existingWindow);
         } else {
-          const terminalCommand = appCommands.default[Apps.terminal]();
+          const terminalCommand = appCommands[Apps.terminal]();
           await terminalCommand.execute(directoryPath);
         }
       } catch (error) {
@@ -663,7 +654,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
         >
           <div
             class={mergeCls(
-              "overflow-auto bg-surface-400",
+              "bg-surface-400 overflow-auto",
               propertiesPanel().visible && propertiesPanel().entry && !isMobile() ? "flex-1" : "flex-1",
             )}
             style="user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;"
@@ -706,7 +697,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
           </Show>
         </div>
 
-        <div class="border-t border-surface-300 bg-surface-500 p-2 text-xs text-gray-300">
+        <div class="border-surface-300 bg-surface-500 border-t p-2 text-xs text-gray-300">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span>
@@ -714,7 +705,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
               </span>
 
               <Show when={directoryContents.loading && isRemotePath()}>
-                <div class="flex animate-pulse items-center gap-1.5 text-primary-400">
+                <div class="text-primary-400 flex animate-pulse items-center gap-1.5">
                   <Icon icon={Icons.spinner} isSpin={true} class="h-3 w-3" />
                   <span>{translate(TranslationKeys.apps_file_explorer_fetching_remote)}</span>
                 </div>

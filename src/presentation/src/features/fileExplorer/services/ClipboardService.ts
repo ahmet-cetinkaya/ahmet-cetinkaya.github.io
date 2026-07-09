@@ -1,4 +1,4 @@
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 
 export interface ClipboardItem {
   path: string;

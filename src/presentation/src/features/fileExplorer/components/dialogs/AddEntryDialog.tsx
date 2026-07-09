@@ -4,6 +4,7 @@ import { TranslationKeys } from "@domain/data/Translations";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import type { BaseDialogProps } from "./BaseFileExplorerDialog";
 import { FileExplorerDialogService } from "../../services/FileExplorerDialogService";
+import { executeDialogAction } from "./executeDialogAction";
 
 type CreateMethod = "createFile" | "createFolder";
 
@@ -21,24 +22,12 @@ export default function AddEntryDialog(props: AddEntryDialogProps) {
   const translate = useI18n();
 
   const handleConfirm = async (name: string): Promise<boolean> => {
-    if (!name.trim()) {
-      return false;
-    }
+    if (!name.trim()) return false;
 
-    return new Promise<boolean>((resolve) => {
+    return executeDialogAction((callbacks) => {
       const method = props.dialogService[props.createMethod];
-      method.call(props.dialogService, props.currentPath, name, {
-        onSuccess: () => {
-          props.onSuccess?.();
-          props.onClose();
-          resolve(true);
-        },
-        onError: (error) => {
-          props.onError?.(error);
-          resolve(false);
-        },
-      });
-    });
+      method.call(props.dialogService, props.currentPath, name, callbacks);
+    }, props);
   };
 
   return (

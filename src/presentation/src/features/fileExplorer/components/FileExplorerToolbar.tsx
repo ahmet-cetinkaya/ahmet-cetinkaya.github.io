@@ -105,7 +105,7 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
   ];
 
   return (
-    <div class="relative flex items-center justify-between border-b border-surface-300 bg-surface-500 p-2">
+    <div class="border-surface-300 bg-surface-500 relative flex items-center justify-between border-b p-2">
       {/* Navigation Controls */}
       <div class="flex items-center space-x-1">
         <Button

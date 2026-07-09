@@ -4,7 +4,7 @@ import type { FileSystemEntry } from "@application/features/system/services/abst
 import Icon from "@shared/components/Icon";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { TranslationKeys } from "@domain/data/Translations";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import ClipboardService from "../services/ClipboardService";
 import { mergeCls } from "@packages/acore-ts/ui/ClassHelpers";
 import Icons from "@domain/data/Icons";
@@ -214,7 +214,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
   return (
     <Portal mount={document.body}>
       <div
-        class="context-menu fixed z-[9999] min-w-48 rounded-lg border border-surface-300 bg-surface-500 shadow-md shadow-secondary"
+        class="context-menu border-surface-300 bg-surface-500 shadow-secondary fixed z-[9999] min-w-48 rounded-lg border shadow-md"
         style={{
           left: `${props.position().x}px`,
           top: `${props.position().y}px`,
@@ -224,7 +224,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
       >
         <For each={menuItems()}>
           {(item) => (
-            <Show when={!item.separator} fallback={<div class="my-1 border-t border-surface-300" />}>
+            <Show when={!item.separator} fallback={<div class="border-surface-300 my-1 border-t" />}>
               <button
                 type="button"
                 class={mergeCls(

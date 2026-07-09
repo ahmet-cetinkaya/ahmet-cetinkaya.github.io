@@ -1,11 +1,11 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import { logger } from "@application/shared/logger";
 import { Apps } from "@domain/data/Apps";
 import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
 import File from "@domain/models/File";
 import Window from "@domain/models/Window";
 import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
-import { logger } from "@shared/utils/logger";
 
 export interface GameExecutable {
   fileName: string;
@@ -45,24 +45,7 @@ export default class GameExecutionService {
     });
   }
 
-  public isGameExecutable(entry: FileSystemEntry): boolean {
-    if (!(entry instanceof File)) {
-      return false;
-    }
-
-    const fileName = entry.name.toLowerCase();
-    const fileExtension = this.getFileExtension(fileName);
-
-    for (const game of this.gameExecutables.values()) {
-      if (game.fileName.toLowerCase() === fileName || game.supportedExtensions.includes(fileExtension)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public getGameExecutable(entry: FileSystemEntry): GameExecutable | null {
+  private findGameForEntry(entry: FileSystemEntry): GameExecutable | null {
     if (!(entry instanceof File)) {
       return null;
     }
@@ -77,6 +60,14 @@ export default class GameExecutionService {
     }
 
     return null;
+  }
+
+  public isGameExecutable(entry: FileSystemEntry): boolean {
+    return this.findGameForEntry(entry) !== null;
+  }
+
+  public getGameExecutable(entry: FileSystemEntry): GameExecutable | null {
+    return this.findGameForEntry(entry);
   }
 
   public getSupportedGameExtensions(): string[] {

@@ -44,6 +44,38 @@ This section explains how to get your project up and running.
    bun start
    ```
 
+### 🏗️ Build and Test
+
+The project follows Clean Code Environment Quality Rules (E1-E2) with single-command build and test workflows:
+
+```bash
+# Single-step build (E1)
+bun run build
+
+# Single-step test (E2)
+bun run test
+
+# Development server
+bun run dev
+
+# Clean build artifacts
+bun run clean
+
+# Install all dependencies
+bun run install-all
+
+# Format code
+bun run format
+
+# Lint code
+bun run lint
+
+# Preview production build
+bun run preview
+```
+
+> **Note**: The project uses `bun` as the package manager. All commands can be run with `bun run <command>` or using the shorthand `bun <command>` for supported scripts.
+
 ## 🤝 Contributing
 
 If you'd like to contribute, please follow these steps:

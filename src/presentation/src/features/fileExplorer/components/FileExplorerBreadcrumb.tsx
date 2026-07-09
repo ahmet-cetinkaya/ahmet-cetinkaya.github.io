@@ -91,7 +91,7 @@ export default function FileExplorerBreadcrumb(props: FileExplorerBreadcrumbProp
                       "rounded px-2 py-1 transition-colors duration-200",
                       item.path === props.currentPath
                         ? "bg-surface-300 text-white"
-                        : "text-gray-300 hover:bg-surface-400 hover:text-white",
+                        : "hover:bg-surface-400 text-gray-300 hover:text-white",
                     )}
                     onClick={() => handleBreadcrumbClick(item.path)}
                     onDblClick={() => item.path === props.currentPath && handlePathEdit()}
@@ -109,7 +109,7 @@ export default function FileExplorerBreadcrumb(props: FileExplorerBreadcrumbProp
         {/* Path editing input */}
         <input
           type="text"
-          class="h-6 w-full rounded bg-surface-300 px-2 py-1 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="bg-surface-300 h-6 w-full rounded px-2 py-1 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           value={editPath()}
           onInput={(e) => setEditPath(e.currentTarget.value)}
           onKeyDown={handlePathSubmit}

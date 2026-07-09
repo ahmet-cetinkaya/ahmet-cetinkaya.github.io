@@ -7,18 +7,15 @@ export default class EmailCommand extends BaseAppCommand {
   name = "email";
   description = TranslationKeys.apps_terminal_commands_email_description;
 
+  protected readonly appConfig = {
+    name: this.name,
+    description: this.description,
+    appId: Apps.email,
+    translationKey: TranslationKeys.common_contact,
+    startedMessageKey: TranslationKeys.apps_terminal_commands_email_started,
+  };
+
   constructor(windowService: IWindowsService) {
     super(windowService);
-  }
-
-  async execute(...args: string[]) {
-    if (args.includes("--help") || args.includes("-h")) return this.createHelpOutput();
-    return this.launchApp(args, {
-      name: this.name,
-      description: this.description,
-      appId: Apps.email,
-      translationKey: TranslationKeys.common_contact,
-      startedMessageKey: TranslationKeys.apps_terminal_commands_email_started,
-    });
   }
 }

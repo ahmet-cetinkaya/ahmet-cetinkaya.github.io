@@ -13,7 +13,8 @@ export type FileChangeType = "add" | "update" | "remove";
 export type FileChangeListener = (change: { type: FileChangeType; entry: FileSystemEntry }) => void;
 
 export default interface IFileSystemService
-  extends IListable<FileSystemEntry>,
+  extends
+    IListable<FileSystemEntry>,
     IGettable<FileSystemEntry>,
     IAddable<FileSystemEntry>,
     IUpdatable<FileSystemEntry>,

@@ -110,7 +110,7 @@ export default function Dialog(props: DialogProps) {
   return (
     <Show when={isOpen}>
       {/* Background overlay/dim */}
-      <div class="fixed inset-0 z-[99] bg-black bg-opacity-30" onClick={handleBackdropClick} />
+      <div class="bg-opacity-30 fixed inset-0 z-[99] bg-black" onClick={handleBackdropClick} />
 
       <Modal
         title={translateText(title)}
@@ -153,7 +153,7 @@ export default function Dialog(props: DialogProps) {
             {/* Icon and Message/Children - Left aligned, icon vertically centered */}
             <div class="flex items-start">
               {icon && (
-                <div class="mr-3 mt-0.5 flex flex-shrink-0 items-center justify-center">
+                <div class="mt-0.5 mr-3 flex flex-shrink-0 items-center justify-center">
                   <img
                     src={(() => {
                       // Use string comparison as a fallback in case enum comparison fails
@@ -188,7 +188,7 @@ export default function Dialog(props: DialogProps) {
           </div>
 
           {/* Fixed Footer with Action Buttons */}
-          <div class="flex-shrink-0 border-t border-black bg-surface-500 p-3">
+          <div class="bg-surface-500 flex-shrink-0 border-t border-black p-3">
             {customButtons}
             {showOkButton && (
               <Button

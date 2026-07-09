@@ -1,4 +1,3 @@
-import { navigate } from "astro:transitions/client";
 import { createResource, createSignal } from "solid-js";
 import Position from "@packages/acore-ts/ui/models/Position";
 import type Size from "@packages/acore-ts/ui/models/Size";
@@ -24,8 +23,10 @@ export default function Window(props: Props) {
   const { windowsService, appsService, i18n } = Container.instance;
   const translate = useI18n();
 
-  const appId = props.window.appId;
-  const appArgs = props.window.args;
+  const topOffset = (): number => props.topOffset ?? 0;
+
+  const { appId } = props.window;
+  const { args: appArgs } = props.window;
 
   const [overrideLayer, setOverrideLayer] = createSignal<number | null>(null);
   const [path] = createResource<string>(getAppPath);
@@ -57,7 +58,10 @@ export default function Window(props: Props) {
     const localePathPrefix = currentLocale === "en" ? "" : `/${currentLocale}`;
     const targetPath = `${localePathPrefix}/${path()!}`;
     if (window.location.pathname !== targetPath) {
-      navigate(targetPath);
+      // Sync the address bar to the focused window without triggering a
+      // ClientRouter transition, which would remount every island (and thus
+      // reload all open windows) on focus/drag/resize.
+      window.history.pushState({}, "", targetPath);
     }
   }
 
@@ -76,8 +80,9 @@ export default function Window(props: Props) {
 
   function onDragEnd(_: MouseEvent, position: Position) {
     props.window.position = position;
-    if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+    const layerOverride = overrideLayer();
+    if (layerOverride !== null) {
+      props.window.layer = layerOverride;
       setOverrideLayer(null);
     }
     windowsService.update(props.window);
@@ -95,8 +100,9 @@ export default function Window(props: Props) {
   function onResizeEnd(_: Event, size: Size, position: Position) {
     props.window.size = size;
     props.window.position = position;
-    if (overrideLayer()) {
-      props.window.layer = overrideLayer()!;
+    const layerOverride = overrideLayer();
+    if (layerOverride !== null) {
+      props.window.layer = layerOverride;
       setOverrideLayer(null);
     }
     windowsService.update(props.window);
@@ -116,7 +122,7 @@ export default function Window(props: Props) {
       customHeaderButtons={
         <Button
           onClick={onMinimize}
-          class="rounded p-1 transition-colors duration-200 ease-in-out hover:bg-surface-300"
+          class="hover:bg-surface-300 rounded p-1 transition-colors duration-200 ease-in-out"
           variant="text"
           size="small"
           ariaLabel={translate(TranslationKeys.desktop_minimize)}
@@ -125,12 +131,23 @@ export default function Window(props: Props) {
         </Button>
       }
       maximizeOffset={{
-        top: 70 + WINDOW_EDGE_OFFSET,
+        top: topOffset() + WINDOW_EDGE_OFFSET,
         left: WINDOW_EDGE_OFFSET,
         right: WINDOW_EDGE_OFFSET,
         bottom: WINDOW_EDGE_OFFSET,
       }}
-      dragOffset={{ top: (props.topOffset ?? 0) + WINDOW_EDGE_OFFSET }}
+      dragOffset={{
+        top: topOffset() + WINDOW_EDGE_OFFSET,
+        left: WINDOW_EDGE_OFFSET,
+        right: WINDOW_EDGE_OFFSET,
+        bottom: WINDOW_EDGE_OFFSET,
+      }}
+      resizeOffset={{
+        top: topOffset() + WINDOW_EDGE_OFFSET,
+        left: WINDOW_EDGE_OFFSET,
+        right: WINDOW_EDGE_OFFSET,
+        bottom: WINDOW_EDGE_OFFSET,
+      }}
       maximizable={true}
       onClick={onClick}
       onClose={onClose}
@@ -158,7 +175,7 @@ export default function Window(props: Props) {
       }}
       customButton={(props) => (
         <Button
-          class="rounded p-1 transition-colors duration-200 ease-in-out hover:bg-surface-300"
+          class="hover:bg-surface-300 rounded p-1 transition-colors duration-200 ease-in-out"
           onClick={props.onClick}
           variant="text"
           size="small"

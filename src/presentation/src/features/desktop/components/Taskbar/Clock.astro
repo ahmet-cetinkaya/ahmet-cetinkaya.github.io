@@ -1,41 +1,35 @@
----
-import Times from "@packages/acore-ts/data/date/constants/Times";
-import Container from "../../../../../Container";
-
-export type Props = {
-  id?: string;
-};
-
-const i18n = Container.instance.i18n;
-const locale = i18n.getLocaleFromUrl(Astro.url, "en");
----
-
-<div class="flex select-none items-center justify-end gap-6 text-nowrap text-white">
-  <span id="clock"> 09:05:00 </span>
-  <span id="date" class="hidden sm:block">
-    10 Kasım 193<span class="text-xl">∞</span>
-  </span>
+<div class="flex items-center justify-end gap-6 text-nowrap text-white select-none">
+  <span id="clock">Loading...</span>
+  <span id="date" class="hidden sm:block">Loading...</span>
 </div>
 
-<script is:inline define:vars={{ Times, locale }}>
-  document.addEventListener("astro:after-swap", onMount);
+<script is:inline>
+  let clockInterval = null;
 
   function onMount() {
+    if (clockInterval) {
+      clearTimeout(clockInterval);
+      clockInterval = null;
+    }
+
     const clockContainer = document.querySelector("#clock");
     const dateContainer = document.querySelector("#date");
+
+    if (!clockContainer || !dateContainer) return;
 
     const now = new Date();
     updateClock(now);
     updateDate(now);
-    scheduleNextUpdate();
 
     function updateClock(now) {
       const hour = now.getHours();
       const minute = now.getMinutes();
-      clockContainer.textContent = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+      const second = now.getSeconds();
+      clockContainer.textContent = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}:${second.toString().padStart(2, "0")}`;
     }
 
     function updateDate(now) {
+      const locale = document.documentElement.lang || "en";
       dateContainer.textContent = now.toLocaleString(locale, {
         year: "numeric",
         month: "long",
@@ -45,14 +39,18 @@ const locale = i18n.getLocaleFromUrl(Astro.url, "en");
     }
 
     function scheduleNextUpdate(nextTimeout) {
-      if (!nextTimeout) nextTimeout = Times.MILLIS_IN_SECOND - now.getMilliseconds();
-      setTimeout(() => {
+      const timeout = nextTimeout || 1000 - new Date().getMilliseconds();
+      clockInterval = setTimeout(() => {
         const now = new Date();
         updateClock(now);
-        if (now.getHours() === 0) updateDate(now);
-
-        scheduleNextUpdate(Times.MILLIS_IN_SECOND);
-      }, nextTimeout);
+        if (now.getSeconds() === 0) updateDate(now);
+        scheduleNextUpdate(1000);
+      }, timeout);
     }
+
+    scheduleNextUpdate();
   }
+
+  onMount();
+  document.addEventListener("astro:after-swap", onMount);
 </script>

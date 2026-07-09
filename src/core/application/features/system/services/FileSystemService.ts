@@ -1,19 +1,22 @@
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 
 import GitHubService from "@application/features/fileExplorer/services/GitHubService";
+import DataService from "@application/shared/DataService";
 import DirectoryData, { Paths } from "@domain/data/Directories";
 import FilesData from "@domain/data/Files";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
-import PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import type IFileSystemService from "./abstraction/IFileSystemService";
 import type { FileChangeListener, FileChangeType, FileSystemEntry } from "./abstraction/IFileSystemService";
 
-export default class FileSystemService implements IFileSystemService {
-  private data?: FileSystemEntry[];
+export default class FileSystemService extends DataService<FileSystemEntry> implements IFileSystemService {
   private listeners: FileChangeListener[] = [];
   private gitHubService = new GitHubService();
   private readonly codePath = `${Paths.USER_HOME}/Code`;
+
+  protected loadData(): FileSystemEntry[] {
+    return [...DirectoryData, ...FilesData];
+  }
 
   addListener(listener: FileChangeListener): void {
     this.listeners.push(listener);
@@ -34,34 +37,6 @@ export default class FileSystemService implements IFileSystemService {
     return !!entry.fullPath && entry.fullPath.endsWith(".desktop");
   }
 
-  private async ensureDataLoaded(): Promise<void> {
-    if (!this.data) this.data = [...DirectoryData, ...FilesData];
-  }
-
-  async getAll(predicate?: ((x: FileSystemEntry) => boolean) | undefined): Promise<FileSystemEntry[]> {
-    await this.ensureDataLoaded();
-    return predicate ? this.data!.filter(predicate) : this.data!;
-  }
-
-  async getList(
-    pageIndex: number,
-    pageSize: number,
-    predicate?: ((x: FileSystemEntry) => boolean) | undefined,
-  ): Promise<PaginationResult<FileSystemEntry>> {
-    await this.ensureDataLoaded();
-
-    const query = predicate ? this.data!.filter(predicate) : this.data!;
-    const totalItems = query.length;
-    const items = query.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
-    return new PaginationResult<FileSystemEntry>(pageIndex, pageSize, items, totalItems);
-  }
-
-  async get(predicate: (x: FileSystemEntry) => boolean): Promise<FileSystemEntry | null> {
-    await this.ensureDataLoaded();
-
-    return this.data!.find(predicate) ?? null;
-  }
-
   async add(item: FileSystemEntry): Promise<void> {
     await this.ensureDataLoaded();
 
@@ -78,8 +53,10 @@ export default class FileSystemService implements IFileSystemService {
     const index = this.data!.findIndex((x) => x.id === item.id);
     if (index === -1) throw new Error("File system entry not found");
 
-    item.updatedDate = new Date();
-    this.data![index] = item;
+    const updatedItem = Object.assign(Object.create(Object.getPrototypeOf(item)), item, {
+      updatedDate: new Date(),
+    }) as FileSystemEntry;
+    this.data![index] = updatedItem;
 
     if (this.isDesktopFile(item)) {
       this.notifyListeners("update", item);
@@ -110,23 +87,14 @@ export default class FileSystemService implements IFileSystemService {
     // If not found and it's a GitHub path, try to fetch it
     if (path.startsWith(this.codePath) && path !== this.codePath) {
       try {
-        // We can't easily resolve a single file without listing the parent or knowing it exists
-        // But for now, let's assume if we are resolving it, we might have listed it before.
-        // If not, we might need to fetch the parent.
-        // However, for performance, let's try to deduce the repo and path.
         const relativePath = path.substring(this.codePath.length + 1);
         const parts = relativePath.split("/");
 
         if (parts.length === 1) {
-          // It's a repo root. We should have fetched it when listing Code dir.
-          // But if we haven't, let's try to fetch repos.
           await this.fetchRepositories();
           return this.data!.find((e) => e.fullPath === path) ?? null;
         }
 
-        // It's a file or dir inside a repo
-        // We can't fetch a single metadata easily without the parent listing usually,
-        // but we can try to fetch the parent directory contents.
         const parentPath = path.substring(0, path.lastIndexOf("/"));
         await this.getChildren(parentPath);
 
@@ -174,11 +142,14 @@ export default class FileSystemService implements IFileSystemService {
     }
   }
 
-  private async fetchRepoContents(path: string): Promise<void> {
+  private parseGitHubPath(path: string): { repoName: string; repoPath: string } {
     const relativePath = path.substring(this.codePath.length + 1);
     const parts = relativePath.split("/");
-    const repoName = parts[0];
-    const repoPath = parts.slice(1).join("/");
+    return { repoName: parts[0], repoPath: parts.slice(1).join("/") };
+  }
+
+  private async fetchRepoContents(path: string): Promise<void> {
+    const { repoName, repoPath } = this.parseGitHubPath(path);
 
     try {
       const contents = await this.gitHubService.getContents(repoName, repoPath);
@@ -191,8 +162,6 @@ export default class FileSystemService implements IFileSystemService {
         if (this.data!.some((e) => e.fullPath === itemPath)) continue;
 
         if (item.type === "dir") {
-          // For directories, use current date as we don't have specific directory modification dates
-          // In the future, could track commits within the directory
           const now = new Date();
           this.data!.push(new Directory(itemPath, now, now));
         } else {
@@ -219,10 +188,7 @@ export default class FileSystemService implements IFileSystemService {
 
     // If it's a GitHub file and content is empty (or placeholder), fetch it
     if (path.startsWith(this.codePath) && path !== this.codePath && !entry.content) {
-      const relativePath = path.substring(this.codePath.length + 1);
-      const parts = relativePath.split("/");
-      const repoName = parts[0];
-      const repoPath = parts.slice(1).join("/");
+      const { repoName, repoPath } = this.parseGitHubPath(path);
 
       try {
         const content = await this.gitHubService.getFileContent(repoName, repoPath);

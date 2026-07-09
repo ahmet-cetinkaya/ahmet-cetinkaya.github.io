@@ -1,7 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "ignoreDependencies": ["@packages/acore-astro", "@packages/acore-solidjs", "@packages/acore-ts", "acore-ts"],
   "ignorePatterns": ["**/.git/**", "**/dist/**", "**/node_modules/**", "**/public/**", "packages/**"],
-  "entry": ["src/presentation/src/**/*.tsx", "src/presentation/src/**/*.ts", "src/presentation/src/**/*.astro"],
+  "entry": [
+    "src/core/domain/**/*.ts",
+    "src/core/application/**/*.ts",
+    "src/presentation/src/**/*.tsx",
+    "src/presentation/src/**/*.ts",
+    "src/presentation/src/**/*.astro"
+  ],
   "ignoreExports": [
     {
       "file": "src/core/application/features/fileExplorer/services/FileExplorerService.ts",

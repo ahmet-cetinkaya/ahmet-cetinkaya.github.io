@@ -1,12 +1,12 @@
 import { createSignal } from "solid-js";
 import Dialog from "../../../features/desktop/components/Dialog";
-import Button from "@shared/components/ui/Button";
 import Icons from "@domain/data/Icons";
 import Size from "@packages/acore-ts/ui/models/Size";
 import { useI18n } from "@shared/utils/i18nTranslate";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import { TranslationKeys } from "@domain/data/Translations";
 import DialogSizeCalculator from "@shared/utils/DialogSizeCalculator";
+import DialogButtons from "./DialogButtons";
 
 interface InputDialogProps {
   isOpen: boolean;
@@ -108,20 +108,12 @@ export default function InputDialog(props: InputDialogProps) {
       fitContent={true}
       sizingOptions={DialogSizeCalculator.createSizeOptions("input")}
       customButtons={[
-        <div class="flex justify-end space-x-2">
-          <Button onClick={handleCancel} variant="text" size="small" class="px-4 py-2 text-sm" ariaLabel="Cancel">
-            {props.cancelButtonText &&
-            Object.values(TranslationKeys).includes(props.cancelButtonText as TranslationKeys)
-              ? translate(props.cancelButtonText as TranslationKeys)
-              : props.cancelButtonText || "Cancel"}
-          </Button>
-          <Button onClick={handleConfirm} variant="primary" size="small" class="px-4 py-2 text-sm" ariaLabel="Confirm">
-            {props.confirmButtonText &&
-            Object.values(TranslationKeys).includes(props.confirmButtonText as TranslationKeys)
-              ? translate(props.confirmButtonText as TranslationKeys)
-              : props.confirmButtonText || "OK"}
-          </Button>
-        </div>,
+        <DialogButtons
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+          cancelButtonText={props.cancelButtonText}
+          confirmButtonText={props.confirmButtonText}
+        />,
       ]}
     >
       <div class="mt-2">
@@ -131,7 +123,7 @@ export default function InputDialog(props: InputDialogProps) {
           onInput={(e) => setInputValue(e.currentTarget.value)}
           onKeyDown={handleKeyDown}
           placeholder={props.placeholder || translate(TranslationKeys.common_path)}
-          class={`w-full rounded border px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-1 ${
+          class={`w-full rounded border px-3 py-2 text-sm text-white placeholder-gray-400 focus:ring-1 focus:outline-none ${
             props.errorMessage
               ? "border-red-500 focus:border-red-500 focus:ring-red-500"
               : "border-surface-300 focus:border-blue-500 focus:ring-blue-500"

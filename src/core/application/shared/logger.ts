@@ -62,7 +62,7 @@ class Logger {
   debug(message: string, ...args: unknown[]): void {
     if (this.shouldLog("debug")) {
       const [formattedMessage, ...formattedArgs] = this.formatMessage("debug", message, ...args);
-      // eslint-disable-next-line no-console
+
       console.debug(formattedMessage, ...formattedArgs);
     }
   }
@@ -70,7 +70,7 @@ class Logger {
   info(message: string, ...args: unknown[]): void {
     if (this.shouldLog("info")) {
       const [formattedMessage, ...formattedArgs] = this.formatMessage("info", message, ...args);
-      // eslint-disable-next-line no-console
+
       console.info(formattedMessage, ...formattedArgs);
     }
   }
@@ -78,7 +78,7 @@ class Logger {
   warn(message: string, ...args: unknown[]): void {
     if (this.shouldLog("warn")) {
       const [formattedMessage, ...formattedArgs] = this.formatMessage("warn", message, ...args);
-      // eslint-disable-next-line no-console
+
       console.warn(formattedMessage, ...formattedArgs);
     }
   }
@@ -86,12 +86,11 @@ class Logger {
   error(message: string, ...args: unknown[]): void {
     if (this.shouldLog("error")) {
       const [formattedMessage, ...formattedArgs] = this.formatMessage("error", message, ...args);
-      // eslint-disable-next-line no-console
+
       console.error(formattedMessage, ...formattedArgs);
     }
   }
 
-  // Specialized logging methods for different contexts
   fileOperation(operation: string, details: LogDetails): void {
     this.debug(`File operation: ${operation}`, details);
   }
@@ -120,6 +119,5 @@ class Logger {
   }
 }
 
-// Export singleton instance
 export const logger = new Logger();
 export default logger;

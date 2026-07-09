@@ -4,14 +4,18 @@ import Key from "@packages/acore-solidjs/ui/components/Key";
 import Window from "@presentation/src/features/desktop/components/Window";
 import WindowModel from "@domain/models/Window";
 import ScreenHelper from "@shared/utils/ScreenHelper";
-import { logger } from "@shared/utils/logger";
+import { logger } from "@application/shared/logger";
 import appCommands from "@shared/constants/AppCommands";
 import type { Apps } from "@domain/data/Apps";
 import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
 
 const TASKBAR_HEIGHT: number = 70;
 
-export default function WindowManager() {
+interface WindowManagerProps {
+  class?: string;
+}
+
+export default function WindowManager(props: WindowManagerProps) {
   const windowService = Container.instance.windowsService;
   const { appsService } = Container.instance;
   const [windows, setWindows] = createSignal<WindowModel[]>([]);
@@ -81,8 +85,10 @@ export default function WindowManager() {
   }
 
   return (
-    <Key each={windows()} by={(item) => item.id}>
-      {(item) => <Window window={item()} topOffset={TASKBAR_HEIGHT} />}
-    </Key>
+    <div class={`relative z-20 ${props.class ?? ""}`}>
+      <Key each={windows()} by={(item) => item.id}>
+        {(item) => <Window window={item()} topOffset={TASKBAR_HEIGHT} />}
+      </Key>
+    </div>
   );
 }

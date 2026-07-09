@@ -9,7 +9,8 @@ import type {
 } from "@packages/acore-ts/repository/abstraction/IRepository";
 
 export default interface IWindowsService
-  extends IAddable<Window>,
+  extends
+    IAddable<Window>,
     IGettable<Window>,
     IListable<Window>,
     IObservable<Window[]>,

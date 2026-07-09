@@ -53,7 +53,9 @@ export default class FileSystemService extends DataService<FileSystemEntry> impl
     const index = this.data!.findIndex((x) => x.id === item.id);
     if (index === -1) throw new Error("File system entry not found");
 
-    const updatedItem = { ...item, updatedDate: new Date() } as FileSystemEntry;
+    const updatedItem = Object.assign(Object.create(Object.getPrototypeOf(item)), item, {
+      updatedDate: new Date(),
+    }) as FileSystemEntry;
     this.data![index] = updatedItem;
 
     if (this.isDesktopFile(item)) {

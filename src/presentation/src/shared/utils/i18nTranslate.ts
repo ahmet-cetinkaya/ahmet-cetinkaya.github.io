@@ -4,7 +4,8 @@ import Container from "@presentation/Container";
 import type II18n from "@packages/acore-ts/i18n/abstraction/II18n";
 
 function resolveLocale(i18n: II18n, url: URL | null): string {
-  const currentUrl = url || new URL(window.location.href);
+  const currentUrl =
+    url || (typeof window !== "undefined" ? new URL(window.location.href) : new URL("http://localhost"));
   let locale = i18n.getLocaleFromUrl(currentUrl, i18n.locales[0]);
   if (!i18n.locales.includes(locale)) locale = i18n.locales[0];
   return locale;

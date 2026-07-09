@@ -166,7 +166,10 @@ export default function Desktop(props: DesktopProps) {
     if (!shortcut) return;
 
     const appCommand = appCommands[shortcut.id];
-    if (!appCommand) throw new Error(`No command found for app with id: ${shortcut.id}`);
+    if (!appCommand) {
+      logger.warn("No command found for app:", shortcut.id);
+      return;
+    }
 
     const appCommandArgs = [];
     if (ScreenHelper.isMobile()) appCommandArgs.push("--maximized");

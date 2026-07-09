@@ -108,6 +108,7 @@ export default abstract class BaseCommand implements ICIProgram {
     args: string[],
     flagNames: Array<{ names: string[]; type: "boolean" | "value"; key: string }>,
     missingOperandKey: TranslationKeys,
+    helpOutput: CommandOutput,
   ): { flags: Record<string, string | boolean>; sources: string[]; destination: string } | { error: CommandOutput } {
     const flags: Record<string, string | boolean> = {};
     for (const def of flagNames) {
@@ -152,17 +153,13 @@ export default abstract class BaseCommand implements ICIProgram {
       }
     }
 
-    if (flags.help) return { error: this.createHelpFromFlags() };
+    if (flags.help) return { error: helpOutput };
     if (flags.version) return { error: this.createVersionOutput() };
     if (!destination || sources.length === 0) {
       return { error: this.createErrorOutput(`{{${missingOperandKey}}}`) };
     }
 
     return { flags, sources, destination };
-  }
-
-  private createHelpFromFlags(): CommandOutput {
-    return { output: `${this.name}: {{${this.description}}}`, exitCode: ExitCodes.SUCCESS };
   }
 
   protected async forEachValidSource(

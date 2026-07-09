@@ -19,6 +19,7 @@ export default class MvCommand extends BaseCommand {
         { names: ["--version"], type: "boolean", key: "version" },
       ],
       TranslationKeys.apps_terminal_mv_missing_operand,
+      this.createHelpOutput(),
     );
 
     if ("error" in result) return result.error;
@@ -39,5 +40,23 @@ export default class MvCommand extends BaseCommand {
       },
     );
     return transferResult ?? { output: "", exitCode: ExitCodes.SUCCESS };
+  }
+
+  private createHelpOutput(): CommandOutput {
+    return {
+      output: `${this.name}: {{${TranslationKeys.apps_terminal_commands_mv_description}}}
+
+{{${TranslationKeys.common_usage}}}:
+  mv [{{${TranslationKeys.common_options}}}]... <{{${TranslationKeys.common_source}}}>... <{{${TranslationKeys.common_target_directory}}}>
+
+{{${TranslationKeys.common_options}}}:
+  -f, --force                   {{${TranslationKeys.apps_terminal_mv_help_option_force}}}
+  -v, --verbose                 {{${TranslationKeys.apps_terminal_mv_help_option_verbose}}}
+  -t, --target-directory=DIR    {{${TranslationKeys.apps_terminal_mv_help_option_target_directory}}}
+  -T, --no-target-directory     {{${TranslationKeys.apps_terminal_mv_help_option_no_target_directory}}}
+      --help                    {{${TranslationKeys.apps_terminal_mv_help_option_help}}}
+      --version                 {{${TranslationKeys.apps_terminal_mv_help_option_version}}}`,
+      exitCode: ExitCodes.SUCCESS,
+    };
   }
 }

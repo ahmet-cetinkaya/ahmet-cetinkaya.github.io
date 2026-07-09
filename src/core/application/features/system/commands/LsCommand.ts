@@ -83,9 +83,9 @@ export default class LsCommand extends BaseCommand {
         exitCode: ExitCodes.SUCCESS,
       };
     } catch (error) {
-      console.error("ls command error:", { error, path: files[0] || this.currentPath });
+      console.error("ls command error:", { error, path: files[0] || this.currentPath, files });
       return this.createErrorOutput(
-        error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}`,
+        error instanceof Error ? error.message : `{{${TranslationKeys.common_unknown_error}}}`,
       );
     }
   }

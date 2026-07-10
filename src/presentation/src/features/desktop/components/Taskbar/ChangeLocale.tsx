@@ -1,4 +1,3 @@
-import { navigate } from "astro:transitions/client";
 import { createSignal, onMount, Show } from "solid-js";
 import { Locales, locales } from "@domain/data/Translations";
 import Container from "@presentation/Container";
@@ -34,7 +33,9 @@ export default function ChangeLocale() {
     const currentUrl = new URL(window.location.href);
     const navigateUrl = i18n.getLocaleUrl(currentUrl, nextLocale, locales[0]);
     if (navigateUrl.pathname !== currentUrl.pathname) {
-      navigate(navigateUrl.toString());
+      // Sync the address bar without a ClientRouter transition, which would
+      // remount every island and reload all open windows.
+      window.history.pushState({}, "", navigateUrl.toString());
     }
   }
 

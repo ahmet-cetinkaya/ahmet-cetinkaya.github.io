@@ -97,11 +97,16 @@ export default function Dropdown(props: Props) {
       props.item.onClick?.();
     }
 
+    function onAnchorClick(event: MouseEvent) {
+      if (props.item.onClick) event.preventDefault();
+      onClick();
+    }
+
     if (props.item.href)
       return (
         <Link
           href={props.item.href}
-          onClick={onClick}
+          onClick={onAnchorClick}
           class={classes}
           variant="link"
           ariaLabel={translate(props.item.text)}

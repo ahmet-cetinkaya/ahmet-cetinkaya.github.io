@@ -35,7 +35,9 @@ export default function Completed() {
     return app;
   }
 
-  async function onContactClick() {
+  async function onContactClick(event: MouseEvent) {
+    event.preventDefault();
+
     if (!contactApp()) return;
 
     const window = new Window(

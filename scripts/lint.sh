@@ -13,7 +13,7 @@ acore_log_header "🔍 Linting ahmetcetinkaya.me project"
 
 # TS/JS Linting
 acore_log_section "🟨 Linting TS/JS"
-bunx eslint . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs --ignore-pattern "**/*.astro" --ignore-pattern "packages/**" --ignore-pattern "src/presentation/public/**"
+bunx eslint . --ext .ts,.tsx,.js,.jsx,.mjs,.cjs --ignore-pattern "**/*.astro" --ignore-pattern ".claude/**" --ignore-pattern "packages/**" --ignore-pattern "src/presentation/public/**" --ignore-pattern "src/presentation/dist/**"
 acore_log_success "✅ TS/JS linting passed"
 
 # Astro

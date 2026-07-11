@@ -23,19 +23,11 @@ export default class CpCommand extends BaseCommand {
       this.createHelpOutput(),
     );
 
-    if ("error" in result) return result.error;
-
-    const transferResult = await this.forEachValidSource(
-      result.sources,
-      result.destination,
-      this.currentPath,
-      async (sourceEntry, destPath) => {
-        const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size);
-        await this.fileSystemService.add(newFile);
-        return result.flags.verbose as boolean;
-      },
-    );
-    return transferResult ?? { output: "", exitCode: ExitCodes.SUCCESS };
+    return this.executeTransfer(result, async (sourceEntry, destPath) => {
+      const newFile = new File(destPath, sourceEntry.content, new Date(), sourceEntry.size);
+      await this.fileSystemService.add(newFile);
+      return result.flags.verbose as boolean;
+    });
   }
 
   private createHelpOutput(): CommandOutput {

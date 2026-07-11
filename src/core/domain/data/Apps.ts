@@ -9,6 +9,7 @@ export enum Apps {
   terminal = "terminal",
   welcome = "welcome",
   fileExplorer = "fileExplorer",
+  textEditor = "textEditor",
 }
 
 const AppsData = [
@@ -43,6 +44,14 @@ const AppsData = [
     TranslationKeys.apps_file_explorer,
     Icons.folder,
     "file-explorer",
+    new Date("2024-05-11 15:55:45"),
+  ),
+  new App(
+    Apps.textEditor,
+    Categories.system,
+    TranslationKeys.apps_text_editor,
+    Icons.edit,
+    "text-editor",
     new Date("2024-05-11 15:55:45"),
   ),
 ];

@@ -162,6 +162,16 @@ export default abstract class BaseCommand implements ICIProgram {
     return { flags, sources, destination };
   }
 
+  protected async executeTransfer(
+    result: { sources: string[]; destination: string } | { error: CommandOutput },
+    handler: (sourceEntry: File, destPath: string) => Promise<boolean>,
+  ): Promise<CommandOutput> {
+    if ("error" in result) return result.error;
+
+    const transferResult = await this.forEachValidSource(result.sources, result.destination, this.currentPath, handler);
+    return transferResult ?? { output: "", exitCode: ExitCodes.SUCCESS };
+  }
+
   protected async forEachValidSource(
     sources: string[],
     destination: string,

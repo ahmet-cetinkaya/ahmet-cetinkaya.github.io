@@ -1,9 +1,14 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
+import TextFileService from "@application/features/textEditor/services/TextFileService";
 import { logger } from "@application/shared/logger";
+import { Apps } from "@domain/data/Apps";
+import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
+import Window from "@domain/models/Window";
+import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 import FileNavigationService from "./FileNavigationService";
 import FileOperationsService from "./FileOperationsService";
 import GameExecutionService from "./GameExecutionService";
@@ -38,14 +43,16 @@ export default class FileExplorerService {
   private readonly operationsService: FileOperationsService;
   private readonly navigationService: FileNavigationService;
   private readonly gameExecutionService: GameExecutionService | null;
+  private readonly textFileService: TextFileService;
 
   private constructor(
     private readonly fileSystemService: IFileSystemService,
-    windowsService?: IWindowsService,
+    private readonly windowsService?: IWindowsService,
   ) {
     this.operationsService = new FileOperationsService(fileSystemService);
     this.navigationService = new FileNavigationService(fileSystemService);
     this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null;
+    this.textFileService = new TextFileService(fileSystemService);
   }
 
   static getInstance(fileSystemService: IFileSystemService, windowsService?: IWindowsService): FileExplorerService {
@@ -262,9 +269,39 @@ export default class FileExplorerService {
 
   // File handler methods
   hasRegisteredHandler(entry: FileSystemEntry): boolean {
-    // Currently only games are supported as executable files
-    // This method is designed to be extensible for future file associations
-    return this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
+    const hasGameHandler = this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
+    return hasGameHandler || this.textFileService.isTextFile(entry);
+  }
+
+  isTextFile(entry: FileSystemEntry): boolean {
+    return this.textFileService.isTextFile(entry);
+  }
+
+  async openInTextEditor(entry: FileSystemEntry, options: { forceReadOnly?: boolean } = {}): Promise<void> {
+    if (!this.windowsService) {
+      throw new Error("Windows service not available");
+    }
+
+    if (!(entry instanceof File)) {
+      throw new Error("Only files can be opened in the text editor");
+    }
+
+    const args = options.forceReadOnly ? [entry.fullPath, "--readonly"] : [entry.fullPath];
+    const appWindow = new Window(
+      CryptoExtensions.generateNanoId(),
+      Apps.textEditor,
+      TranslationKeys.apps_text_editor,
+      0,
+      false,
+      false,
+      undefined,
+      undefined,
+      new Date(),
+      args,
+    );
+
+    await this.windowsService.add(appWindow);
+    await this.windowsService.active(appWindow);
   }
 
   // Game-related methods

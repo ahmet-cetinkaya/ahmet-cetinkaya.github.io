@@ -108,6 +108,22 @@ export default function FileContextMenu(props: FileContextMenuProps) {
         action: () => props.onFileOperation("open", targetPaths),
       });
 
+      const isSingleFileTarget = hasContextTarget && entry!.isFile && targetPaths.length === 1;
+      if (isSingleFileTarget) {
+        items.push(
+          {
+            label: translate(TranslationKeys.apps_text_editor_edit),
+            icon: Icons.edit,
+            action: () => props.onFileOperation("edit", targetPaths),
+          },
+          {
+            label: translate(TranslationKeys.apps_text_editor_view),
+            icon: Icons.eye,
+            action: () => props.onFileOperation("view", targetPaths),
+          },
+        );
+      }
+
       items.push(
         {
           label: translate(TranslationKeys.common_copy),

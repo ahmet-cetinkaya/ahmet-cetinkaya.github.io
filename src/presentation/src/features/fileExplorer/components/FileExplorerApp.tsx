@@ -330,9 +330,10 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
       // Check if the file has a registered handler
       if (service.hasRegisteredHandler(entry)) {
         try {
-          // Currently only games are supported, but this allows for future extensibility
           if (service.isGameExecutable(entry)) {
             await service.launchGame(entry);
+          } else if (service.isTextFile(entry)) {
+            await service.openInTextEditor(entry);
           }
         } catch (error) {
           handleError(error);
@@ -534,14 +535,27 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
   }
 
   async function handleViewOperation(paths: string[]) {
-    if (paths.length === 1) {
-      // FUTURE: Implement file viewer for read-only file content preview
-    }
+    await openInTextEditor(paths, { forceReadOnly: true });
   }
 
   async function handleEditOperation(paths: string[]) {
-    if (paths.length === 1) {
-      // FUTURE: Implement file editor for in-place file editing
+    await openInTextEditor(paths, { forceReadOnly: false });
+  }
+
+  async function openInTextEditor(paths: string[], options: { forceReadOnly: boolean }) {
+    if (paths.length !== 1) return;
+
+    try {
+      const entry = await fileSystemService.get((e) => e.fullPath === paths[0]);
+      if (!entry) {
+        handleError(new Error(`File not found: ${paths[0]}`));
+        return;
+      }
+
+      const service = FileExplorerService.getInstance(fileSystemService, windowsService);
+      await service.openInTextEditor(entry, { forceReadOnly: options.forceReadOnly });
+    } catch (error) {
+      handleError(error);
     }
   }
 

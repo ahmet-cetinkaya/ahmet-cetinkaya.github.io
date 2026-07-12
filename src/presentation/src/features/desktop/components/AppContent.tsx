@@ -11,6 +11,7 @@ type Props = {
   appId: AppId;
   args?: string[];
   initialPath?: string;
+  windowId?: string;
 };
 
 export default function AppContent(props: Props) {
@@ -31,7 +32,7 @@ export default function AppContent(props: Props) {
       const filePath = props.args?.[0];
       const readOnlyArg = props.args?.find((arg) => arg === "--readonly");
       const readOnly = readOnlyArg !== undefined;
-      return <TextEditorApp filePath={filePath} readOnly={readOnly} />;
+      return <TextEditorApp filePath={filePath} readOnly={readOnly} windowId={props.windowId} />;
     }
     default:
       throw new Error(`App not found: ${props.appId}`);

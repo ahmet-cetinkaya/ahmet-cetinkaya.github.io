@@ -2,13 +2,10 @@ import type IWindowsService from "@application/features/desktop/services/abstrac
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import TextFileService from "@application/features/textEditor/services/TextFileService";
+import createTextEditorWindow from "@application/features/textEditor/utils/createTextEditorWindow";
 import { logger } from "@application/shared/logger";
-import { Apps } from "@domain/data/Apps";
-import { TranslationKeys } from "@domain/data/Translations";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
-import Window from "@domain/models/Window";
-import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 import FileNavigationService from "./FileNavigationService";
 import FileOperationsService from "./FileOperationsService";
 import GameExecutionService from "./GameExecutionService";
@@ -287,18 +284,7 @@ export default class FileExplorerService {
     }
 
     const args = options.forceReadOnly ? [entry.fullPath, "--readonly"] : [entry.fullPath];
-    const appWindow = new Window(
-      CryptoExtensions.generateNanoId(),
-      Apps.textEditor,
-      TranslationKeys.apps_text_editor,
-      0,
-      false,
-      false,
-      undefined,
-      undefined,
-      new Date(),
-      args,
-    );
+    const appWindow = createTextEditorWindow(args);
 
     await this.windowsService.add(appWindow);
     await this.windowsService.active(appWindow);

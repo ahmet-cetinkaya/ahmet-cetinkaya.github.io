@@ -14,11 +14,16 @@ import { Paths } from "@domain/data/Directories";
 import CodeMirrorEditor from "./CodeMirrorEditor";
 import FilePickerDialog, { type FilePickerMode } from "./FilePickerDialog";
 
-export default function TextEditorApp(props: { filePath?: string; readOnly?: boolean }): JSX.Element {
+export default function TextEditorApp(props: {
+  filePath?: string;
+  readOnly?: boolean;
+  windowId?: string;
+}): JSX.Element {
   const { fileSystemService, windowsService } = Container.instance;
   const textFileService = new TextFileService(fileSystemService);
   const translate = useI18n();
   const baseTitle = translate(TranslationKeys.apps_text_editor);
+  const forcedReadOnly = props.readOnly ?? false;
 
   const [filePath, setFilePath] = createSignal<string | null>(props.filePath ?? null);
   const [content, setContent] = createSignal("");
@@ -66,7 +71,7 @@ export default function TextEditorApp(props: { filePath?: string; readOnly?: boo
 
       const fileContent = await textFileService.readContent(path);
       const detectedLanguage = textFileService.getLanguageForExtension(entry.name);
-      const isFileReadOnly = textFileService.isReadOnly(path);
+      const isFileReadOnly = forcedReadOnly || textFileService.isReadOnly(path);
 
       setContent(fileContent);
       setSavedContent(fileContent);
@@ -215,7 +220,9 @@ export default function TextEditorApp(props: { filePath?: string; readOnly?: boo
   });
 
   async function syncWindowTitle(title: string): Promise<void> {
-    const appWindow = await windowsService.get((w) => w.appId === Apps.textEditor);
+    const appWindow = props.windowId
+      ? await windowsService.get((w) => w.id === props.windowId)
+      : await windowsService.get((w) => w.appId === Apps.textEditor);
     if (!appWindow || appWindow.title === title) return;
     appWindow.title = title as TranslationKey;
     await windowsService.update(appWindow);

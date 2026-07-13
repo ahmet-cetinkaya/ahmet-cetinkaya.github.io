@@ -1,7 +1,7 @@
 import { PathSanitizer } from "@application/features/fileExplorer/utils/PathSanitizer";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
-import { Paths } from "@domain/data/Directories";
+import PermissionService from "@application/features/system/services/PermissionService";
 import File from "@domain/models/File";
 
 export type EditorLanguage =
@@ -224,9 +224,7 @@ export default class TextFileService {
   }
 
   isReadOnly(path: string): boolean {
-    const codePath = PathSanitizer.normalizePath(`${Paths.USER_HOME}/Code`);
-    const normalizedPath = PathSanitizer.normalizePath(path);
-    return normalizedPath === codePath || normalizedPath.startsWith(`${codePath}/`);
+    return !PermissionService.canModifyPath(path);
   }
 
   async readContent(path: string): Promise<string> {

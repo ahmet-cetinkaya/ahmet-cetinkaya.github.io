@@ -41,7 +41,13 @@ export default function TextEditorApp(props: {
   const [showLabels, setShowLabels] = createSignal(false);
 
   const WIDE_TOOLBAR_THRESHOLD = 520;
+  const SAVE_ERROR_TIMEOUT_MS = 5000;
   let toolbarRef: HTMLDivElement | undefined;
+  let saveErrorTimer: ReturnType<typeof setTimeout> | undefined;
+
+  onCleanup(() => {
+    if (saveErrorTimer) clearTimeout(saveErrorTimer);
+  });
 
   onMount(async () => {
     if (toolbarRef) {
@@ -153,7 +159,8 @@ export default function TextEditorApp(props: {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setSaveError(errorMessage);
-      setTimeout(() => setSaveError(null), 5000);
+      if (saveErrorTimer) clearTimeout(saveErrorTimer);
+      saveErrorTimer = setTimeout(() => setSaveError(null), SAVE_ERROR_TIMEOUT_MS);
     } finally {
       setIsSaving(false);
     }

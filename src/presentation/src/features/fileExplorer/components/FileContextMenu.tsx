@@ -97,7 +97,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
     const hasSelection = selectedFiles.length > 0;
     const hasContextTarget = entry !== undefined;
 
-    const targetPaths = hasSelection ? selectedFiles : hasContextTarget ? [entry!.fullPath] : [];
+    const targetPaths = hasSelection ? selectedFiles : entry ? [entry.fullPath] : [];
 
     let hasContent = false;
 
@@ -108,7 +108,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
         action: () => props.onFileOperation("open", targetPaths),
       });
 
-      const isSingleFileTarget = hasContextTarget && entry!.isFile && targetPaths.length === 1;
+      const isSingleFileTarget = entry !== undefined && entry.isFile && targetPaths.length === 1;
       if (isSingleFileTarget) {
         items.push(
           {

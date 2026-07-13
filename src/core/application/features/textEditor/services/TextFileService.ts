@@ -199,6 +199,12 @@ const LANGUAGE_BY_EXTENSION: Record<string, EditorLanguage> = {
   svelte: "html",
 };
 
+const LANGUAGE_BY_FILENAME: Record<string, EditorLanguage> = {
+  dockerfile: "dockerfile",
+  makefile: "cmake",
+  "cmakelists.txt": "cmake",
+};
+
 /**
  * Encapsulates text-file concerns for the Text Editor: classification (text vs binary),
  * read-only detection, content read/write, and language detection for syntax highlighting.
@@ -297,6 +303,9 @@ export default class TextFileService {
   }
 
   getLanguageForExtension(fileName: string): EditorLanguage {
+    const languageByFullName = LANGUAGE_BY_FILENAME[fileName.toLowerCase()];
+    if (languageByFullName) return languageByFullName;
+
     const extension = this.getExtension(fileName);
     return LANGUAGE_BY_EXTENSION[extension] ?? "plaintext";
   }

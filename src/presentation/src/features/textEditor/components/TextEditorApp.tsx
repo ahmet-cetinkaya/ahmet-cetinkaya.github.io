@@ -39,6 +39,10 @@ export default function TextEditorApp(props: {
   const [pickerMode, setPickerMode] = createSignal<FilePickerMode | null>(null);
   const [pickerInitialPath, setPickerInitialPath] = createSignal<string>(Paths.USER_HOME);
   const [showLabels, setShowLabels] = createSignal(false);
+  // Identifies the document currently loaded in the editor. Bumped whenever the editor
+  // switches to a different document (new file, opened file) so CodeMirrorEditor remounts
+  // with fresh undo/redo history instead of leaking it between unrelated documents.
+  const [documentId, setDocumentId] = createSignal(1);
 
   const WIDE_TOOLBAR_THRESHOLD = 520;
   const SAVE_ERROR_TIMEOUT_MS = 5000;
@@ -85,6 +89,7 @@ export default function TextEditorApp(props: {
       setFilePath(path);
       setReadOnly(isFileReadOnly);
       setIsDirty(false);
+      setDocumentId((id) => id + 1);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setError(errorMessage);
@@ -111,6 +116,7 @@ export default function TextEditorApp(props: {
     setReadOnly(false);
     setError(null);
     setSaveError(null);
+    setDocumentId((id) => id + 1);
   }
 
   async function handleOpen(): Promise<void> {
@@ -367,13 +373,15 @@ export default function TextEditorApp(props: {
               </div>
             }
           >
-            <CodeMirrorEditor
-              initialContent={content()}
-              language={language()}
-              readOnly={readOnly()}
-              onChange={handleContentChange}
-              onSave={handleSave}
-            />
+            <Show when={documentId()} keyed>
+              <CodeMirrorEditor
+                initialContent={content()}
+                language={language()}
+                readOnly={readOnly()}
+                onChange={handleContentChange}
+                onSave={handleSave}
+              />
+            </Show>
           </Show>
         </Show>
 

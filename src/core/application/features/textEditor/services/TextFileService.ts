@@ -237,8 +237,11 @@ export default class TextFileService {
     }
 
     const entry = await this.fileSystemService.get((e) => e.fullPath === path);
-    if (!entry || !(entry instanceof File)) {
+    if (!entry) {
       throw new Error(`File not found: ${path}`);
+    }
+    if (!(entry instanceof File)) {
+      throw new Error(`Cannot save: '${path}' is a directory`);
     }
 
     await this.fileSystemService.update(this.createFile(path, content, entry.createdDate));
@@ -256,7 +259,7 @@ export default class TextFileService {
 
     if (entry) {
       if (!(entry instanceof File)) {
-        throw new Error(`File not found: ${path}`);
+        throw new Error(`Cannot save: '${path}' is a directory`);
       }
       await this.saveContent(path, content);
       return path;

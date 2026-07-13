@@ -67,6 +67,11 @@ export default defineConfig({
             // Split SolidJS vendor
             if (id.includes("solid-js") && !id.includes("/packages/")) return "solid-js-vendor";
 
+            // Let CodeMirror language grammars fall through to Rollup's automatic
+            // dynamic-import splitting so each is fetched lazily by the text editor.
+            // A manualChunks assignment would override that and force them eager.
+            if (id.includes("@codemirror/lang-") || id.includes("@codemirror/legacy-modes")) return undefined;
+
             // Default vendor chunk for other node_modules
             if (id.includes("node_modules")) return "vendor";
 

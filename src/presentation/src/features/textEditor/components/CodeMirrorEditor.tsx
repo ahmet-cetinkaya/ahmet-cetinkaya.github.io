@@ -1,30 +1,5 @@
-import { createEffect, onCleanup, onMount } from "solid-js";
-import { css } from "@codemirror/lang-css";
-import { html } from "@codemirror/lang-html";
-import { javascript } from "@codemirror/lang-javascript";
-import { json } from "@codemirror/lang-json";
-import { markdown } from "@codemirror/lang-markdown";
-import { xml } from "@codemirror/lang-xml";
-import { python } from "@codemirror/lang-python";
-import { rust } from "@codemirror/lang-rust";
-import { cpp } from "@codemirror/lang-cpp";
-import { java } from "@codemirror/lang-java";
-import { php } from "@codemirror/lang-php";
-import { sql } from "@codemirror/lang-sql";
-import { go } from "@codemirror/lang-go";
-import { yaml } from "@codemirror/lang-yaml";
+import { createEffect, on, onCleanup, onMount } from "solid-js";
 import { StreamLanguage } from "@codemirror/language";
-import { shell } from "@codemirror/legacy-modes/mode/shell";
-import { toml } from "@codemirror/legacy-modes/mode/toml";
-import { properties } from "@codemirror/legacy-modes/mode/properties";
-import { ruby } from "@codemirror/legacy-modes/mode/ruby";
-import { lua } from "@codemirror/legacy-modes/mode/lua";
-import { swift } from "@codemirror/legacy-modes/mode/swift";
-import { dockerFile } from "@codemirror/legacy-modes/mode/dockerfile";
-import { powerShell } from "@codemirror/legacy-modes/mode/powershell";
-import { dart, csharp, kotlin, scala } from "@codemirror/legacy-modes/mode/clike";
-import { cmake } from "@codemirror/legacy-modes/mode/cmake";
-import { groovy } from "@codemirror/legacy-modes/mode/groovy";
 import { Compartment, EditorState, type Extension } from "@codemirror/state";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { EditorView, keymap, lineNumbers } from "@codemirror/view";
@@ -39,72 +14,133 @@ type Props = {
   onSave?: () => void;
 };
 
-function languageExtension(language: EditorLanguage): Extension {
+async function languageExtension(language: EditorLanguage): Promise<Extension> {
   switch (language) {
-    case "javascript":
+    case "javascript": {
+      const { javascript } = await import("@codemirror/lang-javascript");
       return javascript();
-    case "jsx":
+    }
+    case "jsx": {
+      const { javascript } = await import("@codemirror/lang-javascript");
       return javascript({ jsx: true });
-    case "typescript":
+    }
+    case "typescript": {
+      const { javascript } = await import("@codemirror/lang-javascript");
       return javascript({ typescript: true });
-    case "tsx":
+    }
+    case "tsx": {
+      const { javascript } = await import("@codemirror/lang-javascript");
       return javascript({ jsx: true, typescript: true });
-    case "json":
+    }
+    case "json": {
+      const { json } = await import("@codemirror/lang-json");
       return json();
-    case "markdown":
+    }
+    case "markdown": {
+      const { markdown } = await import("@codemirror/lang-markdown");
       return markdown();
-    case "html":
+    }
+    case "html": {
+      const { html } = await import("@codemirror/lang-html");
       return html();
-    case "css":
+    }
+    case "css": {
+      const { css } = await import("@codemirror/lang-css");
       return css();
-    case "xml":
+    }
+    case "xml": {
+      const { xml } = await import("@codemirror/lang-xml");
       return xml();
-    case "python":
+    }
+    case "python": {
+      const { python } = await import("@codemirror/lang-python");
       return python();
-    case "rust":
+    }
+    case "rust": {
+      const { rust } = await import("@codemirror/lang-rust");
       return rust();
+    }
     case "cpp":
+    case "c": {
+      const { cpp } = await import("@codemirror/lang-cpp");
       return cpp();
-    case "c":
-      return cpp();
-    case "java":
+    }
+    case "java": {
+      const { java } = await import("@codemirror/lang-java");
       return java();
-    case "php":
+    }
+    case "php": {
+      const { php } = await import("@codemirror/lang-php");
       return php();
-    case "sql":
+    }
+    case "sql": {
+      const { sql } = await import("@codemirror/lang-sql");
       return sql();
-    case "go":
+    }
+    case "go": {
+      const { go } = await import("@codemirror/lang-go");
       return go();
-    case "yaml":
+    }
+    case "yaml": {
+      const { yaml } = await import("@codemirror/lang-yaml");
       return yaml();
-    case "shell":
+    }
+    case "shell": {
+      const { shell } = await import("@codemirror/legacy-modes/mode/shell");
       return StreamLanguage.define(shell);
-    case "toml":
+    }
+    case "toml": {
+      const { toml } = await import("@codemirror/legacy-modes/mode/toml");
       return StreamLanguage.define(toml);
-    case "ini":
+    }
+    case "ini": {
+      const { properties } = await import("@codemirror/legacy-modes/mode/properties");
       return StreamLanguage.define(properties);
-    case "ruby":
+    }
+    case "ruby": {
+      const { ruby } = await import("@codemirror/legacy-modes/mode/ruby");
       return StreamLanguage.define(ruby);
-    case "lua":
+    }
+    case "lua": {
+      const { lua } = await import("@codemirror/legacy-modes/mode/lua");
       return StreamLanguage.define(lua);
-    case "swift":
+    }
+    case "swift": {
+      const { swift } = await import("@codemirror/legacy-modes/mode/swift");
       return StreamLanguage.define(swift);
-    case "dockerfile":
+    }
+    case "dockerfile": {
+      const { dockerFile } = await import("@codemirror/legacy-modes/mode/dockerfile");
       return StreamLanguage.define(dockerFile);
-    case "powershell":
+    }
+    case "powershell": {
+      const { powerShell } = await import("@codemirror/legacy-modes/mode/powershell");
       return StreamLanguage.define(powerShell);
-    case "dart":
+    }
+    case "dart": {
+      const { dart } = await import("@codemirror/legacy-modes/mode/clike");
       return StreamLanguage.define(dart);
-    case "csharp":
+    }
+    case "csharp": {
+      const { csharp } = await import("@codemirror/legacy-modes/mode/clike");
       return StreamLanguage.define(csharp);
-    case "kotlin":
+    }
+    case "kotlin": {
+      const { kotlin } = await import("@codemirror/legacy-modes/mode/clike");
       return StreamLanguage.define(kotlin);
-    case "scala":
+    }
+    case "scala": {
+      const { scala } = await import("@codemirror/legacy-modes/mode/clike");
       return StreamLanguage.define(scala);
-    case "cmake":
+    }
+    case "cmake": {
+      const { cmake } = await import("@codemirror/legacy-modes/mode/cmake");
       return StreamLanguage.define(cmake);
-    case "groovy":
+    }
+    case "groovy": {
+      const { groovy } = await import("@codemirror/legacy-modes/mode/groovy");
       return StreamLanguage.define(groovy);
+    }
     case "plaintext":
     default:
       return [];
@@ -116,6 +152,15 @@ export default function CodeMirrorEditor(props: Props) {
   let view: EditorView | undefined;
   let editableCompartment: Compartment | undefined;
   let languageCompartment: Compartment | undefined;
+  let latestLanguageToken = 0;
+
+  async function applyLanguage(language: EditorLanguage): Promise<void> {
+    const token = ++latestLanguageToken;
+    const extension = await languageExtension(language);
+    // Bail if the view was destroyed or a newer language request superseded this one.
+    if (!view || !languageCompartment || token !== latestLanguageToken) return;
+    view.dispatch({ effects: languageCompartment.reconfigure(extension) });
+  }
 
   onMount(() => {
     if (!container) return;
@@ -147,7 +192,7 @@ export default function CodeMirrorEditor(props: Props) {
         history(),
         keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
         saveKeymap,
-        languageCompartment.of(languageExtension(props.language)),
+        languageCompartment.of([]),
         vscodeDark,
         EditorView.lineWrapping,
         updateListener,
@@ -184,6 +229,7 @@ export default function CodeMirrorEditor(props: Props) {
     });
 
     view = new EditorView({ state, parent: container });
+    void applyLanguage(props.language);
   });
 
   createEffect(() => {
@@ -203,10 +249,15 @@ export default function CodeMirrorEditor(props: Props) {
     view.dispatch({ effects: editableCompartment.reconfigure(EditorState.readOnly.of(props.readOnly)) });
   });
 
-  createEffect(() => {
-    if (!view || !languageCompartment) return;
-    view.dispatch({ effects: languageCompartment.reconfigure(languageExtension(props.language)) });
-  });
+  createEffect(
+    on(
+      () => props.language,
+      (language) => {
+        void applyLanguage(language);
+      },
+      { defer: true },
+    ),
+  );
 
   onCleanup(() => {
     view?.destroy();

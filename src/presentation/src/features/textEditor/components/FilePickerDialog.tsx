@@ -122,7 +122,8 @@ export default function FilePickerDialog(props: FilePickerDialogProps): JSX.Elem
       return;
     }
 
-    props.onConfirm(`${currentPath()}/${fileName().trim()}`);
+    const directory = currentPath() === Paths.ROOT ? "" : currentPath();
+    props.onConfirm(`${directory}/${fileName().trim()}`);
   }
 
   const title = (): string =>

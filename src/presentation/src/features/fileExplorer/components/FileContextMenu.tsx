@@ -97,7 +97,7 @@ export default function FileContextMenu(props: FileContextMenuProps) {
     const hasSelection = selectedFiles.length > 0;
     const hasContextTarget = entry !== undefined;
 
-    const targetPaths = hasSelection ? selectedFiles : hasContextTarget ? [entry!.fullPath] : [];
+    const targetPaths = hasSelection ? selectedFiles : entry ? [entry.fullPath] : [];
 
     let hasContent = false;
 
@@ -107,6 +107,22 @@ export default function FileContextMenu(props: FileContextMenuProps) {
         icon: Icons.open,
         action: () => props.onFileOperation("open", targetPaths),
       });
+
+      const isSingleFileTarget = entry !== undefined && entry.isFile && targetPaths.length === 1;
+      if (isSingleFileTarget) {
+        items.push(
+          {
+            label: translate(TranslationKeys.apps_text_editor_edit),
+            icon: Icons.edit,
+            action: () => props.onFileOperation("edit", targetPaths),
+          },
+          {
+            label: translate(TranslationKeys.apps_text_editor_view),
+            icon: Icons.eye,
+            action: () => props.onFileOperation("view", targetPaths),
+          },
+        );
+      }
 
       items.push(
         {

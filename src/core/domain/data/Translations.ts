@@ -17,6 +17,28 @@ export enum TranslationKeys {
   apps_email_to = "apps_email_to",
   apps_email_trash = "apps_email_trash",
   apps_file_explorer = "apps_file_explorer",
+  apps_text_editor = "apps_text_editor",
+  apps_text_editor_description = "apps_text_editor_description",
+  apps_text_editor_file = "apps_text_editor_file",
+  apps_text_editor_new = "apps_text_editor_new",
+  apps_text_editor_save = "apps_text_editor_save",
+  apps_text_editor_save_as = "apps_text_editor_save_as",
+  apps_text_editor_unsaved = "apps_text_editor_unsaved",
+  apps_text_editor_readonly = "apps_text_editor_readonly",
+  apps_text_editor_unsupported = "apps_text_editor_unsupported",
+  apps_text_editor_untitled = "apps_text_editor_untitled",
+  apps_text_editor_loading = "apps_text_editor_loading",
+  apps_text_editor_save_error = "apps_text_editor_save_error",
+  apps_text_editor_confirm_discard = "apps_text_editor_confirm_discard",
+  apps_text_editor_edit = "apps_text_editor_edit",
+  apps_text_editor_view = "apps_text_editor_view",
+  apps_text_editor_open_title = "apps_text_editor_open_title",
+  apps_text_editor_save_as_title = "apps_text_editor_save_as_title",
+  apps_text_editor_filename = "apps_text_editor_filename",
+  apps_text_editor_readonly_dir = "apps_text_editor_readonly_dir",
+  apps_text_editor_no_text_files = "apps_text_editor_no_text_files",
+  apps_text_editor_empty_folder = "apps_text_editor_empty_folder",
+  apps_text_editor_invalid_filename = "apps_text_editor_invalid_filename",
   apps_file_explorer_description = "apps_file_explorer_description",
   apps_file_explorer_title = "apps_file_explorer_title",
   apps_file_explorer_opening = "apps_file_explorer_opening",
@@ -426,6 +448,94 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_file_explorer: {
     en: "File Explorer",
     tr: "Dosya Gezgini",
+  },
+  apps_text_editor: {
+    en: "Text Editor",
+    tr: "Metin Düzenleyici",
+  },
+  apps_text_editor_description: {
+    en: "A powerful text editor with syntax highlighting and support for multiple file formats.",
+    tr: "Çeşitli dosya formatlarını destekleyen ve sözdizimi vurgulama özellikli güçlü bir metin düzenleyici.",
+  },
+  apps_text_editor_file: {
+    en: "File",
+    tr: "Dosya",
+  },
+  apps_text_editor_new: {
+    en: "New",
+    tr: "Yeni",
+  },
+  apps_text_editor_save: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  apps_text_editor_save_as: {
+    en: "Save As...",
+    tr: "Farklı Kaydet...",
+  },
+  apps_text_editor_unsaved: {
+    en: "Unsaved changes",
+    tr: "Kaydedilmemiş değişiklikler",
+  },
+  apps_text_editor_readonly: {
+    en: "Read-only",
+    tr: "Salt okunur",
+  },
+  apps_text_editor_unsupported: {
+    en: "This file type cannot be opened in the text editor.",
+    tr: "Bu dosya türü metin düzenleyicide açılamaz.",
+  },
+  apps_text_editor_untitled: {
+    en: "Untitled",
+    tr: "Adsız",
+  },
+  apps_text_editor_loading: {
+    en: "Loading file...",
+    tr: "Dosya yükleniyor...",
+  },
+  apps_text_editor_save_error: {
+    en: "Failed to save the file.",
+    tr: "Dosya kaydedilemedi.",
+  },
+  apps_text_editor_confirm_discard: {
+    en: "You have unsaved changes. Do you want to discard them and continue?",
+    tr: "Kaydedilmemiş değişiklikleriniz var. Bunları göz ardı edip devam etmek istiyor musunuz?",
+  },
+  apps_text_editor_edit: {
+    en: "Edit",
+    tr: "Düzenle",
+  },
+  apps_text_editor_view: {
+    en: "View",
+    tr: "Görüntüle",
+  },
+  apps_text_editor_open_title: {
+    en: "Open File",
+    tr: "Dosya Aç",
+  },
+  apps_text_editor_save_as_title: {
+    en: "Save As",
+    tr: "Farklı Kaydet",
+  },
+  apps_text_editor_filename: {
+    en: "File name",
+    tr: "Dosya adı",
+  },
+  apps_text_editor_readonly_dir: {
+    en: "This folder is read-only. Choose another location.",
+    tr: "Bu klasör salt okunur. Başka bir konum seçin.",
+  },
+  apps_text_editor_no_text_files: {
+    en: "No text files in this folder.",
+    tr: "Bu klasörde metin dosyası yok.",
+  },
+  apps_text_editor_empty_folder: {
+    en: "This folder is empty.",
+    tr: "Bu klasör boş.",
+  },
+  apps_text_editor_invalid_filename: {
+    en: "Invalid file name. Avoid / \\ .. and reserved characters.",
+    tr: "Geçersiz dosya adı. / \\ .. ve ayrılmış karakterlerden kaçının.",
   },
   apps_file_explorer_description: {
     en: "Browse and manage files and directories.",

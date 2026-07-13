@@ -3,6 +3,7 @@ import EmailCommand from "@application/features/apps/commands/EmailCommand";
 import WelcomeWizardCommand from "@application/features/apps/commands/WelcomeWizardCommand";
 import TerminalCommand from "@application/features/apps/commands/TerminalCommand";
 import FileExplorerCommand from "@application/features/apps/commands/FileExplorerCommand";
+import TextEditorCommand from "@application/features/apps/commands/TextEditorCommand";
 import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
 import type { Apps } from "@domain/data/Apps";
 import Container from "@presentation/Container";
@@ -18,5 +19,6 @@ const appCommands: Record<Apps, () => ICIProgram<unknown>> = {
       Container.instance.windowsService,
       Container.instance as Container,
     ),
+  textEditor: () => new TextEditorCommand(Container.instance.windowsService),
 };
 export default appCommands;

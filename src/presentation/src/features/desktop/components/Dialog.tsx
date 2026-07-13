@@ -110,7 +110,7 @@ export default function Dialog(props: DialogProps) {
   return (
     <Show when={isOpen}>
       {/* Background overlay/dim */}
-      <div class="bg-opacity-30 fixed inset-0 z-[99] bg-black" onClick={handleBackdropClick} />
+      <div class="fixed inset-0 z-[99] bg-black/30" onClick={handleBackdropClick} />
 
       <Modal
         title={translateText(title)}

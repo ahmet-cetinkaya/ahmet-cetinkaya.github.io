@@ -22,24 +22,16 @@ export default class MvCommand extends BaseCommand {
       this.createHelpOutput(),
     );
 
-    if ("error" in result) return result.error;
-
-    const transferResult = await this.forEachValidSource(
-      result.sources,
-      result.destination,
-      this.currentPath,
-      async (sourceEntry, destPath) => {
-        const destFile = await this.fileSystemService.get((e) => e.fullPath === destPath);
-        if (destFile && !result.flags.force) {
-          await this.fileSystemService.remove((e) => e.fullPath === destPath);
-        }
-        const newFile = new File(destPath, sourceEntry.content, sourceEntry.createdDate, sourceEntry.size);
-        await this.fileSystemService.add(newFile);
-        await this.fileSystemService.remove((e) => e.fullPath === sourceEntry.fullPath);
-        return result.flags.verbose as boolean;
-      },
-    );
-    return transferResult ?? { output: "", exitCode: ExitCodes.SUCCESS };
+    return this.executeTransfer(result, async (sourceEntry, destPath) => {
+      const destFile = await this.fileSystemService.get((e) => e.fullPath === destPath);
+      if (destFile && !result.flags.force) {
+        await this.fileSystemService.remove((e) => e.fullPath === destPath);
+      }
+      const newFile = new File(destPath, sourceEntry.content, sourceEntry.createdDate, sourceEntry.size);
+      await this.fileSystemService.add(newFile);
+      await this.fileSystemService.remove((e) => e.fullPath === sourceEntry.fullPath);
+      return result.flags.verbose as boolean;
+    });
   }
 
   private createHelpOutput(): CommandOutput {

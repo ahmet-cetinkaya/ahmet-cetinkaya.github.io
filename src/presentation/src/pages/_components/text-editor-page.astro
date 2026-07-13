@@ -1,0 +1,28 @@
+---
+import { TranslationKeys } from "@domain/data/Translations";
+import { useI18nStatic } from "../../shared/utils/i18nTranslate";
+import DesktopLayout from "../../shared/layouts/DesktopLayout.astro";
+import SeoConstants from "../../shared/constants/SeoConstants";
+
+const translate = useI18nStatic(Astro.url);
+
+const title = `${translate(TranslationKeys.apps_text_editor)} | ${SeoConstants.DEFAULT_TITLE}`;
+const description = translate(TranslationKeys.apps_text_editor_description);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: title,
+  description: description,
+  url: Astro.url.href,
+  applicationCategory: "Utility",
+  operatingSystem: "Web Browser",
+};
+---
+
+<DesktopLayout
+  metadata={{
+    title,
+    description,
+    structuredData,
+  }}
+/>

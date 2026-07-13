@@ -5,11 +5,13 @@ import DosBoxEngine from "@presentation/src/features/games/components/DosBoxEngi
 import WelcomeWizardApp from "@presentation/src/features/welcome/components/WelcomeWizardApp";
 import Terminal from "@presentation/src/features/system/components/Terminal/Terminal";
 import FileExplorerApp from "@presentation/src/features/fileExplorer/components/FileExplorerApp";
+import TextEditorApp from "@presentation/src/features/textEditor/components/TextEditorApp";
 
 type Props = {
   appId: AppId;
   args?: string[];
   initialPath?: string;
+  windowId?: string;
 };
 
 export default function AppContent(props: Props) {
@@ -26,6 +28,12 @@ export default function AppContent(props: Props) {
       return <Terminal args={props.args} />;
     case Apps.fileExplorer:
       return <FileExplorerApp initialPath={props.initialPath || "/home/ac"} />;
+    case Apps.textEditor: {
+      const filePath = props.args?.[0];
+      const readOnlyArg = props.args?.find((arg) => arg === "--readonly");
+      const readOnly = readOnlyArg !== undefined;
+      return <TextEditorApp filePath={filePath} readOnly={readOnly} windowId={props.windowId} />;
+    }
     default:
       throw new Error(`App not found: ${props.appId}`);
   }

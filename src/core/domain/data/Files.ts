@@ -8,6 +8,7 @@ const DATE_CODE_SPACE = new Date("2025-11-21 20:59:45");
 const DATE_DOOM = new Date("2024-12-24 12:49:08");
 const DATE_DRACO = new Date("2024-12-25 02:42:08");
 const DATE_DESKTOP_SHORTCUTS = new Date("2024-12-24 12:49:08");
+const DATE_PRIVATE_MY_VIDEO = new Date("2024-12-24 12:49:08");
 const DATE_FILE_EXPLORER = new Date("2025-11-23 18:45:15");
 const DATE_TERMINAL = new Date("2024-12-24 12:49:08");
 
@@ -41,6 +42,13 @@ const FilesData: File[] = [
     "[PNG Image data]",
     DATE_PROFILE_IMAGE,
     6715,
+  ),
+
+  // Video shortcuts (YouTube links opened by the media viewer)
+  new File(
+    `${Paths.USER_VIDEOS}/private-my-video.url`,
+    "https://youtu.be/dQw4w9WgXcQ?si=JH88Vk4Cvzqvb9sJ",
+    DATE_PRIVATE_MY_VIDEO,
   ),
 
   // Game files

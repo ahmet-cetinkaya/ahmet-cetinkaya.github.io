@@ -36,8 +36,12 @@ export default function ImageViewer(props: { src: string; alt: string; onError: 
     setScale((current) => clampScale(current - ZOOM_STEP));
   }
 
-  function rotate(): void {
+  function rotateClockwise(): void {
     setRotation((current) => current + ROTATE_STEP_DEGREES);
+  }
+
+  function rotateCounterclockwise(): void {
+    setRotation((current) => current - ROTATE_STEP_DEGREES);
   }
 
   function reset(): void {
@@ -77,11 +81,24 @@ export default function ImageViewer(props: { src: string; alt: string; onError: 
     dragStart = null;
   });
 
-  type ToolbarButton = { icon: Icons; label: string; action: () => void };
+  type ToolbarButton = {
+    icon: Icons;
+    label: string;
+    action: () => void;
+  };
   const toolbarButtons = (): ToolbarButton[] => [
     { icon: Icons.zoomIn, label: translate(TranslationKeys.apps_media_viewer_zoom_in), action: zoomIn },
     { icon: Icons.zoomOut, label: translate(TranslationKeys.apps_media_viewer_zoom_out), action: zoomOut },
-    { icon: Icons.rotate, label: translate(TranslationKeys.apps_media_viewer_rotate), action: rotate },
+    {
+      icon: Icons.rotateAnticlockwise,
+      label: translate(TranslationKeys.apps_media_viewer_rotate_counterclockwise),
+      action: rotateCounterclockwise,
+    },
+    {
+      icon: Icons.rotateClockwise,
+      label: translate(TranslationKeys.apps_media_viewer_rotate_clockwise),
+      action: rotateClockwise,
+    },
     { icon: Icons.refresh, label: translate(TranslationKeys.apps_media_viewer_reset), action: reset },
   ];
 
@@ -90,22 +107,26 @@ export default function ImageViewer(props: { src: string; alt: string; onError: 
 
   return (
     <div class="flex size-full flex-col overflow-hidden">
-      <div class="border-surface-300 bg-surface-500 flex items-center gap-1 border-b p-2">
-        <For each={toolbarButtons()}>
-          {(btn) => (
-            <Button
-              variant="primary"
-              size="small"
-              ariaLabel={btn.label}
-              title={btn.label}
-              onClick={btn.action}
-              class="w-auto p-2"
-            >
-              <Icon icon={btn.icon} class="h-4 w-4 shrink-0" />
-            </Button>
-          )}
-        </For>
-        <span class="ml-2 text-xs text-gray-400">{Math.round(scale() * 100)}%</span>
+      <div class="border-surface-300 bg-surface-500 relative flex items-center border-b p-2">
+        <div class="flex items-center gap-1">
+          <For each={toolbarButtons()}>
+            {(btn) => (
+              <Button
+                variant="primary"
+                size="small"
+                ariaLabel={btn.label}
+                title={btn.label}
+                onClick={btn.action}
+                class="w-auto p-2"
+              >
+                <Icon icon={btn.icon} class="h-4 w-4 shrink-0" />
+              </Button>
+            )}
+          </For>
+        </div>
+        <span class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-xs text-gray-400">
+          {Math.round(scale() * 100)}%
+        </span>
       </div>
 
       <div

@@ -42,7 +42,8 @@ export enum TranslationKeys {
   apps_media_viewer = "apps_media_viewer",
   apps_media_viewer_zoom_in = "apps_media_viewer_zoom_in",
   apps_media_viewer_zoom_out = "apps_media_viewer_zoom_out",
-  apps_media_viewer_rotate = "apps_media_viewer_rotate",
+  apps_media_viewer_rotate_counterclockwise = "apps_media_viewer_rotate_counterclockwise",
+  apps_media_viewer_rotate_clockwise = "apps_media_viewer_rotate_clockwise",
   apps_media_viewer_reset = "apps_media_viewer_reset",
   apps_media_viewer_loading = "apps_media_viewer_loading",
   apps_media_viewer_error = "apps_media_viewer_error",
@@ -566,9 +567,13 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
     en: "Zoom Out",
     tr: "Uzaklaştır",
   },
-  apps_media_viewer_rotate: {
-    en: "Rotate",
-    tr: "Döndür",
+  apps_media_viewer_rotate_counterclockwise: {
+    en: "Rotate Counterclockwise",
+    tr: "Saat yönünün tersine döndür",
+  },
+  apps_media_viewer_rotate_clockwise: {
+    en: "Rotate Clockwise",
+    tr: "Saat yönünde döndür",
   },
   apps_media_viewer_reset: {
     en: "Reset",

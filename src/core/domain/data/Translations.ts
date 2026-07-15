@@ -39,6 +39,24 @@ export enum TranslationKeys {
   apps_text_editor_no_text_files = "apps_text_editor_no_text_files",
   apps_text_editor_empty_folder = "apps_text_editor_empty_folder",
   apps_text_editor_invalid_filename = "apps_text_editor_invalid_filename",
+  apps_media_viewer = "apps_media_viewer",
+  apps_media_viewer_description = "apps_media_viewer_description",
+  apps_media_viewer_zoom_in = "apps_media_viewer_zoom_in",
+  apps_media_viewer_zoom_out = "apps_media_viewer_zoom_out",
+  apps_media_viewer_rotate = "apps_media_viewer_rotate",
+  apps_media_viewer_reset = "apps_media_viewer_reset",
+  apps_media_viewer_loading = "apps_media_viewer_loading",
+  apps_media_viewer_error = "apps_media_viewer_error",
+  apps_media_viewer_unsupported = "apps_media_viewer_unsupported",
+  apps_media_viewer_no_file = "apps_media_viewer_no_file",
+  apps_media_viewer_invalid_url = "apps_media_viewer_invalid_url",
+  apps_media_viewer_play = "apps_media_viewer_play",
+  apps_media_viewer_pause = "apps_media_viewer_pause",
+  apps_media_viewer_mute = "apps_media_viewer_mute",
+  apps_media_viewer_unmute = "apps_media_viewer_unmute",
+  apps_media_viewer_fullscreen = "apps_media_viewer_fullscreen",
+  apps_media_viewer_seek = "apps_media_viewer_seek",
+  apps_media_viewer_volume = "apps_media_viewer_volume",
   apps_file_explorer_description = "apps_file_explorer_description",
   apps_file_explorer_title = "apps_file_explorer_title",
   apps_file_explorer_opening = "apps_file_explorer_opening",
@@ -536,6 +554,78 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_text_editor_invalid_filename: {
     en: "Invalid file name. Avoid / \\ .. and reserved characters.",
     tr: "Geçersiz dosya adı. / \\ .. ve ayrılmış karakterlerden kaçının.",
+  },
+  apps_media_viewer: {
+    en: "Media Viewer",
+    tr: "Medya Görüntüleyici",
+  },
+  apps_media_viewer_description: {
+    en: "View images, videos, and audio files.",
+    tr: "Resim, video ve ses dosyalarını görüntüleyin.",
+  },
+  apps_media_viewer_zoom_in: {
+    en: "Zoom In",
+    tr: "Yakınlaştır",
+  },
+  apps_media_viewer_zoom_out: {
+    en: "Zoom Out",
+    tr: "Uzaklaştır",
+  },
+  apps_media_viewer_rotate: {
+    en: "Rotate",
+    tr: "Döndür",
+  },
+  apps_media_viewer_reset: {
+    en: "Reset",
+    tr: "Sıfırla",
+  },
+  apps_media_viewer_loading: {
+    en: "Loading media...",
+    tr: "Medya yükleniyor...",
+  },
+  apps_media_viewer_error: {
+    en: "Failed to load this media file.",
+    tr: "Bu medya dosyası yüklenemedi.",
+  },
+  apps_media_viewer_unsupported: {
+    en: "This file type cannot be opened in the media viewer.",
+    tr: "Bu dosya türü medya görüntüleyicide açılamaz.",
+  },
+  apps_media_viewer_no_file: {
+    en: "No media file to display.",
+    tr: "Görüntülenecek medya dosyası yok.",
+  },
+  apps_media_viewer_invalid_url: {
+    en: "This shortcut does not point to a valid YouTube video.",
+    tr: "Bu kısayol geçerli bir YouTube videosuna işaret etmiyor.",
+  },
+  apps_media_viewer_play: {
+    en: "Play",
+    tr: "Oynat",
+  },
+  apps_media_viewer_pause: {
+    en: "Pause",
+    tr: "Duraklat",
+  },
+  apps_media_viewer_mute: {
+    en: "Mute",
+    tr: "Sessize al",
+  },
+  apps_media_viewer_unmute: {
+    en: "Unmute",
+    tr: "Sesi aç",
+  },
+  apps_media_viewer_fullscreen: {
+    en: "Fullscreen",
+    tr: "Tam ekran",
+  },
+  apps_media_viewer_seek: {
+    en: "Seek",
+    tr: "İlerle",
+  },
+  apps_media_viewer_volume: {
+    en: "Volume",
+    tr: "Ses düzeyi",
   },
   apps_file_explorer_description: {
     en: "Browse and manage files and directories.",

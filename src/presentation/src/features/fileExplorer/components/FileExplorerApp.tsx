@@ -334,6 +334,8 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
             await service.launchGame(entry);
           } else if (service.isTextFile(entry)) {
             await service.openInTextEditor(entry);
+          } else if (service.isMediaFile(entry)) {
+            await service.openInMediaViewer(entry);
           }
         } catch (error) {
           handleError(error);

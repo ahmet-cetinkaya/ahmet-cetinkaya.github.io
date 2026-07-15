@@ -31,20 +31,11 @@ export default function FileIcon(props: FileIconProps) {
   return (
     <div class={mergeCls("flex items-center justify-center", sizeClasses[props.size || "medium"], props.class)}>
       <div class="relative">
-        <Show
-          when={iconConfig().model}
-          fallback={
-            <Icon
-              icon={isDirectory() ? Icons.folder : Icons[iconConfig().icon as keyof typeof Icons] || Icons.file}
-              class={mergeCls(sizeClasses[props.size || "medium"], iconConfig().color, "text-primary-500")}
-            />
-          }
-        >
-          <Icon
-            icon={isDirectory() ? Icons.folder : Icons.file}
-            class={mergeCls(sizeClasses[props.size || "medium"], iconConfig().color, "text-primary-500")}
-          />
-        </Show>
+        <Icon
+          icon={isDirectory() ? Icons.folder : (iconConfig().icon as Icons) || Icons.file}
+          class={mergeCls(sizeClasses[props.size || "medium"], iconConfig().color, "text-primary-500")}
+          preserveFill={iconConfig().preserveFill}
+        />
 
         <Show when={isGitHubEntry()}>
           <div

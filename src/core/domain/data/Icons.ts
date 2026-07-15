@@ -38,6 +38,7 @@ enum Icons {
   flutter = "Flutter Icon",
   formatClear = "Format Clear Icon",
   github = "GitHub Icon",
+  git = "Git Icon",
   godotEngine = "Godot Engine Icon",
   handWave = "Hand Wave Icon",
   heading1 = "Heading 1 Icon",

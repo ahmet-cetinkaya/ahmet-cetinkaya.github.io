@@ -42,6 +42,7 @@ const IconSvgs: Record<Icons, string> = {
   [Icons.envelope]: "/icons/envelope.svg",
   [Icons.expressJS]: "/icons/express-js.svg",
   [Icons.flutter]: "/icons/flutter.svg",
+  [Icons.git]: "/icons/git.svg",
   [Icons.github]: "/icons/github.svg",
   [Icons.godotEngine]: "/icons/godot-engine.svg",
   [Icons.instagram]: "/icons/instagram.svg",

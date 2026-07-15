@@ -1,3 +1,4 @@
 packages/
 **/*.astro
 src/presentation/public/
+**/dist/

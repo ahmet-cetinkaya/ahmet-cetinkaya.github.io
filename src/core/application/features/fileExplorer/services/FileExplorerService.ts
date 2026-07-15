@@ -1,4 +1,7 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import { openOrActivateWindow } from "@application/features/desktop/utils/openOrActivateWindow";
+import { isMediaFile } from "@application/features/mediaViewer/services/MediaFileService";
+import createMediaViewerWindow from "@application/features/mediaViewer/utils/createMediaViewerWindow";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import TextFileService from "@application/features/textEditor/services/TextFileService";
@@ -267,11 +270,27 @@ export default class FileExplorerService {
   // File handler methods
   hasRegisteredHandler(entry: FileSystemEntry): boolean {
     const hasGameHandler = this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
-    return hasGameHandler || this.textFileService.isTextFile(entry);
+    return hasGameHandler || this.textFileService.isTextFile(entry) || isMediaFile(entry);
   }
 
   isTextFile(entry: FileSystemEntry): boolean {
     return this.textFileService.isTextFile(entry);
+  }
+
+  isMediaFile(entry: FileSystemEntry): boolean {
+    return isMediaFile(entry);
+  }
+
+  async openInMediaViewer(entry: FileSystemEntry): Promise<void> {
+    if (!this.windowsService) {
+      throw new Error("Windows service not available");
+    }
+
+    if (!(entry instanceof File)) {
+      throw new Error("Only files can be opened in the media viewer");
+    }
+
+    await openOrActivateWindow(this.windowsService, createMediaViewerWindow([entry.fullPath]));
   }
 
   async openInTextEditor(entry: FileSystemEntry, options: { forceReadOnly?: boolean } = {}): Promise<void> {
@@ -284,10 +303,7 @@ export default class FileExplorerService {
     }
 
     const args = options.forceReadOnly ? [entry.fullPath, "--readonly"] : [entry.fullPath];
-    const appWindow = createTextEditorWindow(args);
-
-    await this.windowsService.add(appWindow);
-    await this.windowsService.active(appWindow);
+    await openOrActivateWindow(this.windowsService, createTextEditorWindow(args));
   }
 
   // Game-related methods

@@ -46,8 +46,11 @@ acore_log_success "✅ Formatting check passed"
 
 # Common issues (TODO/FIXME)
 acore_log_section "🔎 Checking for TODO/FIXME"
-TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
-	grep -v node_modules | grep -v packages | xargs grep -n "TODO\|FIXME\|XXX\|HACK" 2>/dev/null || true)
+
+TODO_COMMENTS=$(grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" \
+	--exclude-dir=node_modules --exclude-dir=packages --exclude-dir=dist --exclude-dir=public --exclude-dir=.git \
+	"TODO\|FIXME\|XXX\|HACK" . 2>/dev/null || true)
+
 if [[ -n "$TODO_COMMENTS" ]]; then
 	acore_log_warning "⚠️  Found TODO/FIXME comments:"
 	echo "$TODO_COMMENTS" | head -5

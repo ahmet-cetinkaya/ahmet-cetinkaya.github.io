@@ -4,12 +4,13 @@ import Container from "@presentation/Container";
 import type { EditorLanguage } from "@application/features/textEditor/services/TextFileService";
 import TextFileService from "@application/features/textEditor/services/TextFileService";
 import { Apps } from "@domain/data/Apps";
-import { TranslationKeys, type TranslationKey } from "@domain/data/Translations";
+import { TranslationKeys } from "@domain/data/Translations";
 import Icons from "@domain/data/Icons";
 import Icon from "@shared/components/Icon";
 import Button from "@shared/components/ui/Button";
 import ConfirmDialog from "@shared/components/ui/ConfirmDialog";
 import { useI18n } from "@shared/utils/i18nTranslate";
+import { syncWindowTitle } from "@shared/utils/syncWindowTitle";
 import { Paths } from "@domain/data/Directories";
 import CodeMirrorEditor from "./CodeMirrorEditor";
 import FilePickerDialog, { type FilePickerMode } from "./FilePickerDialog";
@@ -229,17 +230,8 @@ export default function TextEditorApp(props: {
   createEffect(() => {
     const name = getDisplayName();
     const dirtyMark = isDirty() && !readOnly() ? "● " : "";
-    void syncWindowTitle(`${dirtyMark}${baseTitle} - ${name}`);
+    void syncWindowTitle(windowsService, Apps.textEditor, props.windowId, `${dirtyMark}${baseTitle} - ${name}`);
   });
-
-  async function syncWindowTitle(title: string): Promise<void> {
-    const appWindow = props.windowId
-      ? await windowsService.get((w) => w.id === props.windowId)
-      : await windowsService.get((w) => w.appId === Apps.textEditor);
-    if (!appWindow || appWindow.title === title) return;
-    appWindow.title = title as TranslationKey;
-    await windowsService.update(appWindow);
-  }
 
   type ToolbarButton = {
     icon: Icons;

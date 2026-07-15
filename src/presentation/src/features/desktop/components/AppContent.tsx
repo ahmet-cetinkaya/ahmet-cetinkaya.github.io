@@ -6,12 +6,14 @@ import WelcomeWizardApp from "@presentation/src/features/welcome/components/Welc
 import Terminal from "@presentation/src/features/system/components/Terminal/Terminal";
 import FileExplorerApp from "@presentation/src/features/fileExplorer/components/FileExplorerApp";
 import TextEditorApp from "@presentation/src/features/textEditor/components/TextEditorApp";
+import MediaViewerApp from "@presentation/src/features/mediaViewer/components/MediaViewerApp";
 
 type Props = {
   appId: AppId;
   args?: string[];
   initialPath?: string;
   windowId?: string;
+  isVisible?: boolean;
 };
 
 export default function AppContent(props: Props) {
@@ -33,6 +35,10 @@ export default function AppContent(props: Props) {
       const readOnlyArg = props.args?.find((arg) => arg === "--readonly");
       const readOnly = readOnlyArg !== undefined;
       return <TextEditorApp filePath={filePath} readOnly={readOnly} windowId={props.windowId} />;
+    }
+    case Apps.mediaViewer: {
+      const filePath = props.args?.[0];
+      return <MediaViewerApp filePath={filePath} windowId={props.windowId} isVisible={props.isVisible ?? true} />;
     }
     default:
       throw new Error(`App not found: ${props.appId}`);

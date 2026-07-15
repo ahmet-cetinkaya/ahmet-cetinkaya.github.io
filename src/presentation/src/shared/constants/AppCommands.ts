@@ -4,6 +4,7 @@ import WelcomeWizardCommand from "@application/features/apps/commands/WelcomeWiz
 import TerminalCommand from "@application/features/apps/commands/TerminalCommand";
 import FileExplorerCommand from "@application/features/apps/commands/FileExplorerCommand";
 import TextEditorCommand from "@application/features/apps/commands/TextEditorCommand";
+import MediaViewerCommand from "@application/features/apps/commands/MediaViewerCommand";
 import type ICIProgram from "@application/features/system/commands/abstraction/ICIProgram";
 import type { Apps } from "@domain/data/Apps";
 import Container from "@presentation/Container";
@@ -20,5 +21,6 @@ const appCommands: Record<Apps, () => ICIProgram<unknown>> = {
       Container.instance as Container,
     ),
   textEditor: () => new TextEditorCommand(Container.instance.windowsService),
+  mediaViewer: () => new MediaViewerCommand(Container.instance.windowsService),
 };
 export default appCommands;

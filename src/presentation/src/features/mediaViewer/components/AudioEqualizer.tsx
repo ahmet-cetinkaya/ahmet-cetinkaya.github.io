@@ -1,4 +1,4 @@
-import { createEffect, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import type { JSX } from "solid-js";
 
 const FFT_SIZE = 256;
@@ -22,11 +22,17 @@ const PEAK_CAP_COLOR = "#f8fafc";
  * Spectrum-analyzer visualizer driven by real FFT data from a Web Audio
  * AnalyserNode tapped off the playing <audio> element (local audio files).
  */
-export default function AudioEqualizer(props: { element?: HTMLAudioElement; isPlaying: boolean }): JSX.Element {
+export default function AudioEqualizer(props: {
+  element?: HTMLAudioElement;
+  isPlaying: boolean;
+  isVisible: boolean;
+}): JSX.Element {
   let canvasRef: HTMLCanvasElement | undefined;
   let audioContext: AudioContext | undefined;
   let analyser: AnalyserNode | undefined;
+  let frequencyBuffer: Uint8Array<ArrayBuffer> | undefined;
   let animationFrame: number | undefined;
+  const [isDocumentVisible, setIsDocumentVisible] = createSignal(typeof document === "undefined" || !document.hidden);
   const peaks = new Float32Array(BAR_COUNT);
   const peakHolds = new Int16Array(BAR_COUNT);
   const magnitudes = new Float32Array(BAR_COUNT);
@@ -45,35 +51,75 @@ export default function AudioEqualizer(props: { element?: HTMLAudioElement; isPl
     analyser.smoothingTimeConstant = 0.8;
     mediaSource.connect(analyser);
     analyser.connect(audioContext.destination);
+    frequencyBuffer = new Uint8Array(analyser.frequencyBinCount);
+  }
+
+  function canRender(): boolean {
+    return props.isPlaying && props.isVisible && isDocumentVisible();
+  }
+
+  function startRendering(): void {
+    if (animationFrame !== undefined) return;
+    animationFrame = requestAnimationFrame(renderFrame);
+  }
+
+  function stopRendering(): void {
+    if (animationFrame === undefined) return;
+    cancelAnimationFrame(animationFrame);
+    animationFrame = undefined;
   }
 
   function renderFrame(): void {
-    animationFrame = requestAnimationFrame(renderFrame);
-    if (!canvasRef || !analyser) return;
+    animationFrame = undefined;
+    if (!canRender()) return;
+    if (!canvasRef || !analyser || !frequencyBuffer) {
+      startRendering();
+      return;
+    }
 
     const context = canvasRef.getContext("2d");
-    if (!context) return;
+    if (!context) {
+      startRendering();
+      return;
+    }
 
     resizeCanvasToDisplaySize(canvasRef);
-    const frequencies = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(frequencies);
-    fillAnalyserMagnitudes(magnitudes, frequencies);
+    analyser.getByteFrequencyData(frequencyBuffer);
+    fillAnalyserMagnitudes(magnitudes, frequencyBuffer);
     drawBars(context, canvasRef, magnitudes, peaks, peakHolds);
+    startRendering();
   }
 
   createEffect(() => {
-    if (!props.isPlaying) return;
+    if (!canRender()) {
+      stopRendering();
+      return;
+    }
 
     const { element } = props;
-    if (!element) return;
-    ensureGraph(element);
-    void audioContext?.resume();
+    if (!element) {
+      stopRendering();
+      return;
+    }
 
-    if (animationFrame === undefined) renderFrame();
+    ensureGraph(element);
+    if (!analyser) return;
+
+    void audioContext?.resume();
+    startRendering();
   });
 
+  function handleVisibilityChange(): void {
+    setIsDocumentVisible(!document.hidden);
+  }
+
+  if (typeof document !== "undefined") {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    onCleanup(() => document.removeEventListener("visibilitychange", handleVisibilityChange));
+  }
+
   onCleanup(() => {
-    if (animationFrame !== undefined) cancelAnimationFrame(animationFrame);
+    stopRendering();
     void audioContext?.close();
   });
 

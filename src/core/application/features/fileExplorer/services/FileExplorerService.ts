@@ -1,4 +1,5 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
+import { openOrActivateWindow } from "@application/features/desktop/utils/openOrActivateWindow";
 import { isMediaFile } from "@application/features/mediaViewer/services/MediaFileService";
 import createMediaViewerWindow from "@application/features/mediaViewer/utils/createMediaViewerWindow";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
@@ -289,10 +290,7 @@ export default class FileExplorerService {
       throw new Error("Only files can be opened in the media viewer");
     }
 
-    const appWindow = createMediaViewerWindow([entry.fullPath]);
-
-    await this.windowsService.add(appWindow);
-    await this.windowsService.active(appWindow);
+    await openOrActivateWindow(this.windowsService, createMediaViewerWindow([entry.fullPath]));
   }
 
   async openInTextEditor(entry: FileSystemEntry, options: { forceReadOnly?: boolean } = {}): Promise<void> {
@@ -305,10 +303,7 @@ export default class FileExplorerService {
     }
 
     const args = options.forceReadOnly ? [entry.fullPath, "--readonly"] : [entry.fullPath];
-    const appWindow = createTextEditorWindow(args);
-
-    await this.windowsService.add(appWindow);
-    await this.windowsService.active(appWindow);
+    await openOrActivateWindow(this.windowsService, createTextEditorWindow(args));
   }
 
   // Game-related methods

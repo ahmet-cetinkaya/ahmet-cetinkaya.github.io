@@ -6,7 +6,16 @@ import type { CategoryId } from "./Category";
 
 export type AppId = Apps;
 
+type AppOptions = {
+  process?: () => void;
+  updatedDate?: Date;
+  allowMultipleInstances?: boolean;
+};
+
 export default class App extends Entity<AppId> {
+  public readonly process?: () => void;
+  public readonly allowMultipleInstances: boolean;
+
   constructor(
     id: AppId,
     public categoryId: CategoryId,
@@ -14,9 +23,10 @@ export default class App extends Entity<AppId> {
     public icon: Icons,
     public path: string,
     createdDate: Date,
-    public process?: () => void,
-    updatedDate?: Date,
+    options: AppOptions = {},
   ) {
-    super(id, createdDate, updatedDate);
+    super(id, createdDate, options.updatedDate);
+    this.process = options.process;
+    this.allowMultipleInstances = options.allowMultipleInstances ?? false;
   }
 }

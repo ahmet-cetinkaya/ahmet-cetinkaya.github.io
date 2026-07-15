@@ -40,7 +40,6 @@ export enum TranslationKeys {
   apps_text_editor_empty_folder = "apps_text_editor_empty_folder",
   apps_text_editor_invalid_filename = "apps_text_editor_invalid_filename",
   apps_media_viewer = "apps_media_viewer",
-  apps_media_viewer_description = "apps_media_viewer_description",
   apps_media_viewer_zoom_in = "apps_media_viewer_zoom_in",
   apps_media_viewer_zoom_out = "apps_media_viewer_zoom_out",
   apps_media_viewer_rotate = "apps_media_viewer_rotate",
@@ -558,10 +557,6 @@ const TranslationsData: Record<TranslationKeys, Record<Locales, string>> = {
   apps_media_viewer: {
     en: "Media Viewer",
     tr: "Medya Görüntüleyici",
-  },
-  apps_media_viewer_description: {
-    en: "View images, videos, and audio files.",
-    tr: "Resim, video ve ses dosyalarını görüntüleyin.",
   },
   apps_media_viewer_zoom_in: {
     en: "Zoom In",

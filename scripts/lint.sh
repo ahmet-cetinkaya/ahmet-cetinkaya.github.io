@@ -46,8 +46,27 @@ acore_log_success "✅ Formatting check passed"
 
 # Common issues (TODO/FIXME)
 acore_log_section "🔎 Checking for TODO/FIXME"
-TODO_COMMENTS=$(find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" |
-	grep -v node_modules | grep -v packages | xargs grep -n "TODO\|FIXME\|XXX\|HACK" 2>/dev/null || true)
+
+# Directories that never contain our own source: build output, vendored/shared
+# packages, static assets, and VCS internals. Pruned before the extension
+# filter so find never has to descend into them.
+EXCLUDED_DIRS=(node_modules packages dist public .git)
+SOURCE_EXTENSIONS=(ts tsx js jsx)
+TODO_MARKERS="TODO\|FIXME\|XXX\|HACK"
+
+find_prune_args=()
+for dir in "${EXCLUDED_DIRS[@]}"; do
+	find_prune_args+=(-o -name "$dir")
+done
+
+find_extension_args=()
+for ext in "${SOURCE_EXTENSIONS[@]}"; do
+	find_extension_args+=(-o -name "*.$ext")
+done
+
+TODO_COMMENTS=$(find . \( "${find_prune_args[@]:1}" \) -prune -o \( "${find_extension_args[@]:1}" \) -print0 |
+	xargs -0 grep -n "$TODO_MARKERS" 2>/dev/null || true)
+
 if [[ -n "$TODO_COMMENTS" ]]; then
 	acore_log_warning "⚠️  Found TODO/FIXME comments:"
 	echo "$TODO_COMMENTS" | head -5

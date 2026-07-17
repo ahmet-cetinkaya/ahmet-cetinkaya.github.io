@@ -1,4 +1,4 @@
-import { createMemo, createSignal, Index, createEffect, Show, type JSX } from "solid-js";
+import { createMemo, createSignal, Index, createEffect, Show, type Accessor, type JSX } from "solid-js";
 import CryptoExtensions from "@packages/acore-ts/crypto/CryptoExtensions";
 import type { TranslationKey } from "@domain/data/Translations";
 import { useI18n } from "@shared/utils/i18nTranslate";
@@ -12,6 +12,7 @@ export type DropdownItem = {
   text: TranslationKey;
   icon?: Icons;
   href?: string;
+  isSelected?: Accessor<boolean> | boolean;
   onClick?: () => void;
   items?: DropdownItem[];
 };
@@ -21,6 +22,7 @@ type Props = {
   children: JSX.Element;
   buttonClass?: string;
   ariaLabel: string;
+  closeOnItemClick?: boolean;
 };
 
 export default function Dropdown(props: Props) {
@@ -88,46 +90,57 @@ export default function Dropdown(props: Props) {
     );
   }
 
-  function MenuItem(props: { item: DropdownItem }) {
-    const classes =
-      "block px-4 py-2 text-sm text-gray-200 hover:bg-surface-300 hover:text-gray-900 w-full text-start border-none shadow-none cursor-pointer rounded transition-colors duration-200 ease-in-out";
+  function MenuItem(menuItemProps: { item: DropdownItem }) {
+    const isSelected = () => {
+      const selectedState = menuItemProps.item.isSelected;
+      return typeof selectedState === "function" ? selectedState() : Boolean(selectedState);
+    };
+
+    const classes = () =>
+      isSelected()
+        ? "mx-2 my-0.5 block w-[calc(100%-1rem)] cursor-pointer rounded border-none bg-surface-300 px-4 py-2 text-start text-sm !text-gray-100 shadow-none transition-colors duration-200 ease-in-out hover:!text-gray-100"
+        : "mx-2 my-0.5 block w-[calc(100%-1rem)] cursor-pointer rounded border-none px-4 py-2 text-start text-sm text-gray-200 shadow-none transition-colors duration-200 ease-in-out hover:bg-surface-300 hover:text-gray-200";
 
     function onClick() {
-      setIsOpen(false);
-      props.item.onClick?.();
+      if (props.closeOnItemClick ?? true) {
+        setIsOpen(false);
+      }
+      menuItemProps.item.onClick?.();
     }
 
     function onAnchorClick(event: MouseEvent) {
-      if (props.item.onClick) event.preventDefault();
+      if (menuItemProps.item.onClick) event.preventDefault();
       onClick();
     }
 
-    if (props.item.href)
+    if (menuItemProps.item.href)
       return (
         <Link
-          href={props.item.href}
+          href={menuItemProps.item.href}
           onClick={onAnchorClick}
-          class={classes}
-          variant="link"
-          ariaLabel={translate(props.item.text)}
+          class={classes()}
+          variant="unstyled"
+          ariaLabel={translate(menuItemProps.item.text)}
         >
-          {renderMenuItem(props.item)}
+          {renderMenuItem(menuItemProps.item)}
         </Link>
       );
     else
       return (
-        <Button onClick={onClick} class={classes} variant="link" ariaLabel={translate(props.item.text)}>
-          {renderMenuItem(props.item)}
+        <Button onClick={onClick} class={classes()} variant="unstyled" ariaLabel={translate(menuItemProps.item.text)}>
+          {renderMenuItem(menuItemProps.item)}
         </Button>
       );
 
     function renderMenuItem(item: DropdownItem) {
       return (
         <span class="flex items-center gap-2">
-          <Show when={item.icon}>
-            <Icon icon={item.icon!} class="size-3" preserveFill={true} />
-          </Show>
-          {translate(item.text)}
+          <span class="flex w-3 shrink-0 justify-center">
+            <Show when={item.icon}>
+              <Icon icon={item.icon!} class="size-3" preserveFill={true} />
+            </Show>
+          </span>
+          <span>{translate(item.text)}</span>
         </span>
       );
     }

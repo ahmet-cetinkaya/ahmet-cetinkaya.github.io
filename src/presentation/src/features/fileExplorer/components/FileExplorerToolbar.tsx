@@ -41,18 +41,25 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
     },
   ];
 
+  const sortDirectionIcon = () => (props.currentSortOrder === SortOrder.ASC ? Icons.sortAsc : Icons.sortDesc);
+
+  const sortItemIcon = (criteria: FileSortCriteria) =>
+    props.currentSortBy === criteria ? sortDirectionIcon() : Icons.sort;
+
   const optionsMenuItems = () => [
     {
       text: TranslationKeys.apps_file_explorer_view_options,
       items: [
         {
           text: TranslationKeys.apps_file_explorer_view_grid,
-          icon: props.currentViewMode === FileViewMode.GRID ? Icons.check : Icons.spinner,
+          icon: Icons.viewGrid,
+          isSelected: () => props.currentViewMode === FileViewMode.GRID,
           onClick: () => props.onViewModeChange(FileViewMode.GRID),
         },
         {
           text: TranslationKeys.apps_file_explorer_view_list,
-          icon: props.currentViewMode === FileViewMode.LIST ? Icons.check : Icons.unorderedList,
+          icon: Icons.viewList,
+          isSelected: () => props.currentViewMode === FileViewMode.LIST,
           onClick: () => props.onViewModeChange(FileViewMode.LIST),
         },
       ],
@@ -62,42 +69,26 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
       items: [
         {
           text: TranslationKeys.apps_file_explorer_sort_by_name,
-          icon:
-            props.currentSortBy === FileSortCriteria.NAME
-              ? props.currentSortOrder === SortOrder.ASC
-                ? Icons.upArrow
-                : Icons.downArrow
-              : Icons.center,
+          icon: sortItemIcon(FileSortCriteria.NAME),
+          isSelected: () => props.currentSortBy === FileSortCriteria.NAME,
           onClick: () => props.onSortChange(FileSortCriteria.NAME),
         },
         {
           text: TranslationKeys.apps_file_explorer_sort_by_size,
-          icon:
-            props.currentSortBy === FileSortCriteria.SIZE
-              ? props.currentSortOrder === SortOrder.ASC
-                ? Icons.upArrow
-                : Icons.downArrow
-              : Icons.center,
+          icon: sortItemIcon(FileSortCriteria.SIZE),
+          isSelected: () => props.currentSortBy === FileSortCriteria.SIZE,
           onClick: () => props.onSortChange(FileSortCriteria.SIZE),
         },
         {
           text: TranslationKeys.apps_file_explorer_sort_by_modified,
-          icon:
-            props.currentSortBy === FileSortCriteria.MODIFIED
-              ? props.currentSortOrder === SortOrder.ASC
-                ? Icons.upArrow
-                : Icons.downArrow
-              : Icons.center,
+          icon: sortItemIcon(FileSortCriteria.MODIFIED),
+          isSelected: () => props.currentSortBy === FileSortCriteria.MODIFIED,
           onClick: () => props.onSortChange(FileSortCriteria.MODIFIED),
         },
         {
           text: TranslationKeys.apps_file_explorer_sort_by_type,
-          icon:
-            props.currentSortBy === FileSortCriteria.TYPE
-              ? props.currentSortOrder === SortOrder.ASC
-                ? Icons.upArrow
-                : Icons.downArrow
-              : Icons.center,
+          icon: sortItemIcon(FileSortCriteria.TYPE),
+          isSelected: () => props.currentSortBy === FileSortCriteria.TYPE,
           onClick: () => props.onSortChange(FileSortCriteria.TYPE),
         },
       ],
@@ -142,8 +133,13 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
           <Icon icon={Icons.plus} class="h-4 w-4" />
         </Dropdown>
 
-        <Dropdown menuItems={optionsMenuItems()} ariaLabel="View and sort options" buttonClass="p-2">
-          <Icon icon={Icons.orderedList} class="h-4 w-4" />
+        <Dropdown
+          menuItems={optionsMenuItems()}
+          ariaLabel="View and sort options"
+          buttonClass="p-2"
+          closeOnItemClick={false}
+        >
+          <Icon icon={Icons.listSettings} class="h-4 w-4" />
         </Dropdown>
       </div>
     </div>

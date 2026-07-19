@@ -2,8 +2,7 @@ import { logger } from "@application/shared/logger";
 
 import GitHubService from "@application/features/fileExplorer/services/GitHubService";
 import DataService from "@application/shared/DataService";
-import DirectoryData, { Paths } from "@domain/data/Directories";
-import FilesData from "@domain/data/Files";
+import FileSystemSeedRegistry, { Paths } from "@domain/data/FileSystemSeedRegistry";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import type IFileSystemService from "./abstraction/IFileSystemService";
@@ -15,7 +14,7 @@ export default class FileSystemService extends DataService<FileSystemEntry> impl
   private readonly codePath = `${Paths.USER_HOME}/Code`;
 
   protected loadData(): FileSystemEntry[] {
-    return [...DirectoryData, ...FilesData];
+    return FileSystemSeedRegistry.entries;
   }
 
   addListener(listener: FileChangeListener): void {

@@ -1,7 +1,3 @@
-import Directory from "@domain/models/Directory";
-import fileSystemTree from "./fileSystemTree/FileSystemTree";
-import flattenFileSystemTree from "./fileSystemTree/flattenFileSystemTree";
-
 export enum Paths {
   HOME = "/home",
   ROOT = "/",
@@ -15,9 +11,3 @@ export enum Paths {
   USER_PICTURES = "/home/ac/Pictures",
   USER_VIDEOS = "/home/ac/Videos",
 }
-
-const { directories } = flattenFileSystemTree(fileSystemTree);
-
-const DirectoryData: Directory[] = directories;
-
-export default DirectoryData;

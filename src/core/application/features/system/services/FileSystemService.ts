@@ -2,7 +2,8 @@ import { logger } from "@application/shared/logger";
 
 import GitHubService from "@application/features/fileExplorer/services/GitHubService";
 import DataService from "@application/shared/DataService";
-import FileSystemSeedRegistry, { Paths } from "@domain/data/FileSystemSeedRegistry";
+import { Paths } from "@domain/data/Directories";
+import FileSystemSeedRegistry from "@domain/data/FileSystemSeedRegistry";
 import Directory from "@domain/models/Directory";
 import File from "@domain/models/File";
 import type IFileSystemService from "./abstraction/IFileSystemService";

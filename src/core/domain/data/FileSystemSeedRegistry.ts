@@ -1,18 +1,21 @@
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
-import { Paths } from "@domain/data/Directories";
 import fileSystemTree from "@domain/data/fileSystemTree/FileSystemTree";
 import flattenFileSystemTree from "@domain/data/fileSystemTree/flattenFileSystemTree";
+import type Directory from "@domain/models/Directory";
+import type File from "@domain/models/File";
 
-const flattenedFileSystemTree = flattenFileSystemTree(fileSystemTree);
-const directoryEntries = flattenedFileSystemTree.directories;
-const fileEntries = flattenedFileSystemTree.files;
-const fileSystemEntries: FileSystemEntry[] = [...directoryEntries, ...fileEntries];
+interface FileSystemSeedRegistry {
+  readonly directories: Directory[];
+  readonly files: File[];
+  readonly entries: FileSystemEntry[];
+}
 
-const FileSystemSeedRegistry = {
-  directories: directoryEntries,
-  files: fileEntries,
-  entries: fileSystemEntries,
+const flattened = flattenFileSystemTree(fileSystemTree);
+
+const FileSystemSeedRegistry: FileSystemSeedRegistry = {
+  directories: flattened.directories,
+  files: flattened.files,
+  entries: [...flattened.directories, ...flattened.files],
 };
 
-export { directoryEntries, fileEntries, fileSystemEntries, Paths };
 export default FileSystemSeedRegistry;

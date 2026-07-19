@@ -6,6 +6,10 @@ const RAW_URL_PATTERN = /^https?:\/\//i;
  * `[InternetShortcut]` INI form (`URL=...`) as well as a bare URL as the file's
  * only content. Returns null when no URL can be found.
  */
+export function isRawUrl(value: string): boolean {
+  return RAW_URL_PATTERN.test(value);
+}
+
 export function extractShortcutUrl(content: string): string | null {
   const trimmed = content.trim();
   if (!trimmed) return null;
@@ -14,5 +18,5 @@ export function extractShortcutUrl(content: string): string | null {
   if (keyed) return keyed;
 
   const firstLine = trimmed.split(/\r?\n/)[0]?.trim() ?? "";
-  return RAW_URL_PATTERN.test(firstLine) ? firstLine : null;
+  return isRawUrl(firstLine) ? firstLine : null;
 }

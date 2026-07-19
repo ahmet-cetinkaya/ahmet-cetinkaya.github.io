@@ -3,8 +3,8 @@ import type { JSX } from "solid-js";
 import Container from "@presentation/Container";
 import { getMediaKindForFileName, type MediaKind } from "@application/features/mediaViewer/services/MediaFileService";
 import RemoteContentResolver from "@application/features/system/services/RemoteContentResolver";
-import { buildYouTubeEmbedUrl, isYouTubeUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
-import { extractShortcutUrl } from "@application/features/mediaViewer/utils/mediaShortcut";
+import { buildYouTubeEmbedUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
+import { extractShortcutUrl, isRawUrl as isRawMediaUrl } from "@application/features/mediaViewer/utils/mediaShortcut";
 import { Apps } from "@domain/data/Apps";
 import { RemoteContentType } from "@domain/data/remoteContent/remoteContent";
 import { TranslationKeys } from "@domain/data/Translations";
@@ -16,9 +16,11 @@ import { syncWindowTitle } from "@shared/utils/syncWindowTitle";
 import ImageViewer from "./ImageViewer";
 import MediaPlayer from "./MediaPlayer";
 
-const RAW_URL_PATTERN = /^https?:\/\//i;
-
-export default function MediaViewerApp(props: { filePath?: string; windowId?: string }): JSX.Element {
+export default function MediaViewerApp(props: {
+  filePath?: string;
+  windowId?: string;
+  isVisible: boolean;
+}): JSX.Element {
   const { windowsService, fileSystemService } = Container.instance;
   const remoteContentResolver = new RemoteContentResolver(fileSystemService);
   const translate = useI18n();
@@ -26,12 +28,12 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
 
   const [loadError, setLoadError] = createSignal(false);
 
-  const isRawUrl = createMemo<boolean>(() => Boolean(props.filePath && RAW_URL_PATTERN.test(props.filePath)));
+  const isExternalUrl = createMemo<boolean>(() => Boolean(props.filePath && isRawMediaUrl(props.filePath)));
 
   const fileName = createMemo<string | null>(() => {
     const path = props.filePath;
     if (!path) return null;
-    if (isRawUrl()) return path;
+    if (isExternalUrl()) return path;
     const parts = path.split("/");
     return parts[parts.length - 1] ?? null;
   });
@@ -49,7 +51,7 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
   const [resolvedMedia] = createResource<ResolvedMedia, string>(
     () => props.filePath,
     async (path): Promise<ResolvedMedia> => {
-      if (RAW_URL_PATTERN.test(path)) {
+      if (isRawMediaUrl(path)) {
         return { kind: "youtube", src: path };
       }
 
@@ -60,7 +62,7 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
       if (mayWrapRemoteContent(fileNameKind)) {
         const remote = await resolveRemoteContent(path);
         if (remote) {
-          if (isYouTubeUrl(remote.url)) return { kind: "youtube", src: remote.url };
+          if (parseYouTubeId(remote.url)) return { kind: "youtube", src: remote.url };
           if (remote.type === RemoteContentType.VIDEO) return { kind: "video", src: remote.url };
         }
       }
@@ -87,7 +89,7 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
   const [youTubeEmbedUrl] = createResource<string | null, string>(
     () => (resolvedKind() === "youtube" ? (resolvedSrc() ?? undefined) : undefined),
     async (sourcePath) => {
-      const sourceUrl = RAW_URL_PATTERN.test(sourcePath) ? sourcePath : await readShortcutUrl(sourcePath);
+      const sourceUrl = isRawMediaUrl(sourcePath) ? sourcePath : await readShortcutUrl(sourcePath);
       const videoId = sourceUrl ? parseYouTubeId(sourceUrl) : null;
       return videoId ? buildYouTubeEmbedUrl(videoId) : null;
     },
@@ -119,32 +121,35 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
             tone="error"
           />
         </Match>
-        <Match when={props.filePath && resolvedKind() === "image"}>
-          <ImageViewer
-            src={resolvedSrc() ?? props.filePath!}
-            alt={fileName() ?? ""}
-            onError={() => setLoadError(true)}
-          />
+        <Match when={resolvedKind() === "image" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => <ImageViewer src={src} alt={fileName() ?? ""} onError={() => setLoadError(true)} />}
         </Match>
-        <Match when={props.filePath && resolvedKind() === "video"}>
-          <MediaPlayer
-            src={resolvedSrc() ?? props.filePath!}
-            kind="video"
-            title={fileName() ?? ""}
-            onError={() => setLoadError(true)}
-          />
+        <Match when={resolvedKind() === "video" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => (
+            <MediaPlayer
+              src={src}
+              kind="video"
+              title={fileName() ?? ""}
+              isVisible={props.isVisible}
+              onError={() => setLoadError(true)}
+            />
+          )}
         </Match>
-        <Match when={props.filePath && resolvedKind() === "audio"}>
-          <MediaPlayer
-            src={resolvedSrc() ?? props.filePath!}
-            kind="audio"
-            title={fileName() ?? ""}
-            onError={() => setLoadError(true)}
-          />
+        <Match when={resolvedKind() === "audio" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => (
+            <MediaPlayer
+              src={src}
+              kind="audio"
+              title={fileName() ?? ""}
+              isVisible={props.isVisible}
+              onError={() => setLoadError(true)}
+            />
+          )}
         </Match>
         <Match when={resolvedKind() === "youtube"}>
           <Show
             when={youTubeEmbedUrl()}
+            keyed
             fallback={
               <Show
                 when={!youTubeEmbedUrl.loading}
@@ -162,16 +167,18 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
               </Show>
             }
           >
-            <div class="bg-surface-900 flex size-full items-center justify-center p-4">
-              <iframe
-                src={youTubeEmbedUrl()!}
-                title={fileName() ?? baseTitle}
-                class="aspect-video h-auto max-h-full w-full max-w-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin"
-              />
-            </div>
+            {(embedUrl) => (
+              <div class="bg-surface-900 flex size-full items-center justify-center p-4">
+                <iframe
+                  src={embedUrl}
+                  title={fileName() ?? baseTitle}
+                  class="aspect-video h-auto max-h-full w-full max-w-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  referrerpolicy="strict-origin-when-cross-origin"
+                />
+              </div>
+            )}
           </Show>
         </Match>
         <Match when={props.filePath && resolvedMedia.loading}>

@@ -1,5 +1,6 @@
 import type IWindowsService from "@application/features/desktop/services/abstraction/IWindowsService";
-import MediaFileService from "@application/features/mediaViewer/services/MediaFileService";
+import { openOrActivateWindow } from "@application/features/desktop/utils/openOrActivateWindow";
+import { isMediaFile } from "@application/features/mediaViewer/services/MediaFileService";
 import createMediaViewerWindow from "@application/features/mediaViewer/utils/createMediaViewerWindow";
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
@@ -43,7 +44,6 @@ export default class FileExplorerService {
   private readonly navigationService: FileNavigationService;
   private readonly gameExecutionService: GameExecutionService | null;
   private readonly textFileService: TextFileService;
-  private readonly mediaFileService: MediaFileService;
 
   private constructor(
     private readonly fileSystemService: IFileSystemService,
@@ -53,7 +53,6 @@ export default class FileExplorerService {
     this.navigationService = new FileNavigationService(fileSystemService);
     this.gameExecutionService = windowsService ? new GameExecutionService(windowsService) : null;
     this.textFileService = new TextFileService(fileSystemService);
-    this.mediaFileService = new MediaFileService();
   }
 
   static getInstance(fileSystemService: IFileSystemService, windowsService?: IWindowsService): FileExplorerService {
@@ -271,7 +270,7 @@ export default class FileExplorerService {
   // File handler methods
   hasRegisteredHandler(entry: FileSystemEntry): boolean {
     const hasGameHandler = this.gameExecutionService ? this.gameExecutionService.isGameExecutable(entry) : false;
-    return hasGameHandler || this.textFileService.isTextFile(entry) || this.mediaFileService.isMediaFile(entry);
+    return hasGameHandler || this.textFileService.isTextFile(entry) || isMediaFile(entry);
   }
 
   isTextFile(entry: FileSystemEntry): boolean {
@@ -279,7 +278,7 @@ export default class FileExplorerService {
   }
 
   isMediaFile(entry: FileSystemEntry): boolean {
-    return this.mediaFileService.isMediaFile(entry);
+    return isMediaFile(entry);
   }
 
   async openInMediaViewer(entry: FileSystemEntry): Promise<void> {
@@ -291,10 +290,7 @@ export default class FileExplorerService {
       throw new Error("Only files can be opened in the media viewer");
     }
 
-    const appWindow = createMediaViewerWindow([entry.fullPath]);
-
-    await this.windowsService.add(appWindow);
-    await this.windowsService.active(appWindow);
+    await openOrActivateWindow(this.windowsService, createMediaViewerWindow([entry.fullPath]));
   }
 
   async openInTextEditor(entry: FileSystemEntry, options: { forceReadOnly?: boolean } = {}): Promise<void> {
@@ -307,10 +303,7 @@ export default class FileExplorerService {
     }
 
     const args = options.forceReadOnly ? [entry.fullPath, "--readonly"] : [entry.fullPath];
-    const appWindow = createTextEditorWindow(args);
-
-    await this.windowsService.add(appWindow);
-    await this.windowsService.active(appWindow);
+    await openOrActivateWindow(this.windowsService, createTextEditorWindow(args));
   }
 
   // Game-related methods

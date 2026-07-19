@@ -16,6 +16,7 @@ export default function MediaPlayer(props: {
   src: string;
   kind: "video" | "audio";
   title: string;
+  isVisible: boolean;
   onError: () => void;
 }): JSX.Element {
   const translate = useI18n();
@@ -104,7 +105,7 @@ export default function MediaPlayer(props: {
           when={props.kind === "video"}
           fallback={
             <div class="flex size-full flex-col items-stretch gap-3">
-              <AudioEqualizer element={audioElement()} isPlaying={isPlaying()} />
+              <AudioEqualizer element={audioElement()} isPlaying={isPlaying()} isVisible={props.isVisible} />
               <span class="shrink-0 truncate text-center text-sm text-gray-300">{props.title}</span>
             </div>
           }

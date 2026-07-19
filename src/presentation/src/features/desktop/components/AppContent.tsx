@@ -13,6 +13,7 @@ type Props = {
   args?: string[];
   initialPath?: string;
   windowId?: string;
+  isVisible?: boolean;
 };
 
 export default function AppContent(props: Props) {
@@ -37,7 +38,7 @@ export default function AppContent(props: Props) {
     }
     case Apps.mediaViewer: {
       const filePath = props.args?.[0];
-      return <MediaViewerApp filePath={filePath} windowId={props.windowId} />;
+      return <MediaViewerApp filePath={filePath} windowId={props.windowId} isVisible={props.isVisible ?? true} />;
     }
     default:
       throw new Error(`App not found: ${props.appId}`);

@@ -4,9 +4,11 @@ import Key from "@packages/acore-solidjs/ui/components/Key";
 import Window from "@presentation/src/features/desktop/components/Window";
 import WindowModel from "@domain/models/Window";
 import ScreenHelper from "@shared/utils/ScreenHelper";
+import { haveSameWindowArgs } from "@application/features/desktop/utils/haveSameWindowArgs";
 import { logger } from "@application/shared/logger";
 import appCommands from "@shared/constants/AppCommands";
 import type { Apps } from "@domain/data/Apps";
+import type App from "@domain/models/App";
 import { parseAppPathFromLocation } from "@shared/utils/parseAppPathFromLocation";
 
 const TASKBAR_HEIGHT: number = 70;
@@ -53,7 +55,8 @@ export default function WindowManager(props: WindowManagerProps) {
 
   async function openWindow(appId: Apps, args?: string[]) {
     try {
-      const existingWindow = await windowService.get((window) => window.appId === appId);
+      const app = await appsService.get((app) => app.id === appId);
+      const existingWindow = await getReusableWindow(app, appId, args);
       if (existingWindow) {
         await windowService.active(existingWindow);
         return;
@@ -70,6 +73,14 @@ export default function WindowManager(props: WindowManagerProps) {
     } catch (error) {
       logger.error("Failed to open window for app:", appId, error);
     }
+  }
+
+  async function getReusableWindow(app: App | null, appId: Apps, args?: string[]): Promise<WindowModel | null> {
+    if (app?.allowMultipleInstances) {
+      return windowService.get((window) => window.appId === appId && haveSameWindowArgs(window.args, args));
+    }
+
+    return windowService.get((window) => window.appId === appId);
   }
 
   let checkMobileScreenTimeout: NodeJS.Timeout | null = null;

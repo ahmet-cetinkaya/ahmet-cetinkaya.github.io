@@ -1,9 +1,19 @@
+import AppsData from "@domain/data/Apps";
 import type Window from "@domain/models/Window";
 import ArrayExtensions from "@packages/acore-ts/data/array/ArrayExtensions";
 import type PaginationResult from "@packages/acore-ts/repository/PaginationResult";
 import Store from "@packages/acore-ts/store/Store";
 import type { IStore } from "@packages/acore-ts/store/abstraction/IStore";
 import type IWindowsService from "./abstraction/IWindowsService";
+
+function canOpenMultipleInstances(window: Window): boolean {
+  const app = AppsData.find((app) => app.id === window.appId);
+  return app?.allowMultipleInstances ?? false;
+}
+
+function getNextLayer(windows: Window[]): number {
+  return Math.max(ArrayExtensions.max(windows, (w) => w.layer!) + 1, 1);
+}
 
 export default class WindowsService implements IWindowsService {
   private readonly _windowsStore: IStore<Window[]> = new Store<Window[]>([]);
@@ -56,15 +66,16 @@ export default class WindowsService implements IWindowsService {
   add(window: Window): Promise<void> {
     const windows = this._windowsStore.get();
 
-    const existsAppWindow = windows.find((w) => w.appId === window.appId);
+    const existsAppWindow = canOpenMultipleInstances(window)
+      ? undefined
+      : windows.find((w) => w.appId === window.appId);
     if (existsAppWindow) {
       this.active(existsAppWindow);
       return Promise.reject(new Error("App window already exists."));
     }
 
-    window.layer = Math.max(ArrayExtensions.max(windows, (w) => w.layer!) + 1, 1);
-    window.createdDate = new Date();
-    this._windowsStore.set([...windows.map((w) => ({ ...w })), window]);
+    const newWindow = { ...window, layer: getNextLayer(windows), createdDate: new Date() };
+    this._windowsStore.set([...windows.map((w) => ({ ...w })), newWindow]);
 
     return Promise.resolve();
   }

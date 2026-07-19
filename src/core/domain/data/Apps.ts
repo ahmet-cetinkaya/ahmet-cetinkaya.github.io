@@ -54,6 +54,7 @@ const AppsData = [
     Icons.edit,
     "text-editor",
     new Date("2026-07-12 00:31:55"),
+    { allowMultipleInstances: true },
   ),
   new App(
     Apps.mediaViewer,
@@ -62,6 +63,7 @@ const AppsData = [
     Icons.image,
     "media-viewer",
     new Date("2026-07-15 00:00:00"),
+    { allowMultipleInstances: true },
   ),
 ];
 export default AppsData;

@@ -185,7 +185,7 @@ export default function Window(props: Props) {
         </Button>
       )}
     >
-      <AppContent appId={appId} args={appArgs} windowId={props.window.id} />
+      <AppContent appId={appId} args={appArgs} windowId={props.window.id} isVisible={!props.window.isMinimized} />
     </Modal>
   );
 }

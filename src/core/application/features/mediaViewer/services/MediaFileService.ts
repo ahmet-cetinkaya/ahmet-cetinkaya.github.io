@@ -11,15 +11,9 @@ const YOUTUBE_SHORTCUT_PATTERN = /\.url$/i;
  * extension patterns (FILE_TYPE_PATTERNS) so the supported extension lists stay
  * defined in a single place.
  */
-export default class MediaFileService {
-  isMediaFile(entry: FileSystemEntry): boolean {
-    return this.getMediaKind(entry) !== null;
-  }
-
-  getMediaKind(entry: FileSystemEntry): MediaKind | null {
-    if (!(entry instanceof File)) return null;
-    return getMediaKindForFileName(entry.name);
-  }
+export function isMediaFile(entry: FileSystemEntry): boolean {
+  if (!(entry instanceof File)) return false;
+  return getMediaKindForFileName(entry.name) !== null;
 }
 
 export function getMediaKindForFileName(fileName: string): MediaKind | null {

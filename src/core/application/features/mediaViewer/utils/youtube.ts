@@ -37,10 +37,6 @@ function extractIdFromParsedUrl(parsed: URL, host: string): string | null {
   return null;
 }
 
-export function isYouTubeUrl(url: string): boolean {
-  return parseYouTubeId(url) !== null;
-}
-
 export function buildYouTubeEmbedUrl(videoId: string): string {
   return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
 }

@@ -156,7 +156,7 @@ const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.SH]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
   [FileType.BAT]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
 
-  [FileType.JSDOS]: { icon: Icons.doom, color: IconColor.RED_400, isDirectory: false },
+  [FileType.JSDOS]: { icon: Icons.doom, color: IconColor.RED_400, isDirectory: false, preserveFill: true },
   [FileType.GAME]: {
     icon: Icons.godotEngine,
     color: IconColor.PURPLE_400,

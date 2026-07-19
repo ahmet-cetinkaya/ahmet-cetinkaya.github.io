@@ -2,6 +2,8 @@ import { PathSanitizer } from "@application/features/fileExplorer/utils/PathSani
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import PermissionService from "@application/features/system/services/PermissionService";
+import { logger } from "@application/shared/logger";
+import { parseRemoteContent, type RemoteContent } from "@domain/data/remoteContent/remoteContent";
 import File from "@domain/models/File";
 
 export type EditorLanguage =
@@ -234,7 +236,22 @@ export default class TextFileService {
   }
 
   async readContent(path: string): Promise<string> {
-    return this.fileSystemService.readFileContent(path);
+    const content = await this.fileSystemService.readFileContent(path);
+    const remote = parseRemoteContent(content);
+    return remote ? this.fetchRemoteContent(remote) : content;
+  }
+
+  private async fetchRemoteContent(remote: RemoteContent): Promise<string> {
+    try {
+      const response = await fetch(remote.url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch remote content: ${response.status}`);
+      }
+      return await response.text();
+    } catch (error) {
+      logger.error(`Failed to fetch remote content from ${remote.url}:`, error);
+      return `Failed to load remote content from ${remote.url}`;
+    }
   }
 
   async saveContent(path: string, content: string): Promise<void> {

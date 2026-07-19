@@ -2,9 +2,10 @@ import { Match, Show, Switch, createEffect, createMemo, createResource, createSi
 import type { JSX } from "solid-js";
 import Container from "@presentation/Container";
 import { getMediaKindForFileName, type MediaKind } from "@application/features/mediaViewer/services/MediaFileService";
-import { buildYouTubeEmbedUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
+import { buildYouTubeEmbedUrl, isYouTubeUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
 import { extractShortcutUrl } from "@application/features/mediaViewer/utils/mediaShortcut";
 import { Apps } from "@domain/data/Apps";
+import { parseRemoteContent, RemoteContentType } from "@domain/data/remoteContent/remoteContent";
 import { TranslationKeys } from "@domain/data/Translations";
 import Icons from "@domain/data/Icons";
 import Icon from "@shared/components/Icon";
@@ -32,19 +33,51 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
     return parts[parts.length - 1] ?? null;
   });
 
-  const mediaKind = createMemo<MediaKind | null>(() => {
-    if (!props.filePath) return null;
-    if (isRawUrl()) return "youtube";
-    const name = fileName();
-    return name ? getMediaKindForFileName(name) : null;
-  });
+  type ResolvedMedia = { kind: MediaKind | null; src: string };
 
-  // Resolves the YouTube embed URL from either a raw URL arg or a `.url` shortcut
-  // file's content. Returns null when the source is not a YouTube URL.
+  // Resolves the effective media kind + source in one step so a media element never
+  // mounts against the wrong src. For a raw URL prop that's a YouTube embed; otherwise
+  // the file's content is checked for a `[RemoteContent]` envelope (e.g. seeded
+  // library/video files whose real asset lives at a remote URL) before falling back
+  // to today's filename-based classification with `fullPath` as the src.
+  const [resolvedMedia] = createResource<ResolvedMedia, string>(
+    () => props.filePath,
+    async (path): Promise<ResolvedMedia> => {
+      if (RAW_URL_PATTERN.test(path)) {
+        return { kind: "youtube", src: path };
+      }
+
+      const remote = await resolveRemoteContent(path);
+      if (remote) {
+        if (isYouTubeUrl(remote.url)) return { kind: "youtube", src: remote.url };
+        if (remote.type === RemoteContentType.VIDEO) return { kind: "video", src: remote.url };
+      }
+
+      const parts = path.split("/");
+      const name = parts[parts.length - 1] ?? "";
+      return { kind: getMediaKindForFileName(name), src: path };
+    },
+  );
+
+  async function resolveRemoteContent(path: string): Promise<ReturnType<typeof parseRemoteContent>> {
+    try {
+      const content = await fileSystemService.readFileContent(path);
+      return parseRemoteContent(content);
+    } catch {
+      return null;
+    }
+  }
+
+  const resolvedKind = createMemo<MediaKind | null>(() => resolvedMedia()?.kind ?? null);
+  const resolvedSrc = createMemo<string | null>(() => resolvedMedia()?.src ?? null);
+
+  // Resolves the YouTube embed URL from the resolved source (a raw URL prop, a
+  // `[RemoteContent]` envelope URL, or a `.url` shortcut file's content). Returns
+  // null when the source is not a YouTube URL.
   const [youTubeEmbedUrl] = createResource<string | null, string>(
-    () => (mediaKind() === "youtube" ? props.filePath : undefined),
-    async (path) => {
-      const sourceUrl = isRawUrl() ? path : await readShortcutUrl(path);
+    () => (resolvedKind() === "youtube" ? (resolvedSrc() ?? undefined) : undefined),
+    async (sourcePath) => {
+      const sourceUrl = RAW_URL_PATTERN.test(sourcePath) ? sourcePath : await readShortcutUrl(sourcePath);
       const videoId = sourceUrl ? parseYouTubeId(sourceUrl) : null;
       return videoId ? buildYouTubeEmbedUrl(videoId) : null;
     },
@@ -76,16 +109,30 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
             tone="error"
           />
         </Match>
-        <Match when={props.filePath && mediaKind() === "image"}>
-          <ImageViewer src={props.filePath!} alt={fileName() ?? ""} onError={() => setLoadError(true)} />
+        <Match when={props.filePath && resolvedKind() === "image"}>
+          <ImageViewer
+            src={resolvedSrc() ?? props.filePath!}
+            alt={fileName() ?? ""}
+            onError={() => setLoadError(true)}
+          />
         </Match>
-        <Match when={props.filePath && mediaKind() === "video"}>
-          <MediaPlayer src={props.filePath!} kind="video" title={fileName() ?? ""} onError={() => setLoadError(true)} />
+        <Match when={props.filePath && resolvedKind() === "video"}>
+          <MediaPlayer
+            src={resolvedSrc() ?? props.filePath!}
+            kind="video"
+            title={fileName() ?? ""}
+            onError={() => setLoadError(true)}
+          />
         </Match>
-        <Match when={props.filePath && mediaKind() === "audio"}>
-          <MediaPlayer src={props.filePath!} kind="audio" title={fileName() ?? ""} onError={() => setLoadError(true)} />
+        <Match when={props.filePath && resolvedKind() === "audio"}>
+          <MediaPlayer
+            src={resolvedSrc() ?? props.filePath!}
+            kind="audio"
+            title={fileName() ?? ""}
+            onError={() => setLoadError(true)}
+          />
         </Match>
-        <Match when={mediaKind() === "youtube"}>
+        <Match when={resolvedKind() === "youtube"}>
           <Show
             when={youTubeEmbedUrl()}
             fallback={
@@ -117,7 +164,10 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
             </div>
           </Show>
         </Match>
-        <Match when={props.filePath && mediaKind() === null}>
+        <Match when={props.filePath && resolvedMedia.loading}>
+          <CenteredMessage icon={Icons.spinner} message={translate(TranslationKeys.apps_media_viewer_loading)} />
+        </Match>
+        <Match when={props.filePath && resolvedKind() === null}>
           <CenteredMessage
             icon={Icons.userForbidden}
             message={translate(TranslationKeys.apps_media_viewer_unsupported)}

@@ -2,8 +2,7 @@ import { PathSanitizer } from "@application/features/fileExplorer/utils/PathSani
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import PermissionService from "@application/features/system/services/PermissionService";
-import { logger } from "@application/shared/logger";
-import { parseRemoteContent, type RemoteContent } from "@domain/data/remoteContent/remoteContent";
+import RemoteContentResolver from "@application/features/system/services/RemoteContentResolver";
 import File from "@domain/models/File";
 
 export type EditorLanguage =
@@ -212,7 +211,11 @@ const LANGUAGE_BY_FILENAME: Record<string, EditorLanguage> = {
  * read-only detection, content read/write, and language detection for syntax highlighting.
  */
 export default class TextFileService {
-  constructor(private readonly fileSystemService: IFileSystemService) {}
+  private readonly remoteContentResolver: RemoteContentResolver;
+
+  constructor(private readonly fileSystemService: IFileSystemService) {
+    this.remoteContentResolver = new RemoteContentResolver(fileSystemService);
+  }
 
   isTextFile(entry: FileSystemEntry): boolean {
     if (!(entry instanceof File)) return false;
@@ -237,21 +240,10 @@ export default class TextFileService {
 
   async readContent(path: string): Promise<string> {
     const content = await this.fileSystemService.readFileContent(path);
-    const remote = parseRemoteContent(content);
-    return remote ? this.fetchRemoteContent(remote) : content;
-  }
-
-  private async fetchRemoteContent(remote: RemoteContent): Promise<string> {
-    try {
-      const response = await fetch(remote.url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch remote content: ${response.status}`);
-      }
-      return await response.text();
-    } catch (error) {
-      logger.error(`Failed to fetch remote content from ${remote.url}:`, error);
-      return `Failed to load remote content from ${remote.url}`;
-    }
+    const remote = this.remoteContentResolver.parseEnvelope(content, path);
+    // A fetch failure propagates so the caller renders an explicit error state,
+    // instead of showing (and letting the user save) a fake-success placeholder.
+    return remote ? this.remoteContentResolver.fetchBody(remote) : content;
   }
 
   async saveContent(path: string, content: string): Promise<void> {

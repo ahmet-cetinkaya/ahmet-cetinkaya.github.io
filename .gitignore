@@ -47,6 +47,7 @@ ehthumbs.db
 # Agent files and configurations
 .claude/
 .serena/
+.omo/
 AGENTS.md
 CLAUDE.md
 graphify-out/

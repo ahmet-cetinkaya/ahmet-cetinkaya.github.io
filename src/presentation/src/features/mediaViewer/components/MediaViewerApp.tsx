@@ -2,12 +2,15 @@ import { Match, Show, Switch, createEffect, createMemo, createResource, createSi
 import type { JSX } from "solid-js";
 import Container from "@presentation/Container";
 import { getMediaKindForFileName, type MediaKind } from "@application/features/mediaViewer/services/MediaFileService";
+import RemoteContentResolver from "@application/features/system/services/RemoteContentResolver";
 import { buildYouTubeEmbedUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
 import { extractShortcutUrl, isRawUrl as isRawMediaUrl } from "@application/features/mediaViewer/utils/mediaShortcut";
 import { Apps } from "@domain/data/Apps";
+import { RemoteContentType } from "@domain/data/remoteContent/remoteContent";
 import { TranslationKeys } from "@domain/data/Translations";
 import Icons from "@domain/data/Icons";
 import Icon from "@shared/components/Icon";
+import { logger } from "@application/shared/logger";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { syncWindowTitle } from "@shared/utils/syncWindowTitle";
 import ImageViewer from "./ImageViewer";
@@ -19,6 +22,7 @@ export default function MediaViewerApp(props: {
   isVisible: boolean;
 }): JSX.Element {
   const { windowsService, fileSystemService } = Container.instance;
+  const remoteContentResolver = new RemoteContentResolver(fileSystemService);
   const translate = useI18n();
   const baseTitle = translate(TranslationKeys.apps_media_viewer);
 
@@ -34,19 +38,58 @@ export default function MediaViewerApp(props: {
     return parts[parts.length - 1] ?? null;
   });
 
-  const mediaKind = createMemo<MediaKind | null>(() => {
-    if (!props.filePath) return null;
-    if (isExternalUrl()) return "youtube";
-    const name = fileName();
-    return name ? getMediaKindForFileName(name) : null;
-  });
+  type ResolvedMedia = { kind: MediaKind | null; src: string };
 
-  // Resolves the YouTube embed URL from either a raw URL arg or a `.url` shortcut
-  // file's content. Returns null when the source is not a YouTube URL.
+  // Only these filename-based kinds can hide a `[RemoteContent]` envelope in the seed
+  // (a `.mp4` whose real asset is a remote/YouTube URL, or an unclassified library file).
+  // Local images/audio never are, so we skip the file read for them.
+  function mayWrapRemoteContent(kind: MediaKind | null): boolean {
+    return kind === null || kind === "video";
+  }
+
+  // Resolves kind + src together so a media element never mounts against the wrong src.
+  const [resolvedMedia] = createResource<ResolvedMedia, string>(
+    () => props.filePath,
+    async (path): Promise<ResolvedMedia> => {
+      if (isRawMediaUrl(path)) {
+        return { kind: "youtube", src: path };
+      }
+
+      const parts = path.split("/");
+      const name = parts[parts.length - 1] ?? "";
+      const fileNameKind = getMediaKindForFileName(name);
+
+      if (mayWrapRemoteContent(fileNameKind)) {
+        const remote = await resolveRemoteContent(path);
+        if (remote) {
+          if (parseYouTubeId(remote.url)) return { kind: "youtube", src: remote.url };
+          if (remote.type === RemoteContentType.VIDEO) return { kind: "video", src: remote.url };
+        }
+      }
+
+      return { kind: fileNameKind, src: path };
+    },
+  );
+
+  async function resolveRemoteContent(path: string): Promise<ReturnType<typeof remoteContentResolver.resolveEnvelope>> {
+    try {
+      return await remoteContentResolver.resolveEnvelope(path);
+    } catch (error) {
+      logger.error(`Failed to resolve remote content for ${path}:`, error);
+      return null;
+    }
+  }
+
+  const resolvedKind = createMemo<MediaKind | null>(() => resolvedMedia()?.kind ?? null);
+  const resolvedSrc = createMemo<string | null>(() => resolvedMedia()?.src ?? null);
+
+  // Resolves the YouTube embed URL from the resolved source (a raw URL prop, a
+  // `[RemoteContent]` envelope URL, or a `.url` shortcut file's content). Returns
+  // null when the source is not a YouTube URL.
   const [youTubeEmbedUrl] = createResource<string | null, string>(
-    () => (mediaKind() === "youtube" ? props.filePath : undefined),
-    async (path) => {
-      const sourceUrl = isExternalUrl() ? path : await readShortcutUrl(path);
+    () => (resolvedKind() === "youtube" ? (resolvedSrc() ?? undefined) : undefined),
+    async (sourcePath) => {
+      const sourceUrl = isRawMediaUrl(sourcePath) ? sourcePath : await readShortcutUrl(sourcePath);
       const videoId = sourceUrl ? parseYouTubeId(sourceUrl) : null;
       return videoId ? buildYouTubeEmbedUrl(videoId) : null;
     },
@@ -78,13 +121,13 @@ export default function MediaViewerApp(props: {
             tone="error"
           />
         </Match>
-        <Match when={mediaKind() === "image" ? props.filePath : undefined} keyed>
-          {(path) => <ImageViewer src={path} alt={fileName() ?? ""} onError={() => setLoadError(true)} />}
+        <Match when={resolvedKind() === "image" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => <ImageViewer src={src} alt={fileName() ?? ""} onError={() => setLoadError(true)} />}
         </Match>
-        <Match when={mediaKind() === "video" ? props.filePath : undefined} keyed>
-          {(path) => (
+        <Match when={resolvedKind() === "video" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => (
             <MediaPlayer
-              src={path}
+              src={src}
               kind="video"
               title={fileName() ?? ""}
               isVisible={props.isVisible}
@@ -92,10 +135,10 @@ export default function MediaViewerApp(props: {
             />
           )}
         </Match>
-        <Match when={mediaKind() === "audio" ? props.filePath : undefined} keyed>
-          {(path) => (
+        <Match when={resolvedKind() === "audio" ? (resolvedSrc() ?? props.filePath) : undefined} keyed>
+          {(src) => (
             <MediaPlayer
-              src={path}
+              src={src}
               kind="audio"
               title={fileName() ?? ""}
               isVisible={props.isVisible}
@@ -103,7 +146,7 @@ export default function MediaViewerApp(props: {
             />
           )}
         </Match>
-        <Match when={mediaKind() === "youtube"}>
+        <Match when={resolvedKind() === "youtube"}>
           <Show
             when={youTubeEmbedUrl()}
             keyed
@@ -138,7 +181,10 @@ export default function MediaViewerApp(props: {
             )}
           </Show>
         </Match>
-        <Match when={props.filePath && mediaKind() === null}>
+        <Match when={props.filePath && resolvedMedia.loading}>
+          <CenteredMessage icon={Icons.spinner} message={translate(TranslationKeys.apps_media_viewer_loading)} />
+        </Match>
+        <Match when={props.filePath && resolvedKind() === null}>
           <CenteredMessage
             icon={Icons.userForbidden}
             message={translate(TranslationKeys.apps_media_viewer_unsupported)}

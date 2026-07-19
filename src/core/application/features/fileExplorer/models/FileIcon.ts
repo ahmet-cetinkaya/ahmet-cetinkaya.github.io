@@ -29,7 +29,7 @@ enum FileType {
   PYTHON = "py",
   JAVA = "java",
   PHP = "php",
-  CSHARP = "csharp",
+  CSHARP = "cs",
 
   GITIGNORE = "gitignore",
   DOCKERFILE = "dockerfile",
@@ -60,7 +60,7 @@ enum FileType {
   BAT = "bat",
 
   JSDOS = "jsdos",
-  GAME = "game",
+  GAME = "gd",
 
   DEFAULT = "default",
 }
@@ -88,10 +88,14 @@ enum IconColor {
 }
 
 export interface FileIconConfig {
-  icon: Icons | string;
+  icon: Icons;
   color: IconColor;
-  model?: string;
   isDirectory: boolean;
+  /**
+   * Multi-color brand logo icons (background plane + differently-colored glyph)
+   * must keep their original fills instead of being flattened to `currentColor`.
+   */
+  preserveFill?: boolean;
 }
 
 const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
@@ -106,20 +110,25 @@ const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.JSON]: { icon: Icons.code, color: IconColor.GREEN, isDirectory: false },
   [FileType.XML]: { icon: Icons.code, color: IconColor.ORANGE, isDirectory: false },
 
-  [FileType.JAVASCRIPT]: { icon: Icons.javascript, color: IconColor.YELLOW, isDirectory: false },
-  [FileType.JSX]: { icon: Icons.react, color: IconColor.CYAN, isDirectory: false },
-  [FileType.TYPESCRIPT]: { icon: Icons.typescript, color: IconColor.BLUE_500, isDirectory: false },
-  [FileType.TSX]: { icon: Icons.react, color: IconColor.BLUE_500, isDirectory: false },
+  [FileType.JAVASCRIPT]: { icon: Icons.javascript, color: IconColor.YELLOW, isDirectory: false, preserveFill: true },
+  [FileType.JSX]: { icon: Icons.react, color: IconColor.CYAN, isDirectory: false, preserveFill: true },
+  [FileType.TYPESCRIPT]: {
+    icon: Icons.typescript,
+    color: IconColor.BLUE_500,
+    isDirectory: false,
+    preserveFill: true,
+  },
+  [FileType.TSX]: { icon: Icons.react, color: IconColor.BLUE_500, isDirectory: false, preserveFill: true },
   [FileType.HTML]: { icon: Icons.code, color: IconColor.ORANGE, isDirectory: false },
   [FileType.CSS]: { icon: Icons.code, color: IconColor.BLUE, isDirectory: false },
   [FileType.SCSS]: { icon: Icons.code, color: IconColor.PINK, isDirectory: false },
-  [FileType.PYTHON]: { icon: Icons.python, color: IconColor.GREEN_500, isDirectory: false },
-  [FileType.JAVA]: { icon: Icons.java, color: IconColor.RED, isDirectory: false },
-  [FileType.PHP]: { icon: Icons.php, color: IconColor.INDIGO, isDirectory: false },
-  [FileType.CSHARP]: { icon: Icons.csharp, color: IconColor.PURPLE, isDirectory: false },
+  [FileType.PYTHON]: { icon: Icons.python, color: IconColor.GREEN_500, isDirectory: false, preserveFill: true },
+  [FileType.JAVA]: { icon: Icons.java, color: IconColor.RED, isDirectory: false, preserveFill: true },
+  [FileType.PHP]: { icon: Icons.php, color: IconColor.INDIGO, isDirectory: false, preserveFill: true },
+  [FileType.CSHARP]: { icon: Icons.csharp, color: IconColor.PURPLE, isDirectory: false, preserveFill: true },
 
-  [FileType.GITIGNORE]: { icon: Icons.github, color: IconColor.GRAY_500, isDirectory: false },
-  [FileType.DOCKERFILE]: { icon: Icons.docker, color: IconColor.BLUE_500, isDirectory: false },
+  [FileType.GITIGNORE]: { icon: Icons.git, color: IconColor.GRAY_500, isDirectory: false, preserveFill: true },
+  [FileType.DOCKERFILE]: { icon: Icons.docker, color: IconColor.BLUE_500, isDirectory: false, preserveFill: true },
   [FileType.ENV]: { icon: Icons.file, color: IconColor.GRAY_600, isDirectory: false },
 
   [FileType.PNG]: { icon: Icons.image, color: IconColor.GREEN, isDirectory: false },
@@ -146,8 +155,13 @@ const FILE_TYPE_ICONS: Record<FileType, FileIconConfig> = {
   [FileType.SH]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
   [FileType.BAT]: { icon: Icons.terminal, color: IconColor.GRAY, isDirectory: false },
 
-  [FileType.JSDOS]: { icon: Icons.doom, color: IconColor.RED_400, isDirectory: false },
-  [FileType.GAME]: { icon: Icons.godotEngine, color: IconColor.PURPLE_400, isDirectory: false },
+  [FileType.JSDOS]: { icon: Icons.doom, color: IconColor.RED_400, isDirectory: false, preserveFill: true },
+  [FileType.GAME]: {
+    icon: Icons.godotEngine,
+    color: IconColor.PURPLE_400,
+    isDirectory: false,
+    preserveFill: true,
+  },
 
   [FileType.DEFAULT]: { icon: Icons.file, color: IconColor.GRAY, isDirectory: false },
 };
@@ -181,6 +195,7 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
     ".gitignore": FileType.GITIGNORE,
     ".env": FileType.ENV,
     "doom.jsdos": FileType.JSDOS,
+    "project.godot": FileType.GAME,
   };
 
   if (exactFileNameMap[lowerFileName]) {
@@ -232,6 +247,10 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
 
   if (FILE_TYPE_PATTERNS.ARCHIVES.test(fileName)) {
     return FILE_TYPE_ICONS[FileType.ZIP];
+  }
+
+  if (FILE_TYPE_PATTERNS.GAME.test(fileName)) {
+    return FILE_TYPE_ICONS[FileType.GAME];
   }
 
   if (FILE_TYPE_PATTERNS.CODE.test(fileName)) {

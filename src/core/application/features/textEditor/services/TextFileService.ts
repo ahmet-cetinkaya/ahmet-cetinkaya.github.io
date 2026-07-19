@@ -2,6 +2,7 @@ import { PathSanitizer } from "@application/features/fileExplorer/utils/PathSani
 import type IFileSystemService from "@application/features/system/services/abstraction/IFileSystemService";
 import type { FileSystemEntry } from "@application/features/system/services/abstraction/IFileSystemService";
 import PermissionService from "@application/features/system/services/PermissionService";
+import RemoteContentResolver from "@application/features/system/services/RemoteContentResolver";
 import File from "@domain/models/File";
 
 export type EditorLanguage =
@@ -210,7 +211,11 @@ const LANGUAGE_BY_FILENAME: Record<string, EditorLanguage> = {
  * read-only detection, content read/write, and language detection for syntax highlighting.
  */
 export default class TextFileService {
-  constructor(private readonly fileSystemService: IFileSystemService) {}
+  private readonly remoteContentResolver: RemoteContentResolver;
+
+  constructor(private readonly fileSystemService: IFileSystemService) {
+    this.remoteContentResolver = new RemoteContentResolver(fileSystemService);
+  }
 
   isTextFile(entry: FileSystemEntry): boolean {
     if (!(entry instanceof File)) return false;
@@ -234,7 +239,11 @@ export default class TextFileService {
   }
 
   async readContent(path: string): Promise<string> {
-    return this.fileSystemService.readFileContent(path);
+    const content = await this.fileSystemService.readFileContent(path);
+    const remote = this.remoteContentResolver.parseEnvelope(content, path);
+    // A fetch failure propagates so the caller renders an explicit error state,
+    // instead of showing (and letting the user save) a fake-success placeholder.
+    return remote ? this.remoteContentResolver.fetchBody(remote) : content;
   }
 
   async saveContent(path: string, content: string): Promise<void> {

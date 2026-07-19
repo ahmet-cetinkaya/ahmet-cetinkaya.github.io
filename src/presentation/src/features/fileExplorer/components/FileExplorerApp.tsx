@@ -372,14 +372,12 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   function setViewMode(mode: FileViewMode) {
     setState((prev) => ({ ...prev, viewMode: mode }));
-    refresh();
   }
 
   function handleSortChange(sortBy: FileSortCriteria) {
     const newSortOrder =
       sortBy === state().sortBy && state().sortOrder === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC;
     setState((prev) => ({ ...prev, sortBy, sortOrder: newSortOrder }));
-    refresh();
   }
 
   function prepareContextMenuEvent(event: MouseEvent) {

@@ -25,7 +25,7 @@ type Props = {
   closeOnItemClick?: boolean;
 };
 
-export default function Dropdown(props: Props) {
+export default function Dropdown(dropdownProps: Props) {
   const translate = useI18n();
 
   const id = createMemo(() => CryptoExtensions.generateNanoId());
@@ -52,11 +52,11 @@ export default function Dropdown(props: Props) {
         <Button
           type="button"
           onClick={onToggleDropdown}
-          class={props.buttonClass}
-          ariaLabel={props.ariaLabel}
+          class={dropdownProps.buttonClass}
+          ariaLabel={dropdownProps.ariaLabel}
           variant="primary"
         >
-          {props.children}
+          {dropdownProps.children}
         </Button>
       </div>
 
@@ -70,7 +70,7 @@ export default function Dropdown(props: Props) {
     return (
       <div class="bg-surface-500 shadow-secondary ring-opacity-5 absolute top-full right-0 z-[9999] mt-1 max-h-96 w-56 origin-top-right overflow-y-auto rounded-md shadow-md ring-1 ring-black">
         <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-          <Index each={props.menuItems}>
+          <Index each={dropdownProps.menuItems}>
             {(item) => {
               if (item().items)
                 return (
@@ -102,7 +102,7 @@ export default function Dropdown(props: Props) {
         : "mx-2 my-0.5 block w-[calc(100%-1rem)] cursor-pointer rounded border-none px-4 py-2 text-start text-sm text-gray-200 shadow-none transition-colors duration-200 ease-in-out hover:bg-surface-300 hover:text-gray-200";
 
     function onClick() {
-      if (props.closeOnItemClick ?? true) {
+      if (dropdownProps.closeOnItemClick ?? true) {
         setIsOpen(false);
       }
       menuItemProps.item.onClick?.();

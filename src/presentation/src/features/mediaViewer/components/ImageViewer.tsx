@@ -122,6 +122,7 @@ export default function ImageViewer(props: { src: string; alt: string; onError: 
             alt={props.alt}
             draggable={false}
             onError={() => props.onError()}
+            referrerpolicy="strict-origin-when-cross-origin"
             class="max-h-full max-w-full object-contain select-none"
             style={{ transform: imageTransform(), "transform-origin": "center center" }}
           />

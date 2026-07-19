@@ -2,13 +2,15 @@ import { Match, Show, Switch, createEffect, createMemo, createResource, createSi
 import type { JSX } from "solid-js";
 import Container from "@presentation/Container";
 import { getMediaKindForFileName, type MediaKind } from "@application/features/mediaViewer/services/MediaFileService";
+import RemoteContentResolver from "@application/features/system/services/RemoteContentResolver";
 import { buildYouTubeEmbedUrl, isYouTubeUrl, parseYouTubeId } from "@application/features/mediaViewer/utils/youtube";
 import { extractShortcutUrl } from "@application/features/mediaViewer/utils/mediaShortcut";
 import { Apps } from "@domain/data/Apps";
-import { parseRemoteContent, RemoteContentType } from "@domain/data/remoteContent/remoteContent";
+import { RemoteContentType } from "@domain/data/remoteContent/remoteContent";
 import { TranslationKeys } from "@domain/data/Translations";
 import Icons from "@domain/data/Icons";
 import Icon from "@shared/components/Icon";
+import { logger } from "@application/shared/logger";
 import { useI18n } from "@shared/utils/i18nTranslate";
 import { syncWindowTitle } from "@shared/utils/syncWindowTitle";
 import ImageViewer from "./ImageViewer";
@@ -18,6 +20,7 @@ const RAW_URL_PATTERN = /^https?:\/\//i;
 
 export default function MediaViewerApp(props: { filePath?: string; windowId?: string }): JSX.Element {
   const { windowsService, fileSystemService } = Container.instance;
+  const remoteContentResolver = new RemoteContentResolver(fileSystemService);
   const translate = useI18n();
   const baseTitle = translate(TranslationKeys.apps_media_viewer);
 
@@ -35,11 +38,14 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
 
   type ResolvedMedia = { kind: MediaKind | null; src: string };
 
-  // Resolves the effective media kind + source in one step so a media element never
-  // mounts against the wrong src. For a raw URL prop that's a YouTube embed; otherwise
-  // the file's content is checked for a `[RemoteContent]` envelope (e.g. seeded
-  // library/video files whose real asset lives at a remote URL) before falling back
-  // to today's filename-based classification with `fullPath` as the src.
+  // Only these filename-based kinds can hide a `[RemoteContent]` envelope in the seed
+  // (a `.mp4` whose real asset is a remote/YouTube URL, or an unclassified library file).
+  // Local images/audio never are, so we skip the file read for them.
+  function mayWrapRemoteContent(kind: MediaKind | null): boolean {
+    return kind === null || kind === "video";
+  }
+
+  // Resolves kind + src together so a media element never mounts against the wrong src.
   const [resolvedMedia] = createResource<ResolvedMedia, string>(
     () => props.filePath,
     async (path): Promise<ResolvedMedia> => {
@@ -47,23 +53,27 @@ export default function MediaViewerApp(props: { filePath?: string; windowId?: st
         return { kind: "youtube", src: path };
       }
 
-      const remote = await resolveRemoteContent(path);
-      if (remote) {
-        if (isYouTubeUrl(remote.url)) return { kind: "youtube", src: remote.url };
-        if (remote.type === RemoteContentType.VIDEO) return { kind: "video", src: remote.url };
-      }
-
       const parts = path.split("/");
       const name = parts[parts.length - 1] ?? "";
-      return { kind: getMediaKindForFileName(name), src: path };
+      const fileNameKind = getMediaKindForFileName(name);
+
+      if (mayWrapRemoteContent(fileNameKind)) {
+        const remote = await resolveRemoteContent(path);
+        if (remote) {
+          if (isYouTubeUrl(remote.url)) return { kind: "youtube", src: remote.url };
+          if (remote.type === RemoteContentType.VIDEO) return { kind: "video", src: remote.url };
+        }
+      }
+
+      return { kind: fileNameKind, src: path };
     },
   );
 
-  async function resolveRemoteContent(path: string): Promise<ReturnType<typeof parseRemoteContent>> {
+  async function resolveRemoteContent(path: string): Promise<ReturnType<typeof remoteContentResolver.resolveEnvelope>> {
     try {
-      const content = await fileSystemService.readFileContent(path);
-      return parseRemoteContent(content);
-    } catch {
+      return await remoteContentResolver.resolveEnvelope(path);
+    } catch (error) {
+      logger.error(`Failed to resolve remote content for ${path}:`, error);
       return null;
     }
   }

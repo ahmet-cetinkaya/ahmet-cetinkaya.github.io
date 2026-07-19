@@ -32,7 +32,7 @@ export default function FileIcon(props: FileIconProps) {
     <div class={mergeCls("flex items-center justify-center", sizeClasses[props.size || "medium"], props.class)}>
       <div class="relative">
         <Icon
-          icon={isDirectory() ? Icons.folder : (iconConfig().icon as Icons) || Icons.file}
+          icon={isDirectory() ? Icons.folder : iconConfig().icon || Icons.file}
           class={mergeCls(sizeClasses[props.size || "medium"], iconConfig().color, "text-primary-500")}
           preserveFill={iconConfig().preserveFill}
         />

@@ -88,9 +88,8 @@ enum IconColor {
 }
 
 export interface FileIconConfig {
-  icon: Icons | string;
+  icon: Icons;
   color: IconColor;
-  model?: string;
   isDirectory: boolean;
   /**
    * Multi-color brand logo icons (background plane + differently-colored glyph)
@@ -250,7 +249,7 @@ function determineFileIconConfig(fileName: string): FileIconConfig {
     return FILE_TYPE_ICONS[FileType.ZIP];
   }
 
-  if (/\.(gd|godot|tscn|tres)$/i.test(fileName)) {
+  if (FILE_TYPE_PATTERNS.GAME.test(fileName)) {
     return FILE_TYPE_ICONS[FileType.GAME];
   }
 

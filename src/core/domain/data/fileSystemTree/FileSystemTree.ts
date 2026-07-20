@@ -296,13 +296,14 @@ StartupNotify=true`,
               children: [
                 {
                   kind: "file",
-                  name: "private-my-video.mp4",
+                  name: "my-private-video.mp4",
                   content: serializeRemoteContent({
                     type: RemoteContentType.VIDEO,
                     format: "mp4",
-                    url: "https://youtu.be/dQw4w9WgXcQ?si=JH88Vk4Cvzqvb9sJ",
+                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                   }),
-                  createdDate: new Date("2024-12-24 12:49:08"),
+                  createdDate: new Date("2026-07-15 17:16:28"),
+                  updatedDate: new Date("2026-07-20 12:52:59"),
                 },
               ],
             },

@@ -100,6 +100,7 @@ export default function WelcomeWizardApp(props: Props) {
   function onPrevPart() {
     if (currentPart() === 0) return;
 
+    if (isWarnedForConfirm()) setIsWarnedForConfirm(false);
     setCurrentPart(currentPart() - 1);
   }
 

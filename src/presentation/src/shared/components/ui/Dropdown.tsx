@@ -8,6 +8,8 @@ import Icon from "@shared/components/Icon";
 import type Icons from "@domain/data/Icons";
 import Title from "@shared/components/ui/Title";
 
+const MENU_WIDTH = 224;
+
 export type DropdownItem = {
   text: TranslationKey;
   icon?: Icons;
@@ -30,6 +32,8 @@ export default function Dropdown(dropdownProps: Props) {
 
   const id = createMemo(() => CryptoExtensions.generateNanoId());
   const [isOpen, setIsOpen] = createSignal(false);
+  const [openRight, setOpenRight] = createSignal(true);
+  let buttonRef: HTMLButtonElement | undefined;
 
   createEffect(() => {
     if (isOpen()) document.addEventListener("click", onClickOutside);
@@ -43,6 +47,10 @@ export default function Dropdown(dropdownProps: Props) {
   }
 
   function onToggleDropdown() {
+    if (!isOpen() && buttonRef) {
+      const rect = buttonRef.getBoundingClientRect();
+      setOpenRight(rect.left + MENU_WIDTH <= window.innerWidth);
+    }
     setIsOpen(!isOpen());
   }
 
@@ -50,6 +58,7 @@ export default function Dropdown(dropdownProps: Props) {
     <div id={id()} class="ac-dropdown relative inline-block text-left">
       <div class="flex size-full items-center justify-center">
         <Button
+          ref={buttonRef}
           type="button"
           onClick={onToggleDropdown}
           class={dropdownProps.buttonClass}
@@ -68,7 +77,10 @@ export default function Dropdown(dropdownProps: Props) {
 
   function Menu() {
     return (
-      <div class="bg-surface-500 shadow-secondary ring-opacity-5 absolute top-full right-0 z-[9999] mt-1 max-h-96 w-56 origin-top-right overflow-y-auto rounded-md shadow-md ring-1 ring-black">
+      <div
+        class="bg-surface-500 shadow-secondary ring-opacity-5 absolute top-full z-[9999] mt-1 max-h-96 w-56 overflow-y-auto rounded-md shadow-md ring-1 ring-black"
+        style={{ left: openRight() ? "0" : "auto", right: openRight() ? "auto" : "0", "transform-origin": openRight() ? "top left" : "top right" }}
+      >
         <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
           <Index each={dropdownProps.menuItems}>
             {(item) => {

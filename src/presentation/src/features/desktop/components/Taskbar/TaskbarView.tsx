@@ -15,6 +15,7 @@ export default function TaskbarView() {
   const translate = useI18n();
 
   const [windows, setWindows] = createSignal<Window[]>([]);
+  const [windowIcons, setWindowIcons] = createSignal<Map<string, Icons>>(new Map());
 
   onMount(() => {
     windowsService.subscribe(onWindowsChange);
@@ -24,8 +25,14 @@ export default function TaskbarView() {
     windowsService.unsubscribe(onWindowsChange);
   });
 
-  function onWindowsChange(windows: Window[]) {
+  async function onWindowsChange(windows: Window[]) {
     setWindows(windows);
+    const icons = new Map<string, Icons>();
+    for (const window of windows) {
+      const app = await appsService.get((a) => a.id === window.appId);
+      if (app) icons.set(window.id, app.icon);
+    }
+    setWindowIcons(icons);
   }
 
   async function onClickTaskView(window: Window) {
@@ -79,6 +86,7 @@ export default function TaskbarView() {
               (window) =>
                 ({
                   text: window.title,
+                  icon: windowIcons().get(window.id),
                   onClick: () => onClickTaskView(window),
                 }) as DropdownItem,
             )}
@@ -99,6 +107,7 @@ export default function TaskbarView() {
           (window) =>
             ({
               text: window.title,
+              icon: windowIcons().get(window.id),
               onClick: () => onClickTaskView(window),
             }) as DropdownItem,
         )}

@@ -642,7 +642,7 @@ export default function FileExplorerApp(props: FileExplorerAppProps) {
 
   return (
     <>
-      <div class={mergeCls("flex size-full flex-col", isMobile() ? "text-sm" : "")}>
+      <div class={mergeCls("flex size-full flex-col overflow-x-hidden", isMobile() ? "text-sm" : "")}>
         <FileExplorerToolbar
           currentPath={state().currentPath}
           breadcrumbPath={breadcrumbPath()}

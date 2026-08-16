@@ -96,9 +96,9 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
   ];
 
   return (
-    <div class="border-surface-300 bg-surface-500 relative flex items-center justify-between border-b p-2">
+    <div class="border-surface-300 bg-surface-500 relative flex min-w-0 items-center justify-between gap-2 border-b p-2">
       {/* Navigation Controls */}
-      <div class="flex items-center space-x-1">
+      <div class="flex shrink-0 items-center space-x-1">
         <Button
           variant="primary"
           size="small"
@@ -123,12 +123,12 @@ export default function FileExplorerToolbar(props: FileExplorerToolbarProps) {
       </div>
 
       {/* Breadcrumb Navigation */}
-      <div class="mx-4 flex flex-1 items-center justify-center">
+      <div class="mx-2 min-w-0 flex-1 overflow-hidden sm:mx-4">
         <FileExplorerBreadcrumb currentPath={props.breadcrumbPath} onNavigate={props.onNavigate} />
       </div>
 
       {/* Action Controls */}
-      <div class="flex items-center space-x-1">
+      <div class="flex shrink-0 items-center space-x-1">
         <Dropdown menuItems={createMenuItems()} ariaLabel="Create new file or folder" buttonClass="p-2">
           <Icon icon={Icons.plus} class="h-4 w-4" />
         </Dropdown>

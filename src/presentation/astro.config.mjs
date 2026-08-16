@@ -12,6 +12,12 @@ export default defineConfig({
   integrations: [sitemap(), solidJs(), compressor()],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        usePolling: true,
+        interval: 300,
+      },
+    },
     resolve: {
       alias: {
         "@": path.resolve("./src"),

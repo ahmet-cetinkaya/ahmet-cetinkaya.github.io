@@ -74,21 +74,24 @@ export default function FileExplorerBreadcrumb(props: FileExplorerBreadcrumbProp
   }
 
   return (
-    <div class="flex h-10 min-h-[2.5rem] items-center p-2">
+    <div class="flex h-8 min-h-[2rem] items-center sm:h-10 sm:min-h-[2.5rem]">
       <Show
         when={isEditing()}
         fallback={
-          <nav class="flex items-center space-x-1 text-sm" aria-label="Breadcrumb">
+          <nav
+            class="scrollbar-none flex items-center space-x-1 overflow-x-auto whitespace-nowrap text-sm"
+            aria-label="Breadcrumb"
+          >
             <For each={breadcrumbItems()}>
               {(item, index) => (
                 <>
                   <Show when={index() > 0}>
-                    <span class="mx-1 text-gray-400">/</span>
+                    <span class="mx-1 shrink-0 text-gray-400">/</span>
                   </Show>
                   <button
                     type="button"
                     class={mergeCls(
-                      "rounded px-2 py-1 transition-colors duration-200",
+                      "shrink-0 rounded px-1.5 py-1 transition-colors duration-200 sm:px-2",
                       item.path === props.currentPath
                         ? "bg-surface-300 text-white"
                         : "hover:bg-surface-400 text-gray-300 hover:text-white",
